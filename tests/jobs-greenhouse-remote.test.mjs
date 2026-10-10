@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {greenhouseJobs, normalizeCollectedJob, SOURCES} from '../jobs.js';
+import {greenhouseJobs, normalizeCollectedJob, SOURCES, countryOf} from '../jobs.js';
 const source = SOURCES.find(s => s.id === 'affirm');
 const posting = location => ({id:123,title:'Engineer',location:{name:location},absolute_url:'https://job-boards.greenhouse.io/affirm/jobs/123'});
 
@@ -90,4 +90,13 @@ test('observed non-geographic qualifiers do not create false missing countries',
   }
   const unresolved=greenhouseJobs([posting('New York; Remote')],'affirm');
   assert.equal(unresolved.complete,false,'remote eligibility without a country stays unproven');
+});
+
+test('Porto corroboration is confined to the explicit Portugal list and never other city prefixes', () => {
+  for(const label of ['Porto','Porto Alegre','Porto-Novo']) {
+    assert.notEqual(countryOf(label),'PT');
+    const result=greenhouseJobs([posting(label)],'affirm');
+    assert.equal(result.complete,false,label);
+    assert.ok(result.rows.every(r=>r.country!=='PT'),label);
+  }
 });

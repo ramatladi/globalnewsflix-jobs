@@ -213,7 +213,7 @@ export function normalizeJobLocation(value) {
 const CITIES = {
   US: ['new york', 'san francisco', 'seattle', 'austin', 'chicago', 'boston', 'los angeles', 'denver', 'atlanta', 'washington d', 'miami', 'palo alto', 'mountain view', 'sunnyvale', 'san jose', 'oakland', 'phoenix', 'dallas', 'houston', 'nashville', 'salt lake', 'us remote', 'remote us'],
   GB: ['london', 'manchester', 'edinburgh', 'bristol', 'glasgow', 'birmingham', 'leeds'], CA: ['toronto', 'vancouver', 'montreal', 'ottawa', 'calgary', 'waterloo'], IE: ['dublin'], DE: ['berlin', 'munich', 'munchen', 'hamburg', 'frankfurt'],
-  FR: ['paris'], NL: ['amsterdam'], ES: ['madrid', 'barcelona'], PT: ['lisbon', 'porto'], PL: ['warsaw', 'krakow'], SE: ['stockholm'], CH: ['zurich', 'geneva', 'basel'], IL: ['tel aviv'], IN: ['bangalore', 'bengaluru', 'hyderabad', 'mumbai', 'pune', 'gurgaon', 'gurugram', 'new delhi', 'chennai', 'noida'],
+  FR: ['paris'], NL: ['amsterdam'], ES: ['madrid', 'barcelona'], PT: ['lisbon'], PL: ['warsaw', 'krakow'], SE: ['stockholm'], CH: ['zurich', 'geneva', 'basel'], IL: ['tel aviv'], IN: ['bangalore', 'bengaluru', 'hyderabad', 'mumbai', 'pune', 'gurgaon', 'gurugram', 'new delhi', 'chennai', 'noida'],
   SG: ['singapore'], JP: ['tokyo', 'osaka'], AU: ['sydney', 'melbourne', 'brisbane', 'perth'], NZ: ['auckland', 'wellington'], BR: ['sao paulo', 'rio de janeiro'], MX: ['mexico city', 'ciudad de mexico', 'monterrey', 'guadalajara'],
   ZA: ['johannesburg', 'cape town', 'durban', 'pretoria', 'sandton', 'centurion', 'midrand', 'secunda', 'sasolburg'], NG: ['lagos', 'abuja'], KE: ['nairobi', 'mombasa'], AE: ['dubai', 'abu dhabi'], KR: ['seoul'], CN: ['shanghai', 'beijing', 'shenzhen'], TW: ['taipei'], CZ: ['prague'], RO: ['bucharest'],
   AR: ['buenos aires'], CO: ['bogota', 'medellin'], PH: ['manila'], DK: ['copenhagen'], NO: ['oslo'], FI: ['helsinki'], IT: ['milan', 'rome'], BE: ['brussels'], AT: ['vienna'], GR: ['athens'], HU: ['budapest'], MY: ['kuala lumpur'], TH: ['bangkok'], VN: ['ho chi minh', 'hanoi'], ID: ['jakarta'], EG: ['cairo'], MA: ['casablanca'], GH: ['accra'],
@@ -390,7 +390,7 @@ export function greenhouseJobs(postings, sourceId) {
       // Standalone US is explicit in the observed metadata, unlike ambiguous
       // state/province abbreviations. Office strings can resolve an unknown
       // metadata place only with corroborating employer-supplied geography.
-      const cc = (oktaUsScope ? 'US' : greenhouseCountry(place)) || (place.trim() === 'Ohio' && (x.offices || []).some(o => /,\s*OH$/.test(o.name || '')) ? 'US' : null);
+      const cc = (oktaUsScope ? 'US' : !metadataPlaces.length && place === 'Porto' && listedPlaces.includes('Portugal') ? 'PT' : greenhouseCountry(place)) || (place.trim() === 'Ohio' && (x.offices || []).some(o => /,\s*OH$/.test(o.name || '')) ? 'US' : null);
       if (!cc) { complete = false; continue; }
       if (!grouped.has(cc)) grouped.set(cc, []);
       grouped.get(cc).push(place);
