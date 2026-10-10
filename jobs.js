@@ -213,7 +213,7 @@ export function normalizeJobLocation(value) {
 const CITIES = {
   US: ['new york', 'san francisco', 'seattle', 'austin', 'chicago', 'boston', 'los angeles', 'denver', 'atlanta', 'washington d', 'miami', 'palo alto', 'mountain view', 'sunnyvale', 'san jose', 'oakland', 'phoenix', 'dallas', 'houston', 'nashville', 'salt lake', 'us remote', 'remote us'],
   GB: ['london', 'manchester', 'edinburgh', 'bristol', 'glasgow', 'birmingham', 'leeds'], CA: ['toronto', 'vancouver', 'montreal', 'ottawa', 'calgary', 'waterloo'], IE: ['dublin'], DE: ['berlin', 'munich', 'munchen', 'hamburg', 'frankfurt'],
-  FR: ['paris'], NL: ['amsterdam'], ES: ['madrid', 'barcelona'], PT: ['lisbon'], PL: ['warsaw', 'krakow'], SE: ['stockholm'], CH: ['zurich', 'geneva', 'basel'], IL: ['tel aviv'], IN: ['bangalore', 'bengaluru', 'hyderabad', 'mumbai', 'pune', 'gurgaon', 'gurugram', 'new delhi', 'chennai', 'noida'],
+  FR: ['paris'], NL: ['amsterdam'], ES: ['madrid', 'barcelona'], PT: ['lisbon', 'porto'], PL: ['warsaw', 'krakow'], SE: ['stockholm'], CH: ['zurich', 'geneva', 'basel'], IL: ['tel aviv'], IN: ['bangalore', 'bengaluru', 'hyderabad', 'mumbai', 'pune', 'gurgaon', 'gurugram', 'new delhi', 'chennai', 'noida'],
   SG: ['singapore'], JP: ['tokyo', 'osaka'], AU: ['sydney', 'melbourne', 'brisbane', 'perth'], NZ: ['auckland', 'wellington'], BR: ['sao paulo', 'rio de janeiro'], MX: ['mexico city', 'ciudad de mexico', 'monterrey', 'guadalajara'],
   ZA: ['johannesburg', 'cape town', 'durban', 'pretoria', 'sandton', 'centurion', 'midrand', 'secunda', 'sasolburg'], NG: ['lagos', 'abuja'], KE: ['nairobi', 'mombasa'], AE: ['dubai', 'abu dhabi'], KR: ['seoul'], CN: ['shanghai', 'beijing', 'shenzhen'], TW: ['taipei'], CZ: ['prague'], RO: ['bucharest'],
   AR: ['buenos aires'], CO: ['bogota', 'medellin'], PH: ['manila'], DK: ['copenhagen'], NO: ['oslo'], FI: ['helsinki'], IT: ['milan', 'rome'], BE: ['brussels'], AT: ['vienna'], GR: ['athens'], HU: ['budapest'], MY: ['kuala lumpur'], TH: ['bangkok'], VN: ['ho chi minh', 'hanoi'], ID: ['jakarta'], EG: ['cairo'], MA: ['casablanca'], GH: ['accra'],
@@ -340,10 +340,10 @@ export function normalizeCollectedJob(src, j, fx) {
 // Employer-supplied remote eligibility still names a country. Strip only the
 // remote label, then require explicit country or exact known city evidence; never treat CA/IN/GA as ISO
 // codes here because they can also be states or ordinary words.
-const greenhousePlaces = value => String(value || '').split(/\s*;\s*/).filter(Boolean);
+const greenhousePlaces = value => String(value || '').split(/\s*;\s*/).filter(part => part && !/^(?:hybrid|on-site|in-office)$/i.test(part));
 const greenhouseCountry = place => {
   const remote = plain(place).match(/^remote(?:\s*[-:]\s*|\s+)(.+)$/i);
-  const name = (remote ? remote[1].trim() : place.trim()).replace(/^\((.*)\)$/, '$1').replace(/:\s*(?:select|all) locations$/i, '').trim();
+  const name = (remote ? remote[1].trim() : place.trim()).replace(/^\((.*)\)$/, '$1').replace(/:\s*(?:select|all) locations$/i, '').replace(/\s*\(DNU\)$/i, '').trim();
   if (name === 'US') return 'US';
   if (/^Georgia$/i.test(name)) return null; // Country/state ambiguity needs more evidence.
   const explicit = countryCode(name);

@@ -82,3 +82,12 @@ test('five observed Okta US office postings correct Georgia while retaining exis
   const otherEmployer=greenhouseJobs(postings,'affirm');
   assert.equal(otherEmployer.complete,false);
 });
+
+test('observed non-geographic qualifiers do not create false missing countries', () => {
+  for(const [label,country] of [['New York, NY, USA; Hybrid','US'],['Remote - Ontario, Canada (DNU)','CA'],['Remote - Alberta, Canada (DNU)','CA'],['Porto; Portugal','PT']]) {
+    const result=greenhouseJobs([posting(label)],'affirm');
+    assert.equal(result.complete,true,label);assert.equal(result.rows.length,1,label);assert.equal(result.rows[0].country,country,label);
+  }
+  const unresolved=greenhouseJobs([posting('New York; Remote')],'affirm');
+  assert.equal(unresolved.complete,false,'remote eligibility without a country stays unproven');
+});
