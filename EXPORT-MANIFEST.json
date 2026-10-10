@@ -9,7 +9,7 @@
   },
   {
     "file": "jobs-runner.mjs",
-    "sha256": "9db123c1f8d91a16b74619a4694eb5b07357f5091467082feb5941d79aa8943d"
+    "sha256": "ead4b925ef239d97d8383961b9f396cda21b4a092d73309001cf89d9f10d70e1"
   },
   {
     "file": "jobs-adapters.js",
@@ -93,7 +93,7 @@
   },
   {
     "file": "tests/jobs-runner.test.mjs",
-    "sha256": "83101cedf136589d0a9296336bbfb4eafd5f2845b132bc57d67d7abbf7f0a9ed"
+    "sha256": "e7f875666777673befc61bf33c75b075a21a315e84a3e435a6f8102f9a5d6f51"
   },
   {
     "file": "tests/test_jobs_government.py",

@@ -15,7 +15,7 @@ export async function uploadJobs({ rows, ok, diagnostics = [], runTs, site, getT
     let acknowledged = false;
     try {
       const r = await fetchImpl(`${site}/api/jobs`, { method: 'POST', headers: await tokenHeaders(), body: JSON.stringify({ runTs, rows: chunk }) });
-      const out = await r.json();
+      const out = await r.json().catch(() => ({}));
       acknowledged = r.ok && out.ok === true && out.n === chunk.length;
       log(`jobs upload: ${r.status}, accepted ${Number.isInteger(out.n) ? out.n : 0}/${chunk.length}`);
     } catch { log('jobs upload: failed'); }
@@ -26,7 +26,7 @@ export async function uploadJobs({ rows, ok, diagnostics = [], runTs, site, getT
   let finished = false;
   try {
     const r = await fetchImpl(`${site}/api/jobs/finish`, { method: 'POST', headers: await tokenHeaders(), body: JSON.stringify({ runTs, sources, diagnostics: reported }) });
-    const out = await r.json();
+    const out = await r.json().catch(() => ({}));
     finished = r.ok && out.ok === true;
     log(`jobs finish: ${r.status}, acknowledged ${finished}`);
   } catch { log('jobs finish: failed'); }
@@ -62,11 +62,19 @@ async function main() {
     if (!r.ok) throw new Error('OIDC request failed');
     const value = (await r.json()).value;
     if (!value) throw new Error('OIDC token missing');
+    const claims = JSON.parse(Buffer.from(value.split('.')[1], 'base64url').toString());
+    console.log('jobs identity:', JSON.stringify(Object.fromEntries(['repository','ref','sub','workflow_ref','job_workflow_ref','event_name','aud','nbf','exp'].filter(k=>claims[k]!==undefined).map(k=>[k,claims[k]]))));
     return value;
   };
   const runTs = Date.now();
   const only = process.env.JOB_SOURCES ? process.env.JOB_SOURCES.split(',').map(s=>s.trim()).filter(Boolean) : null;
   if (only?.some(id=>!SOURCES.some(s=>s.id===id))) throw new Error('Unregistered source selection');
+  if (!dryRun) {
+    const preflight = await fetch(`${site}/api/jobs`, { method:'POST', headers:{authorization:`Bearer ${await getToken()}`,'content-type':'application/json'}, body:JSON.stringify({runTs,rows:[]}) });
+    const check = await preflight.json().catch(()=>({}));
+    console.log(`jobs preflight: ${preflight.status}, acknowledged ${check.ok===true && check.n===0}`);
+    if (!preflight.ok || check.ok!==true || check.n!==0) throw new Error('Jobs upload preflight failed');
+  }
   const data = await collectJobs(fetch,console.log,only);
   if (!only || only.includes('za-dpsa')) {
     const gov = await governmentJobs();
