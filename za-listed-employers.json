@@ -1391,8 +1391,8 @@
       "ownership": "private",
       "ticker": "AVI",
       "careersUrl": "https://avi.simplify.hr/",
-      "ats": null,
-      "status": "careers-identity-and-reader-validation-pending",
+      "ats": "simplify",
+      "status": "verified-reader",
       "provenance": [
         {
           "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
@@ -1413,7 +1413,10 @@
       "websiteUrl": "http://www.avi.co.za/",
       "websiteObservedAt": "2026-10-10",
       "careersObservedAt": "2026-10-10",
-      "discoveryResult": "careers-page-accessible"
+      "discoveryResult": "careers-page-accessible",
+      "activeSourceId": "avi",
+      "verifiedAt": 1791615352792,
+      "notes": "Observed public Simplify list and title/ID/URL-bound detail fixtures validated; partial snapshots only. Source identity is shared with the private-employer catalogue, not another distinct employer."
     },
     {
       "id": "za-jse-ari",
@@ -2547,8 +2550,8 @@
       "ownership": "private",
       "ticker": "OCE",
       "careersUrl": "https://oceana.simplify.hr/",
-      "ats": null,
-      "status": "careers-identity-and-reader-validation-pending",
+      "ats": "simplify",
+      "status": "verified-reader",
       "provenance": [
         {
           "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
@@ -2569,7 +2572,10 @@
       "websiteUrl": "http://www.oceana.co.za/",
       "websiteObservedAt": "2026-10-10",
       "careersObservedAt": "2026-10-10",
-      "discoveryResult": "careers-page-accessible"
+      "discoveryResult": "careers-page-accessible",
+      "activeSourceId": "oceana",
+      "verifiedAt": 1791615352792,
+      "notes": "Observed public Simplify list and title/ID/URL-bound detail fixtures validated; partial snapshots only. Source identity is shared with the private-employer catalogue, not another distinct employer."
     },
     {
       "id": "za-jse-arl",

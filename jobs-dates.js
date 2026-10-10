@@ -53,3 +53,6 @@ export function parseJobDates(html, { country, sourceId, title } = {}) {
   const location = sourceId === 'sasol' ? plain(html.match(/<h[1-6]\b[^>]*>\s*Location\s*<\/h[1-6]>\s*<\/div>\s*<div>\s*<p[^>]*>([^<]+)<\/p>/i)?.[1]) : '';
   return { posted: instant(postedValue) ?? day(postedValue), closing, ...(location ? { location } : {}) };
 }
+
+// Shared strict instant parser for public ATS fields already bound to a job ID.
+export { instant as jobDateInstant };

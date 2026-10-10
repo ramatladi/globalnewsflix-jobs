@@ -132,22 +132,67 @@ export const ZA_EXTRA_SOURCES = [
     ],
     "detailDates": true
   },
-{
-  "id": "sanlam",
-  "name": "Sanlam Group",
-  "ticker": "",
-  "type": "c",
-  "ats": "sf",
-  "args": [
-    "careers.sanlamcloud.co.za"
-  ],
-  "provenanceUrl": "https://careers.sanlamcloud.co.za/",
-  "verifiedAt": 1791610597301,
-  "countries": [
-    "ZA"
-  ],
-  "detailDates": true
-}
+  {
+    "id": "sanlam",
+    "name": "Sanlam Group",
+    "ticker": "",
+    "type": "c",
+    "ats": "sf",
+    "args": [
+      "careers.sanlamcloud.co.za"
+    ],
+    "provenanceUrl": "https://careers.sanlamcloud.co.za/",
+    "verifiedAt": 1791610597301,
+    "countries": [
+      "ZA"
+    ],
+    "detailDates": true
+  },
+  {
+    "id": "avi",
+    "name": "AVI Limited",
+    "ticker": "",
+    "type": "c",
+    "ats": "simplify",
+    "args": [
+      "avi.simplify.hr"
+    ],
+    "provenanceUrl": "https://www.avi.co.za/",
+    "verifiedAt": 1791613867321,
+    "countries": [
+      "ZA"
+    ]
+  },
+  {
+    "id": "oceana",
+    "name": "Oceana Group Limited",
+    "ticker": "",
+    "type": "c",
+    "ats": "simplify",
+    "args": [
+      "oceana.simplify.hr"
+    ],
+    "provenanceUrl": "https://www.oceana.co.za/",
+    "verifiedAt": 1791613867321,
+    "countries": [
+      "ZA"
+    ]
+  },
+  {
+    "id": "shoprite",
+    "name": "Shoprite Group",
+    "ticker": "",
+    "type": "c",
+    "ats": "erecruit",
+    "args": [
+      "https://shoprite.erecruit.co/candidateapp/jobs/browse/"
+    ],
+    "provenanceUrl": "https://shoprite.erecruit.co/candidateapp/Jobs/Search",
+    "verifiedAt": 1791613867321,
+    "countries": [
+      "ZA"
+    ]
+  }
 ];
 
 export const ZA_GOVERNMENT_SOURCES = [
@@ -165,5 +210,37 @@ export const ZA_GOVERNMENT_SOURCES = [
     ],
     "provenanceUrl": "https://jobs.gauteng.gov.za/Public/Jobs.aspx",
     "verifiedAt": 1791610225841
+  },
+  {
+    "id": "uct",
+    "name": "University of Cape Town",
+    "ticker": "",
+    "type": "g",
+    "ats": "uct",
+    "args": [
+      "https://jobs.uct.ac.za/search/"
+    ],
+    "provenanceUrl": "https://jobs.uct.ac.za/",
+    "verifiedAt": 1791613867321,
+    "countries": [
+      "ZA"
+    ]
+  },
+  {
+    "id": "ethekwini",
+    "name": "eThekwini Metropolitan Municipality",
+    "ticker": "",
+    "type": "g",
+    "ats": "orc",
+    "args": [
+      "iabzbn.fa.ocs.oraclecloud.com",
+      "CX_1"
+    ],
+    "provenanceUrl": "https://www.durban.gov.za/press-statement/Governance%2BAnd%2BHuman%2BResources%2BCommittee%2BDecisions",
+    "verifiedAt": 1791613867321,
+    "countries": [
+      "ZA"
+    ],
+    "detailOracle": true
   }
 ];

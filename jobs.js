@@ -2,6 +2,10 @@
 // Collected by a GitHub Actions job every six hours; the site lists them by country, with categories and filters.
 // Pay is shown only where the employer publishes it.
 import { COUNTRY } from './data.js';
+import { SHOPRITE_BROWSE_URL, parseShopriteCategories, parseShopriteList, parseShopriteDetail } from './jobs-erecruit.js';
+import { parseSimplifyList, parseSimplifyDetail } from './jobs-simplify.js';
+import { parseOracleDetail } from './jobs-oracle-detail.js';
+import { UCT_SEARCH_URL, parseUctSearch, parseUctDetail } from './jobs-uct.js';
 import { parseJobDates } from './jobs-dates.js';
 import { parseJobPostings } from './jobs-adapters.js';
 import { employerMetadata } from './jobs-employers.js';
@@ -610,7 +614,61 @@ async function gauteng(f) {
   result.rows = result.rows.filter(row => !row.closed);
   return result;
 }
-const COLLECT = { gauteng, jsonld, gh: greenhouse, lever, ashby, wd: workday, sf: successfactors, orc: oracle, sr: smartrecruiters, amazon, un, unicef, nhs };
+async function erecruit(f) {
+  const categories = parseShopriteCategories(await getText(f, SHOPRITE_BROWSE_URL));
+  const rows = [], seen = new Set();
+  for (const category of categories.slice(0, 30)) {
+    const list = parseShopriteList(await getText(f, category.url), { sourceUrl: category.url });
+    for (const listed of list.rows) {
+      if (seen.has(listed.url) || seen.size >= DETAILS) continue;
+      seen.add(listed.url);
+      const html = await getText(f, listed.url);
+      const row = html && parseShopriteDetail(html, listed);
+      if (row && !row.closed) rows.push(row);
+    }
+  }
+  return snapshot(rows, false, 'detail-validated-partial-list');
+}
+async function simplify(f, src) {
+  const base = `https://${src.args[0]}/`;
+  const html = await getText(f, `${base}vacancy/vacancies?query=&displayOrder=4&ats_referrer=`);
+  const result = parseSimplifyList(html, base);
+  if (!result) return null;
+  for (let i = 0; i < result.rows.length; i++) {
+    const detail = await getText(f, result.rows[i].url);
+    const enriched = detail && parseSimplifyDetail(detail, result.rows[i]);
+    if (enriched) result.rows[i] = enriched;
+  }
+  return result;
+}
+async function uct(f) {
+  const result = parseUctSearch(await getText(f, UCT_SEARCH_URL));
+  if (!result) return null;
+  const rows = [];
+  for (const listed of result.rows.slice(0, DETAILS)) {
+    const detail = await getText(f, listed.url);
+    const row = detail && parseUctDetail(detail, listed);
+    if (row && !row.closed) rows.push(row);
+  }
+  return snapshot(rows, false, 'detail-validated-partial-list');
+}
+async function oracleWithDetails(f, src) {
+  const result = await oracle(f, src);
+  if (!result || !src.detailOracle) return result;
+  const [host, site] = src.args;
+  const validated = [];
+  for (let i = 0; i < result.rows.length && i < DETAILS; i++) {
+    const row = result.rows[i];
+    const payload = await getJson(f, `https://${host}/hcmRestApi/resources/latest/recruitingCEJobRequisitionDetails?onlyData=true&expand=all&finder=ById;Id=${encodeURIComponent(row.id)},siteNumber=${encodeURIComponent(site)}`);
+    const enriched = parseOracleDetail(payload, row);
+    if (enriched) validated.push(enriched);
+    else { result.complete = false; result.reason = 'detail-failed'; }
+  }
+  if (result.rows.length > DETAILS) { result.complete = false; result.reason = 'detail-limit'; }
+  result.rows = validated;
+  return result;
+}
+const COLLECT = { erecruit, simplify, uct, gauteng, jsonld, gh: greenhouse, lever, ashby, wd: workday, sf: successfactors, orc: oracleWithDetails, sr: smartrecruiters, amazon, un, unicef, nhs };
 
 export async function fxRates(fetchImpl = fetch) {
   const j = await getJson(fetchImpl, 'https://api.frankfurter.app/latest?from=USD');

@@ -1,0 +1,14 @@
+{
+  "capturedOn": "2026-10-10",
+  "publisher": "Shoprite public Graylink site",
+  "fixtures": "Verbatim reduced public category anchors, vacancy table rows and detail fields. Hidden state, application controls and scripts excluded.",
+  "browse": "https://shoprite.erecruit.co/candidateapp/jobs/browse/",
+  "categories": [
+    "https://shoprite.erecruit.co/candidateapp/Jobs/Categories/Finance/2d4618fb04c949d5978c9cd95e49aeea",
+    "https://shoprite.erecruit.co/candidateapp/Jobs/Categories/Meat_Markets/a00aa552773341e3acd6f925fc638ce7"
+  ],
+  "details": [
+    "https://shoprite.erecruit.co/candidateapp/Jobs/View/SHO261009-8",
+    "https://shoprite.erecruit.co/candidateapp/Jobs/View/SHO261005-7"
+  ]
+}

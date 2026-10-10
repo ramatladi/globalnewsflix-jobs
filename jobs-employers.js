@@ -66,6 +66,9 @@ export function sourceCareerUrls(source) {
     case 'nhs': careersUrl = 'https://www.jobs.nhs.uk/candidate/search/results'; collectionUrl = careersUrl; break;
     case 'un': careersUrl = 'https://careers.un.org/'; collectionUrl = 'https://careers.un.org/api/public/opening/jo/list/filteredV2/en'; break;
     case 'unicef': careersUrl = 'https://jobs.unicef.org/en-us/listing/'; collectionUrl = careersUrl; break;
+    case 'simplify': careersUrl = `https://${a}/`; collectionUrl = `${careersUrl}vacancy/vacancies?query=&displayOrder=4&ats_referrer=`; break;
+    case 'erecruit':
+    case 'uct':
     case 'gauteng':
     case 'jsonld': careersUrl = a; collectionUrl = a; break;
     // A government's actual configured source URL is required; no guessed PDF.

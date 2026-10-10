@@ -4,7 +4,7 @@ Public vacancy collection only. The website, database, credentials and deploymen
 
 ## Scope
 
-This is the initial South Africa government and shared reader stage. It does not represent 1,000 employers in each country. The registry reports unknown or unverified country coverage explicitly. Existing readers cover Greenhouse, Lever, Ashby, Workday, SuccessFactors, Oracle, SmartRecruiters and selected official portals. ATS detection is not equivalent to a working reader; unsupported iCIMS, Workable and Taleo boards remain unsupported except where actual JobPosting markup is accessible.
+This covers South Africa government and employer sources, including UCT, eThekwini, AVI, Oceana and Shoprite. It does not represent 1,000 employers in each country. The registry reports unknown or unverified country coverage explicitly. Existing readers cover Greenhouse, Lever, Ashby, Workday, SuccessFactors, Oracle, SmartRecruiters, Simplify.hr, selected eRecruit pages and official portals. ATS detection is not equivalent to a working reader; unsupported iCIMS, Workable and Taleo boards remain unsupported except where actual JobPosting markup is accessible.
 
 ## Run
 

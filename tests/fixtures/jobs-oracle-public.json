@@ -1,0 +1,150 @@
+{
+  "note": "Excerpt of public eThekwini responses; only public display/enrichment fields retained. Listing excerpt intentionally partial.",
+  "listing": {
+    "items": [
+      {
+        "TotalJobsCount": 16,
+        "requisitionList": [
+          {
+            "Id": "1600",
+            "Title": "36002886 - Artisan (Roads And Stormwater)",
+            "PostedDate": "2026-10-09",
+            "PostingEndDate": null,
+            "Language": "US",
+            "PrimaryLocationCountry": "ZA",
+            "GeographyId": 100000005582303,
+            "HotJobFlag": false,
+            "WorkplaceTypeCode": "ORA_ON_SITE",
+            "JobFamily": null,
+            "JobFunction": null,
+            "WorkerType": null,
+            "ContractType": null,
+            "ManagerLevel": null,
+            "JobSchedule": null,
+            "JobShift": null,
+            "JobType": null,
+            "StudyLevel": null,
+            "DomesticTravelRequired": null,
+            "InternationalTravelRequired": null,
+            "WorkDurationYears": null,
+            "WorkDurationMonths": null,
+            "WorkHours": null,
+            "WorkDays": null,
+            "LegalEmployer": null,
+            "BusinessUnit": null,
+            "Department": null,
+            "Organization": null,
+            "BusinessUnitId": 300000005233008,
+            "LegalEmployerId": 300000005234001,
+            "OrganizationId": null,
+            "MediaThumbURL": null,
+            "ShortDescriptionStr": "\nCo-ordinates and undertakes specialized/ technical civil construction trade work associated with \ncontrolling the operations pertaining to Road and Stormwater. ",
+            "PrimaryLocation": "Durban, KwaZulu-Natal, South Africa",
+            "Distance": 1791504000000.0,
+            "TrendingFlag": false,
+            "BeFirstToApplyFlag": true,
+            "Relevancy": 9,
+            "WorkplaceType": "On-site",
+            "ExternalQualificationsStr": null,
+            "ExternalResponsibilitiesStr": null,
+            "secondaryLocations": []
+          }
+        ]
+      }
+    ]
+  },
+  "detail": {
+    "items": [
+      {
+        "Id": "1600",
+        "Title": "36002886 - Artisan (Roads And Stormwater)",
+        "PrimaryLocation": "Durban, KwaZulu-Natal, South Africa",
+        "PrimaryLocationCountry": "ZA",
+        "ExternalPostedStartDate": "2026-10-09T21:00:00+00:00",
+        "ExternalPostedEndDate": "2026-10-23T21:00:00+00:00",
+        "Category": "TECHNICAL SPECIALIST",
+        "ExternalDescriptionStr": "<p><strong>Key Responsibility Areas</strong></p><ul><li>Interprets and co-ordinates specific pre-work/ site requirements associated with repairs and planned, predictive maintenance.</li><li>Controls personnel, performance, productivity and discipline.&nbsp;</li><li>Executes specialized/ trade related tasks and monitors and evaluates progress with regards to road and storm-water construction, repair and maintenance work.</li><li>Interacts and provides activity related information with regards to the works.&nbsp;</li><li>Performs specific tasks associated with the operation of heavy and/or specialized vehicles (Tip trucks, Crane trucks, Vector etc.) during road and storm-water drainage maintenance activities.&nbsp;</li><li>Performs specific administrative tasks/ activities associated with the updating and maintain records/ information related to the activities/ operations.</li></ul><p>&nbsp;</p><p><strong>Competencies</strong></p><ul><li>Managing Work&nbsp;</li><li>Planning &amp; Organizing&nbsp;</li><li>Workplace safety</li><li>Discipline Specific Skills&nbsp;</li><li>Service Delivery Orientation&nbsp;</li><li>Communication \u2022 Accountability &amp; Ethical Conduct&nbsp;</li><li>Learning Orientation</li><li>Team Orientation</li><li>Couching &amp; Monitoring</li></ul><p>&nbsp;</p><p>&nbsp;<strong>Essential Requirements&nbsp;</strong></p><ul><li>Trade Tested Artisan in the Civil Construction industry or equivalent.&nbsp;</li><li>Valid motor vehicle driving license (Code C1).&nbsp;</li><li>Valid Professional Driving Permit (PrDP).&nbsp;</li><li>Valid certification of competency in the operation of truck mounted cranes or to be obtained within 6 months from the date of appointment.</li><li>Certification in Basic First Aid to be completed within 6 months from date of appointment.&nbsp;</li><li>3 years relevant post apprenticeship experience.&nbsp;</li></ul><p>&nbsp;</p><p><strong>Special Conditions</strong>&nbsp;</p><ul><li>Required to work in all weather conditions.&nbsp;</li><li>Required to work outside normal working hours during emergencies and planned overtime.&nbsp;</li></ul><ol><li>Required to be on stand-by duty.</li></ol>",
+        "requisitionFlexFields": [
+          {
+            "Prompt": "Loco Allowance",
+            "Value": "No",
+            "ControlType": "SingleChoiceList",
+            "SequenceNumber": 1
+          },
+          {
+            "Prompt": "13th Cheque",
+            "Value": "Yes",
+            "ControlType": "SingleChoiceList",
+            "SequenceNumber": 2
+          },
+          {
+            "Prompt": "Housing Subsidy",
+            "Value": "Yes",
+            "ControlType": "SingleChoiceList",
+            "SequenceNumber": 3
+          },
+          {
+            "Prompt": "Leave",
+            "Value": "Yes",
+            "ControlType": "SingleChoiceList",
+            "SequenceNumber": 4
+          },
+          {
+            "Prompt": "Medical Aid",
+            "Value": "Yes",
+            "ControlType": "SingleChoiceList",
+            "SequenceNumber": 5
+          },
+          {
+            "Prompt": "Other Allowances",
+            "Value": "N/A",
+            "ControlType": "TextArea",
+            "SequenceNumber": 6
+          },
+          {
+            "Prompt": "Pension Fund",
+            "Value": "Yes",
+            "ControlType": "SingleChoiceList",
+            "SequenceNumber": 7
+          },
+          {
+            "Prompt": "Remuneration",
+            "Value": "R347 517.13/R 451 095.57 pa",
+            "ControlType": "TextArea",
+            "SequenceNumber": 8
+          },
+          {
+            "Prompt": "Skill Allowance",
+            "Value": "No",
+            "ControlType": "SingleChoiceList",
+            "SequenceNumber": 9
+          },
+          {
+            "Prompt": "Grade",
+            "Value": "T10",
+            "ControlType": "SingleChoiceList",
+            "SequenceNumber": 15
+          },
+          {
+            "Prompt": "Cluster",
+            "Value": "009 TECHNICAL SERVICES",
+            "ControlType": "SingleChoiceList",
+            "SequenceNumber": 16
+          },
+          {
+            "Prompt": "Directorate",
+            "Value": "0092 ROAD INFRASTRUCTURE MANAGEMENT",
+            "ControlType": "SingleChoiceList",
+            "SequenceNumber": 17
+          },
+          {
+            "Prompt": "Department",
+            "Value": "0094 WEST CENTRAL REGION",
+            "ControlType": "SingleChoiceList",
+            "SequenceNumber": 18
+          }
+        ]
+      }
+    ]
+  }
+}

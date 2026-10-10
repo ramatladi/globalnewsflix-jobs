@@ -99,13 +99,16 @@
       "country": "ZA",
       "sector": "private",
       "industry": "retail",
-      "ats": null,
-      "careersUrl": "https://shoprite.erecruit.co/candidateapp/Jobs/Search",
-      "provenanceUrl": "https://www.shopriteholdings.co.za/docs/applicant-terms.pdf",
-      "verifiedAt": 1791609969947,
-      "status": "reader-needed",
-      "args": [],
-      "note": "Official corporate careers hub returned403; the observed eRecruit public search page is catalogued only, with no collector activated."
+      "ats": "erecruit",
+      "careersUrl": "https://shoprite.erecruit.co/candidateapp/jobs/browse/",
+      "provenanceUrl": "https://shoprite.erecruit.co/candidateapp/Jobs/Search",
+      "verifiedAt": 1791613867321,
+      "status": "verified-reader",
+      "args": [
+        "https://shoprite.erecruit.co/candidateapp/jobs/browse/"
+      ],
+      "note": "Official corporate careers hub returned403; the observed eRecruit public search page is catalogued only, with no collector activated.",
+      "notes": "Public list and detail fixtures validated. Partial source only; no complete-source cleanup authorized."
     },
     {
       "id": "picknpay",
@@ -247,6 +250,36 @@
         "adcorpgroup",
         "Adcorp-Careers-South-Africa"
       ]
+    },
+    {
+      "id": "avi",
+      "name": "AVI Limited",
+      "country": "ZA",
+      "sector": "private",
+      "ats": "simplify",
+      "args": [
+        "avi.simplify.hr"
+      ],
+      "careersUrl": "https://avi.simplify.hr/",
+      "provenanceUrl": "https://www.avi.co.za/",
+      "verifiedAt": 1791613867321,
+      "status": "verified-reader",
+      "notes": "Public list and detail fixtures validated. Partial source only; no complete-source cleanup authorized."
+    },
+    {
+      "id": "oceana",
+      "name": "Oceana Group Limited",
+      "country": "ZA",
+      "sector": "private",
+      "ats": "simplify",
+      "args": [
+        "oceana.simplify.hr"
+      ],
+      "careersUrl": "https://oceana.simplify.hr/",
+      "provenanceUrl": "https://www.oceana.co.za/",
+      "verifiedAt": 1791613867321,
+      "status": "verified-reader",
+      "notes": "Public list and detail fixtures validated. Partial source only; no complete-source cleanup authorized."
     }
   ]
 }

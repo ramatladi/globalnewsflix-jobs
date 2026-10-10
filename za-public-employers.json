@@ -2,13 +2,13 @@
   "version": 1,
   "country": "ZA",
   "observedOn": "2026-10-10",
-  "scope": "Research catalogue; none of these records activates collection. Government means public sector, including autonomous public universities. Provincial groups are not distinct employer counts.",
+  "scope": "Evidence-backed research catalogue. Active flags reference separately configured and validated collectors; this catalogue does not itself activate collection. Government means public sector, including autonomous public universities. Provincial groups are not distinct employer counts.",
   "summary": {
     "catalogueRecords": 100,
     "employerRecords": 91,
     "governmentGroups": 9,
     "careersUrlsObserved": 25,
-    "activeSources": 0
+    "activeSources": 3
   },
   "records": [
     {
@@ -260,9 +260,11 @@
       ],
       "observedOn": "2026-10-10",
       "discoveryStatus": "careers_url_observed",
-      "ingestionStatus": "not_connected",
-      "active": false,
-      "notes": "Municipality explicitly announced Oracle HCM vacancy publication from February 2026. Endpoint still needs adapter verification."
+      "ingestionStatus": "configured_validated",
+      "active": true,
+      "notes": "Exact configured public source validated by list/detail fixtures and live dry-run on 10 October 2026. Source status is separate from deployment and current completeness; keep collection diagnostics authoritative.",
+      "activeSourceId": "ethekwini",
+      "verifiedAt": 1791615352792
     },
     {
       "id": "za-public-mangaung-metropolitan-municipality",
@@ -494,9 +496,11 @@
       ],
       "observedOn": "2026-10-10",
       "discoveryStatus": "careers_url_observed",
-      "ingestionStatus": "not_connected",
-      "active": false,
-      "notes": "Official careers page observed through public web index; ingestion adapter and current vacancies not yet verified."
+      "ingestionStatus": "configured_validated",
+      "active": true,
+      "notes": "Exact configured public source validated by list/detail fixtures and live dry-run on 10 October 2026. Source status is separate from deployment and current completeness; keep collection diagnostics authoritative.",
+      "activeSourceId": "uct",
+      "verifiedAt": 1791615352792
     },
     {
       "id": "za-public-university-of-fort-hare",
@@ -1810,9 +1814,10 @@
       ],
       "observedOn": "2026-10-10",
       "discoveryStatus": "careers_url_observed",
-      "ingestionStatus": "not_connected",
-      "active": false,
-      "notes": "Province-wide discovery target covering multiple departmental employers. Do not count as an additional distinct employer alongside its departments."
+      "ingestionStatus": "configured_validated",
+      "active": true,
+      "notes": "Province-wide discovery target covering multiple departmental employers. Do not count as an additional distinct employer alongside its departments.",
+      "activeSourceId": "za-gauteng"
     },
     {
       "id": "za-public-kwazulu-natal-provincial-government",
