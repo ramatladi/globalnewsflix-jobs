@@ -437,7 +437,7 @@ export function strictWorkdayPlace(info, row, site) {
     if (typeof location !== 'string') return null;
     const label = plain(location).split(',').at(-1).trim();
     // A plain state/country homonym in an additional label is not enough.
-    if (/^Georgia$/i.test(label)) return null;
+    if (fold(label) === 'georgia') return null;
     return countryCode(label);
   };
   const primaryLabel = suffixCountry(info.location);

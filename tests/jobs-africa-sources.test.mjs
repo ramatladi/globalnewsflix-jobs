@@ -109,6 +109,7 @@ test('strict Workday details bind ID/site/title/URL and reject ambiguous or malf
   const info=diageoDetails.find(x=>x.jobPostingInfo.jobReqId==='JR1130878').jobPostingInfo,row=detailRow(info,'IN');
   for(const patch of [{jobReqId:'other'},{jobPostingSiteId:'other'},{title:'other'},{externalUrl:info.externalUrl+'-other'},{country:{descriptor:'Unknown'}},{additionalLocations:{}},{additionalLocations:['Atlanta, Georgia']},{additionalLocations:['Bangalore Karle Town SEZ']},{jobRequisitionLocation:{country:{descriptor:'Ireland'}}}])assert.equal(strictWorkdayPlace({...info,...patch},row,'Diageo_Careers'),null);
   assert.equal(strictWorkdayPlace(info,{...row,country:null},'Diageo_Careers'),null);
+  for(const label of ['Atlanta, Georgia','Atlanta, Georgia.','Atlanta, Georgia 30303']) assert.equal(strictWorkdayPlace({...info,additionalLocations:[label]},{...row,country:'GE'},'Diageo_Careers'),null);
 });
 test('Diageo failed or contradictory details remain omitted and partial with no fallback',async()=>{
   const info=diageoDetails.find(x=>x.jobPostingInfo.jobReqId==='JR1125269').jobPostingInfo;
