@@ -318,6 +318,8 @@ const ago = s => { const m = String(s || '').match(/(\d+)\+?\s+Days? Ago/i); ret
 
 // One raw job → stored row (or null when the country cannot be told).
 export function normalizeCollectedJob(src, j, fx) {
+  if (Object.hasOwn(j, 'payObserved') && typeof j.payObserved !== 'boolean') return null;
+  if (j.countryUnresolved) return null;
   const pay = j.pay === undefined ? (j.text ? parseSalary(j.text) : null) : j.pay;
   const country = j.country || countryOf(j.location);
   if (!country || !COUNTRY[country] || j.id == null || String(j.id).trim() === '' || !j.title || !/^https:\/\//.test(j.url || '')) return null;
@@ -330,10 +332,35 @@ export function normalizeCollectedJob(src, j, fx) {
     cur: ok ? pay.cur : null, min: ok ? pay.min : null, max: ok ? pay.max : null, period: ok ? pay.period : null, usd_min: ok ? umin : null, usd_max: ok ? umax : null,
     posted_ts: j.posted || j.posted_ts || null, closing_ts: j.closing || j.closing_ts || null,
     reference: j.reference || null, source_url: j.source_url || j.url, salary_text: j.salary_text ? plain(j.salary_text).slice(0, 1200) : null, salary_url: j.salary_text ? (j.salary_url || j.url) : null,
+    ...(Object.hasOwn(j, 'payObserved') ? { pay_observed: j.payObserved } : {}),
   };
 }
 
 // Greenhouse and Lever boards (pay is usually in the posting text).
+// Employer-supplied remote eligibility still names a country. Strip only the
+// remote label, then require explicit country or exact known city evidence; never treat CA/IN/GA as ISO
+// codes here because they can also be states or ordinary words.
+const greenhousePlaces = value => String(value || '').split(/\s*;\s*/).filter(Boolean);
+const greenhouseCountry = place => {
+  const remote = plain(place).match(/^remote(?:\s*[-:]\s*|\s+)(.+)$/i);
+  const name = (remote ? remote[1].trim() : place.trim()).replace(/^\((.*)\)$/, '$1').replace(/:\s*(?:select|all) locations$/i, '').trim();
+  if (name === 'US') return 'US';
+  if (/^Georgia$/i.test(name)) return null; // Country/state ambiguity needs more evidence.
+  const explicit = countryCode(name);
+  if (explicit) return explicit;
+  // Observed labels also use 'Remote - Canberra, Australia' and
+  // 'Remote (USA - Boston, MA)'. Require an explicit country component or
+  // an exact established city; never infer from exclusion/eligibility prose.
+  if (remote) {
+    if (/\b(?:except|excluding|outside|not|or|worldwide|global)\b/i.test(name)) return null;
+    const countries = [...new Set(name.split(/,|\s+-\s+/).map(s => s.trim() === 'US' ? 'US' : countryCode(s)).filter(Boolean))];
+    const lastCountry = countryCode(name.split(',').at(-1));
+    if (lastCountry === 'US' && countries.includes('GE')) countries.splice(countries.indexOf('GE'), 1);
+    if (countries.length) return countries.length === 1 ? countries[0] : null;
+    return Object.entries(CITIES).find(([, cities]) => cities.includes(fold(name)))?.[0] || null;
+  }
+  return countryOf(place);
+};
 export function greenhouseJobs(postings, sourceId) {
   let complete = true;
   const rows = postings.flatMap(x => {
@@ -346,20 +373,30 @@ export function greenhouseJobs(postings, sourceId) {
     const raw = { id: x.id, title: x.title, location: x.location?.name, url, text: x.content, posted: dateTs(x.first_published || x.updated_at), closing: dateTs(x.application_deadline), hint: x.departments?.[0]?.name };
     const metadataPlaces = (x.metadata || []).filter(m => m.name === 'Job Posting Location').flatMap(m => [m.value].flat()).filter(v => typeof v === 'string' && v.trim());
     const officePlaces = (x.offices || []).map(o => o.location).filter(v => typeof v === 'string' && v.trim());
-    const places = metadataPlaces.length ? metadataPlaces : raw.location && countryOf(raw.location) ? [raw.location] : officePlaces;
-    if (!places.length || x.id == null || String(x.id).trim() === '') { complete = false; return [raw]; }
+    // Keep the base ID for the country that the previous reader emitted.
+    // Partial sources cannot prune old IDs when a listing gains more countries.
+    const legacyPlaces = metadataPlaces.length ? metadataPlaces : raw.location && countryOf(raw.location) ? [raw.location] : officePlaces;
+    const legacyCountries = new Set(legacyPlaces.map(place => place.trim() === 'US' ? 'US' : countryOf(place) || (place.trim() === 'Ohio' && (x.offices || []).some(o => /,\s*OH$/.test(o.name || '')) ? 'US' : null)).filter(Boolean));
+    const listedPlaces = greenhousePlaces(raw.location);
+    // Five observed Okta postings label the US state Georgia ambiguously.
+    // Their exact attached office and US-only place list establish the scope.
+    const oktaUsPlaces = new Set(['Florida', 'Georgia', 'North Carolina', 'Tennessee', 'South Carolina', 'Virginia', 'Massachusetts', 'New York, New York', 'Washington, DC']);
+    const oktaUsScope = sourceId === 'okta' && !metadataPlaces.length && (x.offices || []).some(o => o.id === 21497 && o.name === 'US Remote East Coast') && listedPlaces.length > 0 && listedPlaces.every(p => oktaUsPlaces.has(p));
+    if (oktaUsScope && legacyCountries.size === 1 && legacyCountries.has('GE')) { legacyCountries.delete('GE'); legacyCountries.add('US'); }
+    const places = (metadataPlaces.length ? metadataPlaces : oktaUsScope || listedPlaces.some(greenhouseCountry) ? listedPlaces : officePlaces).flatMap(greenhousePlaces);
+    if (!places.length || x.id == null || String(x.id).trim() === '') { complete = false; return [{ ...raw, countryUnresolved: true }]; }
     const grouped = new Map();
     for (const place of places) {
       // Standalone US is explicit in the observed metadata, unlike ambiguous
       // state/province abbreviations. Office strings can resolve an unknown
       // metadata place only with corroborating employer-supplied geography.
-      const cc = place.trim() === 'US' ? 'US' : countryOf(place) || (place.trim() === 'Ohio' && (x.offices || []).some(o => /,\s*OH$/.test(o.name || '')) ? 'US' : null);
+      const cc = (oktaUsScope ? 'US' : greenhouseCountry(place)) || (place.trim() === 'Ohio' && (x.offices || []).some(o => /,\s*OH$/.test(o.name || '')) ? 'US' : null);
       if (!cc) { complete = false; continue; }
       if (!grouped.has(cc)) grouped.set(cc, []);
       grouped.get(cc).push(place);
     }
-    if (!grouped.size) return [raw];
-    return [...grouped].map(([country, names]) => ({ ...raw, id: grouped.size > 1 ? `${x.id}:${country}` : x.id, country, location: [...new Set(names)].join('; ') }));
+    if (!grouped.size) return [{ ...raw, countryUnresolved: true }];
+    return [...grouped].map(([country, names]) => ({ ...raw, id: legacyCountries.size === 1 && legacyCountries.has(country) || legacyCountries.size === 0 && grouped.size === 1 ? x.id : `${x.id}:${country}`, country, location: [...new Set(names)].join('; ') }));
   });
   return snapshot(rows, complete, complete ? '' : 'location-scope-unresolved');
 }
@@ -423,17 +460,23 @@ async function workday(f, src, log) {
   }
   if (new Set(out.map(x => x.id)).size !== first.total) complete = false;
   // Job pages: the country where the list could not tell it, and pay where employers publish it.
+  // Geography determines whether a row can be retained at all. Spend the same
+  // bounded detail budget on unresolved rows before optional pay enrichment;
+  // keep the original output order and the source's completeness checks.
+  for (const x of out) { x.country ||= countryOf(x.location); x.payObserved = false; }
+  const detailOrder = [...out.filter(x => !x.country), ...out.filter(x => PAY_COUNTRIES.has(x.country))];
   let n = 0;
-  for (const x of out) {
-    const cc = x.country || countryOf(x.location);
-    if (n >= DETAILS || (cc && !PAY_COUNTRIES.has(cc))) { x.country = cc; continue; }
+  for (const x of detailOrder) {
+    if (n >= DETAILS) break;
+    const cc = x.country;
     n++;
     const d = await getJson(f, base + x.path);
     const i = d?.jobPostingInfo;
     if (!i) { x.country = cc; continue; }
     x.country = cc || countryCode(i.country?.descriptor);
     x.location = i.location || x.location;
-    x.text = i.jobDescription || '';
+    x.payObserved = typeof i.jobDescription === 'string';
+    x.text = x.payObserved ? i.jobDescription : '';
     x.posted = dateTs(i.startDate) || x.posted;
   }
   log(`${src.name}: ${values.length} countries in filter, ${n} job pages read`);

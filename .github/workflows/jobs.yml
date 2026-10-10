@@ -5,6 +5,11 @@ on:
     - cron: "41 */6 * * *"
   workflow_dispatch:
     inputs:
+      dry_run:
+        description: "Collect and upload a report without publishing to the site"
+        required: false
+        type: boolean
+        default: false
       sources:
         description: "Optional comma-separated registered source IDs (blank = all)"
         required: false
@@ -33,7 +38,7 @@ jobs:
       - run: node jobs-runner.mjs
         env:
           JOB_SOURCES: ${{ inputs.sources }}
-          JOBS_DRY_RUN: ${{ vars.PUBLISH_RESULTS != 'true' && '1' || '' }}
+          JOBS_DRY_RUN: ${{ (inputs.dry_run || vars.PUBLISH_RESULTS != 'true') && '1' || '' }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

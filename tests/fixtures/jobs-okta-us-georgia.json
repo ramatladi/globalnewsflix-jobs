@@ -1,0 +1,332 @@
+{
+  "source": "okta",
+  "url": "https://boards-api.greenhouse.io/v1/boards/okta/jobs?content=true",
+  "observedAt": "2026-10-10T14:40:02.600Z",
+  "postings": [
+    {
+      "id": 8237969,
+      "title": "Area Sales Director, Enterprise (Auth0)",
+      "location": {
+        "name": "Florida; Georgia; North Carolina; Tennessee"
+      },
+      "absolute_url": "https://www.okta.com/company/careers/opportunity/8237969?gh_jid=8237969",
+      "metadata": [
+        {
+          "id": 58735330,
+          "name": "Naukri Job URL",
+          "value": null,
+          "value_type": "long_text"
+        },
+        {
+          "id": 58735350,
+          "name": "Naukri Job Error",
+          "value": null,
+          "value_type": "long_text"
+        },
+        {
+          "id": 58735367,
+          "name": "Minimum Salary",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735368,
+          "name": "Maximum Salary",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735369,
+          "name": "Minimum Work Experience",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735370,
+          "name": "Maximum Work Experience",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735384,
+          "name": "City",
+          "value": null,
+          "value_type": "single_select"
+        },
+        {
+          "id": 58735385,
+          "name": "Job Description",
+          "value": null,
+          "value_type": "long_text"
+        }
+      ],
+      "offices": [
+        {
+          "id": 21497,
+          "name": "US Remote East Coast",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": 8213721,
+      "title": "Corporate New Business Account Executive",
+      "location": {
+        "name": "Georgia; North Carolina; Washington, DC"
+      },
+      "absolute_url": "https://www.okta.com/company/careers/opportunity/8213721?gh_jid=8213721",
+      "metadata": [
+        {
+          "id": 58735330,
+          "name": "Naukri Job URL",
+          "value": null,
+          "value_type": "long_text"
+        },
+        {
+          "id": 58735350,
+          "name": "Naukri Job Error",
+          "value": null,
+          "value_type": "long_text"
+        },
+        {
+          "id": 58735367,
+          "name": "Minimum Salary",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735368,
+          "name": "Maximum Salary",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735369,
+          "name": "Minimum Work Experience",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735370,
+          "name": "Maximum Work Experience",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735384,
+          "name": "City",
+          "value": null,
+          "value_type": "single_select"
+        },
+        {
+          "id": 58735385,
+          "name": "Job Description",
+          "value": null,
+          "value_type": "long_text"
+        }
+      ],
+      "offices": [
+        {
+          "id": 21497,
+          "name": "US Remote East Coast",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": 8069407,
+      "title": "Sr. Customer Success Manager ",
+      "location": {
+        "name": "Florida; Georgia; North Carolina; South Carolina; Virginia; Washington, DC"
+      },
+      "absolute_url": "https://www.okta.com/company/careers/opportunity/8069407?gh_jid=8069407",
+      "metadata": [
+        {
+          "id": 58735330,
+          "name": "Naukri Job URL",
+          "value": null,
+          "value_type": "long_text"
+        },
+        {
+          "id": 58735350,
+          "name": "Naukri Job Error",
+          "value": null,
+          "value_type": "long_text"
+        },
+        {
+          "id": 58735367,
+          "name": "Minimum Salary",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735368,
+          "name": "Maximum Salary",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735369,
+          "name": "Minimum Work Experience",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735370,
+          "name": "Maximum Work Experience",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735384,
+          "name": "City",
+          "value": null,
+          "value_type": "single_select"
+        },
+        {
+          "id": 58735385,
+          "name": "Job Description",
+          "value": null,
+          "value_type": "long_text"
+        }
+      ],
+      "offices": [
+        {
+          "id": 21497,
+          "name": "US Remote East Coast",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": 8248960,
+      "title": "Strategic Account Executive, Auth0 Florida ",
+      "location": {
+        "name": "Florida; Georgia; North Carolina; Tennessee"
+      },
+      "absolute_url": "https://www.okta.com/company/careers/opportunity/8248960?gh_jid=8248960",
+      "metadata": [
+        {
+          "id": 58735330,
+          "name": "Naukri Job URL",
+          "value": null,
+          "value_type": "long_text"
+        },
+        {
+          "id": 58735350,
+          "name": "Naukri Job Error",
+          "value": null,
+          "value_type": "long_text"
+        },
+        {
+          "id": 58735367,
+          "name": "Minimum Salary",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735368,
+          "name": "Maximum Salary",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735369,
+          "name": "Minimum Work Experience",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735370,
+          "name": "Maximum Work Experience",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735384,
+          "name": "City",
+          "value": null,
+          "value_type": "single_select"
+        },
+        {
+          "id": 58735385,
+          "name": "Job Description",
+          "value": null,
+          "value_type": "long_text"
+        }
+      ],
+      "offices": [
+        {
+          "id": 21497,
+          "name": "US Remote East Coast",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": 7660357,
+      "title": "Vice President of Enterprise Sales, East",
+      "location": {
+        "name": "Georgia; Massachusetts; New York, New York; Washington, DC"
+      },
+      "absolute_url": "https://www.okta.com/company/careers/opportunity/7660357?gh_jid=7660357",
+      "metadata": [
+        {
+          "id": 58735330,
+          "name": "Naukri Job URL",
+          "value": null,
+          "value_type": "long_text"
+        },
+        {
+          "id": 58735350,
+          "name": "Naukri Job Error",
+          "value": null,
+          "value_type": "long_text"
+        },
+        {
+          "id": 58735367,
+          "name": "Minimum Salary",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735368,
+          "name": "Maximum Salary",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735369,
+          "name": "Minimum Work Experience",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735370,
+          "name": "Maximum Work Experience",
+          "value": null,
+          "value_type": "number"
+        },
+        {
+          "id": 58735384,
+          "name": "City",
+          "value": null,
+          "value_type": "single_select"
+        },
+        {
+          "id": 58735385,
+          "name": "Job Description",
+          "value": null,
+          "value_type": "long_text"
+        }
+      ],
+      "offices": [
+        {
+          "id": 21497,
+          "name": "US Remote East Coast",
+          "location": null
+        }
+      ]
+    }
+  ]
+}

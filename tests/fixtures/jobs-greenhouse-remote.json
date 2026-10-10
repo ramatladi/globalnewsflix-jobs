@@ -1,0 +1,215 @@
+{
+  "source": "affirm",
+  "url": "https://boards-api.greenhouse.io/v1/boards/affirm/jobs?content=true",
+  "observedAt": "2026-10-10T14:33:45.765Z",
+  "postings": [
+    {
+      "id": 7850544003,
+      "title": "Administrative Assistant IV",
+      "location": {
+        "name": "Remote US"
+      },
+      "absolute_url": "https://job-boards.greenhouse.io/affirm/jobs/7850544003",
+      "metadata": [
+        {
+          "id": 4128552003,
+          "name": "External Department",
+          "value": "Engineering",
+          "value_type": "single_select"
+        },
+        {
+          "id": 28890347003,
+          "name": "PERM Job?",
+          "value": false,
+          "value_type": "yes_no"
+        }
+      ],
+      "offices": [
+        {
+          "name": "Remote US",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": 7832318003,
+      "title": "Analyst II, Credit",
+      "location": {
+        "name": "Remote UK"
+      },
+      "absolute_url": "https://job-boards.greenhouse.io/affirm/jobs/7832318003",
+      "metadata": [
+        {
+          "id": 4128552003,
+          "name": "External Department",
+          "value": "Risk & Analytics",
+          "value_type": "single_select"
+        },
+        {
+          "id": 28890347003,
+          "name": "PERM Job?",
+          "value": false,
+          "value_type": "yes_no"
+        }
+      ],
+      "offices": [
+        {
+          "name": "Remote UK",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": 8010489003,
+      "title": "Analyst II, Full Stack",
+      "location": {
+        "name": "Remote Spain"
+      },
+      "absolute_url": "https://job-boards.greenhouse.io/affirm/jobs/8010489003",
+      "metadata": [
+        {
+          "id": 4128552003,
+          "name": "External Department",
+          "value": "Accounting",
+          "value_type": "single_select"
+        },
+        {
+          "id": 28890347003,
+          "name": "PERM Job?",
+          "value": false,
+          "value_type": "yes_no"
+        }
+      ],
+      "offices": [
+        {
+          "name": "Remote Poland",
+          "location": null
+        },
+        {
+          "name": "Remote Spain",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": 7764109003,
+      "title": "Analytics Engineer II",
+      "location": {
+        "name": "Remote Poland"
+      },
+      "absolute_url": "https://job-boards.greenhouse.io/affirm/jobs/7764109003",
+      "metadata": [
+        {
+          "id": 4128552003,
+          "name": "External Department",
+          "value": "Accounting",
+          "value_type": "single_select"
+        },
+        {
+          "id": 28890347003,
+          "name": "PERM Job?",
+          "value": false,
+          "value_type": "yes_no"
+        }
+      ],
+      "offices": [
+        {
+          "name": "Remote Poland",
+          "location": null
+        },
+        {
+          "name": "Remote Spain",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": 8003170003,
+      "title": "Analytics Lead, Full Stack",
+      "location": {
+        "name": "Remote Canada"
+      },
+      "absolute_url": "https://job-boards.greenhouse.io/affirm/jobs/8003170003",
+      "metadata": [
+        {
+          "id": 4128552003,
+          "name": "External Department",
+          "value": "Risk & Analytics",
+          "value_type": "single_select"
+        },
+        {
+          "id": 28890347003,
+          "name": "PERM Job?",
+          "value": false,
+          "value_type": "yes_no"
+        }
+      ],
+      "offices": [
+        {
+          "name": "Remote Canada",
+          "location": null
+        },
+        {
+          "name": "Remote UK",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": 7798815003,
+      "title": "Compliance Manager (Australia)",
+      "location": {
+        "name": "Remote Australia"
+      },
+      "absolute_url": "https://job-boards.greenhouse.io/affirm/jobs/7798815003",
+      "metadata": [
+        {
+          "id": 4128552003,
+          "name": "External Department",
+          "value": "Compliance",
+          "value_type": "single_select"
+        },
+        {
+          "id": 28890347003,
+          "name": "PERM Job?",
+          "value": false,
+          "value_type": "yes_no"
+        }
+      ],
+      "offices": [
+        {
+          "name": "Remote Australia",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": 7895270003,
+      "title": "Senior Manager, Technical Recruiting",
+      "location": {
+        "name": "Remote Poland; Remote Spain; Remote UK"
+      },
+      "absolute_url": "https://job-boards.greenhouse.io/affirm/jobs/7895270003",
+      "metadata": [
+        {
+          "id": 4128552003,
+          "name": "External Department",
+          "value": "People",
+          "value_type": "single_select"
+        },
+        {
+          "id": 28890347003,
+          "name": "PERM Job?",
+          "value": false,
+          "value_type": "yes_no"
+        }
+      ],
+      "offices": [
+        {
+          "name": "Remote UK",
+          "location": null
+        }
+      ]
+    }
+  ]
+}
