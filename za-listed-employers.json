@@ -1,0 +1,5421 @@
+{
+  "country": "ZA",
+  "target": 1000,
+  "listingCompleteness": "unverified; exchange portal returned403; alternate public catalogue259 securities, may include multiple securities per employer",
+  "employers": [
+    {
+      "id": "za-jse-bhg",
+      "name": "BHP Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "BHG",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-anh",
+      "name": "Anheuser-Busch InBev SA/NV",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "ANH",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-cfr",
+      "name": "Compagnie Financi\u00e8re Richemont SA",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "CFR",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-bti",
+      "name": "British American Tobacco p.l.c.",
+      "country": "ZA",
+      "sector": "tobacco",
+      "ownership": "private",
+      "ticker": "BTI",
+      "careersUrl": "https://careers.bat.com/en",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.bat.com/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.bat.com/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-gln",
+      "name": "Glencore plc",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "GLN",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-prx",
+      "name": "Prosus N.V.",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "PRX",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-agl",
+      "name": "Anglo American plc",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "AGL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ang",
+      "name": "AngloGold Ashanti plc",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "ANG",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-gfi",
+      "name": "Gold Fields Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "GFI",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-npn",
+      "name": "Naspers Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "NPN",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-cpi",
+      "name": "Capitec Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "CPI",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-fsr",
+      "name": "FirstRand Limited",
+      "country": "ZA",
+      "sector": "banking",
+      "ownership": "private",
+      "ticker": "FSR",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.firstrand.co.za/",
+      "discoveryResult": "fetch failed"
+    },
+    {
+      "id": "za-jse-sbk",
+      "name": "Standard Bank Group Limited",
+      "country": "ZA",
+      "sector": "Financial services",
+      "ownership": "private",
+      "ticker": "SBK",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.standardbank.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-mtn",
+      "name": "MTN Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MTN",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-val",
+      "name": "Valterra Platinum Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "VAL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-vod",
+      "name": "Vodacom Group Limited",
+      "country": "ZA",
+      "sector": "mobile, communications, multi-national",
+      "ownership": "private",
+      "ticker": "VOD",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.vodacom.com/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.vodacom.com",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "navigation-placeholder-or-no-careers-content"
+    },
+    {
+      "id": "za-jse-s32",
+      "name": "South32 Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "S32",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-dsy",
+      "name": "Discovery Limited",
+      "country": "ZA",
+      "sector": "insurance",
+      "ownership": "private",
+      "ticker": "DSY",
+      "careersUrl": "https://careers.discovery.co.za/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.discovery.co.za/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "https://www.discovery.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-shp",
+      "name": "Shoprite Holdings Ltd",
+      "country": "ZA",
+      "sector": "supermarkets, furniture retail, convenience stores",
+      "ownership": "private",
+      "ticker": "SHP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.shoprite.co.za/",
+      "discoveryResult": "fetch failed"
+    },
+    {
+      "id": "za-jse-abg",
+      "name": "Absa Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "ABG",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-har",
+      "name": "Harmony Gold Mining Company Limited",
+      "country": "ZA",
+      "sector": "mining",
+      "ownership": "private",
+      "ticker": "HAR",
+      "careersUrl": "https://www.harmony.co.za/careers/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.harmony.co.za/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.harmony.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-slm",
+      "name": "Sanlam Limited",
+      "country": "ZA",
+      "sector": "financial services, insurance",
+      "ownership": "private",
+      "ticker": "SLM",
+      "careersUrl": "https://www.sanlamonline.co.za/careers",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.sanlamonline.co.za/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.sanlam.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-imp",
+      "name": "Impala Platinum Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "IMP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-sol",
+      "name": "Sasol Limited",
+      "country": "ZA",
+      "sector": "energy, chemicals, fuels; coal-to-liquid processing, gas-to-liquid processing",
+      "ownership": "private",
+      "ticker": "SOL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.sasol.com/sasol_internet/",
+      "discoveryResult": "http-404"
+    },
+    {
+      "id": "za-jse-solbe1",
+      "name": "Sasol Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SOLBE1",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-bid",
+      "name": "Bid Corporation Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "BID",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ned",
+      "name": "Nedbank Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "NED",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-out",
+      "name": "OUTsurance Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "OUT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ssw",
+      "name": "Sibanye Stillwater Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SSW",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-rem",
+      "name": "Remgro Limited",
+      "country": "ZA",
+      "sector": "financial services, investments, industry, tobacco, mining",
+      "ownership": "private",
+      "ticker": "REM",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.remgro.com/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-inl",
+      "name": "Investec Group",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "INL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-inp",
+      "name": "Investec Group",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "INP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-nrp",
+      "name": "NEPI Rockcastle N.V.",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "NRP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-nph",
+      "name": "Northam Platinum Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "NPH",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-rni",
+      "name": "Reinet Investments S.C.A.",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "RNI",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-bvt",
+      "name": "The Bidvest Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "BVT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-mnp",
+      "name": "Mondi plc",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MNP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-kio",
+      "name": "Kumba Iron Ore Limited",
+      "country": "ZA",
+      "sector": "iron ore; merged to form Exxaro",
+      "ownership": "private",
+      "ticker": "KIO",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.exxaro.com/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": null,
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "source-identity-conflict"
+    },
+    {
+      "id": "za-jse-apn",
+      "name": "Aspen Pharmacare Holdings Limited",
+      "country": "ZA",
+      "sector": "Pharmaceuticals, active pharmaceutical ingredients",
+      "ownership": "private",
+      "ticker": "APN",
+      "careersUrl": "https://www.aspenpharma.com/careers-at-aspen/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.aspenpharma.com/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.aspenpharma.com/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-pph",
+      "name": "Pepkor Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "PPH",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-shc",
+      "name": "Shaftesbury Capital PLC",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SHC",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-grt",
+      "name": "Growthpoint Properties Limited",
+      "country": "ZA",
+      "sector": "leading retail, commercial and industrial property management and development company",
+      "ownership": "private",
+      "ticker": "GRT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.growthpoint.co.za/",
+      "discoveryResult": "http-403"
+    },
+    {
+      "id": "za-jse-omu",
+      "name": "Old Mutual Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "OMU",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-snt",
+      "name": "Santam Ltd",
+      "country": "ZA",
+      "sector": "insurance",
+      "ownership": "private",
+      "ticker": "SNT",
+      "careersUrl": "https://www.santam.co.za/careers/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.santam.co.za/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.santam.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-pan",
+      "name": "Pan African Resources PLC",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "PAN",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-php",
+      "name": "Primary Health Properties Plc",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "PHP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-qlt",
+      "name": "Quilter plc",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "QLT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-cls",
+      "name": "Clicks Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "CLS",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-cnp",
+      "name": "Canal+ SA",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "CNP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-mtm",
+      "name": "Momentum Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MTM",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-mrp",
+      "name": "Mr Price Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MRP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-rdf",
+      "name": "Redefine Properties Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "RDF",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-n91",
+      "name": "Ninety One Group",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "N91",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ny1",
+      "name": "Ninety One Group",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "NY1",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-hmn",
+      "name": "Hammerson Plc",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "HMN",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-exx",
+      "name": "Exxaro Resources Limited",
+      "country": "ZA",
+      "sector": "iron ore; leading global producer",
+      "ownership": "private",
+      "ticker": "EXX",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.exxaro.com/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.exxaro.com/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "navigation-placeholder-or-no-careers-content"
+    },
+    {
+      "id": "za-jse-kst",
+      "name": "PSG Financial Services Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "KST",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-box",
+      "name": "Boxer Retail Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "BOX",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-tbs",
+      "name": "Tiger Brands Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "TBS",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-whl",
+      "name": "Woolworths Holdings Limited",
+      "country": "ZA",
+      "sector": "Woolworths, clothing, food, homeware, beauty, financial services",
+      "ownership": "private",
+      "ticker": "WHL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.woolworthsholdings.co.za",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-drd",
+      "name": "DRDGOLD Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "DRD",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-vke",
+      "name": "Vukile Property Fund Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "VKE",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-kro",
+      "name": "Karooooo Ltd.",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "KRO",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ffb",
+      "name": "Fortress Real Estate Investments Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "FFB",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-sre",
+      "name": "Sirius Real Estate Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SRE",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-adh",
+      "name": "ADvTECH Limited",
+      "country": "ZA",
+      "sector": "Human resources",
+      "ownership": "private",
+      "ticker": "ADH",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.groupadvtech.com/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.advtech.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "navigation-placeholder-or-no-careers-content"
+    },
+    {
+      "id": "za-jse-avi",
+      "name": "AVI Limited",
+      "country": "ZA",
+      "sector": "Life science, biotechnology, food",
+      "ownership": "private",
+      "ticker": "AVI",
+      "careersUrl": "https://avi.simplify.hr/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.avi.co.za/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.avi.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-ari",
+      "name": "African Rainbow Minerals Limited",
+      "country": "ZA",
+      "sector": "Mining: ferrous metals, base metals, platinum, coal",
+      "ownership": "private",
+      "ticker": "ARI",
+      "careersUrl": "https://arm.co.za/careers/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://arm.co.za/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.arm.co.za",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-pmr",
+      "name": "Premier Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "PMR",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-res",
+      "name": "Resilient REIT Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "RES",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-tkg",
+      "name": "Telkom SA SOC Ltd",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "TKG",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-hyp",
+      "name": "Hyprop Investments Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "HYP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-sri",
+      "name": "Supermarket Income REIT plc",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SRI",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-byi",
+      "name": "Bytes Technology Group plc",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "BYI",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-dcp",
+      "name": "Dis-Chem Pharmacies Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "DCP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-aph",
+      "name": "Alphamin Resources Corp.",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "APH",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ntc",
+      "name": "Netcare Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "NTC",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-dtc",
+      "name": "Datatec Limited",
+      "country": "ZA",
+      "sector": "information technology, networking, IT infrastructure, IT services",
+      "ownership": "private",
+      "ticker": "DTC",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.datatec.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-omn",
+      "name": "Omnia Holdings Limited",
+      "country": "ZA",
+      "sector": "chemicals, specialty chemicals, fertilizer, bulk mining, explosives",
+      "ownership": "private",
+      "ticker": "OMN",
+      "careersUrl": "https://www.omnia.co.za/life-at-omnia",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.omnia.co.za/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.omnia.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-gnd",
+      "name": "Grindrod Limited",
+      "country": "ZA",
+      "sector": "Grindrod Bank, logistics, transport, shipping, trucking",
+      "ownership": "private",
+      "ticker": "GND",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.grindrod.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-mth",
+      "name": "Motus Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MTH",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-opa",
+      "name": "Optasia Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "OPA",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-lhc",
+      "name": "Life Healthcare Group Holdings Limited",
+      "country": "ZA",
+      "sector": "Private sector healthcare and hospitals",
+      "ownership": "private",
+      "ticker": "LHC",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.lifehealthcare.co.za",
+      "discoveryResult": "fetch failed"
+    },
+    {
+      "id": "za-jse-lte",
+      "name": "Lighthouse Properties p.l.c.",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "LTE",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-tga",
+      "name": "Thungela Resources Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "TGA",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-tru",
+      "name": "Truworths International Limited",
+      "country": "ZA",
+      "sector": "fashion, apparel, retail, fashion brands",
+      "ownership": "private",
+      "ticker": "TRU",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.truworths.co.za/",
+      "discoveryResult": "http-403"
+    },
+    {
+      "id": "za-jse-tfg",
+      "name": "The Foschini Group Limited",
+      "country": "ZA",
+      "sector": "retail services, financial services",
+      "ownership": "private",
+      "ticker": "TFG",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.tfg.co.za",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-equ",
+      "name": "Equites Property Fund Limited",
+      "country": "ZA",
+      "sector": "Real estate investment trust (REIT)",
+      "ownership": "private",
+      "ticker": "EQU",
+      "careersUrl": "https://equites.co.za/careers/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://equites.co.za/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "https://equites.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-gct",
+      "name": "Greencoat Renewables PLC",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "GCT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-cml",
+      "name": "Coronation Fund Managers Limited",
+      "country": "ZA",
+      "sector": "fund management",
+      "ownership": "private",
+      "ticker": "CML",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.coronation.com/home",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-fta",
+      "name": "Fairvest Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "FTA",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ftb",
+      "name": "Fairvest Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "FTB",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-pik",
+      "name": "Pick n Pay Stores Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "PIK",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-msp",
+      "name": "MAS P.L.C.",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MSP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ssu",
+      "name": "Southern Sun Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SSU",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-sdo",
+      "name": "Stadio Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SDO",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-att",
+      "name": "Attacq Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "ATT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-jse",
+      "name": "JSE Limited",
+      "country": "ZA",
+      "sector": "the Johannesburg Stock Exchange itself",
+      "ownership": "private",
+      "ticker": "JSE",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.jse.co.za",
+      "discoveryResult": "http-403"
+    },
+    {
+      "id": "za-jse-ppc",
+      "name": "PPC Ltd",
+      "country": "ZA",
+      "sector": "cement, limestone",
+      "ownership": "private",
+      "ticker": "PPC",
+      "careersUrl": "https://www.ppc.africa/about-us/people-careers/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.ppc.africa/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "https://www.ppc.africa",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-hci",
+      "name": "Hosken Consolidated Investments Limited",
+      "country": "ZA",
+      "sector": "holding company, media, entertainment, gaming, hotels, energy, bus transport",
+      "ownership": "private",
+      "ticker": "HCI",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.hci.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-wbc",
+      "name": "We Buy Cars Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "WBC",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-bat",
+      "name": "Brait PLC",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "BAT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-sui",
+      "name": "Sun International Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SUI",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-cvw",
+      "name": "Castleview Property Fund Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "CVW",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ael",
+      "name": "Altron Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "AEL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-afe",
+      "name": "AECI Ltd",
+      "country": "ZA",
+      "sector": "Chemicals, explosives, yarns and fibers, property",
+      "ownership": "private",
+      "ticker": "AFE",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.aeci.co.za",
+      "discoveryResult": "fetch failed"
+    },
+    {
+      "id": "za-jse-afh",
+      "name": "Alexander Forbes Group Holdings Limited",
+      "country": "ZA",
+      "sector": "Financial services, risk management",
+      "ownership": "private",
+      "ticker": "AFH",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.alexanderforbes.com/",
+      "discoveryResult": "redirect-limit"
+    },
+    {
+      "id": "za-jse-sac",
+      "name": "SA Corporate Real Estate Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SAC",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ite",
+      "name": "Italtile Limited",
+      "country": "ZA",
+      "sector": "ceramic tile, sanitaryware, bathroom accessory retail",
+      "ownership": "private",
+      "ticker": "ITE",
+      "careersUrl": "https://italtilecareers.ci.hr/applicant/index.php",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.italtile.com/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.italtile.com/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-spp",
+      "name": "The SPAR Group Ltd",
+      "country": "ZA",
+      "sector": "wholesaler, distributor, goods, services, liquor",
+      "ownership": "private",
+      "ticker": "SPP",
+      "careersUrl": "https://spar.pnet.co.za/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.spar.co.za/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.spar.co.za",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-rlo",
+      "name": "Reunert Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "RLO",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-het",
+      "name": "Heriot REIT Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "HET",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-caa",
+      "name": "CA Sales Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "CAA",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ccd",
+      "name": "Cell C Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "CCD",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-tha",
+      "name": "Tharisa plc",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "THA",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-sss",
+      "name": "Stor-Age Property REIT Limited",
+      "country": "ZA",
+      "sector": "self storage",
+      "ownership": "private",
+      "ticker": "SSS",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "https://stor-age.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-sap",
+      "name": "Sappi Limited",
+      "country": "ZA",
+      "sector": "paper and pulp; a global company",
+      "ownership": "private",
+      "ticker": "SAP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.sappi.com/",
+      "discoveryResult": "http-403"
+    },
+    {
+      "id": "za-jse-wbo",
+      "name": "Wilson Bayly Holmes-Ovcon Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "WBO",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-rbx",
+      "name": "Raubex Group Limited",
+      "country": "ZA",
+      "sector": "road construction, infrastructure",
+      "ownership": "private",
+      "ticker": "RBX",
+      "careersUrl": "https://raubex.com/careers/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://raubex.com/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.raubex.co.za",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-oce",
+      "name": "Oceana Group Limited",
+      "country": "ZA",
+      "sector": "commercial fishing, fish processing; potatoes; cold storage for fish, fruit",
+      "ownership": "private",
+      "ticker": "OCE",
+      "careersUrl": "https://oceana.simplify.hr/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.oceana.co.za/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.oceana.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-arl",
+      "name": "Astral Foods Limited",
+      "country": "ZA",
+      "sector": "Agricultural supplies; animal feed; day-old chickens; hatching eggs",
+      "ownership": "private",
+      "ticker": "ARL",
+      "careersUrl": "https://www.trending-talent.com/home/companygroup",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.astralfoods.com/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.astralfoods.com/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-btn",
+      "name": "Burstone Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "BTN",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-kap",
+      "name": "KAP Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "KAP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-exp",
+      "name": "Exemplar REITail Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "EXP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-dib",
+      "name": "Dipula Properties Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "DIB",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-tsg",
+      "name": "Tsogo Sun Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "TSG",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-iso",
+      "name": "ASP Isotopes Inc.",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "ISO",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-rcl",
+      "name": "RCL Foods Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "RCL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-lsk",
+      "name": "Lesaka Technologies, Inc.",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "LSK",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-mkr",
+      "name": "Montauk Renewables, Inc.",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MKR",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-blu",
+      "name": "Blu Label Unlimited Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "BLU",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-emi",
+      "name": "Emira Property Fund Limited",
+      "country": "ZA",
+      "sector": "real estate; property management: office space, retail, industrial",
+      "ownership": "private",
+      "ticker": "EMI",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.emira.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-pwr",
+      "name": "PowerFleet, Inc.",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "PWR",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-gtc",
+      "name": "Globe Trade Centre S.A.",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "GTC",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-spg",
+      "name": "Super Group Limited",
+      "country": "ZA",
+      "sector": "industrial transportation and logistics in Africa and the Indian Ocean area",
+      "ownership": "private",
+      "ticker": "SPG",
+      "careersUrl": "https://www.supergroup.co.za/careers/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.supergroup.co.za/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.supergroup.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-sbp",
+      "name": "Sabvest Capital Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SBP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-sea",
+      "name": "Spear Reit Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SEA",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-syg",
+      "name": "Sygnia Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SYG",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-fbr",
+      "name": "Famous Brands Limited",
+      "country": "ZA",
+      "sector": "various restaurant franchises",
+      "ownership": "private",
+      "ticker": "FBR",
+      "careersUrl": "https://famousbrands.co.za/careers/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://famousbrands.co.za/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.famousbrands.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-wvr",
+      "name": "Weaver Fintech Ltd",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "WVR",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-hdc",
+      "name": "Hudaco Industries Limited",
+      "country": "ZA",
+      "sector": "importing and distributing industrial goods, bearings and transmissions",
+      "ownership": "private",
+      "ticker": "HDC",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.hudaco.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-aft",
+      "name": "Afrimat Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "AFT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-oct",
+      "name": "Octodec Investments Limited",
+      "country": "ZA",
+      "sector": "real estate",
+      "ownership": "private",
+      "ticker": "OCT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "https://www.octodec.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-rbo",
+      "name": "Rainbow Chicken Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "RBO",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-oao",
+      "name": "Oando PLC",
+      "country": "ZA",
+      "sector": "Nigeria based; oil, natural gas, refining, energy",
+      "ownership": "private",
+      "ticker": "OAO",
+      "careersUrl": "https://oandoplc.com/careers",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://oandoplc.com/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.oandoplc.com/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-kp2",
+      "name": "Kore Potash plc",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "KP2",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-npk",
+      "name": "Nampak Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "NPK",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-lew",
+      "name": "Lewis Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "LEW",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-cat",
+      "name": "Caxton and CTP Publishers and Printers Limited",
+      "country": "ZA",
+      "sector": "many local newspapers, magazines, printing, stationery",
+      "ownership": "private",
+      "ticker": "CAT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.caxton.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-bel",
+      "name": "Bell Equipment Limited",
+      "country": "ZA",
+      "sector": "agricultural equipment: agricultural dump trucks, sugar cane loaders, forklifts, backhoes, loggers, teleloggers",
+      "ownership": "private",
+      "ticker": "BEL",
+      "careersUrl": "https://www.bellequipment.com/bell-equipment/careers/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.bellequipment.com/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.bellequipment.com/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-cpp",
+      "name": "Collins Property Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "CPP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-acs",
+      "name": "Acsion Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "ACS",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-mrf",
+      "name": "Merafe Resources Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MRF",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-chp",
+      "name": "Choppies Enterprises Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "CHP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-sur",
+      "name": "Spur Corporation Ltd",
+      "country": "ZA",
+      "sector": "steakhouse; Spur Steak Ranch restaurant chain",
+      "ownership": "private",
+      "ticker": "SUR",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.spursteakranches.com/za",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.spur.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "navigation-placeholder-or-no-careers-content"
+    },
+    {
+      "id": "za-jse-yylbee",
+      "name": "YeboYethu (RF) Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "YYLBEE",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-kal",
+      "name": "KAL Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "KAL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ivt",
+      "name": "Invicta Holdings Limited",
+      "country": "ZA",
+      "sector": "import and distribution of machinery, equipment, motors and components for the agriculture, construction and golf industries",
+      "ownership": "private",
+      "ticker": "IVT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.invictaholdings.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-shg",
+      "name": "Sea Harvest Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SHG",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-zzd",
+      "name": "Zeda Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "ZZD",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-aii",
+      "name": "Aimia Inc.",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "AII",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-sdl",
+      "name": "Southern Palladium Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SDL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-cmh",
+      "name": "Combined Motor Holdings Limited",
+      "country": "ZA",
+      "sector": "automobile sales; holds many brand-name franchises",
+      "ownership": "private",
+      "ticker": "CMH",
+      "careersUrl": "https://cmh.co.za/careers/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://cmh.co.za/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.cmh.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-mpt",
+      "name": "Mpact Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MPT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-mcz",
+      "name": "MC Mining Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MCZ",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-orn",
+      "name": "Orion Minerals Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "ORN",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ioc",
+      "name": "iOCO Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "IOC",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-clh",
+      "name": "City Lodge Hotels Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "CLH",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ppe",
+      "name": "Purple Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "PPE",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-lbr",
+      "name": "Libstar Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "LBR",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-mdi",
+      "name": "Master Drilling Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MDI",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-art",
+      "name": "Argent Industrial Limited",
+      "country": "ZA",
+      "sector": "Holding company, steel, steel trading, other heavy industry",
+      "ownership": "private",
+      "ticker": "ART",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.argent.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-oas",
+      "name": "Oasis Crescent Property Fund",
+      "country": "ZA",
+      "sector": "Sharia-principled real estate investment company with offices in Egypt, Ireland and South Africa",
+      "ownership": "private",
+      "ticker": "OAS",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.oasiscrescent.com/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-csb",
+      "name": "Cashbuild Limited",
+      "country": "ZA",
+      "sector": "wholesale and retail building supplies",
+      "ownership": "private",
+      "ticker": "CSB",
+      "careersUrl": "https://www.cashbuild.co.za/content/20-our-company#Careers",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.cashbuild.co.za/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.cashbuild.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-nvs",
+      "name": "Novus Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "NVS",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-acl",
+      "name": "ArcelorMittal South Africa Limited",
+      "country": "ZA",
+      "sector": "Largest steel producer on the African continent",
+      "ownership": "private",
+      "ticker": "ACL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.arcelormittalsa.com/",
+      "discoveryResult": "fetch failed"
+    },
+    {
+      "id": "za-jse-fth",
+      "name": "Frontier Transport Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "FTH",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-cpr",
+      "name": "Copper 360 Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "CPR",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-scd",
+      "name": "Schroder European Real Estate Investment Trust Plc",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SCD",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-jbl",
+      "name": "Jubilee Metals Group PLC",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "JBL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-zed",
+      "name": "Zeder Investments Ltd.",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "ZED",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-axx",
+      "name": "Araxi Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "AXX",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-qfh",
+      "name": "Quantum Foods Holdings Ltd",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "QFH",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-upl",
+      "name": "Universal Partners Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "UPL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-mmp",
+      "name": "Marshall Monteagle PLC",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MMP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-dnb",
+      "name": "Deneb Investments Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "DNB",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-szk",
+      "name": "SAB Zenzele Kabili Holdings (RF) Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SZK",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-tpc",
+      "name": "Transpaco Limited",
+      "country": "ZA",
+      "sector": "paper and plastic packaging materials",
+      "ownership": "private",
+      "ticker": "TPC",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.transpaco.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-brn",
+      "name": "Brimstone Investment Corporation Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "BRN",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-brt",
+      "name": "Brimstone Investment Corporation Limited",
+      "country": "ZA",
+      "sector": "holding company, insurance, menswear, deep-sea fishing, Aon Holdings' subsidiary, healthcare, financial services, Nedbank subsidiary",
+      "ownership": "private",
+      "ticker": "BRT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.brimstone.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-gml",
+      "name": "Gemfields Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "GML",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-emh",
+      "name": "eMedia Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "EMH",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-emn",
+      "name": "eMedia Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "EMN",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-snv",
+      "name": "Santova Limited",
+      "country": "ZA",
+      "sector": "logistics",
+      "ownership": "private",
+      "ticker": "SNV",
+      "careersUrl": "https://www.santova.com/careers",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.santova.com/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.santova.com",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-ssk",
+      "name": "Stefanutti Stocks Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SSK",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-mta",
+      "name": "Metair Investments Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MTA",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-bcf",
+      "name": "Bowler Metcalf Limited",
+      "country": "ZA",
+      "sector": "packaging, plastic foam",
+      "ownership": "private",
+      "ticker": "BCF",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.bowler.co.za",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-yrk",
+      "name": "York Timber Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "YRK",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-mst",
+      "name": "Mustek Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MST",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-apf",
+      "name": "Accelerate Property Fund Limited",
+      "country": "ZA",
+      "sector": "Property management",
+      "ownership": "private",
+      "ticker": "APF",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "https://www.acceleratepf.co.za/",
+      "discoveryResult": "http-403"
+    },
+    {
+      "id": "za-jse-epe",
+      "name": "EPE Capital Partners Ltd",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "EPE",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-tex",
+      "name": "Texton Property Fund Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "TEX",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-gpl",
+      "name": "Grand Parade Investments Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "GPL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ntu",
+      "name": "Nutun Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "NTU",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-rmh",
+      "name": "RMB Holdings Limited",
+      "country": "ZA",
+      "sector": "financial services, banking, insurance; a holding company for financial services companies",
+      "ownership": "private",
+      "ticker": "RMH",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.rmbh.co.za/",
+      "discoveryResult": "fetch failed"
+    },
+    {
+      "id": "za-jse-nrl",
+      "name": "Newpark REIT Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "NRL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-wez",
+      "name": "Wesizwe Platinum Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "WEZ",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-eps",
+      "name": "Eastern Platinum Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "EPS",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-adr",
+      "name": "Adcorp Holdings Limited",
+      "country": "ZA",
+      "sector": "Human resources, market research",
+      "ownership": "private",
+      "ticker": "ADR",
+      "careersUrl": "https://www.adcorpgroup.com/careers/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.adcorpgroup.com/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.adcorp.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-hlm",
+      "name": "Hulamin Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "HLM",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-pbg",
+      "name": "PBT Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "PBG",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-pbt",
+      "name": "PBT Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "PBT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-nwl",
+      "name": "Nu-World Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "NWL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-act",
+      "name": "AfroCentric Investment Corporation Limited",
+      "country": "ZA",
+      "sector": "Fruit; formerly known as WB Holdings Limited",
+      "ownership": "private",
+      "ticker": "ACT",
+      "careersUrl": "https://www.afrocentric.za.com/contact-us/#Careers",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.afrocentric.za.com/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.afrocentric.za.com",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-aeg",
+      "name": "Aveng Limited",
+      "country": "ZA",
+      "sector": "Construction, steel, equipment, engineering; heavy construction: dams, mining, civil engineering",
+      "ownership": "private",
+      "ticker": "AEG",
+      "careersUrl": "https://aveng.co.za/careers-and-people/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://aveng.co.za/",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "http://www.aveng.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-isa",
+      "name": "ISA Holdings Limited",
+      "country": "ZA",
+      "sector": "security software, information security architects",
+      "ownership": "private",
+      "ticker": "ISA",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.isaholdings.co.za/",
+      "discoveryResult": "fetch failed"
+    },
+    {
+      "id": "za-jse-enx",
+      "name": "enX Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "ENX",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ppr",
+      "name": "Putprop Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "PPR",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ccc",
+      "name": "Cilo Cybin Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "CCC",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-slg",
+      "name": "Salungano Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SLG",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-cgr",
+      "name": "Calgro M3 Holdings Limited",
+      "country": "ZA",
+      "sector": "home builder",
+      "ownership": "private",
+      "ticker": "CGR",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.calgrom3.com",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-4si",
+      "name": "4Sight Holdings Limited",
+      "country": "ZA",
+      "sector": "Software and Computer Services[1]",
+      "ownership": "private",
+      "ticker": "4SI",
+      "careersUrl": "https://www.4sight.cloud/careers/",
+      "ats": null,
+      "status": "careers-identity-and-reader-validation-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        },
+        {
+          "url": "https://www.4sight.cloud/about",
+          "observedAt": "2026-10-10",
+          "claim": "Observed careers navigation link"
+        }
+      ],
+      "websiteUrl": "https://www.4sight.cloud/about",
+      "websiteObservedAt": "2026-10-10",
+      "careersObservedAt": "2026-10-10",
+      "discoveryResult": "careers-page-accessible"
+    },
+    {
+      "id": "za-jse-ame",
+      "name": "African Media Entertainment Limited",
+      "country": "ZA",
+      "sector": "Media",
+      "ownership": "private",
+      "ticker": "AME",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.ame.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-sep",
+      "name": "Sephaku Holdings Limited",
+      "country": "ZA",
+      "sector": "cement",
+      "ownership": "private",
+      "ticker": "SEP",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.sephakuholdings.co.za/",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-rtn",
+      "name": "Rex Trueform Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "RTN",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-rto",
+      "name": "Rex Trueform Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "RTO",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-fgl",
+      "name": "Finbond Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "FGL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ani",
+      "name": "Afine Investments Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "ANI",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-cks",
+      "name": "Crookes Brothers Limited",
+      "country": "ZA",
+      "sector": "agribusiness including sugarcane, wheat, sheep, fruit",
+      "ownership": "private",
+      "ticker": "CKS",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.cbl.co.za/",
+      "discoveryResult": "fetch failed"
+    },
+    {
+      "id": "za-jse-vun",
+      "name": "Vunani Limited",
+      "country": "ZA",
+      "sector": "financial services, investment services, fund management, investment banking",
+      "ownership": "private",
+      "ticker": "VUN",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.vunanilimited.co.za",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-tto",
+      "name": "Trustco Group Holdings Limited",
+      "country": "ZA",
+      "sector": "micro-insurance, financial services, short-term insurance, life cover, mobile, IT",
+      "ownership": "private",
+      "ticker": "TTO",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.tgi.na",
+      "websiteObservedAt": "2026-10-10",
+      "discoveryResult": "no-careers-link"
+    },
+    {
+      "id": "za-jse-mhb",
+      "name": "Mahube Infrastructure Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MHB",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-tmt",
+      "name": "Trematon Capital Investments Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "TMT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-cac",
+      "name": "CAFCA Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "CAC",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-isb",
+      "name": "Insimbi Industrial Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "ISB",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-rng",
+      "name": "Randgold & Exploration Company Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "RNG",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-dlt",
+      "name": "Delta Property Fund Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "DLT",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-seb",
+      "name": "Sebata Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SEB",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-soh",
+      "name": "South Ocean Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SOH",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-hug",
+      "name": "Huge Group Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "HUG",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ncs",
+      "name": "Nictus Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "NCS",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-aon",
+      "name": "African and Overseas Enterprises Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "AON",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-aoo",
+      "name": "African and Overseas Enterprises Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "AOO",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-pmv",
+      "name": "Primeserv Group Limited",
+      "country": "ZA",
+      "sector": "human resources services; vocational training, business colleges",
+      "ownership": "private",
+      "ticker": "PMV",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/List_of_companies_traded_on_the_JSE",
+          "observedAt": "2026-10-10",
+          "claim": "Company website link; article warns it needs updating, requires live validation"
+        }
+      ],
+      "websiteUrl": "http://www.primeserv.co.za/",
+      "discoveryResult": "The operation was aborted due to timeout"
+    },
+    {
+      "id": "za-jse-bik",
+      "name": "Brikor Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "BIK",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-xii",
+      "name": "Numeral Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "XII",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-trl",
+      "name": "Trellidor Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "TRL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-rhb",
+      "name": "RH Bophelo Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "RHB",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-ska",
+      "name": "Shuka Minerals Plc",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SKA",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-tlm",
+      "name": "TeleMasters Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "TLM",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-bac",
+      "name": "Africa Bitcoin Corporation Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "BAC",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-mtu",
+      "name": "Mantengu Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "MTU",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-lab",
+      "name": "Labat Africa Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "LAB",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-vis",
+      "name": "Visual International Holdings Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "VIS",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-euz",
+      "name": "Europa Metals Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "EUZ",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-eel",
+      "name": "Efora Energy Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "EEL",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-adw",
+      "name": "African Dawn Capital Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "ADW",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-sxm",
+      "name": "Sable Exploration and Mining Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "SXM",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    },
+    {
+      "id": "za-jse-fdetnq",
+      "name": "FirstRand Bank Limited",
+      "country": "ZA",
+      "sector": null,
+      "ownership": "private",
+      "ticker": "FDETNQ",
+      "careersUrl": null,
+      "ats": null,
+      "status": "careers-discovery-pending",
+      "provenance": [
+        {
+          "url": "https://stockanalysis.com/list/johannesburg-stock-exchange/",
+          "observedAt": "2026-10-10",
+          "claim": "Public listing catalogue; not evidence of recruitment activity"
+        }
+      ]
+    }
+  ]
+}

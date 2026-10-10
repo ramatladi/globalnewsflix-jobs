@@ -1,0 +1,252 @@
+{
+  "version": 1,
+  "verifiedAt": 1791609969947,
+  "scope": "Evidence-backed South African private-sector employer career catalogue; a career-page record is not a claim of current vacancies. Parent groups and their brands are not counted twice.",
+  "employers": [
+    {
+      "id": "standardbank",
+      "name": "Standard Bank Group",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "banking",
+      "ats": "sr",
+      "careersUrl": "https://careers.smartrecruiters.com/StandardBankGroup",
+      "provenanceUrl": "https://www.standardbank.com/sbg/standard-bank-group/contact-us/careers",
+      "verifiedAt": 1791609969947,
+      "status": "verified-reader",
+      "args": [
+        "StandardBankGroup"
+      ]
+    },
+    {
+      "id": "firstrand",
+      "name": "FirstRand (including FNB, RMB and WesBank)",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "banking",
+      "ats": "wd",
+      "careersUrl": "https://firstrand.wd3.myworkdayjobs.com/en-US/FRB",
+      "provenanceUrl": "https://online.firstrand.co.za/careers/",
+      "verifiedAt": 1791609969947,
+      "status": "verified-reader",
+      "args": [
+        "firstrand.wd3.myworkdayjobs.com",
+        "firstrand",
+        "FRB"
+      ]
+    },
+    {
+      "id": "sasol",
+      "name": "Sasol",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "energy-and-chemicals",
+      "ats": "sf",
+      "careersUrl": "https://jobs.sasol.com/",
+      "provenanceUrl": "https://sasol.com/careers/careers-faq",
+      "verifiedAt": 1791609969947,
+      "status": "verified-reader",
+      "args": [
+        "jobs.sasol.com"
+      ]
+    },
+    {
+      "id": "angloamerican",
+      "name": "Anglo American / De Beers Group",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "mining",
+      "ats": "sr",
+      "careersUrl": "https://careers.smartrecruiters.com/AngloAmericanDeBeersGroup",
+      "provenanceUrl": "https://www.angloamerican.com/careers/job-opportunities/apply?searchtext=south+africa",
+      "verifiedAt": 1791609969947,
+      "status": "verified-reader",
+      "args": [
+        "AngloAmericanDeBeersGroup"
+      ]
+    },
+    {
+      "id": "capitec",
+      "name": "Capitec Bank",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "banking",
+      "ats": "sf",
+      "careersUrl": "https://careers.capitecbank.co.za/search/",
+      "provenanceUrl": "https://www.capitecbank.co.za/about-us/careers/",
+      "verifiedAt": 1791610419852,
+      "status": "verified-reader",
+      "args": [
+        "careers.capitecbank.co.za"
+      ]
+    },
+    {
+      "id": "investec",
+      "name": "Investec",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "banking",
+      "ats": null,
+      "careersUrl": "https://careers.investec.co.za/jobs/home/",
+      "provenanceUrl": "https://www.investec.com/en_za/welcome-to-investec/Careers/vacancies.html",
+      "verifiedAt": 1791609969947,
+      "status": "reader-needed",
+      "args": []
+    },
+    {
+      "id": "shoprite",
+      "name": "Shoprite Group",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "retail",
+      "ats": null,
+      "careersUrl": "https://shoprite.erecruit.co/candidateapp/Jobs/Search",
+      "provenanceUrl": "https://www.shopriteholdings.co.za/docs/applicant-terms.pdf",
+      "verifiedAt": 1791609969947,
+      "status": "reader-needed",
+      "args": [],
+      "note": "Official corporate careers hub returned403; the observed eRecruit public search page is catalogued only, with no collector activated."
+    },
+    {
+      "id": "picknpay",
+      "name": "Pick n Pay",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "retail",
+      "ats": null,
+      "careersUrl": "https://preview.pnp.co.za/careers",
+      "provenanceUrl": "https://preview.pnp.co.za/careers",
+      "verifiedAt": 1791609969947,
+      "status": "reader-needed",
+      "args": []
+    },
+    {
+      "id": "woolworths",
+      "name": "Woolworths South Africa",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "retail",
+      "ats": null,
+      "careersUrl": "https://woolworths.erecruit.co/candidateapp/jobs/categories/",
+      "provenanceUrl": "https://www.woolworths.co.za/careers",
+      "verifiedAt": 1791609969947,
+      "status": "reader-needed",
+      "args": []
+    },
+    {
+      "id": "mtn",
+      "name": "MTN Group",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "telecommunications",
+      "ats": null,
+      "careersUrl": "https://www.mtn.com/join-our-yello-family-people-and-culture/",
+      "provenanceUrl": "https://www.mtn.com/join-our-yello-family-people-and-culture/",
+      "verifiedAt": 1791609969947,
+      "status": "reader-needed",
+      "args": []
+    },
+    {
+      "id": "vodacom",
+      "name": "Vodacom",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "telecommunications",
+      "ats": null,
+      "careersUrl": "https://jobs.vodafone.com/careers/",
+      "provenanceUrl": "https://www.vodacom.com/search-jobs.php",
+      "verifiedAt": 1791609969947,
+      "status": "reader-needed",
+      "args": []
+    },
+    {
+      "id": "discovery",
+      "name": "Discovery",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "insurance-and-health",
+      "ats": "sf",
+      "careersUrl": "https://careers.discovery.co.za/go/All-Jobs/4509301/",
+      "provenanceUrl": "https://www.discovery.co.za/corporate/life-at-discovery",
+      "verifiedAt": 1791610133646,
+      "status": "verified-reader",
+      "args": [
+        "careers.discovery.co.za"
+      ]
+    },
+    {
+      "id": "goldfields",
+      "name": "Gold Fields",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "mining",
+      "ats": "sf",
+      "careersUrl": "https://careers.goldfields.com/",
+      "provenanceUrl": "https://www.goldfields.co.za/applying-to-work-at-gold-fields.php",
+      "verifiedAt": 1791610419852,
+      "status": "verified-reader",
+      "args": [
+        "careers.goldfields.com"
+      ]
+    },
+    {
+      "id": "sanlam",
+      "name": "Sanlam Group",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "insurance",
+      "ats": "sf",
+      "careersUrl": "https://careers.sanlamcloud.co.za/",
+      "provenanceUrl": "https://careers.sanlamcloud.co.za/",
+      "verifiedAt": 1791610597301,
+      "status": "verified-reader",
+      "args": [
+        "careers.sanlamcloud.co.za"
+      ],
+      "note": "Normal HTTPS public service returned 186 source rows in the live probe; partial pagination retained safely, with country normalization tested. No complete-source cleanup is authorized for the partial run."
+    },
+    {
+      "id": "harmony",
+      "name": "Harmony Gold",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "mining",
+      "ats": null,
+      "careersUrl": "https://careers.harmony.co.za/",
+      "provenanceUrl": "https://www.harmony.co.za/careers/",
+      "verifiedAt": 1791609969947,
+      "status": "reader-needed",
+      "args": []
+    },
+    {
+      "id": "clicks",
+      "name": "Clicks Group",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "retail-and-health",
+      "ats": null,
+      "careersUrl": "https://careers.clicksgroup.co.za/?controller=Page&name=jobsearch",
+      "provenanceUrl": "https://www.clicksgroup.co.za/",
+      "verifiedAt": 1791609969947,
+      "status": "reader-needed",
+      "args": []
+    },
+    {
+      "id": "adcorp",
+      "name": "Adcorp Group",
+      "country": "ZA",
+      "sector": "private",
+      "industry": "workforce-services",
+      "ats": "wd",
+      "careersUrl": "https://adcorpgroup.wd3.myworkdayjobs.com/Adcorp-Careers-South-Africa",
+      "provenanceUrl": "https://adcorpgroup.wd3.myworkdayjobs.com/Adcorp-Careers-South-Africa",
+      "verifiedAt": 1791610419852,
+      "status": "verified-reader",
+      "args": [
+        "adcorpgroup.wd3.myworkdayjobs.com",
+        "adcorpgroup",
+        "Adcorp-Careers-South-Africa"
+      ]
+    }
+  ]
+}

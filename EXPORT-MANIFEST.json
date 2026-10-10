@@ -1,0 +1,122 @@
+[
+  {
+    "file": "jobs.js",
+    "sha256": "b73a7abf2a2881cfcaee5c9c4bd1951ee6c15f90a88a78f9b2946fcea050217d"
+  },
+  {
+    "file": "data.js",
+    "sha256": "573397a46bbf9e7e1a04fd8d5b95860e893ad1e3bf5e711536ef9273a33771ee"
+  },
+  {
+    "file": "jobs-runner.mjs",
+    "sha256": "9db123c1f8d91a16b74619a4694eb5b07357f5091467082feb5941d79aa8943d"
+  },
+  {
+    "file": "jobs-adapters.js",
+    "sha256": "f17ebc442e948a1183b506ca534766946e0a0c724d6e60616bd6ac6fb65094a8"
+  },
+  {
+    "file": "jobs-employers.js",
+    "sha256": "175ed064b082ea86024bf6fcc0780c5df78fac8c2bd680d4c02a7a7f7a217b0f"
+  },
+  {
+    "file": "jobs-government.py",
+    "sha256": "3f9b66f8e261caa6ac8761d3bc5405cfa9db8ce4dd22a12d08e091ca9c10b8c6"
+  },
+  {
+    "file": "jobs-za-sources.js",
+    "sha256": "de3fca50036895c75d796e84bcec6dd91f22b87461abe2b6dda24d56306041f2"
+  },
+  {
+    "file": "jobs-gauteng.js",
+    "sha256": "0af8452fcd75f9f9c7bb01aa206221226d64321cee582c7e99556a0950426c9f"
+  },
+  {
+    "file": "jobs-dates.js",
+    "sha256": "35fc3d3b883053ab7f0d28b67d7fb8f3aedbdb6f01493e6c38d343de71560a55"
+  },
+  {
+    "file": "tests/jobs-dates.test.mjs",
+    "sha256": "cb48a1bab22d5582cad771158737ebde34df4a9b8e6e9d2d5fd80687739e3f0d"
+  },
+  {
+    "file": "tests/fixtures/jobs-detail-dates.json",
+    "sha256": "185518d9a7e6daeb91d19f50d583a9a102de62b2ac74e17e552607536792e9e4"
+  },
+  {
+    "file": "za-government-directory.json",
+    "sha256": "f9cf9def46bbcbf50bca97fd39fd7cad8ebf99ffbfb820511dec019cccdea374"
+  },
+  {
+    "file": "tests/jobs-gauteng.test.mjs",
+    "sha256": "59bd2156def0e4830c262a8bca7c666bc3aebd0ab7ee60446e28fed3bc98a99c"
+  },
+  {
+    "file": "tests/fixtures/jobs-za-public.json",
+    "sha256": "df6993ec7caac3031dc7baf6c4ae389da996f9ad71cd223af1532c28fade1840"
+  },
+  {
+    "file": "tests/fixtures/jobs-gauteng.html",
+    "sha256": "08ee38be1b462c4000abc0f66b70e12b68d20891a1aad897959d807a517bd470"
+  },
+  {
+    "file": "tests/fixtures/jobs-gauteng.meta.json",
+    "sha256": "f60448ca94312d9d3c2d56088e33a868bb49ebbfe1868f5077e9b2d5299e571e"
+  },
+  {
+    "file": "tests/fixtures/jobs-gauteng-detail.html",
+    "sha256": "df44ffb2f4d6ef07d64f89320d3d8deaf776f5fd89fdff631480e450f8534dea"
+  },
+  {
+    "file": "za-listed-employers.json",
+    "sha256": "1e552e4699ac13c3890fa532912ae3dc44d62de5366baa49c5d8fde82d3202d8"
+  },
+  {
+    "file": "za-public-employers.json",
+    "sha256": "995df8d660750f0885799f45df831dc4c29a2f77ac13ffdc2a0c0d2816b9e243"
+  },
+  {
+    "file": "za-private-employers.json",
+    "sha256": "e1dcf59cad72a290dd5086775997ffb3f71dc38ceaad0bdaab68e69e9f9f41d4"
+  },
+  {
+    "file": "tests/fixtures/jobs-greenhouse-public.json",
+    "sha256": "55d717591d538c74068f2d280a6a85049e808a9915b2c14611d9819bc0979144"
+  },
+  {
+    "file": "tests/jobs-collectors.test.mjs",
+    "sha256": "24a9583ac505ee09093de8427fca15a376b73e8e94ee0f43b6e34e522b955e66"
+  },
+  {
+    "file": "tests/jobs-employers.test.mjs",
+    "sha256": "2b810bba607929789a30d1d188647b26574029269ef802c34dbe2c331aa3aca5"
+  },
+  {
+    "file": "tests/jobs-runner.test.mjs",
+    "sha256": "83101cedf136589d0a9296336bbfb4eafd5f2845b132bc57d67d7abbf7f0a9ed"
+  },
+  {
+    "file": "tests/test_jobs_government.py",
+    "sha256": "ff59ab07b74b0d8e1a71edd58c5956f5759a4896a77e874d1e8a04f93d025038"
+  },
+  {
+    "file": ".github/workflows/jobs.yml",
+    "sha256": "040aec536044717ccbbe9fd463ba8ec056a01d741670168fcf4b92b746bd1dfc"
+  },
+  {
+    "file": "package.json",
+    "sha256": "bf289e6946df29007b689de89b1d0f8778c25331685df37776e8d6c0ee1165f5"
+  },
+  {
+    "file": "requirements.txt",
+    "sha256": "af99a44c3e0e6ff026eb04308fc630b49b8bffddc508c4b4c69caf774fbcefca"
+  },
+  {
+    "file": ".gitignore",
+    "sha256": "4492c54bd12efd51066dc8b0ae848d7333b9f28b5c5f28e51a88ba44289f3113"
+  },
+  {
+    "file": "README.md",
+    "sha256": "3f7a8adabee208d592829deecb83896bc6b22aa2c7575ae512029b8d9ccf6e36"
+  }
+]

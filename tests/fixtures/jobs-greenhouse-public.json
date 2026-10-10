@@ -1,0 +1,167 @@
+{
+  "provenance": {
+    "cloudflare": {
+      "countries": [
+        "AE",
+        "AU",
+        "BE",
+        "CA",
+        "CH",
+        "CL",
+        "CN",
+        "CO",
+        "DE",
+        "ES",
+        "FR",
+        "GB",
+        "IN",
+        "JP",
+        "KR",
+        "MX",
+        "MY",
+        "NL",
+        "PT",
+        "SE",
+        "SG",
+        "US"
+      ],
+      "provenanceUrl": "https://boards-api.greenhouse.io/v1/boards/cloudflare/jobs?content=true",
+      "verifiedAt": 1791609502628
+    },
+    "block": {
+      "countries": [
+        "AU",
+        "CA",
+        "FR",
+        "GB",
+        "IE",
+        "JP",
+        "SG",
+        "US"
+      ],
+      "provenanceUrl": "https://boards-api.greenhouse.io/v1/boards/block/jobs?content=true",
+      "verifiedAt": 1791609508563
+    }
+  },
+  "fixtures": [
+    {
+      "source": "cloudflare",
+      "postings": [
+        {
+          "id": 7695702,
+          "title": "Account Executive, FedCiv",
+          "absolute_url": "https://boards.greenhouse.io/cloudflare/jobs/7695702?gh_jid=7695702",
+          "location": {
+            "name": "Hybrid"
+          },
+          "metadata": [
+            {
+              "id": 8654220,
+              "name": "Job Posting Location",
+              "value": [
+                "Washington DC, US"
+              ],
+              "value_type": "multi_select"
+            }
+          ],
+          "offices": [
+            {
+              "id": 19994,
+              "name": "Washington, DC",
+              "location": "Washington, DC, United States",
+              "child_ids": [],
+              "parent_id": 48752
+            }
+          ],
+          "first_published": "2026-03-09T16:05:19-04:00",
+          "application_deadline": null
+        },
+        {
+          "id": 7657028,
+          "title": "Business Development Representative - Danish, Norwegian or Swedish Speaking",
+          "absolute_url": "https://boards.greenhouse.io/cloudflare/jobs/7657028?gh_jid=7657028",
+          "location": {
+            "name": "Hybrid"
+          },
+          "metadata": [
+            {
+              "id": 8654220,
+              "name": "Job Posting Location",
+              "value": [
+                "Lisbon, Portugal",
+                "London, UK",
+                "Sweden"
+              ],
+              "value_type": "multi_select"
+            }
+          ],
+          "offices": [
+            {
+              "id": 84343,
+              "name": "Remote Sweden",
+              "location": "Örebro, Sweden",
+              "child_ids": [],
+              "parent_id": 74843
+            }
+          ],
+          "first_published": "2026-02-26T04:13:08-05:00",
+          "application_deadline": null
+        },
+        {
+          "id": 7954702,
+          "title": "Senior Customer Engineer, Named - Cincinnati, OH",
+          "absolute_url": "https://boards.greenhouse.io/cloudflare/jobs/7954702?gh_jid=7954702",
+          "location": {
+            "name": "Distributed"
+          },
+          "metadata": [
+            {
+              "id": 8654220,
+              "name": "Job Posting Location",
+              "value": [
+                "Ohio"
+              ],
+              "value_type": "multi_select"
+            }
+          ],
+          "offices": [
+            {
+              "id": 83255,
+              "name": "Cincinatti, OH",
+              "location": null,
+              "child_ids": [],
+              "parent_id": 48752
+            }
+          ],
+          "first_published": "2026-05-26T10:44:48-04:00",
+          "application_deadline": null
+        }
+      ]
+    },
+    {
+      "source": "block",
+      "postings": [
+        {
+          "id": 5317296008,
+          "title": "Account Manager, SMB",
+          "absolute_url": "http://block.xyz/careers/jobs/5317296008?gh_jid=5317296008",
+          "location": {
+            "name": "Sydney, Australia"
+          },
+          "metadata": [],
+          "offices": [
+            {
+              "id": 4007817008,
+              "name": "AU - NSW - Remote",
+              "location": null,
+              "child_ids": [],
+              "parent_id": 4007684008
+            }
+          ],
+          "first_published": "2026-07-09T14:36:51-04:00",
+          "application_deadline": null
+        }
+      ]
+    }
+  ]
+}

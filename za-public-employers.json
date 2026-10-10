@@ -1,0 +1,1934 @@
+{
+  "version": 1,
+  "country": "ZA",
+  "observedOn": "2026-10-10",
+  "scope": "Research catalogue; none of these records activates collection. Government means public sector, including autonomous public universities. Provincial groups are not distinct employer counts.",
+  "summary": {
+    "catalogueRecords": 100,
+    "employerRecords": 91,
+    "governmentGroups": 9,
+    "careersUrlsObserved": 25,
+    "activeSources": 0
+  },
+  "records": [
+    {
+      "id": "za-public-eskom-holdings-soc-ltd",
+      "name": "Eskom Holdings SOC Ltd",
+      "country": "ZA",
+      "sector": "state-owned enterprise",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://www.eskom.co.za/careers/",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.eskom.co.za/careers/"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Direct page open reports recruitment website temporarily unavailable until further notice. This overrides stale search-index vacancy cards. Not connected."
+    },
+    {
+      "id": "za-public-transnet-soc-ltd",
+      "name": "Transnet SOC Ltd",
+      "country": "ZA",
+      "sector": "state-owned enterprise",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://www.transnet.net/Careers",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.transnet.net/Careers"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official careers page observed. External applicant guide indicates login for job search; do not bypass login."
+    },
+    {
+      "id": "za-public-south-african-national-roads-agency-soc-ltd",
+      "name": "South African National Roads Agency SOC Ltd",
+      "country": "ZA",
+      "sector": "state-owned enterprise",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://www.nra.co.za/sanral-careers/list/closed-vacancies?region_id=1",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.nra.co.za/sanral-careers/list/closed-vacancies?region_id=1"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Observed careers portal is explicitly CLOSED vacancies. Discover open listing before ingestion."
+    },
+    {
+      "id": "za-public-passenger-rail-agency-of-south-africa",
+      "name": "Passenger Rail Agency of South Africa",
+      "country": "ZA",
+      "sector": "state-owned enterprise",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://careers.prasa.com/",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://careers.prasa.com/"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official careers page observed; ATS and complete public listings not yet verified."
+    },
+    {
+      "id": "za-public-denel-soc-ltd",
+      "name": "Denel SOC Ltd",
+      "country": "ZA",
+      "sector": "state-owned enterprise",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://www.denel.co.za/careers",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.denel.co.za/careers"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official page states no current vacancies; adapter not connected."
+    },
+    {
+      "id": "za-public-south-african-airways",
+      "name": "South African Airways",
+      "country": "ZA",
+      "sector": "state-owned enterprise",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://www.flysaa.com/about-us/leading-carrier/careers/lets-talk-about-talent",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.flysaa.com/about-us/leading-carrier/careers/lets-talk-about-talent"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official careers page currently says site under construction; do not infer active vacancy coverage."
+    },
+    {
+      "id": "za-public-rand-water",
+      "name": "Rand Water",
+      "country": "ZA",
+      "sector": "state-owned enterprise",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.randwater.co.za/media/annual_reports/RAND%20WATER%20INTEGRATED%20ANNUAL%20REPORT%202025.pdf"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official annual report confirms employer; main site could not be opened by research tool. Careers URL remains unverified."
+    },
+    {
+      "id": "za-public-buffalo-city-metropolitan-municipality",
+      "name": "Buffalo City Metropolitan Municipality",
+      "country": "ZA",
+      "sector": "metropolitan municipality",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://www.buffalocity.gov.za/vacancies_list_archives.php?year=2026",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/links/local-government",
+        "https://www.buffalocity.gov.za/vacancies_list_archives.php?year=2026"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Observed page is the 2026 archive; verify current open vacancies separately."
+    },
+    {
+      "id": "za-public-city-of-cape-town",
+      "name": "City of Cape Town",
+      "country": "ZA",
+      "sector": "metropolitan municipality",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://www.capetown.gov.za/work-and-business/jobs-and-skills-development/work-for-the-city-of-cape-town/city-jobs-and-opportunities/?L1=Jobs-and-careers",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/links/local-government",
+        "https://www.capetown.gov.za/work-and-business/jobs-and-skills-development/work-for-the-city-of-cape-town/city-jobs-and-opportunities/?L1=Jobs-and-careers"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official careers page observed through public web index; ingestion adapter and current vacancies not yet verified."
+    },
+    {
+      "id": "za-public-city-of-ekurhuleni",
+      "name": "City of Ekurhuleni",
+      "country": "ZA",
+      "sector": "metropolitan municipality",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://rems.ekurhuleni.gov.za/eRecruitment/jobs",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/links/local-government",
+        "https://rems.ekurhuleni.gov.za/eRecruitment/jobs"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official careers page observed through public web index; ingestion adapter and current vacancies not yet verified."
+    },
+    {
+      "id": "za-public-city-of-johannesburg",
+      "name": "City of Johannesburg",
+      "country": "ZA",
+      "sector": "metropolitan municipality",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://joburg.org.za/work_/Pages/Work%20in%20Joburg/Vacancies/Vacancies.aspx",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/links/local-government",
+        "https://joburg.org.za/work_/Pages/Work%20in%20Joburg/Vacancies/Vacancies.aspx"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official careers page observed through public web index; ingestion adapter and current vacancies not yet verified."
+    },
+    {
+      "id": "za-public-city-of-tshwane",
+      "name": "City of Tshwane",
+      "country": "ZA",
+      "sector": "metropolitan municipality",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://careers.tshwane.gov.za/viewalljobs/",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/links/local-government",
+        "https://careers.tshwane.gov.za/viewalljobs/"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official careers page observed through public web index; ingestion adapter and current vacancies not yet verified."
+    },
+    {
+      "id": "za-public-ethekwini-metropolitan-municipality",
+      "name": "eThekwini Metropolitan Municipality",
+      "country": "ZA",
+      "sector": "metropolitan municipality",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://www.durban.gov.za/page/jobs",
+      "ats": "Oracle HCM",
+      "atsEvidenceUrl": "https://www.durban.gov.za/press-statement/Governance%2BAnd%2BHuman%2BResources%2BCommittee%2BDecisions",
+      "provenanceUrls": [
+        "https://www.gov.za/links/local-government",
+        "https://www.durban.gov.za/page/jobs"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Municipality explicitly announced Oracle HCM vacancy publication from February 2026. Endpoint still needs adapter verification."
+    },
+    {
+      "id": "za-public-mangaung-metropolitan-municipality",
+      "name": "Mangaung Metropolitan Municipality",
+      "country": "ZA",
+      "sector": "metropolitan municipality",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://www.mangaung.co.za/category/vacancies/",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/links/local-government",
+        "https://www.mangaung.co.za/category/vacancies/"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Vacancy archive contains dated notices; expiry checks required before import."
+    },
+    {
+      "id": "za-public-nelson-mandela-bay-metropolitan-municipality",
+      "name": "Nelson Mandela Bay Metropolitan Municipality",
+      "country": "ZA",
+      "sector": "metropolitan municipality",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/links/local-government"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official municipality directory confirms identity; observed application-update login is not a public vacancy feed."
+    },
+    {
+      "id": "za-public-cape-peninsula-university-of-technology",
+      "name": "Cape Peninsula University of Technology",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://www.cput.ac.za/staff/quick-links/work-at-cput",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education",
+        "https://www.cput.ac.za/staff/quick-links/work-at-cput"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official careers page observed through public web index; ingestion and live opening status not verified."
+    },
+    {
+      "id": "za-public-central-university-of-technology",
+      "name": "Central University of Technology",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://www.cut.ac.za/careers",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education",
+        "https://www.cut.ac.za/careers"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official careers page observed through public web index; ingestion and live opening status not verified."
+    },
+    {
+      "id": "za-public-durban-university-of-technology",
+      "name": "Durban University of Technology",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://www.dut.ac.za/careers/",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education",
+        "https://www.dut.ac.za/careers/"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official careers page observed through public web index; ingestion and live opening status not verified."
+    },
+    {
+      "id": "za-public-mangosuthu-university-of-technology",
+      "name": "Mangosuthu University of Technology",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://www.mut.ac.za/vacancies/",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education",
+        "https://www.mut.ac.za/vacancies/"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official careers page observed through public web index; ingestion and live opening status not verified."
+    },
+    {
+      "id": "za-public-nelson-mandela-university",
+      "name": "Nelson Mandela University",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-north-west-university",
+      "name": "North-West University",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-rhodes-university",
+      "name": "Rhodes University",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-sol-plaatje-university",
+      "name": "Sol Plaatje University",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-tshwane-university-of-technology",
+      "name": "Tshwane University of Technology",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-university-of-cape-town",
+      "name": "University of Cape Town",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://jobs.uct.ac.za/",
+      "ats": "SAP SuccessFactors",
+      "atsEvidenceUrl": "https://jobs.uct.ac.za/",
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education",
+        "https://jobs.uct.ac.za/"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official careers page observed through public web index; ingestion adapter and current vacancies not yet verified."
+    },
+    {
+      "id": "za-public-university-of-fort-hare",
+      "name": "University of Fort Hare",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-university-of-the-free-state",
+      "name": "University of the Free State",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-university-of-johannesburg",
+      "name": "University of Johannesburg",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://jobs.uj.ac.za/",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education",
+        "https://jobs.uj.ac.za/"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official careers page observed through public web index; ingestion adapter and current vacancies not yet verified."
+    },
+    {
+      "id": "za-public-university-of-kwazulu-natal",
+      "name": "University of KwaZulu-Natal",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-university-of-limpopo",
+      "name": "University of Limpopo",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-university-of-mpumalanga",
+      "name": "University of Mpumalanga",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-university-of-pretoria",
+      "name": "University of Pretoria",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://www.up.ac.za/human-resources-department/careersup",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education",
+        "https://www.up.ac.za/human-resources-department/careersup"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official careers page observed through public web index; ingestion adapter and current vacancies not yet verified."
+    },
+    {
+      "id": "za-public-university-of-south-africa",
+      "name": "University of South Africa",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-stellenbosch-university",
+      "name": "Stellenbosch University",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-university-of-venda",
+      "name": "University of Venda",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-university-of-the-western-cape",
+      "name": "University of the Western Cape",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-university-of-the-witwatersrand",
+      "name": "University of the Witwatersrand",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": "https://www.wits.ac.za/vacancies/",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education",
+        "https://www.wits.ac.za/vacancies/"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official careers page observed through public web index; ingestion adapter and current vacancies not yet verified."
+    },
+    {
+      "id": "za-public-university-of-zululand",
+      "name": "University of Zululand",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-vaal-university-of-technology",
+      "name": "Vaal University of Technology",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-walter-sisulu-university",
+      "name": "Walter Sisulu University",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-sefako-makgatho-health-sciences-university",
+      "name": "Sefako Makgatho Health Sciences University",
+      "country": "ZA",
+      "sector": "public university",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/about-sa/education"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official directory confirms institution; careers endpoint has not yet been verified."
+    },
+    {
+      "id": "za-public-buffalo-city-tvet-college",
+      "name": "Buffalo City TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-eastcape-midlands-tvet-college",
+      "name": "Eastcape Midlands TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-ikhala-tvet-college",
+      "name": "Ikhala TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-ingwe-tvet-college",
+      "name": "Ingwe TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-king-hintsa-tvet-college",
+      "name": "King Hintsa TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-king-sabata-dalindyebo-tvet-college",
+      "name": "King Sabata Dalindyebo TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-lovedale-tvet-college",
+      "name": "Lovedale TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-port-elizabeth-tvet-college",
+      "name": "Port Elizabeth TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-flavius-mareka-tvet-college",
+      "name": "Flavius Mareka TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-goldfields-tvet-college",
+      "name": "Goldfields TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-maluti-tvet-college",
+      "name": "Maluti TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-motheo-tvet-college",
+      "name": "Motheo TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-central-johannesburg-tvet-college",
+      "name": "Central Johannesburg TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-ekurhuleni-east-tvet-college",
+      "name": "Ekurhuleni East TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-ekurhuleni-west-tvet-college",
+      "name": "Ekurhuleni West TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-sedibeng-tvet-college",
+      "name": "Sedibeng TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-south-west-gauteng-tvet-college",
+      "name": "South West Gauteng TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-tshwane-north-tvet-college",
+      "name": "Tshwane North TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-tshwane-south-tvet-college",
+      "name": "Tshwane South TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-western-tvet-college",
+      "name": "Western TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-coastal-tvet-college",
+      "name": "Coastal TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-elangeni-tvet-college",
+      "name": "Elangeni TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-esayidi-tvet-college",
+      "name": "Esayidi TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-majuba-tvet-college",
+      "name": "Majuba TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-mnambithi-tvet-college",
+      "name": "Mnambithi TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-mthashana-tvet-college",
+      "name": "Mthashana TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-thekwini-tvet-college",
+      "name": "Thekwini TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-umfolozi-tvet-college",
+      "name": "Umfolozi TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-umgungundlovu-tvet-college",
+      "name": "Umgungundlovu TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-capricorn-tvet-college",
+      "name": "Capricorn TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-lephalale-tvet-college",
+      "name": "Lephalale TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-letaba-tvet-college",
+      "name": "Letaba TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-mopani-south-east-tvet-college",
+      "name": "Mopani South East TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-sekhukhune-tvet-college",
+      "name": "Sekhukhune TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-vhembe-tvet-college",
+      "name": "Vhembe TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-waterberg-tvet-college",
+      "name": "Waterberg TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-ehlanzeni-tvet-college",
+      "name": "Ehlanzeni TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-gert-sibande-tvet-college",
+      "name": "Gert Sibande TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-nkangala-tvet-college",
+      "name": "Nkangala TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-northern-cape-rural-tvet-college",
+      "name": "Northern Cape Rural TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-northern-cape-urban-tvet-college",
+      "name": "Northern Cape Urban TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-orbit-tvet-college",
+      "name": "Orbit TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-taletso-tvet-college",
+      "name": "Taletso TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-vuselela-tvet-college",
+      "name": "Vuselela TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-boland-tvet-college",
+      "name": "Boland TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-college-of-cape-town",
+      "name": "College of Cape Town",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-false-bay-tvet-college",
+      "name": "False Bay TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-northlink-tvet-college",
+      "name": "Northlink TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-south-cape-tvet-college",
+      "name": "South Cape TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-west-coast-tvet-college",
+      "name": "West Coast TVET College",
+      "country": "ZA",
+      "sector": "public TVET college",
+      "government": true,
+      "entityKind": "employer",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.dhet.gov.za/RegionalOffices/educational-institutions/technical-vocational-education-and-training-colleges-tvet-colleges.html"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Official DHET directory lists the institution. Directory contains legacy contact details; current employer name and careers endpoint require confirmation before activation."
+    },
+    {
+      "id": "za-public-eastern-cape-provincial-government",
+      "name": "Eastern Cape Provincial Government",
+      "country": "ZA",
+      "sector": "provincial government",
+      "government": true,
+      "entityKind": "government_group",
+      "careersUrl": "https://ecprov.gov.za/MediaCenter/Document?id=11",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/government-jobs-week",
+        "https://ecprov.gov.za/MediaCenter/Document?id=11"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Province-wide discovery target covering multiple departmental employers. Do not count as an additional distinct employer alongside its departments."
+    },
+    {
+      "id": "za-public-free-state-provincial-government",
+      "name": "Free State Provincial Government",
+      "country": "ZA",
+      "sector": "provincial government",
+      "government": true,
+      "entityKind": "government_group",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/government-jobs-week"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Province-wide discovery target covering multiple departmental employers. Do not count as an additional distinct employer alongside its departments."
+    },
+    {
+      "id": "za-public-gauteng-provincial-government",
+      "name": "Gauteng Provincial Government",
+      "country": "ZA",
+      "sector": "provincial government",
+      "government": true,
+      "entityKind": "government_group",
+      "careersUrl": "https://jobs.gauteng.gov.za/Public/Jobs.aspx",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/government-jobs-week",
+        "https://jobs.gauteng.gov.za/Public/Jobs.aspx"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Province-wide discovery target covering multiple departmental employers. Do not count as an additional distinct employer alongside its departments."
+    },
+    {
+      "id": "za-public-kwazulu-natal-provincial-government",
+      "name": "KwaZulu-Natal Provincial Government",
+      "country": "ZA",
+      "sector": "provincial government",
+      "government": true,
+      "entityKind": "government_group",
+      "careersUrl": "https://www.kznonline.gov.za/index.php?id=290&itemid=709&option=com_content&view=article",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/government-jobs-week",
+        "https://www.kznonline.gov.za/index.php?id=290&itemid=709&option=com_content&view=article"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Province-wide discovery target covering multiple departmental employers. Do not count as an additional distinct employer alongside its departments."
+    },
+    {
+      "id": "za-public-limpopo-provincial-government",
+      "name": "Limpopo Provincial Government",
+      "country": "ZA",
+      "sector": "provincial government",
+      "government": true,
+      "entityKind": "government_group",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/government-jobs-week"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Province-wide discovery target covering multiple departmental employers. Do not count as an additional distinct employer alongside its departments."
+    },
+    {
+      "id": "za-public-mpumalanga-provincial-government",
+      "name": "Mpumalanga Provincial Government",
+      "country": "ZA",
+      "sector": "provincial government",
+      "government": true,
+      "entityKind": "government_group",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/government-jobs-week"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Province-wide discovery target covering multiple departmental employers. Do not count as an additional distinct employer alongside its departments."
+    },
+    {
+      "id": "za-public-northern-cape-provincial-government",
+      "name": "Northern Cape Provincial Government",
+      "country": "ZA",
+      "sector": "provincial government",
+      "government": true,
+      "entityKind": "government_group",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/government-jobs-week"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Province-wide discovery target covering multiple departmental employers. Do not count as an additional distinct employer alongside its departments."
+    },
+    {
+      "id": "za-public-north-west-provincial-government",
+      "name": "North West Provincial Government",
+      "country": "ZA",
+      "sector": "provincial government",
+      "government": true,
+      "entityKind": "government_group",
+      "careersUrl": null,
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/government-jobs-week"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "catalogue_pending",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Province-wide discovery target covering multiple departmental employers. Do not count as an additional distinct employer alongside its departments."
+    },
+    {
+      "id": "za-public-western-cape-provincial-government",
+      "name": "Western Cape Provincial Government",
+      "country": "ZA",
+      "sector": "provincial government",
+      "government": true,
+      "entityKind": "government_group",
+      "careersUrl": "https://e-recruitment.westerncape.gov.za/",
+      "ats": null,
+      "atsEvidenceUrl": null,
+      "provenanceUrls": [
+        "https://www.gov.za/government-jobs-week",
+        "https://e-recruitment.westerncape.gov.za/"
+      ],
+      "observedOn": "2026-10-10",
+      "discoveryStatus": "careers_url_observed",
+      "ingestionStatus": "not_connected",
+      "active": false,
+      "notes": "Province-wide discovery target covering multiple departmental employers. Do not count as an additional distinct employer alongside its departments."
+    }
+  ]
+}

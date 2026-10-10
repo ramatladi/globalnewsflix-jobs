@@ -1,0 +1,249 @@
+{
+  "note": "Exact date/title metadata excerpts from the twenty fetched employer pages; full job descriptions omitted.",
+  "samples": [
+    {
+      "id": "standardbank:744000153701279",
+      "sourceId": "standardbank",
+      "title": "Branch Manager KZN",
+      "country": "ZA",
+      "sourceUrl": "https://jobs.smartrecruiters.com/StandardBankGroup/744000153701279",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><h1 class=\"isn-overlay-dialog-header isn-ml-05 isn-mr-1\" data-i18n=\"ie11_sunset_notification.overlay-header\"></h1><h1 class=\"job-title spl-text-h3\" itemprop=\"title\">Branch Manager KZN</h1><meta itemprop=\"datePosted\" content=\"2026-10-06T09:02:59.024Z\"><meta itemprop=\"validThrough\" content=\"2026-10-12T22:00:00.000Z\"></main>",
+      "expected": {
+        "posted": 1791277379024,
+        "closing": 1791842400000
+      }
+    },
+    {
+      "id": "standardbank:744000154717880",
+      "sourceId": "standardbank",
+      "title": "Senior Manager, New Products, CIB Finance",
+      "country": "ZA",
+      "sourceUrl": "https://jobs.smartrecruiters.com/StandardBankGroup/744000154717880",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><h1 class=\"isn-overlay-dialog-header isn-ml-05 isn-mr-1\" data-i18n=\"ie11_sunset_notification.overlay-header\"></h1><h1 class=\"job-title spl-text-h3\" itemprop=\"title\">Senior Manager, New Products, CIB Finance</h1><meta itemprop=\"datePosted\" content=\"2026-10-09T15:39:55.891Z\"><meta itemprop=\"validThrough\" content=\"2026-10-18T22:00:00.000Z\"></main>",
+      "expected": {
+        "posted": 1791560395891,
+        "closing": 1792360800000
+      }
+    },
+    {
+      "id": "standardbank:744000153742579",
+      "sourceId": "standardbank",
+      "title": "Investment Banking Analyst, Advisory",
+      "country": "ZA",
+      "sourceUrl": "https://jobs.smartrecruiters.com/StandardBankGroup/744000153742579",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><h1 class=\"isn-overlay-dialog-header isn-ml-05 isn-mr-1\" data-i18n=\"ie11_sunset_notification.overlay-header\"></h1><h1 class=\"job-title spl-text-h3\" itemprop=\"title\">Investment Banking Analyst, Advisory</h1><meta itemprop=\"datePosted\" content=\"2026-10-06T12:06:45.255Z\"><meta itemprop=\"validThrough\" content=\"2026-10-12T22:00:00.000Z\"></main>",
+      "expected": {
+        "posted": 1791288405255,
+        "closing": 1791842400000
+      }
+    },
+    {
+      "id": "standardbank:744000153209186",
+      "sourceId": "standardbank",
+      "title": "Non-Financial Risk Specialist, Transaction Banking, CIB",
+      "country": "ZA",
+      "sourceUrl": "https://jobs.smartrecruiters.com/StandardBankGroup/744000153209186",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><h1 class=\"isn-overlay-dialog-header isn-ml-05 isn-mr-1\" data-i18n=\"ie11_sunset_notification.overlay-header\"></h1><h1 class=\"job-title spl-text-h3\" itemprop=\"title\">Non-Financial Risk Specialist, Transaction Banking, CIB</h1><meta itemprop=\"datePosted\" content=\"2026-10-02T14:56:48.291Z\"><meta itemprop=\"validThrough\" content=\"2026-10-13T22:00:00.000Z\"></main>",
+      "expected": {
+        "posted": 1790953008291,
+        "closing": 1791928800000
+      }
+    },
+    {
+      "id": "angloamerican:744000154036924",
+      "sourceId": "angloamerican",
+      "title": "Section Manager Load and Haul",
+      "country": "ZA",
+      "sourceUrl": "https://jobs.smartrecruiters.com/AngloAmericanDeBeersGroup/744000154036924",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><h1 class=\"isn-overlay-dialog-header isn-ml-05 isn-mr-1\" data-i18n=\"ie11_sunset_notification.overlay-header\"></h1><h1 class=\"job-title spl-text-h3\" itemprop=\"title\">Section Manager Load and Haul</h1><meta itemprop=\"datePosted\" content=\"2026-10-07T08:41:35.284Z\"><meta itemprop=\"validThrough\" content=\"2026-10-13T22:00:00.000Z\"></main>",
+      "expected": {
+        "posted": 1791362495284,
+        "closing": 1791928800000
+      }
+    },
+    {
+      "id": "angloamerican:744000154760991",
+      "sourceId": "angloamerican",
+      "title": "Chief Safety Officer",
+      "country": "ZA",
+      "sourceUrl": "https://jobs.smartrecruiters.com/AngloAmericanDeBeersGroup/744000154760991",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><h1 class=\"isn-overlay-dialog-header isn-ml-05 isn-mr-1\" data-i18n=\"ie11_sunset_notification.overlay-header\"></h1><h1 class=\"job-title spl-text-h3\" itemprop=\"title\">Chief Safety Officer</h1><meta itemprop=\"datePosted\" content=\"2026-10-09T18:40:52.825Z\"><meta itemprop=\"validThrough\" content=\"2026-10-11T22:00:00.000Z\"></main>",
+      "expected": {
+        "posted": 1791571252825,
+        "closing": 1791756000000
+      }
+    },
+    {
+      "id": "angloamerican:744000154639122",
+      "sourceId": "angloamerican",
+      "title": "Senior Revenue Manager",
+      "country": "ZA",
+      "sourceUrl": "https://jobs.smartrecruiters.com/AngloAmericanDeBeersGroup/744000154639122",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><h1 class=\"isn-overlay-dialog-header isn-ml-05 isn-mr-1\" data-i18n=\"ie11_sunset_notification.overlay-header\"></h1><h1 class=\"job-title spl-text-h3\" itemprop=\"title\">Senior Revenue Manager</h1><meta itemprop=\"datePosted\" content=\"2026-10-09T10:21:46.019Z\"><meta itemprop=\"validThrough\" content=\"2026-10-21T22:00:00.000Z\"></main>",
+      "expected": {
+        "posted": 1791541306019,
+        "closing": 1792620000000
+      }
+    },
+    {
+      "id": "sasol:1446065833",
+      "sourceId": "sasol",
+      "title": "Specialist - Technical High Schools Portfolio",
+      "country": "ZA",
+      "sourceUrl": "https://jobs.sasol.com/job/Sandton-Specialist-Technical-High-Schools-Portfolio/1446065833/",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><h1 id=\"job-title\" itemprop=\"title\">Specialist - Technical High Schools Portfolio</h1><meta itemprop=\"datePosted\" content=\"Fri Oct 09 00:00:00 UTC 2026\"><meta itemprop=\"validThrough\" content=\"Thu Oct 22 22:00:00 UTC 2026\"><H2 style=\"font-size:1.0em;margin:0.0px\">Location </H2>\r</div><div><p>Sandton </p></main>",
+      "expected": {
+        "posted": 1791504000000,
+        "closing": 1792706400000,
+        "location": "Sandton"
+      }
+    },
+    {
+      "id": "sasol:1445056333",
+      "sourceId": "sasol",
+      "title": "Retail Field trainer",
+      "country": "ZA",
+      "sourceUrl": "https://jobs.sasol.com/job/Sandton-Retail-Field-trainer/1445056333/",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><h1 id=\"job-title\" itemprop=\"title\">Retail Field trainer</h1><meta itemprop=\"datePosted\" content=\"Wed Oct 07 00:00:00 UTC 2026\"><meta itemprop=\"validThrough\" content=\"Fri Oct 16 22:00:00 UTC 2026\"><H2 style=\"font-size:1.0em;margin:0.0px\">Location </H2>\r</div><div><p>Durban </p></main>",
+      "expected": {
+        "posted": 1791331200000,
+        "closing": 1792188000000,
+        "location": "Durban"
+      }
+    },
+    {
+      "id": "sasol:1443693333",
+      "sourceId": "sasol",
+      "title": "Foreman X2",
+      "country": "ZA",
+      "sourceUrl": "https://jobs.sasol.com/job/Sasolburg-Foreman-X2/1443693333/",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><h1 id=\"job-title\" itemprop=\"title\">Foreman X2</h1><meta itemprop=\"datePosted\" content=\"Fri Oct 02 00:00:00 UTC 2026\"><meta itemprop=\"validThrough\" content=\"Fri Oct 16 22:00:00 UTC 2026\"><H2 style=\"font-size:1.0em;margin:0.0px\">Location</H2>\r</div><div><p>Sasolburg, Free State</p></main>",
+      "expected": {
+        "posted": 1790899200000,
+        "closing": 1792188000000,
+        "location": "Sasolburg, Free State"
+      }
+    },
+    {
+      "id": "sasol:1443842833",
+      "sourceId": "sasol",
+      "title": "Artisan Instrument Mechanician Grade 2",
+      "country": "ZA",
+      "sourceUrl": "https://jobs.sasol.com/job/Secunda-Artisan-Instrument-Mechanician-Grade-2/1443842833/",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><h1 id=\"job-title\" itemprop=\"title\">Artisan Instrument Mechanician Grade 2</h1><meta itemprop=\"datePosted\" content=\"Fri Oct 02 00:00:00 UTC 2026\"><meta itemprop=\"validThrough\" content=\"Fri Oct 16 22:00:00 UTC 2026\"><H2 style=\"font-size:1.0em;margin:0.0px\">Location</H2>\r</div><div><p>Secunda, Mpumalanga</p></main>",
+      "expected": {
+        "posted": 1790899200000,
+        "closing": 1792188000000,
+        "location": "Secunda, Mpumalanga"
+      }
+    },
+    {
+      "id": "discovery:1433258333",
+      "sourceId": "discovery",
+      "title": "Strategic Insights Manager: HNM",
+      "country": "ZA",
+      "sourceUrl": "https://careers.discovery.co.za/job/Sandton-1-Discovery-Place-Strategic-Insights-Manager-HNM-GP-2196/1433258333/",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><h1>\n\n    <span xml:lang=\"en-GB\" lang=\"en-GB\" itemprop=\"title\" data-careersite-propertyid=\"title\" class=\"rtltextaligneligible\">Strategic Insights Manager: HNM\n    </span>\n                        </h1><meta itemprop=\"datePosted\" content=\"Fri Oct 09 02:01:00 UTC 2026\"><meta itemprop=\"validThrough\" content=\"Fri Oct 16 22:00:00 UTC 2026\"></main>",
+      "expected": {
+        "posted": 1791511260000,
+        "closing": 1792188000000
+      }
+    },
+    {
+      "id": "discovery:1445931433",
+      "sourceId": "discovery",
+      "title": "Chef de Partie",
+      "country": "ZA",
+      "sourceUrl": "https://careers.discovery.co.za/job/Sandton-1-Discovery-Place-Chef-de-Partie-GP-2196/1445931433/",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><h1>\n\n    <span xml:lang=\"en-GB\" lang=\"en-GB\" itemprop=\"title\" data-careersite-propertyid=\"title\" class=\"rtltextaligneligible\">Chef de Partie\n    </span>\n                        </h1><meta itemprop=\"datePosted\" content=\"Fri Oct 09 00:00:00 UTC 2026\"><meta itemprop=\"validThrough\" content=\"Fri Oct 16 22:00:00 UTC 2026\"></main>",
+      "expected": {
+        "posted": 1791504000000,
+        "closing": 1792188000000
+      }
+    },
+    {
+      "id": "discovery:1445901033",
+      "sourceId": "discovery",
+      "title": "Non-motor Specialist Strategy and Procurement",
+      "country": "ZA",
+      "sourceUrl": "https://careers.discovery.co.za/job/Sandton-1-Discovery-Place-Non-motor-Specialist-Strategy-and-Procurement-GP-2196/1445901033/",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><h1>\n\n    <span xml:lang=\"en-GB\" lang=\"en-GB\" itemprop=\"title\" data-careersite-propertyid=\"title\" class=\"rtltextaligneligible\">Non-motor Specialist Strategy and Procurement\n    </span>\n                        </h1><meta itemprop=\"datePosted\" content=\"Fri Oct 09 00:00:00 UTC 2026\"><meta itemprop=\"validThrough\" content=\"Sun Oct 18 22:00:00 UTC 2026\"></main>",
+      "expected": {
+        "posted": 1791504000000,
+        "closing": 1792360800000
+      }
+    },
+    {
+      "id": "discovery:1382759533",
+      "sourceId": "discovery",
+      "title": "Pre Auth Service Consultant - Inhouse",
+      "country": "ZA",
+      "sourceUrl": "https://careers.discovery.co.za/job/Cape-Town-Sable-Park-Pre-Auth-Service-Consultant-Inhouse-WC-7446/1382759533/",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><h1>\n\n    <span xml:lang=\"en-GB\" lang=\"en-GB\" itemprop=\"title\" data-careersite-propertyid=\"title\" class=\"rtltextaligneligible\">Pre Auth Service Consultant - Inhouse\n    </span>\n                        </h1><meta itemprop=\"datePosted\" content=\"Sat Oct 10 02:00:00 UTC 2026\"><meta itemprop=\"validThrough\" content=\"Mon Nov 30 22:00:00 UTC 2026\"></main>",
+      "expected": {
+        "posted": 1791597600000,
+        "closing": 1796076000000
+      }
+    },
+    {
+      "id": "firstrand:R54333",
+      "sourceId": "firstrand",
+      "title": "External Sales and Service Advisor OBR",
+      "country": "ZA",
+      "sourceUrl": "https://firstrand.wd3.myworkdayjobs.com/FRB/job/Kwaggafontein/External-Sales-and-Service-Advisor-OBR_R54333",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><script type=\"application/ld+json\">{\"@type\":\"JobPosting\",\"title\":\"External Sales and Service Advisor OBR\",\"datePosted\":\"2026-10-09\",\"validThrough\":\"2026-10-16\"}</script><p>applications will not be accepted on the below date and onwards</p></main>",
+      "expected": {
+        "posted": 1791504000000,
+        "closing": 1792101600000
+      }
+    },
+    {
+      "id": "firstrand:R53801",
+      "sourceId": "firstrand",
+      "title": "FNB Community Advisor DHA",
+      "country": "ZA",
+      "sourceUrl": "https://firstrand.wd3.myworkdayjobs.com/FRB/job/Jeffreys-Bay/FNB-Community-Advisor-DHA_R53801",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><script type=\"application/ld+json\">{\"@type\":\"JobPosting\",\"title\":\"FNB Community Advisor DHA\",\"datePosted\":\"2026-10-09\",\"validThrough\":\"2026-10-12\"}</script><p>applications will not be accepted on the below date and onwards</p></main>",
+      "expected": {
+        "posted": 1791504000000,
+        "closing": 1791756000000
+      }
+    },
+    {
+      "id": "firstrand:R43836",
+      "sourceId": "firstrand",
+      "title": "Lending Advisor",
+      "country": "ZA",
+      "sourceUrl": "https://firstrand.wd3.myworkdayjobs.com/FRB/job/Johannesburg/Lending-Advisor_R43836",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><script type=\"application/ld+json\">{\"@type\":\"JobPosting\",\"title\":\"Lending Advisor\",\"datePosted\":\"2026-10-09\",\"validThrough\":\"2026-10-20\"}</script><p>applications will not be accepted on the below date and onwards</p></main>",
+      "expected": {
+        "posted": 1791504000000,
+        "closing": 1792447200000
+      }
+    },
+    {
+      "id": "firstrand:R52422-1",
+      "sourceId": "firstrand",
+      "title": "Financial Manager",
+      "country": "ZA",
+      "sourceUrl": "https://firstrand.wd3.myworkdayjobs.com/FRB/job/Randburg/Financial-Manager_R52422-1",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><script type=\"application/ld+json\">{\"@type\":\"JobPosting\",\"title\":\"Financial Manager\",\"datePosted\":\"2026-10-09\",\"validThrough\":\"2026-10-17\"}</script><p>applications will not be accepted on the below date and onwards</p></main>",
+      "expected": {
+        "posted": 1791504000000,
+        "closing": 1792188000000
+      }
+    },
+    {
+      "id": "firstrand:R52542",
+      "sourceId": "firstrand",
+      "title": "Branch Advisor FAIS",
+      "country": "ZA",
+      "sourceUrl": "https://firstrand.wd3.myworkdayjobs.com/FRB/job/Hermanus/Branch-Advisor-FAIS_R52542",
+      "html": "<main itemtype=\"http://schema.org/JobPosting\"><script type=\"application/ld+json\">{\"@type\":\"JobPosting\",\"title\":\"Branch Advisor FAIS\",\"datePosted\":\"2026-10-09\",\"validThrough\":\"2026-10-15\"}</script><p>applications will not be accepted on the below date and onwards</p></main>",
+      "expected": {
+        "posted": 1791504000000,
+        "closing": 1792015200000
+      }
+    }
+  ]
+}

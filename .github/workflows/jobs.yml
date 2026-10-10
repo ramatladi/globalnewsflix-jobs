@@ -1,0 +1,42 @@
+name: Jobs
+# Collects jobs from listed companies', governments' and international organisations' own career sites every six hours.
+on:
+  schedule:
+    - cron: "41 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      sources:
+        description: "Optional comma-separated registered source IDs (blank = all)"
+        required: false
+        type: string
+permissions:
+  id-token: write
+  contents: read
+concurrency:
+  group: jobs
+  cancel-in-progress: false
+jobs:
+  jobs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pypdf==6.20.0
+      - run: npm test
+      - run: python -m unittest discover -s tests -p 'test_jobs_government.py'
+      - run: node jobs-runner.mjs
+        env:
+          JOB_SOURCES: ${{ inputs.sources }}
+          JOBS_DRY_RUN: ${{ vars.PUBLISH_RESULTS != 'true' && '1' || '' }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jobs-collection-report
+          path: jobs-collection-report.json
+          if-no-files-found: ignore

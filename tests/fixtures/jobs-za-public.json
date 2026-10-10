@@ -1,0 +1,619 @@
+{
+  "verifiedAt": 1791610107786,
+  "sources": {
+    "standardbank": {
+      "offset": 0,
+      "limit": 100,
+      "totalFound": 139,
+      "content": [
+        {
+          "id": "744000154722698",
+          "name": "Copy of Entrenchment Universal Banker",
+          "releasedDate": "2026-10-09T15:51:44.314Z",
+          "location": {
+            "city": "Johannesburg",
+            "region": "GP",
+            "country": "za",
+            "address": "5 Simmonds Street",
+            "postalCode": "2001",
+            "remote": false,
+            "hybrid": false,
+            "latitude": "-26.209",
+            "longitude": "28.03938",
+            "fullLocation": "Johannesburg, GP, South Africa"
+          },
+          "function": {
+            "id": "other",
+            "label": "Other"
+          },
+          "department": {
+            "id": "6085871",
+            "label": "Non-Perm job"
+          }
+        },
+        {
+          "id": "744000154717880",
+          "name": "Senior Manager, New Products, CIB Finance",
+          "releasedDate": "2026-10-09T15:39:55.891Z",
+          "location": {
+            "city": "Johannesburg",
+            "region": "GP",
+            "country": "za",
+            "address": "30 Baker Street",
+            "postalCode": "2196",
+            "remote": false,
+            "hybrid": false,
+            "latitude": "-26.1479",
+            "longitude": "28.04396",
+            "fullLocation": "Johannesburg, GP, South Africa"
+          },
+          "function": {
+            "id": "other",
+            "label": "Other"
+          },
+          "department": {}
+        }
+      ]
+    },
+    "angloamerican": {
+      "offset": 0,
+      "limit": 100,
+      "totalFound": 82,
+      "content": [
+        {
+          "id": "744000154760991",
+          "name": "Chief Safety Officer",
+          "releasedDate": "2026-10-09T18:40:52.825Z",
+          "location": {
+            "city": "Musina",
+            "region": "LIMPOPO",
+            "country": "za",
+            "address": "Venetia Mine",
+            "postalCode": "900",
+            "remote": false,
+            "hybrid": false,
+            "fullLocation": "Musina, LIMPOPO, South Africa"
+          },
+          "function": {
+            "id": "general_business",
+            "label": "General Business"
+          },
+          "department": {}
+        },
+        {
+          "id": "744000154639122",
+          "name": "Senior Revenue Manager",
+          "releasedDate": "2026-10-09T10:21:46.019Z",
+          "location": {
+            "city": "Johannesburg",
+            "country": "za",
+            "address": "144 Oxford Road, Melrose",
+            "postalCode": "2196",
+            "remote": false,
+            "hybrid": true,
+            "fullLocation": "Johannesburg, , South Africa"
+          },
+          "function": {
+            "id": "quality_assurance",
+            "label": "Quality Assurance"
+          },
+          "department": {}
+        }
+      ]
+    },
+    "firstrand": {
+      "total": 167,
+      "jobPostings": [
+        {
+          "title": "Private Clients Advisor",
+          "externalPath": "/job/George/Private-Clients-Advisor_R52897",
+          "bulletFields": [
+            "George",
+            "South Africa",
+            "R52897",
+            "Permanent",
+            "FNB"
+          ]
+        },
+        {
+          "title": "Private Advisor",
+          "externalPath": "/job/Upington/Private-Client-Advisor_R48537",
+          "bulletFields": [
+            "Upington",
+            "South Africa",
+            "R48537",
+            "FNB"
+          ]
+        }
+      ],
+      "facets": [
+        {
+          "facetParameter": "locationMainGroup",
+          "values": [
+            {
+              "facetParameter": "locationCountry",
+              "descriptor": "Location Country",
+              "values": [
+                {
+                  "descriptor": "Botswana",
+                  "id": "db69bdbc446c11de98360015c5e6daf6",
+                  "count": 4
+                },
+                {
+                  "descriptor": "Eswatini",
+                  "id": "bbc94efce1eb471881e82f61629ac52d",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Ghana",
+                  "id": "db69c640446c11de98360015c5e6daf6",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Mozambique",
+                  "id": "7f514f8f47894bc797c5772adbddbb25",
+                  "count": 2
+                },
+                {
+                  "descriptor": "Namibia",
+                  "id": "db69d446446c11de98360015c5e6daf6",
+                  "count": 5
+                },
+                {
+                  "descriptor": "Nigeria",
+                  "id": "db69d536446c11de98360015c5e6daf6",
+                  "count": 2
+                },
+                {
+                  "descriptor": "South Africa",
+                  "id": "4db3c26940b944919b83612cc1193eed",
+                  "count": 143
+                },
+                {
+                  "descriptor": "Zambia",
+                  "id": "db69e9b8446c11de98360015c5e6daf6",
+                  "count": 6
+                }
+              ]
+            },
+            {
+              "facetParameter": "primaryLocation",
+              "descriptor": "Primary Location",
+              "values": [
+                {
+                  "descriptor": "Accra",
+                  "id": "6450b01b9917101d4b5d0af60c060000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Bela-Bela",
+                  "id": "6450b01b9917101d4b5c2c9b14110000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Bellville",
+                  "id": "6450b01b9917101d4b5ff55266e60000",
+                  "count": 3
+                },
+                {
+                  "descriptor": "Benoni",
+                  "id": "6450b01b9917101d4b5f1b3946370000",
+                  "count": 2
+                },
+                {
+                  "descriptor": "Bethlehem",
+                  "id": "6450b01b9917101d4b5e9a5c1fa70000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Bloemfontein",
+                  "id": "6450b01b9917101d4b5ddd2fc9600000",
+                  "count": 3
+                },
+                {
+                  "descriptor": "Boksburg",
+                  "id": "6450b01b9917101d4b5e6ab389190000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Cape Town",
+                  "id": "6450b01b9917101d4b5e7d634f190000",
+                  "count": 14
+                },
+                {
+                  "descriptor": "Diepkloof",
+                  "id": "6450b01b9917101d4b604d4cb7fb0000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Durban",
+                  "id": "6450b01b9917101d4b5e6d1d10b40000",
+                  "count": 11
+                },
+                {
+                  "descriptor": "Elim",
+                  "id": "6450b01b9917101d4b5bc5011a8e0000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Emalahleni",
+                  "id": "6450b01b9917101d4b5ec35042d80000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Ermelo",
+                  "id": "6450b01b9917101d4b5f684d2eab0000",
+                  "count": 4
+                },
+                {
+                  "descriptor": "Estcourt",
+                  "id": "6450b01b9917101d4b603d057ac80000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "FNB Acacia house, 2 Kikembe Drive, Umhlanga, Durban, 4319",
+                  "id": "6450b01b9917101d4b8a868d09610000",
+                  "count": 4
+                },
+                {
+                  "descriptor": "Gaborone",
+                  "id": "6450b01b9917101d4b5d088cda000000",
+                  "count": 4
+                },
+                {
+                  "descriptor": "George",
+                  "id": "6450b01b9917101d4b5e68498a780000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Hermanus",
+                  "id": "6450b01b9917101d4b6047ddc0280000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Ixopo",
+                  "id": "6450b01b9917101d4b5be91839960000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "JAT Building, 420 Av 25 de Setembro, Maputo, 1101",
+                  "id": "6450b01b9917101d4b8ad7f7d8fc0000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Jeffrey's Bay",
+                  "id": "6450b01b9917101d4b5f7024449a0000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Johannesburg",
+                  "id": "6450b01b9917101d4b5e62df1bbf0000",
+                  "count": 41
+                },
+                {
+                  "descriptor": "Kathu",
+                  "id": "6450b01b9917101d4b5f96bdf2cf0000",
+                  "count": 2
+                },
+                {
+                  "descriptor": "Kimberley",
+                  "id": "6450b01b9917101d4b6045745bb60000",
+                  "count": 2
+                },
+                {
+                  "descriptor": "Klerksdorp",
+                  "id": "6450b01b9917101d4b5f06185c730000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Kwaggafontein",
+                  "id": "6450b01b9917101d4b5b7adc5e320000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Lagos Central",
+                  "id": "6450b01b9917101d4b5d810c32260000",
+                  "count": 2
+                },
+                {
+                  "descriptor": "Landros Mare Street, Polokwane Central, Polokwane, 699",
+                  "id": "6450b01b9917101d4b86357234b70000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Lichtenburg",
+                  "id": "6450b01b9917101d4b5e853796f30000",
+                  "count": 3
+                },
+                {
+                  "descriptor": "Lusaka",
+                  "id": "6450b01b9917101d4b5d29af8e670000",
+                  "count": 6
+                },
+                {
+                  "descriptor": "Magalieskruin",
+                  "id": "6450b01b9917101d4b5f408c6d5c0000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Malmesbury",
+                  "id": "6450b01b9917101d4b5f50ce53090000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Maputo",
+                  "id": "6450b01b9917101d4b5cd41d21e40000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Margate",
+                  "id": "6450b01b9917101d4b5c6c7463810000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Mbabane",
+                  "id": "6450b01b9917101d4b5d149964a70000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Middelburg",
+                  "id": "6450b01b9917101d4b5df7a811c60000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Midrand",
+                  "id": "6450b01b9917101d4b602af986790000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Motherwell",
+                  "id": "6450b01b9917101d4b5c1ff057050000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Nelspruit",
+                  "id": "6450b01b9917101d4b5efb468f420000",
+                  "count": 3
+                },
+                {
+                  "descriptor": "Orange Farm",
+                  "id": "6450b01b9917101d4b5bedeb788a0000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Pietermaritzburg",
+                  "id": "6450b01b9917101d4b5f23a7353b0000",
+                  "count": 3
+                },
+                {
+                  "descriptor": "Polokwane",
+                  "id": "6450b01b9917101d4b5e3d8bd43e0000",
+                  "count": 4
+                },
+                {
+                  "descriptor": "Port Shepstone",
+                  "id": "6450b01b9917101d4b5f854038da0000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Pretoria",
+                  "id": "6450b01b9917101d4b5e7fcb28e60000",
+                  "count": 6
+                },
+                {
+                  "descriptor": "Randburg",
+                  "id": "6450b01b9917101d4b5e65477d930000",
+                  "count": 4
+                },
+                {
+                  "descriptor": "Randfontein",
+                  "id": "6450b01b9917101d4b5ef84526410000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Roodepoort",
+                  "id": "6450b01b9917101d4b5e50328af20000",
+                  "count": 2
+                },
+                {
+                  "descriptor": "Rustenburg",
+                  "id": "6450b01b9917101d4b5f08831bd40000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Secunda",
+                  "id": "6450b01b9917101d4b604fb4a39e0000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Shop 55 Highveld Mall, President Street, Witbank, Emalahleni, 1034",
+                  "id": "6450b01b9917101d4b8d9b49ed5f0000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Stellenbosch",
+                  "id": "6450b01b9917101d4b5ecbbbc3370000",
+                  "count": 2
+                },
+                {
+                  "descriptor": "Thaba nchu",
+                  "id": "6450b01b9917101d4b5b5a53b4fb0000",
+                  "count": 2
+                },
+                {
+                  "descriptor": "Upington",
+                  "id": "6450b01b9917101d4b5e82cdd4f30000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Ventersdorp",
+                  "id": "6450b01b9917101d4b5e8d12ed790000",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Windhoek",
+                  "id": "6450b01b9917101d4b5dbae17b240000",
+                  "count": 5
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "userAuthenticated": false
+    },
+    "sasol": "<li class=\"job-tile job-id-1445938833 job-row-index-3 linkhovercolora880bb1b\" data-url=\"/job/Durban-Snr-Security-Officer/1445938833/\" data-row-index=\"3\" data-focus-tile=\".job-id-1445938833\">\n                <div class=\"job-tile-cell\">\n                    <div class=\"row job job-row backgroundcolor76a1865d  shadowcolorb6a533a1 shadowhovercolorb6a533a1 bordercolorb6a533a1\" style=\"border-radius:0px;\">\n                        \n                        <div class=\"col-md-12 sub-section sub-section-desktop hidden-xs hidden-sm\">\n                            <div class=\"oneline\">\n        <div class=\"tiletitle\">\n            <span class=\"sr-only\">Title</span>\n            <span style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\" class=\"col-md-12 section-title title\" role=\"heading\" aria-level=\"2\">\n                <a class=\"jobTitle-link fontcolorb6a533a1\" data-focus-tile=\".job-id-1445938833\" aria-describedby=\"jobSearchTileHelpText-1445938833\" href=\"/job/Durban-Snr-Security-Officer/1445938833/\">\n                    Snr Security Officer\n                </a>\n            </span>\n        </div>\n                            </div>\n                            <div class=\"oneline\">\n            <div id=\"job-1445938833-desktop-section-city\" data-focus-tile=\".job-id-1445938833\" class=\"section-field city fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445938833-desktop-section-city-label\" aria-describedby=\"job-1445938833-desktop-section-city-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    City\n                </span>\n                <div id=\"job-1445938833-desktop-section-city-value\">Durban\n                </div>\n            </div>\n            <div id=\"job-1445938833-desktop-section-date\" data-focus-tile=\".job-id-1445938833\" class=\"section-field date fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445938833-desktop-section-date-label\" aria-describedby=\"job-1445938833-desktop-section-date-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    Posting Date\n                </span>\n                <div id=\"job-1445938833-desktop-section-date-value\">Oct 9, 2026\n                </div>\n            </div>\n            <div id=\"job-1445938833-desktop-section-customfield2\" data-focus-tile=\".job-id-1445938833\" class=\"section-field customfield2 fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445938833-desktop-section-customfield2-label\" aria-describedby=\"job-1445938833-desktop-section-customfield2-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    Work Location\n                </span>\n                <div id=\"job-1445938833-desktop-section-customfield2-value\">On-site\n                </div>\n            </div>\n            <div id=\"job-1445938833-desktop-section-multilocation\" data-focus-tile=\".job-id-1445938833\" class=\"section-field multilocation fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445938833-desktop-section-multilocation-label\" aria-describedby=\"job-1445938833-desktop-section-multilocation-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    Other Locations\n                </span>\n                <div id=\"job-1445938833-desktop-section-multilocation-value\">Durban\n                </div>\n            </div>\n                            </div>\n                        </div>\n                        \n                        <div class=\"col-md-12 sub-section sub-section-tablet hidden-xs hidden-md hidden-lg\">\n                            <div class=\"oneline\">\n        <div class=\"tiletitle\">\n            <span class=\"sr-only\">Title</span>\n            <span style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\" class=\"col-md-12 section-title title\" role=\"heading\" aria-level=\"2\">\n                <a class=\"jobTitle-link fontcolorb6a533a1\" data-focus-tile=\".job-id-1445938833\" aria-describedby=\"jobSearchTileHelpText-1445938833\" href=\"/job/Durban-Snr-Security-Officer/1445938833/\">\n                    Snr Security Officer\n                </a>\n            </span>\n        </div>\n                            </div>\n                            <div class=\"oneline\">\n            <div id=\"job-1445938833-tablet-section-city\" data-focus-tile=\".job-id-1445938833\" class=\"section-field city fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445938833-tablet-section-city-label\" aria-describedby=\"job-1445938833-tablet-section-city-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    City\n                </span>\n                <div id=\"job-1445938833-tablet-section-city-value\">Durban\n                </div>\n            </div>\n            <div id=\"job-1445938833-tablet-section-date\" data-focus-tile=\".job-id-1445938833\" class=\"section-field date fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445938833-tablet-section-date-label\" aria-describedby=\"job-1445938833-tablet-section-date-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    Posting Date\n                </span>\n                <div id=\"job-1445938833-tablet-section-date-value\">Oct 9, 2026\n                </div>\n            </div>\n            <div id=\"job-1445938833-tablet-section-multilocation\" data-focus-tile=\".job-id-1445938833\" class=\"section-field multilocation fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445938833-tablet-section-multilocation-label\" aria-describedby=\"job-1445938833-tablet-section-multilocation-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    Other Locations\n                </span>\n                <div id=\"job-1445938833-tablet-section-multilocation-value\">Durban\n                </div>\n            </div>\n                            </div>\n                        </div>\n                        \n                        <span class=\"col-md-12 sub-section sub-section-mobile hidden-sm hidden-md hidden-lg\">\n        <div class=\"tiletitle\">\n            <span class=\"sr-only\">Title</span>\n            <span style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\" class=\"col-md-12 section-title title\" role=\"heading\" aria-level=\"2\">\n                <a class=\"jobTitle-link fontcolorb6a533a1\" data-focus-tile=\".job-id-1445938833\" aria-describedby=\"jobSearchTileHelpText-1445938833\" href=\"/job/Durban-Snr-Security-Officer/1445938833/\">\n                    Snr Security Officer\n                </a>\n            </span>\n        </div>\n            <div id=\"job-1445938833-mobile-section-city\" data-focus-tile=\".job-id-1445938833\" class=\"section-field city fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445938833-mobile-section-city-label\" aria-describedby=\"job-1445938833-mobile-section-city-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    City\n                </span>\n                <div id=\"job-1445938833-mobile-section-city-value\">Durban\n                </div>\n            </div>\n            <div id=\"job-1445938833-mobile-section-date\" data-focus-tile=\".job-id-1445938833\" class=\"section-field date fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445938833-mobile-section-date-label\" aria-describedby=\"job-1445938833-mobile-section-date-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    Posting Date\n                </span>\n                <div id=\"job-1445938833-mobile-section-date-value\">Oct 9, 2026\n                </div>\n            </div>\n            <div id=\"job-1445938833-mobile-section-multilocation\" data-focus-tile=\".job-id-1445938833\" class=\"section-field multilocation fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445938833-mobile-section-multilocation-label\" aria-describedby=\"job-1445938833-mobile-section-multilocation-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    Other Locations\n                </span>\n                <div id=\"job-1445938833-mobile-section-multilocation-value\">Durban\n                </div>\n            </div>\n                        </span>\n\n                        <span class=\"sr-only\" id=\"jobSearchTileHelpText-1445938833\">Select with space bar to view the full contents of the job information.</span>\n                    </div>\n                </div>\n            </li>\n<li class=\"job-tile job-id-1445689433 job-row-index-7 linkhovercolora880bb1b\" data-url=\"/job/Secunda-Forensic-Accountant-x2/1445689433/\" data-row-index=\"7\" data-focus-tile=\".job-id-1445689433\">\n                <div class=\"job-tile-cell\">\n                    <div class=\"row job job-row backgroundcolor76a1865d  shadowcolorb6a533a1 shadowhovercolorb6a533a1 bordercolorb6a533a1\" style=\"border-radius:0px;\">\n                        \n                        <div class=\"col-md-12 sub-section sub-section-desktop hidden-xs hidden-sm\">\n                            <div class=\"oneline\">\n        <div class=\"tiletitle\">\n            <span class=\"sr-only\">Title</span>\n            <span style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\" class=\"col-md-12 section-title title\" role=\"heading\" aria-level=\"2\">\n                <a class=\"jobTitle-link fontcolorb6a533a1\" data-focus-tile=\".job-id-1445689433\" aria-describedby=\"jobSearchTileHelpText-1445689433\" href=\"/job/Secunda-Forensic-Accountant-x2/1445689433/\">\n                    Forensic Accountant x2\n                </a>\n            </span>\n        </div>\n                            </div>\n                            <div class=\"oneline\">\n            <div id=\"job-1445689433-desktop-section-city\" data-focus-tile=\".job-id-1445689433\" class=\"section-field city fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445689433-desktop-section-city-label\" aria-describedby=\"job-1445689433-desktop-section-city-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    City\n                </span>\n                <div id=\"job-1445689433-desktop-section-city-value\">Secunda\n                </div>\n            </div>\n            <div id=\"job-1445689433-desktop-section-date\" data-focus-tile=\".job-id-1445689433\" class=\"section-field date fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445689433-desktop-section-date-label\" aria-describedby=\"job-1445689433-desktop-section-date-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    Posting Date\n                </span>\n                <div id=\"job-1445689433-desktop-section-date-value\">Oct 8, 2026\n                </div>\n            </div>\n            <div id=\"job-1445689433-desktop-section-customfield2\" data-focus-tile=\".job-id-1445689433\" class=\"section-field customfield2 fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445689433-desktop-section-customfield2-label\" aria-describedby=\"job-1445689433-desktop-section-customfield2-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    Work Location\n                </span>\n                <div id=\"job-1445689433-desktop-section-customfield2-value\">On-site\n                </div>\n            </div>\n            <div id=\"job-1445689433-desktop-section-multilocation\" data-focus-tile=\".job-id-1445689433\" class=\"section-field multilocation fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445689433-desktop-section-multilocation-label\" aria-describedby=\"job-1445689433-desktop-section-multilocation-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    Other Locations\n                </span>\n                <div id=\"job-1445689433-desktop-section-multilocation-value\">Secunda\n                </div>\n            </div>\n                            </div>\n                        </div>\n                        \n                        <div class=\"col-md-12 sub-section sub-section-tablet hidden-xs hidden-md hidden-lg\">\n                            <div class=\"oneline\">\n        <div class=\"tiletitle\">\n            <span class=\"sr-only\">Title</span>\n            <span style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\" class=\"col-md-12 section-title title\" role=\"heading\" aria-level=\"2\">\n                <a class=\"jobTitle-link fontcolorb6a533a1\" data-focus-tile=\".job-id-1445689433\" aria-describedby=\"jobSearchTileHelpText-1445689433\" href=\"/job/Secunda-Forensic-Accountant-x2/1445689433/\">\n                    Forensic Accountant x2\n                </a>\n            </span>\n        </div>\n                            </div>\n                            <div class=\"oneline\">\n            <div id=\"job-1445689433-tablet-section-city\" data-focus-tile=\".job-id-1445689433\" class=\"section-field city fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445689433-tablet-section-city-label\" aria-describedby=\"job-1445689433-tablet-section-city-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    City\n                </span>\n                <div id=\"job-1445689433-tablet-section-city-value\">Secunda\n                </div>\n            </div>\n            <div id=\"job-1445689433-tablet-section-date\" data-focus-tile=\".job-id-1445689433\" class=\"section-field date fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445689433-tablet-section-date-label\" aria-describedby=\"job-1445689433-tablet-section-date-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    Posting Date\n                </span>\n                <div id=\"job-1445689433-tablet-section-date-value\">Oct 8, 2026\n                </div>\n            </div>\n            <div id=\"job-1445689433-tablet-section-multilocation\" data-focus-tile=\".job-id-1445689433\" class=\"section-field multilocation fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445689433-tablet-section-multilocation-label\" aria-describedby=\"job-1445689433-tablet-section-multilocation-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    Other Locations\n                </span>\n                <div id=\"job-1445689433-tablet-section-multilocation-value\">Secunda\n                </div>\n            </div>\n                            </div>\n                        </div>\n                        \n                        <span class=\"col-md-12 sub-section sub-section-mobile hidden-sm hidden-md hidden-lg\">\n        <div class=\"tiletitle\">\n            <span class=\"sr-only\">Title</span>\n            <span style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\" class=\"col-md-12 section-title title\" role=\"heading\" aria-level=\"2\">\n                <a class=\"jobTitle-link fontcolorb6a533a1\" data-focus-tile=\".job-id-1445689433\" aria-describedby=\"jobSearchTileHelpText-1445689433\" href=\"/job/Secunda-Forensic-Accountant-x2/1445689433/\">\n                    Forensic Accountant x2\n                </a>\n            </span>\n        </div>\n            <div id=\"job-1445689433-mobile-section-city\" data-focus-tile=\".job-id-1445689433\" class=\"section-field city fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445689433-mobile-section-city-label\" aria-describedby=\"job-1445689433-mobile-section-city-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    City\n                </span>\n                <div id=\"job-1445689433-mobile-section-city-value\">Secunda\n                </div>\n            </div>\n            <div id=\"job-1445689433-mobile-section-date\" data-focus-tile=\".job-id-1445689433\" class=\"section-field date fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445689433-mobile-section-date-label\" aria-describedby=\"job-1445689433-mobile-section-date-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    Posting Date\n                </span>\n                <div id=\"job-1445689433-mobile-section-date-value\">Oct 8, 2026\n                </div>\n            </div>\n            <div id=\"job-1445689433-mobile-section-multilocation\" data-focus-tile=\".job-id-1445689433\" class=\"section-field multilocation fontcolorb6a533a1\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                <span id=\"job-1445689433-mobile-section-multilocation-label\" aria-describedby=\"job-1445689433-mobile-section-multilocation-value\" class=\"section-label fontcolorb6a533a1 \" style=\"font-family:Arial, Helvetica, sans-serif; font-size:14px;\">\n                    Other Locations\n                </span>\n                <div id=\"job-1445689433-mobile-section-multilocation-value\">Secunda\n                </div>\n            </div>\n                        </span>\n\n                        <span class=\"sr-only\" id=\"jobSearchTileHelpText-1445689433\">Select with space bar to view the full contents of the job information.</span>\n                    </div>\n                </div>\n            </li>",
+    "discovery": "<tr class=\"data-row\">\n                                                <td class=\"colTitle\" headers=\"hdrTitle\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"jobTitle hidden-phone\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<a href=\"/job/Cape-Town-Sable-Park-Pre-Auth-Service-Consultant-Inhouse-WC-7446/1382759533/\" class=\"jobTitle-link\">Pre Auth Service Consultant - Inhouse</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</span>\n                                                    <div class=\"jobdetail-phone visible-phone\">\n                                                                    <span class=\"jobTitle visible-phone\">\n                                                                        <a class=\"jobTitle-link\" href=\"/job/Cape-Town-Sable-Park-Pre-Auth-Service-Consultant-Inhouse-WC-7446/1382759533/\">Pre Auth Service Consultant - Inhouse</a>\n                                                                    </span>\n                                                                    <span class=\"jobFacility visible-phone\">Discovery Health</span>\n                                                                    <span class=\"jobLocation visible-phone\">\n        \n        <span class=\"jobLocation\">\n            Cape Town - Sable Park, WC, ZA, 7446\n            \n        </span></span>\n                                                                    <span class=\"jobDate visible-phone\">10 Oct 2026\n\t\t\t\t\t\t\t\t\t\t\t\t\t                </span>\n                                                    </div>\n                                                </td>\n\t\t\t\t\t\t\t\t\t\t\t<td class=\"colLocation hidden-phone\" headers=\"hdrLocation\">\n        \n        <span class=\"jobLocation\">\n            Cape Town - Sable Park, WC, ZA, 7446\n            \n        </span>\n\t\t\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t\t\t<td class=\"colDate hidden-phone\" nowrap=\"nowrap\" headers=\"hdrDate\">\n\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"jobDate\">10 Oct 2026\n\t\t\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td class=\"hidden-phone\"></td>\n                            </tr>\n<tr class=\"data-row\">\n                                                <td class=\"colTitle\" headers=\"hdrTitle\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"jobTitle hidden-phone\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<a href=\"/job/Sandton-1-Discovery-Place-Finance-Business-Partner-GP-2196/1382668933/\" class=\"jobTitle-link\">Finance Business Partner</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</span>\n                                                    <div class=\"jobdetail-phone visible-phone\">\n                                                                    <span class=\"jobTitle visible-phone\">\n                                                                        <a class=\"jobTitle-link\" href=\"/job/Sandton-1-Discovery-Place-Finance-Business-Partner-GP-2196/1382668933/\">Finance Business Partner</a>\n                                                                    </span>\n                                                                    <span class=\"jobFacility visible-phone\">Discovery Central Services</span>\n                                                                    <span class=\"jobLocation visible-phone\">\n        \n        <span class=\"jobLocation\">\n            Sandton - 1 Discovery Place, GP, ZA, 2196\n            \n        </span></span>\n                                                                    <span class=\"jobDate visible-phone\">10 Oct 2026\n\t\t\t\t\t\t\t\t\t\t\t\t\t                </span>\n                                                    </div>\n                                                </td>\n\t\t\t\t\t\t\t\t\t\t\t<td class=\"colLocation hidden-phone\" headers=\"hdrLocation\">\n        \n        <span class=\"jobLocation\">\n            Sandton - 1 Discovery Place, GP, ZA, 2196\n            \n        </span>\n\t\t\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t\t\t<td class=\"colDate hidden-phone\" nowrap=\"nowrap\" headers=\"hdrDate\">\n\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"jobDate\">10 Oct 2026\n\t\t\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td class=\"hidden-phone\"></td>\n                            </tr>",
+    "capitec": "<table><tr class=\"data-row\">\n                                                <td class=\"colTitle\" headers=\"hdrTitle\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"jobTitle hidden-phone\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<a href=\"/job/Data-Engineer/1425926633/\" class=\"jobTitle-link\">Data Engineer</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</span>\n                                                    <div class=\"jobdetail-phone visible-phone\">\n                                                                    <span class=\"jobTitle visible-phone\">\n                                                                        <a class=\"jobTitle-link\" href=\"/job/Data-Engineer/1425926633/\">Data Engineer</a>\n                                                                    </span>\n                                                                    <span class=\"jobLocation visible-phone\">\n        \n        <span class=\"jobLocation\">\n            ZA\n            \n        </span></span>\n                                                                    <span class=\"jobDate visible-phone\">10 Oct 2026\n\t\t\t\t\t\t\t\t\t\t\t\t\t                </span>\n                                                                    <span class=\"jobDistance visible-phone\">0.00 km</span>\n                                                    </div>\n                                                </td>\n\t\t\t\t\t\t\t\t\t\t\t<td class=\"colDepartment hidden-phone\" headers=\"hdrDepartment\">\n\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"jobDepartment\">Business Development and Technology</span>\n\t\t\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t\t\t<td class=\"colLocation hidden-phone\" headers=\"hdrLocation\">\n        \n        <span class=\"jobLocation\">\n            ZA\n            \n        </span>\n\t\t\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td class=\"hidden-phone\"></td>\n                            </tr><tr class=\"data-row\">\n                                                <td class=\"colTitle\" headers=\"hdrTitle\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"jobTitle hidden-phone\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<a href=\"/job/Stellenbosch-Accounts-Payable-Clerk/1445935333/\" class=\"jobTitle-link\">Accounts Payable Clerk</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</span>\n                                                    <div class=\"jobdetail-phone visible-phone\">\n                                                                    <span class=\"jobTitle visible-phone\">\n                                                                        <a class=\"jobTitle-link\" href=\"/job/Stellenbosch-Accounts-Payable-Clerk/1445935333/\">Accounts Payable Clerk</a>\n                                                                    </span>\n                                                                    <span class=\"jobLocation visible-phone\">\n        \n        <span class=\"jobLocation\">\n            Stellenbosch, ZA\n            \n        </span></span>\n                                                                    <span class=\"jobDate visible-phone\">9 Oct 2026\n\t\t\t\t\t\t\t\t\t\t\t\t\t                </span>\n                                                                    <span class=\"jobDistance visible-phone\">0.00 km</span>\n                                                    </div>\n                                                </td>\n\t\t\t\t\t\t\t\t\t\t\t<td class=\"colDepartment hidden-phone\" headers=\"hdrDepartment\">\n\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"jobDepartment\">Financial Management</span>\n\t\t\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t\t\t<td class=\"colLocation hidden-phone\" headers=\"hdrLocation\">\n        \n        <span class=\"jobLocation\">\n            Stellenbosch, ZA\n            \n        </span>\n\t\t\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td class=\"hidden-phone\"></td>\n                            </tr></table>",
+    "goldfields": "<table><tr class=\"data-row\">\n                                                <td class=\"colTitle\" headers=\"hdrTitle\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"jobTitle hidden-phone\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<a href=\"/Australia/job/Agnew-Leinster-Service-Crew-Operator-WA-6437/1303649000/\" class=\"jobTitle-link\">Service Crew Operator</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</span>\n                                                    <div class=\"jobdetail-phone visible-phone\">\n                                                                    <span class=\"jobTitle visible-phone\">\n                                                                        <a class=\"jobTitle-link\" href=\"/Australia/job/Agnew-Leinster-Service-Crew-Operator-WA-6437/1303649000/\">Service Crew Operator</a>\n                                                                    </span>\n                                                                    <span class=\"jobLocation visible-phone\">\n        \n        <span class=\"jobLocation\">\n            Agnew - Leinster, WA, AU, 6437\n            \n        </span></span>\n                                                                    <span class=\"jobDate visible-phone\">8 Oct 2026\n\t\t\t\t\t\t\t\t\t\t\t\t\t                </span>\n                                                    </div>\n                                                </td>\n\t\t\t\t\t\t\t\t\t\t\t<td class=\"colLocation hidden-phone\" headers=\"hdrLocation\">\n        \n        <span class=\"jobLocation\">\n            Agnew - Leinster, WA, AU, 6437\n            \n        </span>\n\t\t\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t\t\t<td class=\"colDate hidden-phone\" nowrap=\"nowrap\" headers=\"hdrDate\">\n\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"jobDate\">8 Oct 2026\n\t\t\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td class=\"hidden-phone\"></td>\n                            </tr><tr class=\"data-row\">\n                                                <td class=\"colTitle\" headers=\"hdrTitle\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"jobTitle hidden-phone\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<a href=\"/job/Westonaria-Supervisor-Engineering-Electrical-Sout-1780/1438132400/\" class=\"jobTitle-link\">Supervisor Engineering Electrical</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</span>\n                                                    <div class=\"jobdetail-phone visible-phone\">\n                                                                    <span class=\"jobTitle visible-phone\">\n                                                                        <a class=\"jobTitle-link\" href=\"/job/Westonaria-Supervisor-Engineering-Electrical-Sout-1780/1438132400/\">Supervisor Engineering Electrical</a>\n                                                                    </span>\n                                                                    <span class=\"jobLocation visible-phone\">\n        \n        <span class=\"jobLocation\">\n            Westonaria, South Deep, South Africa, 1780\n            \n        </span></span>\n                                                                    <span class=\"jobDate visible-phone\">8 Oct 2026\n\t\t\t\t\t\t\t\t\t\t\t\t\t                </span>\n                                                    </div>\n                                                </td>\n\t\t\t\t\t\t\t\t\t\t\t<td class=\"colLocation hidden-phone\" headers=\"hdrLocation\">\n        \n        <span class=\"jobLocation\">\n            Westonaria, South Deep, South Africa, 1780\n            \n        </span>\n\t\t\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t\t\t<td class=\"colDate hidden-phone\" nowrap=\"nowrap\" headers=\"hdrDate\">\n\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"jobDate\">8 Oct 2026\n\t\t\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td class=\"hidden-phone\"></td>\n                            </tr></table>",
+    "adcorp": {
+      "total": 5,
+      "jobPostings": [
+        {
+          "title": "Business Development Consultant",
+          "externalPath": "/job/Durban---Musgrave/Business-Development-Consultant_R103927",
+          "locationsText": "Durban - Musgrave",
+          "postedOn": "Posted 3 Days Ago",
+          "timeLeftToApply": "9 days left to apply",
+          "bulletFields": [
+            "End Date: 20 October 2026"
+          ]
+        },
+        {
+          "title": "Recruitment Administrator",
+          "externalPath": "/job/Richards-Bay/Recruitment-Administrator_R103931",
+          "locationsText": "Richards Bay",
+          "postedOn": "Posted 3 Days Ago",
+          "timeLeftToApply": "9 days left to apply",
+          "bulletFields": [
+            "End Date: 20 October 2026"
+          ]
+        }
+      ],
+      "facets": [
+        {
+          "facetParameter": "jobFamilyGroup",
+          "descriptor": "Job Category",
+          "values": [
+            {
+              "descriptor": "Sales - Group",
+              "id": "88d7341b2dae010eaca77e0a0301b40b",
+              "count": 1
+            },
+            {
+              "descriptor": "Operational Delivery - Group",
+              "id": "88d7341b2dae0148fc776f0a0301b00b",
+              "count": 1
+            },
+            {
+              "descriptor": "Human Capital - Group",
+              "id": "88d7341b2dae019aaff9460a0301a60b",
+              "count": 1
+            },
+            {
+              "descriptor": "Finance - Group",
+              "id": "88d7341b2dae0129fa3a3c0a0301a40b",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "facetParameter": "workerSubType",
+          "descriptor": "Job Type",
+          "values": [
+            {
+              "descriptor": "Permanent",
+              "id": "88d7341b2dae0134d0c03fd0bd002801",
+              "count": 5
+            }
+          ]
+        },
+        {
+          "facetParameter": "timeType",
+          "descriptor": "Time Type",
+          "values": [
+            {
+              "descriptor": "Full time",
+              "id": "755a1f7642e3013073db1d922f1a5800",
+              "count": 5
+            }
+          ]
+        },
+        {
+          "facetParameter": "locationMainGroup",
+          "values": [
+            {
+              "facetParameter": "locationCountry",
+              "descriptor": "Location Country",
+              "values": [
+                {
+                  "descriptor": "South Africa",
+                  "id": "4db3c26940b944919b83612cc1193eed",
+                  "count": 5
+                }
+              ]
+            },
+            {
+              "facetParameter": "locations",
+              "descriptor": "Locations",
+              "values": [
+                {
+                  "descriptor": "Durban - Morningside",
+                  "id": "88d7341b2dae01037473eabae300db09",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Durban - Musgrave",
+                  "id": "88d7341b2dae012a0b180abce3009e0a",
+                  "count": 1
+                },
+                {
+                  "descriptor": "Johannesburg - Adcorp Place",
+                  "id": "88d7341b2dae0162b68b95bae300a909",
+                  "count": 2
+                },
+                {
+                  "descriptor": "Richards Bay",
+                  "id": "88d7341b2dae014ac6ad3cbbe300120a",
+                  "count": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "facetParameter": "distance",
+          "descriptor": "Distance",
+          "values": [
+            {
+              "descriptor": "10 miles",
+              "id": "a538cdb60a631000078a2c60ed1700f3",
+              "count": 1
+            },
+            {
+              "descriptor": "25 miles",
+              "id": "a538cdb60a631000078a2c6a410300f4",
+              "count": 1
+            },
+            {
+              "descriptor": "50 miles",
+              "id": "a538cdb60a631000078a2c6eadd300f5",
+              "count": 1
+            },
+            {
+              "descriptor": "100 miles",
+              "id": "a538cdb60a631000078a2c71efcc00f6",
+              "count": 1
+            },
+            {
+              "descriptor": "Any Distance",
+              "id": "a538cdb60a631000078a2c74f73b00f7",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "userAuthenticated": false
+    }
+  }
+}
