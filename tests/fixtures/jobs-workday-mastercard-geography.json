@@ -1,0 +1,62 @@
+{
+  "source": "mastercard",
+  "description": "Minimal observed public Workday detail fields, preserving original list IDs (Tbilisi list suffix differs from jobReqId).",
+  "records": [
+    {
+      "listId": "R-292581",
+      "detailReference": "R-292581",
+      "location": "Atlanta, Georgia (675 Ponce De Leon Ave NE)",
+      "countryDescriptor": "United States of America",
+      "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Atlanta-Georgia-675-Ponce-De-Leon-Ave-NE/Manager--B2B-Marketing-Operations---Partner-Marketing-Platforms_R-292581"
+    },
+    {
+      "listId": "R-290891",
+      "detailReference": "R-290891",
+      "location": "Atlanta, Georgia",
+      "countryDescriptor": "United States of America",
+      "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Atlanta-Georgia/Senior-Data-Engineer_R-290891"
+    },
+    {
+      "listId": "R-291509",
+      "detailReference": "R-291509",
+      "location": "Atlanta, Georgia",
+      "countryDescriptor": "United States of America",
+      "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Atlanta-Georgia/Manager--Partner-Success---Security-Solutions_R-291509"
+    },
+    {
+      "listId": "R-274958-1",
+      "detailReference": "R-274958",
+      "location": "Tbilisi, Georgia",
+      "countryDescriptor": "Georgia",
+      "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Tbilisi-Georgia/Manager--Account-Management_R-274958-1"
+    },
+    {
+      "listId": "R-289372",
+      "detailReference": "R-289372",
+      "location": "Atlanta, Georgia",
+      "countryDescriptor": "United States of America",
+      "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Atlanta-Georgia/Lead-Software-Engineer_R-289372"
+    },
+    {
+      "listId": "R-288500",
+      "detailReference": "R-288500",
+      "location": "Atlanta, Georgia",
+      "countryDescriptor": "United States of America",
+      "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Atlanta-Georgia/Lead-Software-Engineer_R-288500"
+    },
+    {
+      "listId": "R-288277",
+      "detailReference": "R-288277",
+      "location": "Atlanta, Georgia",
+      "countryDescriptor": "United States of America",
+      "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Atlanta-Georgia/Senior-Software-Engineer_R-288277"
+    },
+    {
+      "listId": "R-280197",
+      "detailReference": "R-280197",
+      "location": "Atlanta, Georgia",
+      "countryDescriptor": "United States of America",
+      "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Atlanta-Georgia/Principal-Systems-Engineer_R-280197"
+    }
+  ]
+}

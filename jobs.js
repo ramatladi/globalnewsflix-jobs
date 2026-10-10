@@ -463,7 +463,12 @@ async function workday(f, src, log) {
   // Geography determines whether a row can be retained at all. Spend the same
   // bounded detail budget on unresolved rows before optional pay enrichment;
   // keep the original output order and the source's completeness checks.
-  for (const x of out) { x.country ||= countryOf(x.location); x.payObserved = false; }
+  for (const x of out) {
+    // This observed Workday office label names the US state, not the country.
+    // Explicit country facets/bullets already on the row keep priority.
+    x.country ||= /^Atlanta,\s*Georgia(?:\s*\([^()]*\))?$/i.test(plain(x.location)) ? 'US' : countryOf(x.location);
+    x.payObserved = false;
+  }
   const detailOrder = [...out.filter(x => !x.country), ...out.filter(x => PAY_COUNTRIES.has(x.country))];
   let n = 0;
   for (const x of detailOrder) {

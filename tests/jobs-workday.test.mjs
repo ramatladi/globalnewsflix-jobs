@@ -1,4 +1,5 @@
 import { test } from 'node:test';
+import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 import { collectJobs, normalizeCollectedJob, SOURCES } from '../jobs.js';
 
@@ -6,7 +7,7 @@ const response = data => Response.json(data);
 const posting = (id, location = 'Undisclosed workplace') => ({
   externalPath: `/job/Workplace/Engineer_${id}`, title: 'Engineer', locationsText: location,
 });
-async function collect(postings, detail = () => ({ jobPostingInfo: { country: { descriptor: 'South Africa' }, location: 'Johannesburg' } })) {
+async function collect(postings, detail = () => ({ jobPostingInfo: { country: { descriptor: 'South Africa' }, location: 'Johannesburg' } }), source = 'absa') {
   const requests = [];
   const result = await collectJobs(async (url, options) => {
     if (url.includes('frankfurter')) return response({ rates: { ZAR: 18 } });
@@ -18,7 +19,7 @@ async function collect(postings, detail = () => ({ jobPostingInfo: { country: { 
     requests.push(id);
     const value = detail(id);
     return value instanceof Response ? value : response(value);
-  }, () => {}, ['absa'], { requestDelayMs: 0 });
+  }, () => {}, [source], { requestDelayMs: 0 });
   return { ...result, requests };
 }
 
@@ -89,4 +90,43 @@ test('pay observation is optional for other readers and malformed supplied flags
   assert.equal(Object.hasOwn(normalizeCollectedJob(source,job,null),'pay_observed'),false);
   for (const flag of [true,false]) assert.equal(normalizeCollectedJob(source,{...job,payObserved:flag},null).pay_observed,flag);
   for (const flag of [null,undefined,0,'false',{}]) assert.equal(normalizeCollectedJob(source,{...job,payObserved:flag},null),null);
+});
+
+test('observed Workday Atlanta office labels infer US while Tbilisi and explicit bullet countries retain their identity', async () => {
+  // Actual Mastercard labels/IDs captured in the collection report. The public
+  // R-290891 detail independently states United States of America.
+  const rows = [posting('R-290891','Atlanta, Georgia'), posting('R-292581','Atlanta, Georgia (675 Ponce De Leon Ave NE)'), posting('R-274958-1','Tbilisi, Georgia'),
+    {...posting('explicit-ge','Atlanta, Georgia'),bulletFields:['Georgia']}, {...posting('explicit-gb','Atlanta, Georgia (675 Ponce De Leon Ave NE)'),bulletFields:['United Kingdom']}];
+  const result=await collect(rows,()=>({}),'mastercard');
+  assert.deepEqual(result.rows.map(row=>[row.id,row.country]),[
+    ['mastercard:R-290891','US'],['mastercard:R-292581','US'],['mastercard:R-274958-1','GE'],['mastercard:explicit-ge','GE'],['mastercard:explicit-gb','GB'],
+  ]);
+  assert.deepEqual(result.ok,['mastercard']);
+  assert.equal(result.rows[1].location,'Atlanta, Georgia (675 Ponce De Leon Ave NE)');
+});
+
+test('Workday country facets take priority over the narrow Atlanta inference', async () => {
+  const item=posting('facet-gb','Atlanta, Georgia');
+  const result=await collectJobs(async (url,options)=>{
+    if(url.includes('frankfurter'))return response({rates:{}});
+    if(!url.endsWith('/jobs'))return response({});
+    const {appliedFacets}=JSON.parse(options.body);
+    return Object.keys(appliedFacets).length ? response({jobPostings:[item]}) : response({total:1,jobPostings:[item],facets:[{facetParameter:'country',values:[{id:'gb',descriptor:'United Kingdom',count:1}]}]});
+  },()=>{},['mastercard'],{requestDelayMs:0});
+  assert.deepEqual(result.rows.map(row=>[row.id,row.country]),[['mastercard:facet-gb','GB']]);
+});
+
+
+test('all seven observed Atlanta details and genuine Tbilisi control retain the original list IDs', async () => {
+  const {records}=JSON.parse(readFileSync(new URL('./fixtures/jobs-workday-mastercard-geography.json',import.meta.url)));
+  const result=await collect(records.map(r=>posting(r.listId,r.location)),()=>({}),'mastercard');
+  assert.equal(result.rows.length,8);
+  assert.equal(result.rows.filter(r=>r.country==='US').length,7);
+  assert.equal(result.rows.filter(r=>r.country==='GE').length,1);
+  for(const evidence of records){
+    const row=result.rows.find(r=>r.id==='mastercard:'+evidence.listId);
+    assert.ok(row,evidence.listId);
+    assert.equal(row.country,evidence.countryDescriptor==='United States of America'?'US':'GE');
+  }
+  assert.ok(result.rows.some(r=>r.id==='mastercard:R-274958-1'&&r.country==='GE'),'detail reference never replaces the existing list ID');
 });
