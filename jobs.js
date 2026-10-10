@@ -528,7 +528,7 @@ async function workday(f, src, log) {
 }
 // Opt-in geography is accepted only from one detail posting bound to the exact
 // listed URL/title. Plant names and the employer's home country are not evidence.
-export function parseJobGeography(html, row) {
+export function parseJobGeography(html, row, { employerName } = {}) {
   if (typeof html !== 'string' || html.length > 2000000) return null;
   const key = value => plain(value).normalize('NFKC').toLowerCase();
   const explicitCountry = value => Object.hasOwn(COUNTRY, plain(value)) ? plain(value) : countryCode(value);
@@ -564,8 +564,16 @@ export function parseJobGeography(html, row) {
   const prop = (e, value) => (e.attrs.itemprop || '').split(/\s+/).includes(value);
   const enclosingScope = e => { for (let p = e.parent; p; p = p.parent) if (Object.hasOwn(p.attrs, 'itemscope')) return p; return null; };
   const scopes = elements.filter(e => typed(e, 'JobPosting'));
+  const visibleCompanyMatches = scope => {
+    const companies = elements.filter(e => e.attrs.id === 'job-company' && (!scope || enclosingScope(e) === scope));
+    return companies.length <= 1 && companies.every(e => !e.malformed && e.end && key(html.slice(e.openEnd, e.end)).replace(/^company\s*:\s*/, '') === key(employerName));
+  };
   if (nodes.length) {
     if (nodes.length !== 1 || scopes.length || !sameUrl(nodes[0].url || nodes[0]['@id']) || key(nodes[0].title) !== key(row.title)) return null;
+    if (employerName) {
+      const org = nodes[0].hiringOrganization;
+      if (key(typeof org === 'string' ? org : org?.name) !== key(employerName) || !visibleCompanyMatches(null)) return null;
+    }
     const bound = `<script type="application/ld+json">${JSON.stringify(nodes[0])}</script>`;
     const records = parseJobPostings(bound, row.url);
     if (records.length !== 1) return null;
@@ -574,6 +582,12 @@ export function parseJobGeography(html, row) {
   }
   if (scopes.length !== 1 || !scopes[0].end) return null;
   const scope = scopes[0];
+  if (employerName) {
+    const employers = elements.filter(e => e.tag === 'meta' && prop(e, 'hiringOrganization') && enclosingScope(e) === scope);
+    if (employers.length !== 1 || employers[0].malformed || key(employers[0].attrs.content) !== key(employerName)) return null;
+    // Visible Company is supplementary evidence, never a substitute for the bound organization.
+    if (!visibleCompanyMatches(scope)) return null;
+  }
   const canonical = elements.filter(e => e.tag === 'link' && !e.malformed && e.attrs.rel?.toLowerCase() === 'canonical');
   if (canonical.length !== 1 || !sameUrl(canonical[0].attrs.href)) return null;
   const titles = elements.filter(e => e.tag === 'h1' && prop(e, 'title') && enclosingScope(e) === scope && !e.malformed && e.end);
@@ -592,8 +606,16 @@ export function parseJobGeography(html, row) {
 // SAP SuccessFactors career sites, in either the older page layout or the newer one with a search service.
 async function successfactors(f, src) {
   const host = `https://${src.args[0]}`;
+  const scope = src.sfScope;
+  // Opt-in scopes are explicit registry assertions; never guess a brand from a label.
+  if (scope && (!/^\/go\/[A-Za-z0-9-]+\/\d+\/$/.test(scope.listPath || '') || !/^\/[A-Za-z0-9-]+\/job\/$/.test(scope.jobPath || '') || typeof scope.employerName !== 'string' || !scope.employerName.trim() || !Object.hasOwn(COUNTRY, scope.country))) return null;
+  const listPath = scope?.listPath || '/search/';
+  const allowed = row => {
+    if (!scope) return true;
+    try { const url = new URL(row.url); return url.origin === host && url.pathname.startsWith(scope.jobPath) && !url.search && !url.hash && !/%(?:2f|5c|2e)/i.test(row.url) && !/(?:^|\/)\.\.?(?:\/|$)/.test(row.url); } catch { return false; }
+  };
   const out = [];
-  const first = await req(f, `${host}/search/?q=&sortColumn=referencedate&sortDirection=desc&startrow=0`, {}, 'text');
+  const first = await req(f, `${host}${listPath}?q=&sortColumn=referencedate&sortDirection=desc&startrow=0`, {}, 'text');
   if (!first) return null;
   const tableRows = t => (t.split(/<tr class="data-row/).slice(1)).map(r => {
     const a = r.match(/href="(\/(?:[A-Za-z-]+\/)?job\/[^"]+)"[^>]*>([^<]+)</);
@@ -605,7 +627,7 @@ async function successfactors(f, src) {
     return { id: (a[1].match(/\/(\d+)\/?$/) || [])[1] || a[1], title: a[2], location: loc, country: code && COUNTRY[code] ? code : null, url: host + a[1], posted: dateTs(date), hint: dept };
   }).filter(Boolean);
   const tileRows = t => t.split(/<li class="job-tile /).slice(1).map(block => {
-    const a = block.match(/href="(\/job\/[^"]+)"[^>]*>\s*([^<]+)</);
+    const a = block.match(scope ? /href="(\/(?:[A-Za-z-]+\/)?job\/[^"]+)"[^>]*>\s*([^<]+)</ : /href="(\/job\/[^"]+)"[^>]*>\s*([^<]+)</);
     const field = key => plain((block.match(new RegExp(`id="[^"]+-desktop-section-${key}-value">([^<]+)<`)) || [])[1]);
     if (!a) return null;
     return { id: (a[1].match(/\/(\d+)\/?$/) || [])[1] || a[1], title: plain(a[2]), location: field('location') || field('city'), url: host + plain(a[1]), posted: dateTs(field('date')) };
@@ -613,14 +635,16 @@ async function successfactors(f, src) {
   const rowsOf = t => t.includes('class="job-tile ') ? tileRows(t) : tableRows(t);
   let rows = rowsOf(first.body);
   if (rows.length) {
-    out.push(...rows);
-    for (let s = 25; rows.length >= 25 && out.length < PER_SOURCE; s += 25) {
-      const t = await getText(f, `${host}/search/?q=&sortColumn=referencedate&sortDirection=desc&startrow=${s}`);
+    out.push(...rows.filter(allowed));
+    for (let s = 25; rows.length >= 25 && (scope ? s < PER_SOURCE : out.length < PER_SOURCE); s += 25) {
+      const t = await getText(f, `${host}${listPath}?q=&sortColumn=referencedate&sortDirection=desc&startrow=${s}`);
       rows = t ? rowsOf(t) : [];
-      out.push(...rows);
+      out.push(...rows.filter(allowed));
     }
     return snapshot(out, false, 'html-total-unverified');
   }
+  // An empty scoped page must never fall back to a shared all-brand service.
+  if (scope) return snapshot([], false, 'scoped-html-empty-or-unverified');
   // Newer layout: the page carries a token for its job search service.
   const token = (first.body.match(/CSRFToken\s*=\s*["']([^"']+)/) || [])[1];
   if (!token) return null;
@@ -846,15 +870,15 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
         log(`${s.name}: no valid answer`); continue;
       }
       const list = result.rows;
-      if (s.detailGeography) for (const row of list) row.countryUnresolved = true;
-      if (s.detailDates || s.detailGeography) for (const row of list.slice(0, DETAILS)) {
+      if (s.detailGeography || s.sfScope) for (const row of list) row.countryUnresolved = true;
+      if (s.detailDates || s.detailGeography || s.sfScope) for (const row of list.slice(0, DETAILS)) {
         if (!/^https:\/\//.test(row.url || '')) continue;
         const html = await getText(fetchImpl, row.url);
         if (!html) continue;
         let datesHtml = html;
-        if (s.detailGeography) {
-          const geography = parseJobGeography(html, row);
-          if (!geography || (row.country && row.country !== geography.country)) continue;
+        if (s.detailGeography || s.sfScope) {
+          const geography = parseJobGeography(html, row, { employerName: s.sfScope?.employerName });
+          if (!geography || (row.country && row.country !== geography.country) || (s.sfScope && geography.country !== s.sfScope.country)) continue;
           row.country = geography.country; row.location = geography.location;
           row.countryUnresolved = false; datesHtml = geography.datesHtml;
         }
