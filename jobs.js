@@ -495,11 +495,37 @@ export function parseJobGeography(html, row) {
   const key = value => plain(value).normalize('NFKC').toLowerCase();
   const explicitCountry = value => Object.hasOwn(COUNTRY, plain(value)) ? plain(value) : countryCode(value);
   const sameUrl = value => { try { return new URL(plain(value)).href === new URL(plain(row.url)).href; } catch { return false; } };
-  const attrs = tag => Object.fromEntries([...tag.matchAll(/([a-z-]+)\s*=\s*(["'])(.*?)\2/gi)].map(m => [m[1].toLowerCase(), plain(m[3])]));
   const nodes = [];
   const visit = x => { if (Array.isArray(x)) return x.forEach(visit); if (!x || typeof x !== 'object') return; if ([x['@type']].flat().includes('JobPosting')) nodes.push(x); if (x['@graph']) visit(x['@graph']); if (Array.isArray(x.itemListElement)) x.itemListElement.forEach(i => visit(i?.item || i)); };
   for (const m of html.matchAll(/<script\b[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script\s*>/gi)) { try { visit(JSON.parse(m[1])); } catch { /* fail closed below */ } }
-  const scopes = [...html.matchAll(/<[a-z][^>]*\bitemtype\s*=\s*["']https?:\/\/schema\.org\/JobPosting["'][^>]*>/gi)];
+  // Small inert tag tree: exact attributes, boolean itemscope and parent scopes.
+  // Comments and script/style bodies cannot create fake metadata elements.
+  const elements = [], stack = [], voids = new Set('area base br col embed hr img input link meta param source track wbr'.split(' '));
+  for (const token of html.matchAll(/<!--[\s\S]*?-->|<script\b[^>]*>[\s\S]*?<\/script\s*>|<style\b[^>]*>[\s\S]*?<\/style\s*>|<\/?[a-z][^>]*>/gi)) {
+    const raw = token[0];
+    if (/^<!--|^<(?:script|style)\b/i.test(raw)) continue;
+    const tag = raw.match(/^<\/?([a-z][\w:-]*)/i)?.[1].toLowerCase();
+    if (!tag) continue;
+    if (/^<\//.test(raw)) {
+      const at = stack.findLastIndex(e => e.tag === tag);
+      if (at < 0) continue;
+      for (let i = stack.length - 1; i >= at; i--) { const e = stack.pop(); e.end = token.index + raw.length; if (i !== at) e.malformed = true; }
+      continue;
+    }
+    const attrs = Object.create(null); let invalid = false;
+    const body = raw.slice(raw.match(/^<[a-z][\w:-]*/i)[0].length).replace(/\/?>$/, '');
+    for (const m of body.matchAll(/([^\s=/>]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/g)) {
+      const name = m[1].toLowerCase(); if (Object.hasOwn(attrs, name)) invalid = true;
+      attrs[name] = plain(m[2] ?? m[3] ?? m[4] ?? '');
+    }
+    const e = { tag, attrs, parent: stack.at(-1) || null, start: token.index, openEnd: token.index + raw.length, end: null, malformed: invalid };
+    elements.push(e);
+    if (voids.has(tag)) e.end = e.openEnd; else stack.push(e);
+  }
+  const typed = (e, type) => !e.malformed && Object.hasOwn(e.attrs, 'itemscope') && new RegExp(`^https?://schema\\.org/${type}$`).test(e.attrs.itemtype || '');
+  const prop = (e, value) => (e.attrs.itemprop || '').split(/\s+/).includes(value);
+  const enclosingScope = e => { for (let p = e.parent; p; p = p.parent) if (Object.hasOwn(p.attrs, 'itemscope')) return p; return null; };
+  const scopes = elements.filter(e => typed(e, 'JobPosting'));
   if (nodes.length) {
     if (nodes.length !== 1 || scopes.length || !sameUrl(nodes[0].url || nodes[0]['@id']) || key(nodes[0].title) !== key(row.title)) return null;
     const bound = `<script type="application/ld+json">${JSON.stringify(nodes[0])}</script>`;
@@ -508,23 +534,22 @@ export function parseJobGeography(html, row) {
     const country = explicitCountry(records[0].countryName);
     return country ? { country, location: records[0].location, datesHtml: bound } : null;
   }
-  if (scopes.length !== 1 || !/^<div\b/i.test(scopes[0][0])) return null;
-  const canonical = [...html.matchAll(/<link\b[^>]*>/gi)].map(m => attrs(m[0])).filter(a => a.rel?.toLowerCase() === 'canonical');
-  if (canonical.length !== 1 || !sameUrl(canonical[0].href)) return null;
-  const start = scopes[0].index; let depth = 0, end = null;
-  for (const m of html.slice(start).matchAll(/<\/?div\b[^>]*>/gi)) { depth += /^<\//.test(m[0]) ? -1 : 1; if (!depth) { end = start + m.index + m[0].length; break; } }
-  if (end == null) return null;
-  const scope = html.slice(start, end);
-  const titles = [...scope.matchAll(/<h1\b([^>]*)>([\s\S]*?)<\/h1\s*>/gi)].filter(m => attrs(m[1]).itemprop === 'title');
-  if (titles.length !== 1 || key(titles[0][2]) !== key(row.title)) return null;
-  const addresses = [...scope.matchAll(/<span\b([^>]*)>([\s\S]*?)<\/span\s*>/gi)].filter(m => /schema\.org\/PostalAddress/.test(m[1]) || /schema\.org\/PostalAddress/.test(m[2]));
-  if (addresses.length !== 1 || (scope.match(/schema\.org\/PostalAddress/g) || []).length !== 1) return null;
-  const fields = [...addresses[0][0].matchAll(/<meta\b[^>]*>/gi)].map(m => attrs(m[0]));
-  const countries = fields.filter(a => a.itemprop === 'addressCountry');
+  if (scopes.length !== 1 || !scopes[0].end) return null;
+  const scope = scopes[0];
+  const canonical = elements.filter(e => e.tag === 'link' && !e.malformed && e.attrs.rel?.toLowerCase() === 'canonical');
+  if (canonical.length !== 1 || !sameUrl(canonical[0].attrs.href)) return null;
+  const titles = elements.filter(e => e.tag === 'h1' && prop(e, 'title') && enclosingScope(e) === scope && !e.malformed && e.end);
+  if (titles.length !== 1 || key(html.slice(titles[0].openEnd, titles[0].end)) !== key(row.title)) return null;
+  const locations = elements.filter(e => prop(e, 'jobLocation') && enclosingScope(e) === scope);
+  if (locations.length !== 1 || !typed(locations[0], 'Place') || !locations[0].end) return null;
+  const addresses = elements.filter(e => prop(e, 'address') && enclosingScope(e) === locations[0]);
+  if (addresses.length !== 1 || !typed(addresses[0], 'PostalAddress') || !addresses[0].end) return null;
+  const fields = elements.filter(e => e.tag === 'meta' && !e.malformed && enclosingScope(e) === addresses[0]);
+  const countries = fields.filter(e => prop(e, 'addressCountry'));
   if (countries.length !== 1) return null;
-  const country = explicitCountry(countries[0].content);
-  const localities = fields.filter(a => a.itemprop === 'addressLocality' && a.content);
-  return country ? { country, location: localities.length === 1 ? localities[0].content : row.location, datesHtml: scope } : null;
+  const country = explicitCountry(countries[0].attrs.content);
+  const localities = fields.filter(e => prop(e, 'addressLocality') && e.attrs.content);
+  return country ? { country, location: localities.length === 1 ? localities[0].attrs.content : row.location, datesHtml: html.slice(scope.start, scope.end) } : null;
 }
 // SAP SuccessFactors career sites, in either the older page layout or the newer one with a search service.
 async function successfactors(f, src) {

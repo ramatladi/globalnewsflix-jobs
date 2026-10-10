@@ -48,5 +48,19 @@ export const AFRICA_EXTRA_SOURCES = [
     "countries": [
       "KE"
     ]
+  },
+  {
+    "id": "cbk",
+    "name": "Central Bank of Kenya",
+    "ticker": "",
+    "type": "g",
+    "ats": "orc",
+    "args": [
+      "esal.fa.ocs.oraclecloud.com",
+      "CX_2"
+    ],
+    "provenanceUrl": "https://www.centralbank.go.ke/cbkcareers/",
+    "verifiedAt": 1791652945621,
+    "countries": []
   }
 ];

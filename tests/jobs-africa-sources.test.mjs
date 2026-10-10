@@ -18,6 +18,14 @@ test('captured Dangote detail binds canonical/title and explicit microdata count
     detail.replace('<meta itemprop="addressCountry" content="NG">', '<meta itemprop="addressCountry" content="NG"><meta itemprop="addressCountry" content="TZ">'),
     detail + '<div itemscope itemtype="http://schema.org/JobPosting"></div>',
     detail.replace('itemtype="http://schema.org/PostalAddress"', 'itemtype="http://schema.org/Thing"'),
+    detail.replace('itemprop="jobLocation"', 'itemprop="hiringOrganization"'),
+    detail.replace('itemtype="http://schema.org/JobPosting"', 'data-itemtype="http://schema.org/JobPosting"'),
+    detail.replace('itemscope="itemscope"', ''),
+    detail.replace('itemtype="http://schema.org/Place"', 'itemtype="http://schema.org/Organization"'),
+    detail.replace('itemprop="address"', 'itemprop="relatedAddress"'),
+    detail.replace('itemprop="jobLocation" itemscope', 'itemprop="jobLocation"'),
+    detail.replace('itemprop="address" itemscope', 'itemprop="address"'),
+
   ]) assert.equal(parseJobGeography(changed, row), null);
   assert.equal(parseJobGeography('<h1>Sign in</h1>', row), null);
 });
@@ -59,4 +67,19 @@ test('captured Safaricom public Oracle response yields its two explicit Kenya jo
   const result = await collectJobs(async url => url.includes('frankfurter') ? json({ rates: {} }) : json(captured), () => {}, ['safaricom'], { requestDelayMs: 0 });
   assert.equal(result.rows.length, 2); assert.deepEqual(result.rows.map(r => r.id).sort(), ['safaricom:1561', 'safaricom:1569']);
   assert.ok(result.rows.every(r => r.country === 'KE'));
+});
+
+test('Dangote detail enrichment attempts exactly250 of251 postings and never authorizes pruning', async () => {
+  const tile = (id) => `<li class="job-tile x"><a href="/job/Role/${id}/">Role ${id}</a><div id="job-${id}-desktop-section-location-value">Ibese Plant</div></li>`;
+  const listing = `<ul>${Array.from({length:251},(_,i)=>tile(i+1)).join('')}</ul>`;
+  let attempts = 0;
+  const result = await collectJobs(async url => {
+    if (url.includes('frankfurter')) return json({rates:{}});
+    if (url.includes('/search/')) return new Response(url.includes('startrow=0') ? listing : '<ul></ul>');
+    attempts++; const id = url.match(/\/(\d+)\/$/)[1];
+    return new Response(`<link rel="canonical" href="${url}"><div itemscope itemtype="http://schema.org/JobPosting"><h1 itemprop="title">Role ${id}</h1><span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place"><span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><meta itemprop="addressCountry" content="NG"><meta itemprop="addressLocality" content="Ibese Plant"></span></span></div>`);
+  },()=>{},['dangote'],{requestDelayMs:0});
+  assert.equal(attempts,250); assert.equal(result.rows.length,250);
+  assert.ok(!result.rows.some(r=>r.id==='dangote:251'));
+  assert.equal(result.diagnostics[0].rawCount,251); assert.equal(result.diagnostics[0].status,'partial'); assert.deepEqual(result.ok,[]);
 });

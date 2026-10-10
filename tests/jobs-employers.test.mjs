@@ -8,8 +8,8 @@ test('every supported configured source has deterministic HTTPS career provenanc
     const row = employerMetadata(source);
     assert.match(row.careersUrl, /^https:\/\//, source.id);
     assert.match(row.collectionUrl, /^https:\/\//, source.id);
-    assert.equal(row.verifiedAt != null, ['cloudflare', 'block', 'standardbank', 'firstrand', 'sasol', 'angloamerican', 'discovery', 'za-gauteng', 'capitec', 'goldfields', 'adcorp', 'sanlam', 'avi', 'oceana', 'shoprite', 'uct', 'ethekwini', 'dangote', 'safaricom', 'diageo'].includes(source.id));
-    assert.equal(row.verification, ['cloudflare', 'block', 'standardbank', 'firstrand', 'sasol', 'angloamerican', 'discovery', 'za-gauteng', 'capitec', 'goldfields', 'adcorp', 'sanlam', 'avi', 'oceana', 'shoprite', 'uct', 'ethekwini', 'dangote', 'safaricom', 'diageo'].includes(source.id) ? 'observed' : 'configured-unverified');
+    assert.equal(row.verifiedAt != null, ['cloudflare', 'block', 'standardbank', 'firstrand', 'sasol', 'angloamerican', 'discovery', 'za-gauteng', 'capitec', 'goldfields', 'adcorp', 'sanlam', 'avi', 'oceana', 'shoprite', 'uct', 'ethekwini', 'dangote', 'safaricom', 'diageo', 'cbk'].includes(source.id));
+    assert.equal(row.verification, ['cloudflare', 'block', 'standardbank', 'firstrand', 'sasol', 'angloamerican', 'discovery', 'za-gauteng', 'capitec', 'goldfields', 'adcorp', 'sanlam', 'avi', 'oceana', 'shoprite', 'uct', 'ethekwini', 'dangote', 'safaricom', 'diageo', 'cbk'].includes(source.id) ? 'observed' : 'configured-unverified');
   }
   const source = SOURCES.find(source => source.id === 'absa');
   assert.equal(sourceCareerUrls(source).careersUrl, 'https://absa.wd3.myworkdayjobs.com/ABSAcareersite');
