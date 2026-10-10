@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "TotalJobsCount": 2,
+      "requisitionList": [
+        {
+          "Id": "1561",
+          "Title": "Specialist – Monitoring Evaluation Reporting and Learning( Fixed Term Contract)",
+          "PrimaryLocation": "Kenya",
+          "PrimaryLocationCountry": "KE",
+          "PostedDate": "2026-10-07",
+          "PostingEndDate": null
+        },
+        {
+          "Id": "1569",
+          "Title": "M-Pesa Africa: Senior Data Architect",
+          "PrimaryLocation": "Kenya",
+          "PrimaryLocationCountry": "KE",
+          "PostedDate": "2026-10-05",
+          "PostingEndDate": null
+        }
+      ]
+    }
+  ]
+}
