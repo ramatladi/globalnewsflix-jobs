@@ -1,21 +1,6 @@
 // Public career systems observed through official employer careers pages.
+// Dangote is held: official structured countries conflict with visible locations.
 export const AFRICA_EXTRA_SOURCES = [
-  {
-    "id": "dangote",
-    "detailGeography": true,
-    "name": "Dangote Group",
-    "ticker": "",
-    "type": "c",
-    "ats": "sf",
-    "args": [
-      "careers.dangote.com"
-    ],
-    "provenanceUrl": "https://careers.dangote.com/go/Roles-At-Dangote/9056002/",
-    "verifiedAt": 1791645811108,
-    "countries": [
-      "NG"
-    ]
-  },
   {
     "id": "safaricom",
     "name": "Safaricom PLC",
@@ -34,6 +19,7 @@ export const AFRICA_EXTRA_SOURCES = [
   },
   {
     "id": "diageo",
+    "strictDetailGeography": true,
     "name": "Diageo (including East African Breweries)",
     "ticker": "DGE",
     "type": "c",

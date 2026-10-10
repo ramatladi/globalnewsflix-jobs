@@ -1,0 +1,109 @@
+[
+  {
+    "sourceUrl": "https://diageo.wd3.myworkdayjobs.com/Diageo_Careers/job/Limerick-Republic-of-Ireland/Spirits-Account-Manager_JR1125269",
+    "jobPostingInfo": {
+      "jobReqId": "JR1125269",
+      "title": "Spirits Account Manager - South Ireland (12-month Fixed Term Contract)",
+      "location": "Limerick, Republic of Ireland",
+      "additionalLocations": [
+        "Kerry, Republic of Ireland",
+        "Waterford, Republic of Ireland",
+        "Kilkenny, Republic of Ireland",
+        "Galway, Republic of Ireland",
+        "Cork, Republic of Ireland"
+      ],
+      "jobPostingSiteId": "Diageo_Careers",
+      "country": {
+        "descriptor": "Ireland",
+        "id": "04a05835925f45b3a59406a2a6b72c8a"
+      },
+      "jobRequisitionLocation": {
+        "descriptor": "St James Gate",
+        "country": {
+          "descriptor": "Ireland",
+          "id": "04a05835925f45b3a59406a2a6b72c8a",
+          "alpha2Code": "IE"
+        }
+      },
+      "externalUrl": "https://diageo.wd3.myworkdayjobs.com/Diageo_Careers/job/Limerick-Republic-of-Ireland/Spirits-Account-Manager_JR1125269"
+    }
+  },
+  {
+    "sourceUrl": "https://diageo.wd3.myworkdayjobs.com/Diageo_Careers/job/Budapest-Hungary/Senior-Manager---Federal-Tax-Compliance_JR1129850",
+    "jobPostingInfo": {
+      "jobReqId": "JR1129850",
+      "title": "Senior Manager - Federal Tax Compliance",
+      "location": "Budapest, Hungary",
+      "additionalLocations": [
+        "Bogota, Colombia",
+        "Bangalore Karle Town SEZ",
+        "GURUGRAM, INDIA"
+      ],
+      "jobPostingSiteId": "Diageo_Careers",
+      "country": {
+        "descriptor": "Hungary",
+        "id": "9db257f5937e4421b2fac64eec6832f8"
+      },
+      "jobRequisitionLocation": {
+        "descriptor": "Budapest",
+        "country": {
+          "descriptor": "Hungary",
+          "id": "9db257f5937e4421b2fac64eec6832f8",
+          "alpha2Code": "HU"
+        }
+      },
+      "externalUrl": "https://diageo.wd3.myworkdayjobs.com/Diageo_Careers/job/Budapest-Hungary/Senior-Manager---Federal-Tax-Compliance_JR1129850"
+    }
+  },
+  {
+    "sourceUrl": "https://diageo.wd3.myworkdayjobs.com/Diageo_Careers/job/London-England/Global-Audit-Manager_JR1130447",
+    "jobPostingInfo": {
+      "jobReqId": "JR1130447",
+      "title": "Global Audit Manager",
+      "location": "London, England",
+      "additionalLocations": [
+        "Bangalore, India"
+      ],
+      "jobPostingSiteId": "Diageo_Careers",
+      "country": {
+        "descriptor": "United Kingdom",
+        "id": "29247e57dbaf46fb855b224e03170bc7"
+      },
+      "jobRequisitionLocation": {
+        "descriptor": "1HQ",
+        "country": {
+          "descriptor": "United Kingdom",
+          "id": "29247e57dbaf46fb855b224e03170bc7",
+          "alpha2Code": "GB"
+        }
+      },
+      "externalUrl": "https://diageo.wd3.myworkdayjobs.com/Diageo_Careers/job/London-England/Global-Audit-Manager_JR1130447"
+    }
+  },
+  {
+    "sourceUrl": "https://diageo.wd3.myworkdayjobs.com/Diageo_Careers/job/Budapest-Hungary/NAM-Tax-Compliance-Senior-Manager_JR1130878",
+    "jobPostingInfo": {
+      "jobReqId": "JR1130878",
+      "title": "NAM Tax Compliance Senior Manager",
+      "location": "Budapest, Hungary",
+      "additionalLocations": [
+        "Bogota, Colombia",
+        "Bangalore, India"
+      ],
+      "jobPostingSiteId": "Diageo_Careers",
+      "country": {
+        "descriptor": "Hungary",
+        "id": "9db257f5937e4421b2fac64eec6832f8"
+      },
+      "jobRequisitionLocation": {
+        "descriptor": "Budapest",
+        "country": {
+          "descriptor": "Hungary",
+          "id": "9db257f5937e4421b2fac64eec6832f8",
+          "alpha2Code": "HU"
+        }
+      },
+      "externalUrl": "https://diageo.wd3.myworkdayjobs.com/Diageo_Careers/job/Budapest-Hungary/NAM-Tax-Compliance-Senior-Manager_JR1130878"
+    }
+  }
+]

@@ -420,6 +420,33 @@ async function ashby(f, src) {
   if (!Array.isArray(j?.jobs)) return null;
   return snapshot(j.jobs.map(x => ({ id: x.id, title: x.title, location: x.location, url: x.jobUrl, country: countryCode(x.address?.postalAddress?.addressCountry), posted: dateTs(x.publishedAt), hint: x.department, text: x.compensation?.compensationTierSummary || '', salary_text: x.compensation?.compensationTierSummary || '' })));
 }
+// Strict opt-in: a country facet is eligibility evidence only when the exact
+// posting detail also names that country. Additional locations need a literal
+// country label, never a city/currency guess or a similar-job recommendation.
+export function strictWorkdayPlace(info, row, site) {
+  if (!info || typeof info !== 'object' || info.jobReqId !== row.id || info.jobPostingSiteId !== site) return null;
+  const key = value => plain(value).normalize('NFKC').toLowerCase();
+  if (!row.title || key(info.title) !== key(row.title)) return null;
+  try { if (new URL(info.externalUrl).href !== new URL(row.url).href) return null; } catch { return null; }
+  if (!Object.hasOwn(COUNTRY, row.country) || typeof info.location !== 'string' || !plain(info.location)) return null;
+  const primary = countryCode(info.country?.descriptor);
+  if (!primary) return null;
+  const requisitionCountry = info.jobRequisitionLocation?.country;
+  if (requisitionCountry && ((requisitionCountry.descriptor && countryCode(requisitionCountry.descriptor) !== primary) || (requisitionCountry.alpha2Code && requisitionCountry.alpha2Code !== primary))) return null;
+  const suffixCountry = location => {
+    if (typeof location !== 'string') return null;
+    const label = plain(location).split(',').at(-1).trim();
+    // A plain state/country homonym in an additional label is not enough.
+    if (/^Georgia$/i.test(label)) return null;
+    return countryCode(label);
+  };
+  const primaryLabel = suffixCountry(info.location);
+  if (primaryLabel && primaryLabel !== primary) return null;
+  if (info.additionalLocations != null && (!Array.isArray(info.additionalLocations) || info.additionalLocations.some(x => typeof x !== 'string'))) return null;
+  if (row.country === primary) return { country: row.country, location: plain(info.location) };
+  const match = (info.additionalLocations || []).find(location => suffixCountry(location) === row.country);
+  return match ? { country: row.country, location: plain(match) } : null;
+}
 // Workday: jobs are read country by country (using the site's own country filter), pay from the job page where it is published.
 async function workday(f, src, log) {
   const [host, tenant, site] = src.args;
@@ -467,10 +494,14 @@ async function workday(f, src, log) {
   for (const x of out) {
     // This observed Workday office label names the US state, not the country.
     // Explicit country facets/bullets already on the row keep priority.
-    x.country ||= /^Atlanta,\s*Georgia(?:\s*\([^()]*\))?$/i.test(plain(x.location)) ? 'US' : countryOf(x.location);
+    if (src.strictDetailGeography) x.countryUnresolved = true;
+    else x.country ||= /^Atlanta,\s*Georgia(?:\s*\([^()]*\))?$/i.test(plain(x.location)) ? 'US' : countryOf(x.location);
     x.payObserved = false;
   }
-  const detailOrder = [...out.filter(x => !x.country), ...out.filter(x => PAY_COUNTRIES.has(x.country))];
+  const preferred = new Set(src.countries || []);
+  const detailOrder = src.strictDetailGeography
+    ? [...out.filter(x => preferred.has(x.country)), ...out.filter(x => !preferred.has(x.country))]
+    : [...out.filter(x => !x.country), ...out.filter(x => PAY_COUNTRIES.has(x.country))];
   let n = 0;
   for (const x of detailOrder) {
     if (n >= DETAILS) break;
@@ -478,13 +509,20 @@ async function workday(f, src, log) {
     n++;
     const d = await getJson(f, base + x.path);
     const i = d?.jobPostingInfo;
-    if (!i) { x.country = cc; continue; }
-    x.country = cc || countryCode(i.country?.descriptor);
-    x.location = i.location || x.location;
+    if (src.strictDetailGeography) {
+      const place = strictWorkdayPlace(i, x, site);
+      if (!place) { complete = false; continue; }
+      x.country = place.country; x.location = place.location; x.countryUnresolved = false;
+    } else {
+      if (!i) { x.country = cc; continue; }
+      x.country = cc || countryCode(i.country?.descriptor);
+      x.location = i.location || x.location;
+    }
     x.payObserved = typeof i.jobDescription === 'string';
     x.text = x.payObserved ? i.jobDescription : '';
     x.posted = dateTs(i.startDate) || x.posted;
   }
+  if (src.strictDetailGeography && out.some(x => x.countryUnresolved)) complete = false;
   log(`${src.name}: ${values.length} countries in filter, ${n} job pages read`);
   return snapshot(out, complete, complete ? '' : 'incomplete-or-capped');
 }
