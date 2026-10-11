@@ -1,7 +1,7 @@
 [
   {
     "file": ".github/workflows/jobs.yml",
-    "sha256": "7d8e52288b057551b1a94b5330d5f996e7a876cdab9c5b1b17f4cfe9208b2e74"
+    "sha256": "e72a37d307d6225889a76761fcdcd4ee4b6fed5200b8d5d2759f42999da2d51a"
   },
   {
     "file": ".gitignore",
@@ -16,6 +16,10 @@
     "sha256": "573397a46bbf9e7e1a04fd8d5b95860e893ad1e3bf5e711536ef9273a33771ee"
   },
   {
+    "file": "data/discovered-sources/manifest.json",
+    "sha256": "c65b40284dd5851db681e9025d837f28a578e52e9b13e836731c547ec318ef9e"
+  },
+  {
     "file": "jobs-adapters.js",
     "sha256": "f17ebc442e948a1183b506ca534766946e0a0c724d6e60616bd6ac6fb65094a8"
   },
@@ -26,6 +30,14 @@
   {
     "file": "jobs-dates.js",
     "sha256": "7af9190604eaad4dad0c29ff720ef4abc2ad16f7808546b60e5b01e534db061b"
+  },
+  {
+    "file": "jobs-discovered-fetch.mjs",
+    "sha256": "7d0383ab8afbad817db87d57874dcfc60a92b4c08c8e10cd2e5ef461f53cdb3f"
+  },
+  {
+    "file": "jobs-discovered-sources.js",
+    "sha256": "439769cf378239e88d5d0b8b1f8af4cf29539500e9a22b13d14d2ed995d707c8"
   },
   {
     "file": "jobs-employers.js",
@@ -49,7 +61,7 @@
   },
   {
     "file": "jobs-runner.mjs",
-    "sha256": "ead4b925ef239d97d8383961b9f396cda21b4a092d73309001cf89d9f10d70e1"
+    "sha256": "d4e07b7cf5ca6ec9d4809d2b493e33f3f684b58cb770af53da191fcd3b123613"
   },
   {
     "file": "jobs-simplify.js",
@@ -65,7 +77,7 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "3517fe0bdbdd58bd78f9be22fef61ab9012e54301837b1f6b6f1940fef4c3340"
+    "sha256": "c485fd20013057684e050283a9de4d0bf343f53950baecc78a3b0603d4506a50"
   },
   {
     "file": "package.json",
@@ -202,6 +214,10 @@
   {
     "file": "tests/jobs-dates.test.mjs",
     "sha256": "cb48a1bab22d5582cad771158737ebde34df4a9b8e6e9d2d5fd80687739e3f0d"
+  },
+  {
+    "file": "tests/jobs-discovered.test.mjs",
+    "sha256": "428b12406c63b8046c8e26ca5da10d6742296ae31e476c93ddae529c9ce0a00f"
   },
   {
     "file": "tests/jobs-employers.test.mjs",

@@ -1,6 +1,8 @@
 // Jobs from employers' own career sites: publicly listed companies, governments and international organisations.
 // Collected by a GitHub Actions job every six hours; the site lists them by country, with categories and filters.
 // Pay is shown only where the employer publishes it.
+import discoveredManifest from './data/discovered-sources/manifest.json' with { type: 'json' };
+import { registeredDiscoveredSources, discoveredJobAllowed } from './jobs-discovered-sources.js';
 import { COUNTRY } from './data.js';
 import { AFRICA_EXTRA_SOURCES } from './jobs-africa-sources.js';
 import { SHOPRITE_BROWSE_URL, parseShopriteCategories, parseShopriteList, parseShopriteDetail } from './jobs-erecruit.js';
@@ -100,7 +102,7 @@ export const SOURCES = SOURCE_ROWS.trim().split('\n').map(l => {
   const [id, name, ticker, type, ats, ...args] = l.split('|');
   const source = { id, name, ticker, type, ats, args };
   return { ...source, ...employerMetadata(source) };
-}).concat([...ZA_EXTRA_SOURCES, ...ZA_GOVERNMENT_SOURCES, ...AFRICA_EXTRA_SOURCES].map(source => ({ ...source, ...employerMetadata(source, source) })));
+}).concat([...ZA_EXTRA_SOURCES, ...ZA_GOVERNMENT_SOURCES, ...AFRICA_EXTRA_SOURCES].map(source => ({ ...source, ...employerMetadata(source, source) }))).concat(registeredDiscoveredSources(discoveredManifest));
 export const EMPLOYERS = SOURCES.map(({ args, type, ...metadata }) => metadata);
 const BY_ID = new Map(SOURCES.map(s => [s.id, s]));
 export const JOB_TYPES = { c: 'jtC', g: 'jtG', i: 'jtI' };
@@ -319,6 +321,7 @@ const ago = s => { const m = String(s || '').match(/(\d+)\+?\s+Days? Ago/i); ret
 
 // One raw job → stored row (or null when the country cannot be told).
 export function normalizeCollectedJob(src, j, fx) {
+  if (src.automatic && !discoveredJobAllowed(src, { ...j, country: j.country || countryOf(j.location) })) return null;
   if (Object.hasOwn(j, 'payObserved') && typeof j.payObserved !== 'boolean') return null;
   if (j.countryUnresolved) return null;
   const pay = j.pay === undefined ? (j.text ? parseSalary(j.text) : null) : j.pay;
@@ -510,7 +513,10 @@ async function workday(f, src, log) {
     const d = await getJson(f, base + x.path);
     const i = d?.jobPostingInfo;
     if (src.strictDetailGeography) {
-      const place = strictWorkdayPlace(i, x, site);
+      // Employer-scoped automatic sources may have no country facet at all.
+      // The exact posting detail can supply the explicit country in that case.
+      const placementRow = src.automatic && !x.country ? { ...x, country: countryCode(i?.country?.descriptor) } : x;
+      const place = strictWorkdayPlace(i, placementRow, site);
       if (!place) { complete = false; continue; }
       x.country = place.country; x.location = place.location; x.countryUnresolved = false;
     } else {
@@ -521,6 +527,7 @@ async function workday(f, src, log) {
     x.payObserved = typeof i.jobDescription === 'string';
     x.text = x.payObserved ? i.jobDescription : '';
     x.posted = dateTs(i.startDate) || x.posted;
+    if (src.automatic) x.closing = dateTs(i.endDate) || null;
   }
   if (src.strictDetailGeography && out.some(x => x.countryUnresolved)) complete = false;
   log(`${src.name}: ${values.length} countries in filter, ${n} job pages read`);
@@ -855,16 +862,17 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
   const fx = await fxRates(fetchImpl);
   if (!fx) log('Exchange rates unavailable: retaining employer pay in its original currency');
   const rows = [], ok = [], diagnostics = [];
-  const queue = SOURCES.filter(s => !only || only.includes(s.id));
+  const queue = (options.sources || SOURCES).filter(s => !only || only.includes(s.id));
   await Promise.all(Array.from({ length: 6 }, async () => {
     for (let s; (s = queue.shift());) {
       const attemptedAt = Date.now();
+      const sourceFetch = s.automatic ? options.automaticFetch?.(s) : fetchImpl;
       let result = null;
       if (s.ats === 'dpsa') {
         diagnostics.push({ src: s.id, status: 'partial', rawCount: 0, acceptedCount: 0, reason: 'external-reader', attemptedAt });
         continue;
       }
-      try { result = await COLLECT[s.ats]?.(fetchImpl, s, log); } catch { /* recorded below without raw provider data */ }
+      try { result = sourceFetch ? await COLLECT[s.ats]?.(sourceFetch, s, log) : null; } catch { /* recorded below without raw provider data */ }
       if (!result) {
         diagnostics.push({ src: s.id, status: 'failed', rawCount: 0, acceptedCount: 0, reason: 'source-unavailable', attemptedAt });
         log(`${s.name}: no valid answer`); continue;
@@ -891,7 +899,7 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
       const seen = new Set();
       const uniq = got.filter(r => !seen.has(r.id) && seen.add(r.id));
       // Invalid/unlocated rows or duplicate IDs cannot prove a full replacement snapshot.
-      const complete = result.complete && got.length === list.length && uniq.length === got.length;
+      const complete = !s.automatic && result.complete && got.length === list.length && uniq.length === got.length;
       const reason = complete ? '' : result.reason || 'rows-rejected-or-duplicated';
       diagnostics.push({ src: s.id, status: complete ? 'complete' : 'partial', rawCount: list.length, acceptedCount: uniq.length, reason, attemptedAt });
       log(`${s.name}: ${list.length} jobs, ${uniq.length} placed, ${complete ? 'complete' : 'partial'} (${Math.round((Date.now() - attemptedAt) / 1000)}s)`);
