@@ -4,6 +4,7 @@
 import discoveredManifest from './data/discovered-sources/manifest.json' with { type: 'json' };
 import { registeredDiscoveredSources, discoveredJobAllowed } from './jobs-discovered-sources.js';
 import { COUNTRY } from './data.js';
+import { auditAutomaticOutput } from './jobs-source-health.js';
 import { AFRICA_EXTRA_SOURCES } from './jobs-africa-sources.js';
 import { SHOPRITE_BROWSE_URL, parseShopriteCategories, parseShopriteList, parseShopriteDetail } from './jobs-erecruit.js';
 import { parseSimplifyList, parseSimplifyDetail } from './jobs-simplify.js';
@@ -897,7 +898,11 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
       }
       const got = list.map(x => normalizeCollectedJob(s, x, fx)).filter(Boolean);
       const seen = new Set();
-      const uniq = got.filter(r => !seen.has(r.id) && seen.add(r.id));
+      const uniq = got.filter(r => (!s.automatic || !r.closing_ts || r.closing_ts > Date.now()) && !seen.has(r.id) && seen.add(r.id));
+      if (s.automatic && !auditAutomaticOutput(s, uniq, list.length).ok) {
+        diagnostics.push({ src:s.id,status:'failed',rawCount:list.length,acceptedCount:0,reason:'automatic-quality-breaker',attemptedAt });
+        continue;
+      }
       // Invalid/unlocated rows or duplicate IDs cannot prove a full replacement snapshot.
       const complete = !s.automatic && result.complete && got.length === list.length && uniq.length === got.length;
       const reason = complete ? '' : result.reason || 'rows-rejected-or-duplicated';

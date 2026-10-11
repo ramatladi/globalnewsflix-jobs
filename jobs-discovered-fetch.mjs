@@ -56,9 +56,10 @@ export async function loadDiscoveredManifest({ fetchImpl=fetch, cachePath='.jobs
     const reader=r.body.getReader(), chunks=[];let size=0;
     for (;;) {const {value,done}=await reader.read();if(done)break;size+=value.length;if(size>4000000){await reader.cancel();throw new Error('Manifest too large');}chunks.push(value);}
     const next=validateDiscoveredManifest(JSON.parse(Buffer.concat(chunks).toString()));
-    // The source registry is append-only; never silently accept a rollback.
+    // Existing entries are immutable. Explicit removal on the trusted site is
+    // a maintainer's undo; the daily publisher itself remains append-only.
     const known=new Map(next.sources.map(s=>[s.id,JSON.stringify(s)]));
-    if (previous.sources.some(s=>known.get(s.id)!==JSON.stringify(s))) throw new Error('Manifest rollback');
+    if (previous.sources.some(s=>known.has(s.id)&&known.get(s.id)!==JSON.stringify(s))) throw new Error('Manifest identity changed');
     await mkdir(dirname(cachePath),{recursive:true});await writeFile(cachePath,JSON.stringify(next));return next;
   } catch {log('Discovered source manifest unavailable or invalid; retaining last valid registry');return previous;}
 }
