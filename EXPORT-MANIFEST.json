@@ -29,7 +29,7 @@
   },
   {
     "file": "jobs-employers.js",
-    "sha256": "f8b10ba9c8826f1e8e42d3af1eaa25cd85dda8b1ccbc9b6140f94fa0cf367975"
+    "sha256": "266806093cc224690206250dd10c3b6ce843a89c91aaab847a04841317f0d5d3"
   },
   {
     "file": "jobs-erecruit.js",
@@ -61,11 +61,11 @@
   },
   {
     "file": "jobs-za-sources.js",
-    "sha256": "e2fecf576c780bd3fb88908107e768cd11323f7e385fac955cf6bcf01d74a7b6"
+    "sha256": "bfc59bac5f4c769cbf8101fc1be7e7eda12677744ca0ac1c989c3c7c2f45eaf2"
   },
   {
     "file": "jobs.js",
-    "sha256": "47da7fa0d0449384ba0601e1008b5b2dd6a9dfd844541dec239ea6fa9a386807"
+    "sha256": "3517fe0bdbdd58bd78f9be22fef61ab9012e54301837b1f6b6f1940fef4c3340"
   },
   {
     "file": "package.json",
@@ -164,6 +164,10 @@
     "sha256": "580af810cd23955296268c092706c2eb3ddc6f9435a720af656d66364444519b"
   },
   {
+    "file": "tests/fixtures/jobs-tshwane-scoped.json",
+    "sha256": "9972e41245162536baef047d03774f2a43f049f4c8588972a315d53c0664a43d"
+  },
+  {
     "file": "tests/fixtures/jobs-uct-detail.html",
     "sha256": "a8de8663dee69dd347750c5587bd6a98f2744787386e642c3d931e07090e6214"
   },
@@ -201,7 +205,7 @@
   },
   {
     "file": "tests/jobs-employers.test.mjs",
-    "sha256": "e6de3db32635a24b862be73ff917881a9226ee3b11553595970b17cea4913963"
+    "sha256": "9623377fd289150e54bf53ab339f4b7bb75e28de738d814f68bb7dfaf76d6055"
   },
   {
     "file": "tests/jobs-erecruit.test.mjs",
@@ -222,6 +226,10 @@
   {
     "file": "tests/jobs-runner.test.mjs",
     "sha256": "e7f875666777673befc61bf33c75b075a21a315e84a3e435a6f8102f9a5d6f51"
+  },
+  {
+    "file": "tests/jobs-sf-scope.test.mjs",
+    "sha256": "3ee10ac8ff91b604dd1ef9875b0198cfc0302472529e7a3e6a1ffcd4331bc5a5"
   },
   {
     "file": "tests/jobs-uct.test.mjs",

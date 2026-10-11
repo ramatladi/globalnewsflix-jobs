@@ -242,5 +242,26 @@ export const ZA_GOVERNMENT_SOURCES = [
       "ZA"
     ],
     "detailOracle": true
+  },
+  {
+    "id": "tshwane",
+    "name": "City of Tshwane",
+    "ticker": "",
+    "type": "g",
+    "ats": "sf",
+    "args": [
+      "careers.tshwane.gov.za"
+    ],
+    "provenanceUrl": "https://careers.tshwane.gov.za/go/cot/9524655/",
+    "verifiedAt": 1791671263920,
+    "countries": [
+      "ZA"
+    ],
+    "sfScope": {
+      "listPath": "/go/cot/9524655/",
+      "jobPath": "/cot/job/",
+      "employerName": "City of Tshwane",
+      "country": "ZA"
+    }
   }
 ];

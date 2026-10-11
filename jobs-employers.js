@@ -59,7 +59,7 @@ export function sourceCareerUrls(source) {
     case 'lever': careersUrl = `https://jobs.lever.co/${segment(a)}`; collectionUrl = `https://api.lever.co/v0/postings/${segment(a)}?mode=json`; break;
     case 'ashby': careersUrl = `https://jobs.ashbyhq.com/${segment(a)}`; collectionUrl = `https://api.ashbyhq.com/posting-api/job-board/${segment(a)}?includeCompensation=true`; break;
     case 'wd': careersUrl = a?.includes('myworkdaysite') ? `https://${a}/recruiting/${segment(b)}/${segment(c)}` : `https://${a}/${segment(c)}`; collectionUrl = `https://${a}/wday/cxs/${segment(b)}/${segment(c)}/jobs`; break;
-    case 'sf': careersUrl = `https://${a}/search/`; collectionUrl = careersUrl; break;
+    case 'sf': careersUrl = `https://${a}${source.sfScope?.listPath || '/search/'}`; collectionUrl = careersUrl; break;
     case 'orc': careersUrl = `https://${a}/hcmUI/CandidateExperience/en/sites/${segment(b)}`; collectionUrl = `https://${a}/hcmRestApi/resources/latest/recruitingCEJobRequisitions`; break;
     case 'sr': careersUrl = `https://careers.smartrecruiters.com/${segment(a)}`; collectionUrl = `https://api.smartrecruiters.com/v1/companies/${segment(a)}/postings`; break;
     case 'amazon': careersUrl = 'https://www.amazon.jobs/'; collectionUrl = 'https://www.amazon.jobs/en/search.json'; break;

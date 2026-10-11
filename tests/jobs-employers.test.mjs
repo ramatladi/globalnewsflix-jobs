@@ -8,8 +8,8 @@ test('every supported configured source has deterministic HTTPS career provenanc
     const row = employerMetadata(source);
     assert.match(row.careersUrl, /^https:\/\//, source.id);
     assert.match(row.collectionUrl, /^https:\/\//, source.id);
-    assert.equal(row.verifiedAt != null, ['cloudflare', 'block', 'standardbank', 'firstrand', 'sasol', 'angloamerican', 'discovery', 'za-gauteng', 'capitec', 'goldfields', 'adcorp', 'sanlam', 'avi', 'oceana', 'shoprite', 'uct', 'ethekwini', 'safaricom', 'diageo', 'cbk'].includes(source.id));
-    assert.equal(row.verification, ['cloudflare', 'block', 'standardbank', 'firstrand', 'sasol', 'angloamerican', 'discovery', 'za-gauteng', 'capitec', 'goldfields', 'adcorp', 'sanlam', 'avi', 'oceana', 'shoprite', 'uct', 'ethekwini', 'safaricom', 'diageo', 'cbk'].includes(source.id) ? 'observed' : 'configured-unverified');
+    assert.equal(row.verifiedAt != null, ['cloudflare', 'block', 'standardbank', 'firstrand', 'sasol', 'angloamerican', 'discovery', 'za-gauteng', 'capitec', 'goldfields', 'adcorp', 'sanlam', 'avi', 'oceana', 'shoprite', 'uct', 'ethekwini', 'safaricom', 'diageo', 'cbk', 'tshwane'].includes(source.id));
+    assert.equal(row.verification, ['cloudflare', 'block', 'standardbank', 'firstrand', 'sasol', 'angloamerican', 'discovery', 'za-gauteng', 'capitec', 'goldfields', 'adcorp', 'sanlam', 'avi', 'oceana', 'shoprite', 'uct', 'ethekwini', 'safaricom', 'diageo', 'cbk', 'tshwane'].includes(source.id) ? 'observed' : 'configured-unverified');
   }
   const source = SOURCES.find(source => source.id === 'absa');
   assert.equal(sourceCareerUrls(source).careersUrl, 'https://absa.wd3.myworkdayjobs.com/ABSAcareersite');
@@ -37,7 +37,7 @@ test('coverage reports source deficits, never fabricates a thousand employers or
   assert.equal(coverage.countries.length, 6);
   assert.ok(coverage.countryUnknownSources > 70);
   for (const row of coverage.countries) {
-    assert.equal(row.observedSources, ['US', 'GB'].includes(row.country) ? 2 : row.country === 'IN' ? 1 : row.country === 'ZA' ? 15 : row.country === 'KE' ? 2 : 0);
+    assert.equal(row.observedSources, ['US', 'GB'].includes(row.country) ? 2 : row.country === 'IN' ? 1 : row.country === 'ZA' ? 16 : row.country === 'KE' ? 2 : 0);
     assert.equal(row.sourceShortfall, 1000 - row.configuredSources);
   }
   assert.match(coverage.note, /not employer or live vacancy counts/);
