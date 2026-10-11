@@ -29,8 +29,8 @@ test('changed or truncated tables and hostile application URLs fail closed, empt
 });
 
 test('collector integration imports bounded normalized rows without granting finish authority',async t=>{
- t.mock.method(Date,'now',()=>now);
  const {collectJobs}=await import('../jobs.js');
+ t.mock.method(Date,'now',()=>now);
  const calls=[];
  const result=await collectJobs(async url=>{calls.push(String(url));if(String(url).includes('frankfurter'))return new Response(JSON.stringify({rates:{ZAR:18}}));if(String(url)===GAUTENG_JOBS_URL)return new Response(html);if(String(url)===parseGautengJobs(html,{now}).rows[0].url)return new Response(detailHtml);return new Response('',{status:404});},()=>{},['za-gauteng']);
  assert.equal(result.rows.length,20);assert.deepEqual(result.ok,[]);assert.equal(result.diagnostics[0].status,'partial');

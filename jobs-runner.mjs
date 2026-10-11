@@ -1,4 +1,6 @@
 // Scheduled collector. GitHub OIDC is short-lived and scoped by the site to this workflow.
+import { automaticTransport, loadDiscoveredManifest } from './jobs-discovered-fetch.mjs';
+import { registeredDiscoveredSources } from './jobs-discovered-sources.js';
 import { collectJobs, normalizeCollectedJob, fxRates, SOURCES } from './jobs.js';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -67,15 +69,17 @@ async function main() {
     return value;
   };
   const runTs = Date.now();
+  const discovered = registeredDiscoveredSources(await loadDiscoveredManifest());
+  const sources = [...new Map([...SOURCES, ...discovered].map(s => [s.id, s])).values()];
   const only = process.env.JOB_SOURCES ? process.env.JOB_SOURCES.split(',').map(s=>s.trim()).filter(Boolean) : null;
-  if (only?.some(id=>!SOURCES.some(s=>s.id===id))) throw new Error('Unregistered source selection');
+  if (only?.some(id=>!sources.some(s=>s.id===id))) throw new Error('Unregistered source selection');
   if (!dryRun) {
     const preflight = await fetch(`${site}/api/jobs`, { method:'POST', headers:{authorization:`Bearer ${await getToken()}`,'content-type':'application/json'}, body:JSON.stringify({runTs,rows:[]}) });
     const check = await preflight.json().catch(()=>({}));
     console.log(`jobs preflight: ${preflight.status}, acknowledged ${check.ok===true && check.n===0}`);
     if (!preflight.ok || check.ok!==true || check.n!==0) throw new Error('Jobs upload preflight failed');
   }
-  const data = await collectJobs(fetch,console.log,only);
+  const data = await collectJobs(fetch,console.log,only,{sources,automaticFetch:automaticTransport()});
   if (!only || only.includes('za-dpsa')) {
     const gov = await governmentJobs();
     data.rows.push(...gov.rows);

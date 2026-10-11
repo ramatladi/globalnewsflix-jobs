@@ -4,7 +4,7 @@ import { SOURCES } from '../jobs.js';
 import { sourceCareerUrls, employerMetadata, employerRegistry, registryCoverage } from '../jobs-employers.js';
 
 test('every supported configured source has deterministic HTTPS career provenance', () => {
-  for (const source of SOURCES.filter(source => source.ats !== 'dpsa')) {
+  for (const source of SOURCES.filter(source => source.ats !== 'dpsa' && !source.automatic)) {
     const row = employerMetadata(source);
     assert.match(row.careersUrl, /^https:\/\//, source.id);
     assert.match(row.collectionUrl, /^https:\/\//, source.id);
@@ -31,9 +31,10 @@ test('country metadata distinguishes existing explicit reader scopes from dated 
 });
 
 test('coverage reports source deficits, never fabricates a thousand employers or country coverage', () => {
-  const registry = employerRegistry(SOURCES);
+  const configured = SOURCES.filter(s => !s.automatic);
+  const registry = employerRegistry(configured);
   const coverage = registryCoverage(registry);
-  assert.equal(coverage.totalSources, SOURCES.length);
+  assert.equal(coverage.totalSources, configured.length);
   assert.equal(coverage.countries.length, 6);
   assert.ok(coverage.countryUnknownSources > 70);
   for (const row of coverage.countries) {
