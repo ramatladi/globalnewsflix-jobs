@@ -4,6 +4,10 @@
     "sha256": "e72a37d307d6225889a76761fcdcd4ee4b6fed5200b8d5d2759f42999da2d51a"
   },
   {
+    "file": ".github/workflows/tests.yml",
+    "sha256": "20952d418c1d4700aff459c3db02ffe93ae938c54c8aa82f9e50a59b78777bd9"
+  },
+  {
     "file": ".gitignore",
     "sha256": "4492c54bd12efd51066dc8b0ae848d7333b9f28b5c5f28e51a88ba44289f3113"
   },
@@ -81,7 +85,7 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "5342d4b5908d614fc792d019d3e318da2dc033d688f52f9a8180a6ccc8a1a54d"
+    "sha256": "adb1c7e02e6144bca82ac5e33309c2aafe287789a46e14a54220527fc2497d4d"
   },
   {
     "file": "package.json",
@@ -225,7 +229,7 @@
   },
   {
     "file": "tests/jobs-employers.test.mjs",
-    "sha256": "9623377fd289150e54bf53ab339f4b7bb75e28de738d814f68bb7dfaf76d6055"
+    "sha256": "da6da7f9c4f65642aa5ba0237b66c6e15de3b2c05c2b989ec509cc0e9e6df562"
   },
   {
     "file": "tests/jobs-erecruit.test.mjs",
@@ -233,7 +237,7 @@
   },
   {
     "file": "tests/jobs-gauteng.test.mjs",
-    "sha256": "59bd2156def0e4830c262a8bca7c666bc3aebd0ab7ee60446e28fed3bc98a99c"
+    "sha256": "5948d933abd6e5bdff90d749be03216d275983fd878de38053b718a7fc206319"
   },
   {
     "file": "tests/jobs-greenhouse-remote.test.mjs",
