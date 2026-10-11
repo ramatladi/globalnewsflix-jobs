@@ -99,11 +99,13 @@ au|African Union Commission||i|sf|jobs.au.int
 ebrd|EBRD||i|sf|jobs.ebrd.com
 oecd|OECD||i|sr|OECD
 `;
+// Bundled manifest timestamps are checked in CI/publication. Workerd has no
+// request clock during module initialization; schema validation stays active.
 export const SOURCES = SOURCE_ROWS.trim().split('\n').map(l => {
   const [id, name, ticker, type, ats, ...args] = l.split('|');
   const source = { id, name, ticker, type, ats, args };
   return { ...source, ...employerMetadata(source) };
-}).concat([...ZA_EXTRA_SOURCES, ...ZA_GOVERNMENT_SOURCES, ...AFRICA_EXTRA_SOURCES].map(source => ({ ...source, ...employerMetadata(source, source) }))).concat(registeredDiscoveredSources(discoveredManifest).map(source => ({ ...source, ...employerMetadata(source, source) })));
+}).concat([...ZA_EXTRA_SOURCES, ...ZA_GOVERNMENT_SOURCES, ...AFRICA_EXTRA_SOURCES].map(source => ({ ...source, ...employerMetadata(source, source) }))).concat(registeredDiscoveredSources(discoveredManifest, Infinity).map(source => ({ ...source, ...employerMetadata(source, source, Infinity) })));
 export const EMPLOYERS = SOURCES.map(({ args, type, ...metadata }) => metadata);
 const BY_ID = new Map(SOURCES.map(s => [s.id, s]));
 export const JOB_TYPES = { c: 'jtC', g: 'jtG', i: 'jtI' };
