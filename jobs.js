@@ -99,13 +99,11 @@ au|African Union Commission||i|sf|jobs.au.int
 ebrd|EBRD||i|sf|jobs.ebrd.com
 oecd|OECD||i|sr|OECD
 `;
-// Bundled manifest timestamps are checked in CI/publication. Workerd has no
-// request clock during module initialization; schema validation stays active.
 export const SOURCES = SOURCE_ROWS.trim().split('\n').map(l => {
   const [id, name, ticker, type, ats, ...args] = l.split('|');
   const source = { id, name, ticker, type, ats, args };
   return { ...source, ...employerMetadata(source) };
-}).concat([...ZA_EXTRA_SOURCES, ...ZA_GOVERNMENT_SOURCES, ...AFRICA_EXTRA_SOURCES].map(source => ({ ...source, ...employerMetadata(source, source) }))).concat(registeredDiscoveredSources(discoveredManifest, Infinity).map(source => ({ ...source, ...employerMetadata(source, source, Infinity) })));
+}).concat([...ZA_EXTRA_SOURCES, ...ZA_GOVERNMENT_SOURCES, ...AFRICA_EXTRA_SOURCES].map(source => ({ ...source, ...employerMetadata(source, source) }))).concat(registeredDiscoveredSources(discoveredManifest).map(source => ({ ...source, ...employerMetadata(source, source) })));
 export const EMPLOYERS = SOURCES.map(({ args, type, ...metadata }) => metadata);
 const BY_ID = new Map(SOURCES.map(s => [s.id, s]));
 export const JOB_TYPES = { c: 'jtC', g: 'jtG', i: 'jtI' };
@@ -287,7 +285,7 @@ async function req(fetchImpl, url, opt = {}, type = 'json') {
         continue;
       }
       if (r.status < 500) return null;
-    } catch (error) { if(error?.code==='AUTOMATIC_BUDGET_EXHAUSTED')return null; }
+    } catch (error) { if(['AUTOMATIC_BUDGET_EXHAUSTED','AUTOMATIC_SOURCE_REQUEST_CAP'].includes(error?.code))return null; }
     if (a === 0) await sleep(1500);
   }
   return null;
@@ -877,7 +875,7 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
       }
       try { result = sourceFetch ? await COLLECT[s.ats]?.(sourceFetch, s, log) : null; } catch { /* recorded below without raw provider data */ }
       const transportState=s.automatic ? sourceFetch?.diagnostics?.() : null;
-      const budgetReason=transportState?.budgetExhausted ? (transportState.httpRequests===0 ? 'not-attempted-budget' : 'budget-exhausted') : '';
+      const budgetReason=transportState?.sourceRequestCap ? 'source-request-cap' : transportState?.budgetExhausted ? (transportState.httpRequests===0 ? 'not-attempted-budget' : 'budget-exhausted') : '';
       if (!result) {
         diagnostics.push({ src: s.id, status: 'failed', rawCount: 0, acceptedCount: 0, reason: budgetReason || 'source-unavailable', attemptedAt });
         log(`${s.name}: no valid answer`); continue;

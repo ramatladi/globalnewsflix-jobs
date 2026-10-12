@@ -13,8 +13,12 @@ export function publicAddress(a) {
 }
 export function automaticTransport({ resolver = lookup, transport = request, now = () => performance.now(), pause = ms => new Promise(r => setTimeout(r,ms)), maxRequests = 1000, maxSeconds = 900 } = {}) {
   let total = 0, deadline = null;
-  const locks = new Map(), counts = new Map(), cooled = new Set(), budgetStopped = new Set();
+  const locks = new Map(), counts = new Map(), cooled = new Set(), budgetStopped = new Set(), sourceCapped = new Set();
   const budgetError = source => {budgetStopped.add(source.id);return Object.assign(new Error('Automatic request budget exhausted'),{code:'AUTOMATIC_BUDGET_EXHAUSTED'});};
+  const checkBudget = source => {
+    if ((counts.get(source.id) || 0) >= 100) {sourceCapped.add(source.id);throw Object.assign(new Error('Automatic source request cap exhausted'),{code:'AUTOMATIC_SOURCE_REQUEST_CAP'});}
+    if (now() >= deadline || total >= maxRequests) throw budgetError(source);
+  };
   return source => {const scopedFetch = async function(value, options = {}) {
     let url = String(value), method = String(options.method || 'GET').toUpperCase();
     if (options.body && (typeof options.body !== 'string' || Buffer.byteLength(options.body) > 10000)) throw new Error('Invalid request body');
@@ -23,7 +27,7 @@ export function automaticTransport({ resolver = lookup, transport = request, now
       // Manual collectors may run first. Start the shared automatic budget only
       // on its first allowed request; never restart it for another source or hop.
       deadline ??= now() + maxSeconds * 1000;
-      if (now() >= deadline || total >= maxRequests || (counts.get(source.id) || 0) >= 100) throw budgetError(source);
+      checkBudget(source);
       const u = new URL(url), host = u.hostname;
       if (cooled.has(host)) throw new Error('Automatic host cooldown');
       let release;
@@ -31,11 +35,11 @@ export function automaticTransport({ resolver = lookup, transport = request, now
       await prior;
       try {
         await pause(1000);
-        if (now() >= deadline || total >= maxRequests || (counts.get(source.id) || 0) >= 100) throw budgetError(source);
+        checkBudget(source);
         if (cooled.has(host)) throw new Error('Automatic host cooldown');
         const addresses = await Promise.race([resolver(host,{all:true,family:4}), new Promise((_,reject) => { const t=setTimeout(()=>reject(new Error('DNS timeout')),5000); t.unref?.(); })]);
         if (!addresses.length || addresses.some(a => !publicAddress(a.address))) throw new Error('Non-public destination');
-        if (now() >= deadline || total >= maxRequests || (counts.get(source.id) || 0) >= 100) throw budgetError(source);
+        checkBudget(source);
         total++; counts.set(source.id,(counts.get(source.id) || 0)+1);
         const result = await new Promise((resolve,reject) => {
           const req = transport(u, { method, servername:host, family:4, autoSelectFamily:false, lookup:(_h,o,cb)=>o?.all?cb(null,[{address:addresses[0].address,family:4}]):cb(null,addresses[0].address,4), headers:{'user-agent':'GlobalNewsflix-careers/1.0','accept':'application/json,text/html','content-type':'application/json'} }, res => {
@@ -54,7 +58,7 @@ export function automaticTransport({ resolver = lookup, transport = request, now
     }
     throw new Error('Redirect limit');
   };
-  scopedFetch.diagnostics=()=>({httpRequests:counts.get(source.id)||0,budgetExhausted:budgetStopped.has(source.id)});
+  scopedFetch.diagnostics=()=>({httpRequests:counts.get(source.id)||0,budgetExhausted:budgetStopped.has(source.id),sourceRequestCap:sourceCapped.has(source.id)});
   return scopedFetch;};
 }
 export async function loadDiscoveredManifest({ fetchImpl=fetch, cachePath='.jobs-cache/discovered-sources.json', log=console.log }={}) {
