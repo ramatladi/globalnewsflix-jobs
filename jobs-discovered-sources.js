@@ -1,5 +1,6 @@
 // Data-only source manifests. This module is shared by the site and collector.
 import { COUNTRY } from './data.js';
+import { workdayQueryFacets } from './jobs-workday-query.js';
 const atsHosts = /(?:^|\.)(?:myworkdayjobs\.com|myworkdaysite\.com|greenhouse\.io|lever\.co|ashbyhq\.com|smartrecruiters\.com|oraclecloud\.com|successfactors\.(?:com|eu)|workable\.com|icims\.com|taleo\.net)$/i;
 const excluded = ['indeed.com', 'indeed.co.uk', 'indeed.co.za', 'indeed.ca', 'indeed.com.au', 'indeed.co.in', 'linkedin.com', 'glassdoor.com', 'monster.com', 'ziprecruiter.com', 'careerjet.com', 'jooble.org', 'jobberman.com', 'jobberman.com.gh', 'myjobmag.com', 'myjobmag.co.ke', 'myjobmag.co.za', 'brightermonday.com', 'brightermonday.co.ke', 'brightermonday.co.ug', 'brightermonday.co.tz', 'pnet.co.za', 'careerjunction.co.za', 'careers24.com', 'nav.no', 'arbetsformedlingen.se', 'arbeitsagentur.de', 'francetravail.fr', 'ncs.gov.in', 'seek.com.au', 'seek.co.nz', 'totaljobs.com', 'reed.co.uk', 'adzuna.com', 'jobs.ac.uk'];
 export function excludedDiscoveryUrl(value) {
@@ -9,7 +10,7 @@ export function strictPublicHttps(value) {
   if (typeof value !== 'string' || value.length > 1000) return null;
   try {
     const u = new URL(value);
-    if (u.protocol !== 'https:' || u.username || u.password || u.port || u.hash || /%(?:2f|5c|00|0a|0d)|\\/i.test(u.pathname) || !/^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?\.[a-z]{2,}$/i.test(u.hostname) || /(?:^|\.)(?:localhost|local|internal|test|invalid)$/.test(u.hostname) || excludedDiscoveryUrl(value)) return null;
+    if (u.protocol !== 'https:' || u.username || u.password || u.port || value.includes('#') || /%(?:2f|5c|00|0a|0d)|\\/i.test(u.pathname) || !/^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?\.[a-z]{2,}$/i.test(u.hostname) || /(?:^|\.)(?:localhost|local|internal|test|invalid)$/.test(u.hostname) || excludedDiscoveryUrl(value)) return null;
     return u;
   } catch { return null; }
 }
@@ -19,16 +20,19 @@ export function discoveredReader(careerUrl, officialDomain) {
   if (!u || !domain || domain.pathname !== '/' || domain.search || atsHosts.test(domain.hostname)) return null;
   const p = u.pathname.split('/').filter(Boolean), host = u.hostname;
   const simple = { 'boards.greenhouse.io': 'gh', 'job-boards.greenhouse.io': 'gh', 'jobs.lever.co': 'lever', 'jobs.ashbyhq.com': 'ashby', 'careers.smartrecruiters.com': 'sr' };
-  if (simple[host] && p.length === 1 && segment(p[0])) return { ats: simple[host], args: [p[0]] };
+  // These readers collect an entire tenant and have no metadata-bound query
+  // filter implementation. Never silently widen a registered filtered URL.
+  if (simple[host] && p.length === 1 && segment(p[0])) return u.search ? null : { ats: simple[host], args: [p[0]] };
   if (/^[a-z0-9-]+\.wd\d+\.myworkdayjobs\.com$/.test(host)) {
     const parts = /^[a-z]{2}-[A-Z]{2}$/.test(p[0] || '') ? p.slice(1) : p;
-    if (parts.length === 1 && segment(parts[0])) return { ats: 'wd', args: [host, host.split('.')[0], parts[0]] };
+    if (parts.length === 1 && segment(parts[0]) && workdayQueryFacets(u.href) !== null) return { ats: 'wd', args: [host, host.split('.')[0], parts[0]] };
   }
-  if (/^(?:www|wd\d+)\.myworkdaysite\.com$/.test(host) && p.length === 3 && p[0] === 'recruiting' && p.slice(1).every(segment)) return { ats: 'wd', args: [host, p[1], p[2]] };
+  if (/^(?:www|wd\d+)\.myworkdaysite\.com$/.test(host) && p.length === 3 && p[0] === 'recruiting' && p.slice(1).every(segment) && workdayQueryFacets(u.href) !== null) return { ats: 'wd', args: [host, p[1], p[2]] };
   // Unsupported or shared provider roots stay held; supported does not mean every
   // provider's URL shape has a safely automated reader.
   if (atsHosts.test(host)) return null;
-  return employerHost(u.hostname, domain.hostname) ? { ats: 'jsonld', args: [u.href] } : null;
+  // Preserving a URL alone does not establish its search/locale semantics.
+  return !u.search && employerHost(u.hostname, domain.hostname) ? { ats: 'jsonld', args: [u.href] } : null;
 }
 function exactKeys(value, keys) { return value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === keys.length && Object.keys(value).every(k => keys.includes(k)); }
 function observed(value, now) { return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(value) && Number.isFinite(Date.parse(value)) && Date.parse(value) <= now; }

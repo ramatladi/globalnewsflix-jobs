@@ -37,11 +37,11 @@
   },
   {
     "file": "jobs-discovered-fetch.mjs",
-    "sha256": "e5ad7f88f8240d4342af22693e03f74238088d2147c80bf999b98b4778ceba79"
+    "sha256": "6fd05b0f66f98f9b78a3a4444af0b9183e06bd8676799d84d7f0c641e2af5518"
   },
   {
     "file": "jobs-discovered-sources.js",
-    "sha256": "439769cf378239e88d5d0b8b1f8af4cf29539500e9a22b13d14d2ed995d707c8"
+    "sha256": "a2b4e4567844c50e0a25793fde55c187f7f1e7fded5197185cf8719d3af6607b"
   },
   {
     "file": "jobs-employers.js",
@@ -64,8 +64,12 @@
     "sha256": "a5679937146e8680812a7c78d6a9293a2073b49c4784006221005b143b32cdec"
   },
   {
+    "file": "jobs-pacing.js",
+    "sha256": "1cd69d83d9b488b4a65fe67887144d1b1d4b485223c0381e196803aee342927d"
+  },
+  {
     "file": "jobs-runner.mjs",
-    "sha256": "d4e07b7cf5ca6ec9d4809d2b493e33f3f684b58cb770af53da191fcd3b123613"
+    "sha256": "fa53f3208265c79c4894f57ecbc976ba7fb8abc8eb250871ecde44cb8ac7475b"
   },
   {
     "file": "jobs-simplify.js",
@@ -73,11 +77,15 @@
   },
   {
     "file": "jobs-source-health.js",
-    "sha256": "b7b6b9651fc55eb19b6587d9d893d58f3a07cdd33ac7d521fda89b09a91601e8"
+    "sha256": "a00bd0ac389f64dc897be1dec97463bd85f85f33c51b5aad4c96e90f8f8a5d78"
   },
   {
     "file": "jobs-uct.js",
     "sha256": "6f414960d1d2d5880c83abb0e074aa0c4056888b3eceb0fbe3f06c689a0562b2"
+  },
+  {
+    "file": "jobs-workday-query.js",
+    "sha256": "941f88f8aea84753ef2d87b6a1ab946b0858301286e99e409abefdb62df06ee1"
   },
   {
     "file": "jobs-za-sources.js",
@@ -85,7 +93,7 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "9d96d80ae936d9396b77b333329f8be4cde6ed2292b426457de8f5603154012d"
+    "sha256": "d45ae6e6d3ab80c658d4069736bd733926ac0777e423b81d27f7b1380963b571"
   },
   {
     "file": "package.json",
@@ -208,6 +216,14 @@
     "sha256": "ee9e45efc68f237757070b812130c9ae79f9994634c92054cc63a7f7ca6065a2"
   },
   {
+    "file": "tests/fixtures/jobs-workday-ntu-list-shape.json",
+    "sha256": "d448628eacf82c65dc97a00286a86bcb3d5eefe1990d10ab0f8a64b87dbe8efc"
+  },
+  {
+    "file": "tests/fixtures/jobs-workday-ntu-page2-recorded.json",
+    "sha256": "39701934cf7dc7d15f59b41992f796a9b3d94153d507843f628b0a9bf8aa684b"
+  },
+  {
     "file": "tests/fixtures/jobs-za-public.json",
     "sha256": "df6993ec7caac3031dc7baf6c4ae389da996f9ad71cd223af1532c28fade1840"
   },
@@ -225,7 +241,7 @@
   },
   {
     "file": "tests/jobs-discovered.test.mjs",
-    "sha256": "3b438e6b5ab2fe705797102806361f48782673819617a6ce7014a93e700cd1c3"
+    "sha256": "15eabb1816c0f9a4e6c26f8f3c39dd8735cd959fc3e7e6173532288ebad30b86"
   },
   {
     "file": "tests/jobs-employers.test.mjs",
@@ -248,8 +264,16 @@
     "sha256": "9a4c8c97168c4a63f8a1f5899a288eaa6d2f30b0fc90fc61c6b9427ec83ce1d0"
   },
   {
+    "file": "tests/jobs-pacing.test.mjs",
+    "sha256": "c97296a75955d9e7137585cda31eb951faa633790d036bdf82092577dee5ffba"
+  },
+  {
+    "file": "tests/jobs-query-scope.test.mjs",
+    "sha256": "7d66c4baae50de518a0fb858a30e6a4309dc6e191be8b98b696adeeaa9c0349d"
+  },
+  {
     "file": "tests/jobs-runner.test.mjs",
-    "sha256": "e7f875666777673befc61bf33c75b075a21a315e84a3e435a6f8102f9a5d6f51"
+    "sha256": "09b1dd725f51531339987e802bc644f5810ae0f5c6d31dce1ba52b5954f7c9ec"
   },
   {
     "file": "tests/jobs-sf-scope.test.mjs",
@@ -258,6 +282,10 @@
   {
     "file": "tests/jobs-uct.test.mjs",
     "sha256": "8f34f5bd5dca93d7bca1b1f771248116332b8131f603f7179df359e6793e73b8"
+  },
+  {
+    "file": "tests/jobs-workday-automatic.test.mjs",
+    "sha256": "6e644199872c38fcb7ee780b974f56270b886b0ad560db2cb9df5a051f8e2c20"
   },
   {
     "file": "tests/jobs-workday.test.mjs",

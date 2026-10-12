@@ -1,0 +1,196 @@
+{
+  "description": "Recorded public Workday response from one read-only POST to NTU Careers on 2026-10-12, offset20 limit20 appliedFacets{}. Only this continuation page is recorded; the first page and detail responses in the regression are synthetic. No applicant data.",
+  "request": {
+    "limit": 20,
+    "offset": 20,
+    "searchText": "",
+    "appliedFacets": {}
+  },
+  "response": {
+    "total": 0,
+    "jobPostings": [
+      {
+        "title": "Senior Executive / Assistant Manager, Grant Administration",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Senior-Executive---Assistant-Manager--Grant-Administration_R00025886",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00025886"
+        ]
+      },
+      {
+        "title": "Senior Executive/Assistant Manager, MSc Programme",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Senior-Executive-Assistant-Manager--MSc-Programme_R00025779",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00025779"
+        ]
+      },
+      {
+        "title": "Assistant Manager, Research and Partnership",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Assistant-Manager--Research-and-Partnership_R00025770",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00025770"
+        ]
+      },
+      {
+        "title": "Senior Executive/Assistant Manager, Research Administration & Grants Support (Administrative Support)",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Senior-Executive--Assistant-Manager--Research-Administration---Grants-Support--Administrative-Support-_R00023595",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00023595"
+        ]
+      },
+      {
+        "title": "Senior Assistant Manager, Content & Web Management Specialist",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Content---Web-Management-Specialist_R00025671",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00025671"
+        ]
+      },
+      {
+        "title": "Executive / Senior Executive, Teaching Lab",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Executive---Senior-Executive--Teaching-Lab_R00025231",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00025231"
+        ]
+      },
+      {
+        "title": "Senior Executive, Admin Support",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Senior-Executive--Admin-Support_R00025193",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00025193"
+        ]
+      },
+      {
+        "title": "Assistant Manager, Administrative Support",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Assistant-Manager--Administrative-Support_R00025728",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00025728"
+        ]
+      },
+      {
+        "title": "Assistant Manager (Grant Management)",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Assistant-Manager--Grant-Management-_R00024908",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00024908"
+        ]
+      },
+      {
+        "title": "Assistant Manager, Student Experience and Vibrancy",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Assistant-Manager--Student-Experience-and-Vibrancy_R00025385",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00025385"
+        ]
+      },
+      {
+        "title": "Assistant Manager, Research & Centre Support",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Assistant-Manager--Research---Centre-Support_R00024815",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00024815"
+        ]
+      },
+      {
+        "title": "Assistant Manager, Semester Exchange Programme (Inbound)",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Assistant-Manager--Semester-Exchange-Programme--Inbound-_R00024218",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00024218"
+        ]
+      },
+      {
+        "title": "Research Assistant (Science of Learning in Education Centre) [NIE]",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Research-Assistant--Science-of-Learning-in-Education-Centre---NIE-_R00025997-1",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00025997"
+        ]
+      },
+      {
+        "title": "Deputy Director, Administrations",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Deputy-Director--Administrations_R00024217",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00024217"
+        ]
+      },
+      {
+        "title": "Research Fellow (Environmental Sciences)",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Research-Fellow--Environmental-Sciences-_R00025991",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00025991"
+        ]
+      },
+      {
+        "title": "Senior Assistant Director, IT Applications Support",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Senior-Assistant-Director--IT-Applications-Support_R00025992",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00025992"
+        ]
+      },
+      {
+        "title": "Senior Assistant Manager, M&E Facilities Management",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Senior-Assistant-Manager--M-E-Facilities-Management_R00025735",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00025735"
+        ]
+      },
+      {
+        "title": "Research Fellow (Physical Education & Sports Science Department) [NIE]",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Research-Fellow--Physical-Education---Sports-Science-Department---NIE-_R00024836",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 2 Days Ago",
+        "bulletFields": [
+          "R00024836"
+        ]
+      },
+      {
+        "title": "Research Fellow (Solid Waste Valorization)",
+        "externalPath": "/job/CleanTech-One/Research-Fellow--Solid-Waste-Valorization-_R00025981",
+        "locationsText": "CleanTech One",
+        "postedOn": "Posted 3 Days Ago",
+        "bulletFields": [
+          "R00025981"
+        ]
+      },
+      {
+        "title": "Research Fellow (Energy Storage for SG Grid)",
+        "externalPath": "/job/NTU-Main-Campus-Singapore/Research-Fellow--Energy-Storage-for-SG-Grid-_R00025990",
+        "locationsText": "NTU Main Campus, Singapore",
+        "postedOn": "Posted 3 Days Ago",
+        "bulletFields": [
+          "R00025990"
+        ]
+      }
+    ],
+    "facets": [],
+    "userAuthenticated": false
+  }
+}

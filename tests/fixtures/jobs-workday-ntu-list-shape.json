@@ -1,0 +1,17 @@
+{
+  "description": "Synthetic Workday response-shape fixture, not captured NTU postings or confirmed NTU facet metadata. The742 total and registered jobFamilyGroup URL come from the controlled aggregate/cache evidence; generated job identities/details are fictional.",
+  "total": 742,
+  "source": {
+    "id": "auto-8befb80d669fd1078172abfd",
+    "name": "Nanyang Technological University",
+    "country": "SG",
+    "type": "c",
+    "officialDomain": "https://www.ntu.edu.sg/",
+    "automatic": true,
+    "strictDetailGeography": true,
+    "ats": "wd",
+    "args": ["ntu.wd3.myworkdayjobs.com", "ntu", "Careers"],
+    "careerUrl": "https://ntu.wd3.myworkdayjobs.com/Careers?jobFamilyGroup=09b383db6f9d018b6e6c440e633a4199"
+  },
+  "facets": [{"facetParameter": "jobFamilyGroup", "values": [{"id": "09b383db6f9d018b6e6c440e633a4199", "descriptor": "Synthetic reviewed group", "count": 742}]}]
+}
