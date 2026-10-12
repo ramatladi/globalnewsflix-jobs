@@ -26,7 +26,11 @@ export function persistedRefreshHealth(d){
 }
 export function evaluateSourceHealth(sources, report, status, now=Date.now()) {
   const reasons=[],pending=[],groups=new Map(),backlog=[];
-  if(status.legacyGrace?.overflow===true)reasons.push('legacy-grace-snapshot-overflow');
+  if(status.legacyGrace?.overflow===true){
+    const snapshotAt=status.legacyGrace.snapshotAt;
+    if(!Number.isSafeInteger(snapshotAt)||snapshotAt<=0||snapshotAt>now)reasons.push('legacy-grace-snapshot-invalid');
+    else if(now<snapshotAt+72*3600000)reasons.push('legacy-grace-snapshot-overflow');
+  }
   let checked=0,attempted=0,failed=0,empty=0;
   for(const s of sources){
     const discovered=Date.parse(s.discoveredAt),day=s.discoveredAt.slice(0,10);

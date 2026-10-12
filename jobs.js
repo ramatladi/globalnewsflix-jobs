@@ -455,22 +455,35 @@ export function strictWorkdayPlace(info, row, site) {
 }
 // Automatic Workday sources retain the exact registered listing scope.
 // Metadata discovery is not a job snapshot and its unfiltered rows are not accepted.
-export function registeredWorkdayFacets(first, source) {
+function registeredWorkdayScope(first, source) {
   const requested = workdayQueryFacets(source.careerUrl), nodes = [];
   if(!requested)return null;
+  if(Object.keys(requested).length===0)return {facets:{},bounds:[]};
+  if(!Number.isSafeInteger(first.total)||first.total<0||!Array.isArray(first.facets))return null;
   const visit = (value, depth=0) => {
     if (!value || typeof value !== 'object' || depth>8) return;
     if (typeof value.facetParameter==='string' && Array.isArray(value.values)) nodes.push(value);
-    for (const child of value.values || []) visit(child,depth+1);
+    for (const child of Array.isArray(value.values)?value.values:[]) visit(child,depth+1);
   };
-  for (const facet of first.facets || []) visit(facet);
-  const facets={};
+  for (const facet of first.facets) visit(facet);
+  const facets={},bounds=[];
   for (const [key,values] of Object.entries(requested)) {
     const matches=nodes.filter(node=>node.facetParameter===key);
-    if (matches.length!==1 || values.some(value=>!value || value.length>200 || matches[0].values.filter(option=>option.id===value).length!==1)) return null;
-    facets[key]=values;
+    if(matches.length!==1)return null;
+    let sum=0;
+    for(const value of values){
+      const options=matches[0].values.filter(option=>option?.id===value);
+      if(options.length!==1)return null;
+      const count=options[0].count;
+      if(!Number.isSafeInteger(count)||count<0||count>first.total||count>1000000)return null;
+      sum+=count;
+    }
+    facets[key]=values;bounds.push(sum);
   }
-  return facets;
+  return {facets,bounds};
+}
+export function registeredWorkdayFacets(first, source) {
+  return registeredWorkdayScope(first,source)?.facets??null;
 }
 export async function automaticWorkday(f, src, log=()=>{}) {
   const [host,tenant,site]=src.args,base=`https://${host}/wday/cxs/${tenant}/${site}`;
@@ -490,20 +503,23 @@ export async function automaticWorkday(f, src, log=()=>{}) {
   const result=reason=>({rows,complete:false,reason,paginationComplete,scopedTotal,reportedTotal:scopedTotal,pagesFetched,paginationEnd,phaseHttp,detailValidated,sourceRequestCap});
   const probe=await page({},0);
   if(!probe||!Array.isArray(probe.jobPostings)||!Number.isSafeInteger(probe.total)||probe.total<0)return result('invalid-workday-list');
-  const facets=registeredWorkdayFacets(probe,src);
-  if(!facets){paginationEnd='registered-filter-unconfirmed';return result('registered-workday-filter-unconfirmed');}
+  const scope=registeredWorkdayScope(probe,src);
+  if(!scope){paginationEnd='registered-filter-unconfirmed';return result('registered-workday-filter-unconfirmed');}
+  const {facets,bounds}=scope;
   let current=Object.keys(facets).length?await page(facets,0):probe;
   if(!current||!Array.isArray(current.jobPostings)||!Number.isSafeInteger(current.total)||current.total<0)return result('invalid-workday-list');
+  if(bounds.some(bound=>current.total>bound||(probe.total>bound&&current.total>=probe.total))){paginationEnd='registered-filter-unconfirmed';return result('registered-workday-filter-unconfirmed');}
   scopedTotal=current.total;paginationEnd='row-limit';
   for(let offset=0;offset<PER_SOURCE;offset+=20){
     if(offset)current=await page(facets,offset);
     if(!current||!Array.isArray(current.jobPostings)||current.jobPostings.length>20){paginationEnd=attempts>=100?'request-cap':'invalid-page';break;}
     pagesFetched++;
-    if(current.total!==scopedTotal){paginationEnd='changed-total';break;}
+    // Workday's observed continuation pages use total:0; only page zero owns the total.
+    if(current.total!==scopedTotal&&!(offset>0&&current.total===0)){paginationEnd='changed-total';break;}
     for(const posting of current.jobPostings){
       const path=posting.externalPath,id=typeof path==='string'?path.split('_').at(-1):'';
-      if(!id||!/^\/job\/[^?#]+$/.test(path)||path.includes('..')||!posting.title||seen.has(id))continue;
-      seen.add(id);rows.push({id,title:posting.title,location:posting.locationsText,url:pub+path,path,posted:ago(posting.postedOn),country:null,countryUnresolved:true,payObserved:false});
+      if(!id||!/^\/job\/[^?#]+$/.test(path)||path.includes('..')||!posting.title||seen.has(path))continue;
+      seen.add(path);rows.push({id,title:posting.title,location:posting.locationsText,url:pub+path,path,posted:ago(posting.postedOn),country:null,countryUnresolved:true,payObserved:false});
     }
     if(offset+current.jobPostings.length>=scopedTotal){paginationComplete=rows.length===scopedTotal;paginationEnd=paginationComplete?'reported-total':'invalid-or-duplicate-rows';break;}
     if(current.jobPostings.length<20){paginationEnd='short-before-total';break;}
@@ -948,7 +964,7 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
       }
       try { result = sourceFetch ? await COLLECT[s.ats]?.(sourceFetch, s, log) : null; } catch { /* recorded below without raw provider data */ }
       let transportState=s.automatic ? sourceFetch?.diagnostics?.() : null;
-      let telemetry=transportState ? {pagesFetched:result?.pagesFetched,reportedTotal:result?.reportedTotal,paginationEnd:result?.paginationEnd,...(result?.phaseHttp?{phaseHttp:result.phaseHttp}:{}),httpRequests:transportState.httpRequests,elapsedMs:transportState.elapsedMs,budgetExhausted:transportState.budgetExhausted,sourceRequestCap:result?.sourceRequestCap===true||transportState.sourceRequestCap,paginationComplete:result?.paginationComplete===true||result?.paginationComplete==null&&result?.complete===true} : {};
+      let telemetry=transportState ? {pagesFetched:result?.pagesFetched,reportedTotal:result?.reportedTotal,paginationEnd:result?.paginationEnd,...(result?.phaseHttp?{phaseHttp:result.phaseHttp}:{}),httpRequests:transportState.httpRequests,elapsedMs:transportState.elapsedMs,budgetExhausted:transportState.budgetExhausted,sourceRequestCap:result?.sourceRequestCap===true||transportState.sourceRequestCap,paginationComplete:s.ats==='wd'&&result?.paginationComplete===true} : {};
       let budgetReason=transportState?.sourceRequestCap ? 'source-request-cap' : transportState?.budgetExhausted ? (transportState.httpRequests===0 ? 'not-attempted-budget' : 'budget-exhausted') : '';
       if (!result) {
         diagnostics.push({ src: s.id, status: 'failed', rawCount: 0, acceptedCount: 0, reason: budgetReason || 'source-unavailable', attemptedAt, ...telemetry });
@@ -972,7 +988,7 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
         if (dates.closing != null) row.closing = dates.closing;
         if (dates.location && countryOf(dates.location) === (row.country || countryOf(row.location))) row.location = dates.location;
       }
-      if(s.automatic){transportState=sourceFetch?.diagnostics?.();telemetry={httpRequests:transportState?.httpRequests,elapsedMs:transportState?.elapsedMs,budgetExhausted:transportState?.budgetExhausted,sourceRequestCap:result.sourceRequestCap===true||transportState?.sourceRequestCap,paginationComplete:result.paginationComplete===true||result.paginationComplete==null&&result.complete===true,pagesFetched:result.pagesFetched,reportedTotal:result.reportedTotal,paginationEnd:result.paginationEnd,...(result.phaseHttp?{phaseHttp:result.phaseHttp}:{})};}
+      if(s.automatic){transportState=sourceFetch?.diagnostics?.();telemetry={httpRequests:transportState?.httpRequests,elapsedMs:transportState?.elapsedMs,budgetExhausted:transportState?.budgetExhausted,sourceRequestCap:result.sourceRequestCap===true||transportState?.sourceRequestCap,paginationComplete:s.ats==='wd'&&result.paginationComplete===true,pagesFetched:result.pagesFetched,reportedTotal:result.reportedTotal,paginationEnd:result.paginationEnd,...(result.phaseHttp?{phaseHttp:result.phaseHttp}:{})};}
       const got = list.map(x => normalizeCollectedJob(s, x, fx)).filter(Boolean);
       const seen = new Set();
       const uniq = got.filter(r => (!s.automatic || !r.closing_ts || r.closing_ts > Date.now()) && !seen.has(r.id) && seen.add(r.id));

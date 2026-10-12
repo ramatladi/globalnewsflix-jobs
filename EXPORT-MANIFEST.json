@@ -41,7 +41,7 @@
   },
   {
     "file": "jobs-discovered-sources.js",
-    "sha256": "7db95846f293e4f6107a27d5a83d3cb7359e8322f99bd23781305f3e951dc6cb"
+    "sha256": "a2b4e4567844c50e0a25793fde55c187f7f1e7fded5197185cf8719d3af6607b"
   },
   {
     "file": "jobs-employers.js",
@@ -77,7 +77,7 @@
   },
   {
     "file": "jobs-source-health.js",
-    "sha256": "562e5ae852cc0e0161bf78ec5f6f800aefd9859103c2ae9f71665193e2b0b1c6"
+    "sha256": "a00bd0ac389f64dc897be1dec97463bd85f85f33c51b5aad4c96e90f8f8a5d78"
   },
   {
     "file": "jobs-uct.js",
@@ -85,7 +85,7 @@
   },
   {
     "file": "jobs-workday-query.js",
-    "sha256": "c3482cbd019877a33570f38dd8ac738597245fb2210ac68e1ea7ecfa4c2f3d03"
+    "sha256": "941f88f8aea84753ef2d87b6a1ab946b0858301286e99e409abefdb62df06ee1"
   },
   {
     "file": "jobs-za-sources.js",
@@ -93,7 +93,7 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "c8b63992643f347f3e89cca72b57ff7f60f86e5d486580c274586f1bebe6492f"
+    "sha256": "7e8c62a6b0405d6675ac805efef02cb85682809f6659d6df27f7f603f775a37a"
   },
   {
     "file": "package.json",
@@ -217,7 +217,11 @@
   },
   {
     "file": "tests/fixtures/jobs-workday-ntu-list-shape.json",
-    "sha256": "01f5e06ff8339b310c9f3c13025005358b33a32a19576acc776cbb40e34107e6"
+    "sha256": "d448628eacf82c65dc97a00286a86bcb3d5eefe1990d10ab0f8a64b87dbe8efc"
+  },
+  {
+    "file": "tests/fixtures/jobs-workday-ntu-page2-recorded.json",
+    "sha256": "39701934cf7dc7d15f59b41992f796a9b3d94153d507843f628b0a9bf8aa684b"
   },
   {
     "file": "tests/fixtures/jobs-za-public.json",
@@ -237,7 +241,7 @@
   },
   {
     "file": "tests/jobs-discovered.test.mjs",
-    "sha256": "61cf18c58798be8961657c67afd785d998ba3f023bbb15c1b5edfb007e3772dc"
+    "sha256": "2bad401c8fd04991d99ccb35a87a1ff957c37409ea0871cb6046f5e4a0208ec7"
   },
   {
     "file": "tests/jobs-employers.test.mjs",
@@ -265,7 +269,7 @@
   },
   {
     "file": "tests/jobs-query-scope.test.mjs",
-    "sha256": "57c4899fb093d93c40baf1ba0a9fdcec2b61cb490c154219eab6bc6f160dfbed"
+    "sha256": "7d66c4baae50de518a0fb858a30e6a4309dc6e191be8b98b696adeeaa9c0349d"
   },
   {
     "file": "tests/jobs-runner.test.mjs",
@@ -281,7 +285,7 @@
   },
   {
     "file": "tests/jobs-workday-automatic.test.mjs",
-    "sha256": "1a659b920e5fdde16a1e72e84ad6fbcd4138f2f031c957c57db321558effe9c4"
+    "sha256": "c4e3e2558b4e1115bb32418a30e4041d8f094a5cd6e21cbc41ac74755111ac25"
   },
   {
     "file": "tests/jobs-workday.test.mjs",

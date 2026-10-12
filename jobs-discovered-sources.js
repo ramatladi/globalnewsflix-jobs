@@ -10,7 +10,7 @@ export function strictPublicHttps(value) {
   if (typeof value !== 'string' || value.length > 1000) return null;
   try {
     const u = new URL(value);
-    if (u.protocol !== 'https:' || u.username || u.password || u.port || u.hash || /%(?:2f|5c|00|0a|0d)|\\/i.test(u.pathname) || !/^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?\.[a-z]{2,}$/i.test(u.hostname) || /(?:^|\.)(?:localhost|local|internal|test|invalid)$/.test(u.hostname) || excludedDiscoveryUrl(value)) return null;
+    if (u.protocol !== 'https:' || u.username || u.password || u.port || value.includes('#') || /%(?:2f|5c|00|0a|0d)|\\/i.test(u.pathname) || !/^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?\.[a-z]{2,}$/i.test(u.hostname) || /(?:^|\.)(?:localhost|local|internal|test|invalid)$/.test(u.hostname) || excludedDiscoveryUrl(value)) return null;
     return u;
   } catch { return null; }
 }
