@@ -1017,7 +1017,8 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
       const reason = s.automatic ? (!refresh.healthy&&readerFailure?readerFailure:refresh.reason) : complete ? '' : result.reason || 'rows-rejected-or-duplicated';
       diagnostics.push({ src: s.id, status: s.automatic ? (refresh.healthy?'partial':'failed') : complete ? 'complete' : 'partial', rawCount: list.length, acceptedCount: uniq.length, reason, attemptedAt, ...telemetry });
       log(`${s.name}: ${list.length} jobs, ${uniq.length} placed, ${s.automatic&&!refresh.healthy?'failed':complete?'complete':'partial'} (${Math.round((Date.now() - attemptedAt) / 1000)}s)`);
-      rows.push(...uniq);
+      // Unhealthy automatic refreshes retain diagnostic candidates only; no upload or seen_ts renewal.
+      if(!s.automatic||refresh.healthy)rows.push(...uniq);
       if (complete) ok.push(s.id);
     }
   }));

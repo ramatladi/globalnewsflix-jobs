@@ -12,7 +12,7 @@ export function publicAddress(a) {
   const [x,y] = a.split('.').map(Number);
   return !(x === 0 || x === 10 || x === 127 || x >= 224 || x === 100 && y >= 64 && y <= 127 || x === 169 && y === 254 || x === 172 && y >= 16 && y <= 31 || x === 192 && [0,168].includes(y) || x === 198 && [18,19,51].includes(y) || x === 203 && y === 0);
 }
-export function automaticTransport({ resolver = lookup, transport = request, now = () => performance.now(), pause = ms => new Promise(r => setTimeout(r,ms)), maxRequests = 1000, maxSeconds = 900, platformPace } = {}) {
+export function automaticTransport({ resolver = lookup, transport = request, now = () => performance.now(), pause = ms => new Promise(r => setTimeout(r,ms)), maxRequests = 1000, maxSeconds = 300, platformPace } = {}) {
   platformPace ||= createPlatformPacer({now,pause});
   let total = 0, deadline = null, ended = null;
   const timings = new Map();

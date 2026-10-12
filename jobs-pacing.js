@@ -37,6 +37,8 @@ export function createPlatformPacer({now=()=>performance.now(),pause=ms=>new Pro
       releaseHost();
     }
   };
+  // waitMs includes prior host scheduling and automatic DNS resolution.
+  // activityElapsedMs spans this platform's automatic and manual activity, including the gap.
   pace.diagnostics=()=>[...metrics].map(([platform,m])=>({platform,activityElapsedMs:Math.max(0,Math.ceil(m.ended-m.started)),...Object.fromEntries(['manual','automatic','other'].map(k=>[k,{requestsStarted:m[k].requestsStarted,waitMs:Math.ceil(m[k].waitMs)}]))}));
   return pace;
 }
