@@ -51,7 +51,11 @@ test('automatic Workday retains exact local details without country facets and p
   const s={...source(),automatic:true,strictDetailGeography:true,countries:['ZA']};
   const path='/job/Campus/Engineer_JR1';
   const detail={jobReqId:'JR1',jobPostingSiteId:'External',title:'Engineer',externalUrl:s.careerUrl+path,location:'Campus',country:{descriptor:'South Africa'},jobRequisitionLocation:{country:{alpha2Code:'ZA'}},jobDescription:'Engineering role',endDate:'2027-01-01'};
-  const run=async(change={})=>collectJobs(async()=>Response.json({rates:{}}),()=>{},[s.id],{sources:[s],requestDelayMs:0,automaticFetch:()=>async url=>Response.json(url.endsWith('/jobs')?{total:1,jobPostings:[{title:'Engineer',externalPath:path,locationsText:'Campus'}],facets:[]}:{jobPostingInfo:{...detail,...change}})});
+  const run=async(change={})=>{
+    let httpRequests=0;const scoped=async url=>{httpRequests++;return Response.json(url.endsWith('/jobs')?{total:1,jobPostings:[{title:'Engineer',externalPath:path,locationsText:'Campus'}],facets:[]}:{jobPostingInfo:{...detail,...change}});};
+    scoped.diagnostics=()=>({httpRequests,elapsedMs:httpRequests*10,sourceRequestCap:false,budgetExhausted:false});
+    return collectJobs(async()=>Response.json({rates:{}}),()=>{},[s.id],{sources:[s],requestDelayMs:0,automaticFetch:()=>scoped});
+  };
   const r=await run();assert.equal(r.rows.length,1);assert.equal(r.rows[0].country,'ZA');assert.equal(r.rows[0].closing_ts,Date.parse('2027-01-01'));assert.deepEqual(r.ok,[]);
   for(const change of [{jobReqId:'other'},{externalUrl:'https://other.example.com/job'},{country:{descriptor:'United States'}},{country:{}}])assert.equal((await run(change)).rows.length,0);
 });
@@ -75,9 +79,9 @@ test('automatic budget starts after unrelated manual work and stays shared acros
   const s=source(),url='https://acme.wd3.myworkdayjobs.com/wday/cxs/acme/External/jobs',options={method:'POST',body:'{}'};
   const first=scoped(s);clock=20*60000; // Production failure: automatic employers reached the queue after20 minutes.
   assert.equal((await first(url,options)).status,200);assert.equal(http,1);
-  const start=clock;clock=start+900000-1;
+  const start=clock;clock=start+300000-1;
   assert.equal((await scoped({...s,id:'auto-'+'d'.repeat(24)})(url,options)).status,200,'another employer shares the same active budget');
-  clock=start+900000;
+  clock=start+300000;
   await assert.rejects(first(url,options),/budget/);await assert.rejects(scoped({...s,id:'auto-'+'e'.repeat(24)})(url,options),/budget/);
   assert.equal(dns,2);assert.equal(http,2,'no request starts at or beyond the fixed deadline');
 });
@@ -134,7 +138,7 @@ test('accepted partial rows cannot hide a selected source budget failure',async(
  const scoped=async()=>Response.json({jobs:[{id:1,title:'Engineer',absolute_url:'https://boards.greenhouse.io/acme/jobs/1',location:{name:'Johannesburg, South Africa'},content:'Engineering role'}]});
  scoped.diagnostics=()=>({httpRequests:100,elapsedMs:45000,sourceRequestCap:true,budgetExhausted:false});
  const result=await collectJobs(async()=>Response.json({rates:{}}),()=>{},[s.id],{sources:[s],requestDelayMs:0,automaticFetch:()=>scoped});
- assert.equal(result.rows.length,1);assert.equal(result.diagnostics[0].status,'failed');assert.equal(result.diagnostics[0].reason,'source-request-cap');assert.equal(result.diagnostics[0].httpRequests,100);assert.equal(result.diagnostics[0].elapsedMs,45000);assert.deepEqual(result.ok,[]);
+ assert.equal(result.rows.length,0);assert.equal(result.diagnostics[0].acceptedCount,1);assert.equal(result.diagnostics[0].status,'failed');assert.equal(result.diagnostics[0].reason,'source-request-cap');assert.equal(result.diagnostics[0].httpRequests,100);assert.equal(result.diagnostics[0].elapsedMs,45000);assert.deepEqual(result.ok,[]);
 });
 
 

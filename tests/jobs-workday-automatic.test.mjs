@@ -5,16 +5,16 @@ import {workdayQueryFacets} from '../jobs-workday-query.js';
 import {automaticWorkday,registeredWorkdayFacets,collectJobs} from '../jobs.js';
 const fixture=JSON.parse(readFileSync(new URL('./fixtures/jobs-workday-ntu-list-shape.json',import.meta.url)));
 const posting=i=>({externalPath:`/job/Synthetic-Campus/Synthetic-engineer_SYN${i}`,title:`Synthetic engineer ${i}`,locationsText:'Singapore',postedOn:'Posted Today'});
-async function run({total=5,filteredTotal=4,facets,source=fixture.source,detailChange={},pageChange=x=>x,collect=false}={}){
+async function run({total=5,filteredTotal=4,facets,source=fixture.source,detailChange={},pageChange=x=>x,collect=false,transportChange={}}={}){
  facets??=fixture.facets.map(f=>({...f,values:f.values.map(v=>({...v,count:filteredTotal}))}));
  const requests=[],posts=Array.from({length:Math.max(total,filteredTotal)},(_,i)=>posting(i));
  const f=async(url,opt)=>{
   requests.push({url,body:opt?.body?JSON.parse(opt.body):null});
   if(url.endsWith('/jobs')){const b=JSON.parse(opt.body),n=Object.keys(b.appliedFacets).length?filteredTotal:total;return Response.json(pageChange({total:n,jobPostings:posts.slice(b.offset,Math.min(n,b.offset+20)),facets},b));}
   const row=posts.find(x=>url.endsWith(x.externalPath));
-  return Response.json({jobPostingInfo:{jobReqId:row.externalPath.split('_').at(-1),jobPostingSiteId:'Careers',title:row.title,externalUrl:'https://ntu.wd3.myworkdayjobs.com/Careers'+row.externalPath,location:'Synthetic campus',country:{descriptor:'Singapore'},jobRequisitionLocation:{country:{alpha2Code:'SG'}},...detailChange}});
+  return Response.json({jobPostingInfo:{jobReqId:row.externalPath.split('_').at(-1),jobPostingSiteId:'Careers',title:row.title,externalUrl:'https://ntu.wd3.myworkdayjobs.com/Careers'+row.externalPath,location:'Synthetic campus',country:{descriptor:'Singapore'},jobRequisitionLocation:{country:{alpha2Code:'SG'}},...(typeof detailChange==='function'?detailChange(row):detailChange)}});
  };
- f.diagnostics=()=>({httpRequests:requests.length,elapsedMs:requests.length*10,budgetExhausted:false,sourceRequestCap:false});
+ f.diagnostics=()=>({httpRequests:requests.length,elapsedMs:requests.length*10,budgetExhausted:false,sourceRequestCap:false,...transportChange});
  const result=collect?await collectJobs(async()=>Response.json({rates:{}}),()=>{},[source.id],{sources:[source],automaticFetch:()=>f,requestDelayMs:0}):await automaticWorkday(f,source);return {result,requests};
 }
 test('registered jobFamilyGroup is verified and preserved on every scoped page, excluding probe rows',async()=>{
@@ -65,7 +65,7 @@ test('ninety-five percent accepted cannot conceal pending detail work stopped by
 
 test('collector health rejects local detail-cap truncation while permitting exact-budget natural completion',async()=>{
  const failed=await run({total:100,collect:true,source:{...fixture.source,careerUrl:'https://ntu.wd3.myworkdayjobs.com/Careers'}});
- assert.equal(failed.result.rows.length,95);assert.equal(failed.result.diagnostics[0].status,'failed');assert.equal(failed.result.diagnostics[0].sourceRequestCap,true);
+ assert.equal(failed.result.rows.length,0);assert.equal(failed.result.diagnostics[0].acceptedCount,95);assert.equal(failed.result.diagnostics[0].status,'failed');assert.equal(failed.result.diagnostics[0].sourceRequestCap,true);
  const healthy=await run({total:95,filteredTotal:94,collect:true});assert.equal(healthy.requests.length,100);assert.equal(healthy.result.rows.length,94);assert.equal(healthy.result.diagnostics[0].status,'partial');assert.equal(healthy.result.diagnostics[0].reason,'healthy-automatic-refresh');assert.deepEqual(healthy.result.ok,[],'automatic refresh never authorizes pruning');
 });
 
@@ -141,7 +141,7 @@ test('zero page-zero total with rows and truly empty tenants or scopes fail clos
  const badCollected=await run({total:0,filteredTotal:0,source:queryless,collect:true,pageChange:p=>({...p,jobPostings:[posting(1)]})});assert.equal(badCollected.result.diagnostics[0].reason,'total-zero-with-rows');
 });
 test('encoded separators, traversal and URL normalization never trigger a Workday detail request',async()=>{
- const attacks=['/job/%2e%2e/other_1','/job/%2E./other_1','/job/%2fother_1','/job/%2Fother_1','/job/%5c..%5cother_1','/job/%5Cother_1','/job/../other_1','/job/\\..\\other_1','/job/	../other_1'];
+ const attacks=['/job/%2e%2e/other_1','/job/%2E./other_1','/job/.%2e/other_1','/job/%2fother_1','/job/%2Fother_1','/job/%5c..%5cother_1','/job/%5Cother_1','/job/../other_1','/job/\\..\\other_1','/job/	../other_1'];
  for(const path of attacks){
   let calls=0;
   const f=async()=>{calls++;return Response.json({total:1,jobPostings:[{externalPath:path,title:'Engineer'}]});};
@@ -186,4 +186,16 @@ test('manual phase retains registered order and exactly six concurrent readers',
  await ready;assert.deepEqual(starts,sources.slice(0,6).map(s=>s.args[0]));
  release[0]();await new Promise(resolve=>setImmediate(resolve));assert.deepEqual(starts,sources.map(s=>s.args[0]));
  for(const resolve of release.slice(1))resolve();const result=await run;assert.equal(result.diagnostics.length,7);assert.deepEqual(phases.map(x=>x.phase),['automatic','manual']);assert.ok(phases.every(x=>Number.isInteger(x.ms)&&x.ms>=0));
+});
+
+test('under90percent automatic refresh discards valid candidates instead of uploading or renewing them',async()=>{
+ const result=await run({total:11,filteredTotal:10,collect:true,detailChange:row=>/SYN[01]$/.test(row.externalPath)?{country:{descriptor:'United States'}}:{}});
+ assert.equal(result.result.rows.length,0);assert.equal(result.result.diagnostics[0].status,'failed');assert.equal(result.result.diagnostics[0].acceptedCount,8);assert.equal(result.result.diagnostics[0].rawCount,10);assert.deepEqual(result.result.ok,[]);
+});
+
+test('otherwise valid automatic candidates are not emitted after either transport cap',async()=>{
+ for(const transportChange of [{budgetExhausted:true},{sourceRequestCap:true}]){
+  const {result}=await run({collect:true,transportChange});
+  assert.equal(result.rows.length,0);assert.equal(result.diagnostics[0].status,'failed');assert.equal(result.diagnostics[0].acceptedCount,4);assert.equal(result.diagnostics[0].rawCount,4);assert.deepEqual(result.ok,[]);
+ }
 });
