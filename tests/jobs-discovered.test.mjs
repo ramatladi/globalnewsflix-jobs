@@ -5,7 +5,7 @@ import { Readable } from 'node:stream';
 import { mkdtemp, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { discoveredReader, validateDiscoveredManifest, allowedDiscoveredRequest, discoveredJobAllowed } from '../jobs-discovered-sources.js';
+import { discoveredReader, validateDiscoveredManifest, registeredDiscoveredSources, allowedDiscoveredRequest, discoveredJobAllowed } from '../jobs-discovered-sources.js';
 import { loadDiscoveredManifest, automaticTransport } from '../jobs-discovered-fetch.mjs';
 import { normalizeCollectedJob, collectJobs } from '../jobs.js';
 import {evaluateSourceHealth} from '../jobs-source-health.js';
@@ -97,7 +97,7 @@ test('delayed automatic start preserves the shared hard request limit',async()=>
 test('queued concurrent requests cannot exceed the per-employer100 request cap',async()=>{
  let http=0;const f=automaticTransport({now:()=>0,pause:async()=>{},resolver:async()=>[{address:'8.8.8.8'}],transport:fakeHttps(()=>http++)})(source());const url='https://acme.wd3.myworkdayjobs.com/wday/cxs/acme/External/jobs',options={method:'POST',body:'{}'};
  for(let i=0;i<99;i++)await f(url,options);
- const results=await Promise.allSettled([f(url,options),f(url,options)]);assert.equal(results.filter(r=>r.status==='fulfilled').length,1);assert.equal(http,100);assert.equal(f.diagnostics().httpRequests,100);
+ const results=await Promise.allSettled([f(url,options),f(url,options)]);assert.equal(results.filter(r=>r.status==='fulfilled').length,1);assert.equal(http,100);assert.equal(f.diagnostics().httpRequests,100);assert.equal(f.diagnostics().sourceRequestCap,true);assert.equal(results.find(r=>r.status==='rejected').reason.code,'AUTOMATIC_SOURCE_REQUEST_CAP');
 });
 test('budget diagnostics distinguish zero HTTP from attempted collection and still trip health',async()=>{
  const now=Date.now(),s={...source(),discoveredAt:new Date(now-1000).toISOString(),automatic:true};const url='https://acme.wd3.myworkdayjobs.com/wday/cxs/acme/External/jobs',options={method:'POST',body:'{}'};
@@ -107,5 +107,24 @@ test('budget diagnostics distinguish zero HTTP from attempted collection and sti
   const result=await collectJobs(async()=>Response.json({rates:{}}),()=>{},[s.id],{sources:[s],requestDelayMs:0,automaticFetch:()=>scoped});
   const d=result.diagnostics[0];assert.equal(d.status,'failed');assert.equal(d.reason,attempted?'budget-exhausted':'not-attempted-budget');assert.equal(http,attempted?1:0);assert.equal(scoped.diagnostics().httpRequests,http);assert.deepEqual(result.rows,[]);assert.deepEqual(result.ok,[]);
   const health=evaluateSourceHealth([s],{},{diagnostics:[{src:s.id,status:d.status,raw_count:d.rawCount,accepted_count:d.acceptedCount,attempted_ts:d.attemptedAt,reason:d.reason}]},Date.now());assert.equal(health.tripped,true);assert.ok(health.reasons.some(r=>r.endsWith('failed-or-empty-over-20-percent')),'budget failure cannot silently bypass the breaker');
+ }
+});
+
+
+test('source cap has its own failed diagnostic and still trips health',async()=>{
+ const now=Date.now(),s={...source(),discoveredAt:new Date(now-1000).toISOString(),automatic:true};let http=0;
+ const scoped=automaticTransport({now:()=>0,pause:async()=>{},resolver:async()=>[{address:'8.8.8.8'}],transport:fakeHttps(()=>http++)})(s);
+ for(let i=0;i<100;i++)await scoped('https://acme.wd3.myworkdayjobs.com/wday/cxs/acme/External/jobs',{method:'POST',body:'{}'});
+ const result=await collectJobs(async()=>Response.json({rates:{}}),()=>{},[s.id],{sources:[s],requestDelayMs:0,automaticFetch:()=>scoped});
+ const d=result.diagnostics[0];assert.equal(d.status,'failed');assert.equal(d.reason,'source-request-cap');assert.equal(http,100);assert.equal(scoped.diagnostics().budgetExhausted,false);assert.deepEqual(result.rows,[]);assert.deepEqual(result.ok,[]);
+ const health=evaluateSourceHealth([s],{},{diagnostics:[{src:s.id,status:d.status,raw_count:0,accepted_count:0,attempted_ts:d.attemptedAt,reason:d.reason}]},now);assert.equal(health.tripped,true);assert.ok(health.reasons.some(r=>r.endsWith('failed-or-empty-over-20-percent')));
+});
+test('runtime manifest validation rejects future source and identity timestamps',async()=>{
+ const future=new Date(Date.now()+86400000).toISOString();
+ for(const change of [{discoveredAt:future},{identity:{...source().identity,observedAt:future}}]){
+  const manifest={version:1,sources:[{...source(),...change}]};
+  assert.throws(()=>registeredDiscoveredSources(manifest));
+  const cachePath=join(await mkdtemp(join(tmpdir(),'gnf-future-manifest-')),'manifest.json');
+  assert.deepEqual(await loadDiscoveredManifest({cachePath,fetchImpl:async()=>Response.json(manifest),log:()=>{}}),{version:1,sources:[]});
  }
 });
