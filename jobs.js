@@ -287,7 +287,7 @@ async function req(fetchImpl, url, opt = {}, type = 'json') {
         continue;
       }
       if (r.status < 500) return null;
-    } catch { /* retry */ }
+    } catch (error) { if(error?.code==='AUTOMATIC_BUDGET_EXHAUSTED')return null; }
     if (a === 0) await sleep(1500);
   }
   return null;
@@ -876,8 +876,10 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
         continue;
       }
       try { result = sourceFetch ? await COLLECT[s.ats]?.(sourceFetch, s, log) : null; } catch { /* recorded below without raw provider data */ }
+      const transportState=s.automatic ? sourceFetch?.diagnostics?.() : null;
+      const budgetReason=transportState?.budgetExhausted ? (transportState.httpRequests===0 ? 'not-attempted-budget' : 'budget-exhausted') : '';
       if (!result) {
-        diagnostics.push({ src: s.id, status: 'failed', rawCount: 0, acceptedCount: 0, reason: 'source-unavailable', attemptedAt });
+        diagnostics.push({ src: s.id, status: 'failed', rawCount: 0, acceptedCount: 0, reason: budgetReason || 'source-unavailable', attemptedAt });
         log(`${s.name}: no valid answer`); continue;
       }
       const list = result.rows;
@@ -907,7 +909,7 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
       }
       // Invalid/unlocated rows or duplicate IDs cannot prove a full replacement snapshot.
       const complete = !s.automatic && result.complete && got.length === list.length && uniq.length === got.length;
-      const reason = complete ? '' : result.reason || 'rows-rejected-or-duplicated';
+      const reason = complete ? '' : budgetReason || result.reason || 'rows-rejected-or-duplicated';
       diagnostics.push({ src: s.id, status: complete ? 'complete' : 'partial', rawCount: list.length, acceptedCount: uniq.length, reason, attemptedAt });
       log(`${s.name}: ${list.length} jobs, ${uniq.length} placed, ${complete ? 'complete' : 'partial'} (${Math.round((Date.now() - attemptedAt) / 1000)}s)`);
       rows.push(...uniq);
