@@ -4,7 +4,9 @@
 import discoveredManifest from './data/discovered-sources/manifest.json' with { type: 'json' };
 import { registeredDiscoveredSources, discoveredJobAllowed } from './jobs-discovered-sources.js';
 import { COUNTRY } from './data.js';
-import { auditAutomaticOutput } from './jobs-source-health.js';
+import { workdayQueryFacets } from './jobs-workday-query.js';
+import { platformForReader } from './jobs-pacing.js';
+import { auditAutomaticOutput, automaticRefreshHealth } from './jobs-source-health.js';
 import { AFRICA_EXTRA_SOURCES } from './jobs-africa-sources.js';
 import { SHOPRITE_BROWSE_URL, parseShopriteCategories, parseShopriteList, parseShopriteDetail } from './jobs-erecruit.js';
 import { parseSimplifyList, parseSimplifyDetail } from './jobs-simplify.js';
@@ -290,16 +292,16 @@ async function req(fetchImpl, url, opt = {}, type = 'json') {
   }
   return null;
 }
-export function createJobFetch(fetchImpl, delayMs = fetchImpl === fetch ? 1000 : 0) {
+export function createJobFetch(fetchImpl, delayMs = fetchImpl === fetch ? 1000 : 0, platformPace = async(_url,send)=>send()) {
   const delay = Number.isFinite(delayMs) ? Math.max(0, Math.min(60000, delayMs)) : 1000;
   const hosts = new Map();
-  return async (url, options) => {
+  return async (url, options, platform) => {
     const host = new URL(url).host, previous = hosts.get(host) || { tail: Promise.resolve(), next: 0 };
     const task = previous.tail.then(async () => {
       if (previous.blockedUntil > Date.now()) return new Response('', { status: 429, headers: { 'retry-after': String(Math.ceil((previous.blockedUntil - Date.now()) / 1000)) } });
       if (previous.next > Date.now()) await sleep(previous.next - Date.now());
       try {
-        const response = await fetchImpl(url, options);
+        const response = await platformPace(url,()=>fetchImpl(url, options),platform);
         if (response.status === 429) {
           const value = response.headers.get('retry-after');
           const until = /^\d+$/.test(value || '') ? Date.now() + Number(value) * 1000 : Date.parse(value || '');
@@ -451,8 +453,79 @@ export function strictWorkdayPlace(info, row, site) {
   const match = (info.additionalLocations || []).find(location => suffixCountry(location) === row.country);
   return match ? { country: row.country, location: plain(match) } : null;
 }
+// Automatic Workday sources retain the exact registered listing scope.
+// Metadata discovery is not a job snapshot and its unfiltered rows are not accepted.
+export function registeredWorkdayFacets(first, source) {
+  const requested = workdayQueryFacets(source.careerUrl), nodes = [];
+  if(!requested)return null;
+  const visit = (value, depth=0) => {
+    if (!value || typeof value !== 'object' || depth>8) return;
+    if (typeof value.facetParameter==='string' && Array.isArray(value.values)) nodes.push(value);
+    for (const child of value.values || []) visit(child,depth+1);
+  };
+  for (const facet of first.facets || []) visit(facet);
+  const facets={};
+  for (const [key,values] of Object.entries(requested)) {
+    const matches=nodes.filter(node=>node.facetParameter===key);
+    if (matches.length!==1 || values.some(value=>!value || value.length>200 || matches[0].values.filter(option=>option.id===value).length!==1)) return null;
+    facets[key]=values;
+  }
+  return facets;
+}
+export async function automaticWorkday(f, src, log=()=>{}) {
+  const [host,tenant,site]=src.args,base=`https://${host}/wday/cxs/${tenant}/${site}`;
+  const pub=host.includes('myworkdaysite')?`https://${host}/recruiting/${tenant}/${site}`:`https://${host}/${site}`;
+  const phaseHttp={listing:0,detail:0};let phase='listing',attempts=0,detailValidated=0,sourceRequestCap=false;
+  const counted=async(...args)=>{
+    const before=f.diagnostics?.().httpRequests;
+    attempts++;
+    if(attempts>100){sourceRequestCap=true;throw Object.assign(new Error('Automatic source request cap exhausted'),{code:'AUTOMATIC_SOURCE_REQUEST_CAP'});}
+    try{return await f(...args);}finally{
+      const after=f.diagnostics?.().httpRequests;
+      phaseHttp[phase]+=Number.isSafeInteger(before)&&Number.isSafeInteger(after)?Math.max(0,after-before):1;
+    }
+  };
+  const page=(facets,offset)=>postJson(counted,base+'/jobs',{limit:20,offset,searchText:'',appliedFacets:facets});
+  const rows=[],seen=new Set();let paginationComplete=false,scopedTotal=null,pagesFetched=0,paginationEnd='unavailable';
+  const result=reason=>({rows,complete:false,reason,paginationComplete,scopedTotal,reportedTotal:scopedTotal,pagesFetched,paginationEnd,phaseHttp,detailValidated,sourceRequestCap});
+  const probe=await page({},0);
+  if(!probe||!Array.isArray(probe.jobPostings)||!Number.isSafeInteger(probe.total)||probe.total<0)return result('invalid-workday-list');
+  const facets=registeredWorkdayFacets(probe,src);
+  if(!facets){paginationEnd='registered-filter-unconfirmed';return result('registered-workday-filter-unconfirmed');}
+  let current=Object.keys(facets).length?await page(facets,0):probe;
+  if(!current||!Array.isArray(current.jobPostings)||!Number.isSafeInteger(current.total)||current.total<0)return result('invalid-workday-list');
+  scopedTotal=current.total;paginationEnd='row-limit';
+  for(let offset=0;offset<PER_SOURCE;offset+=20){
+    if(offset)current=await page(facets,offset);
+    if(!current||!Array.isArray(current.jobPostings)||current.jobPostings.length>20){paginationEnd=attempts>=100?'request-cap':'invalid-page';break;}
+    pagesFetched++;
+    if(current.total!==scopedTotal){paginationEnd='changed-total';break;}
+    for(const posting of current.jobPostings){
+      const path=posting.externalPath,id=typeof path==='string'?path.split('_').at(-1):'';
+      if(!id||!/^\/job\/[^?#]+$/.test(path)||path.includes('..')||!posting.title||seen.has(id))continue;
+      seen.add(id);rows.push({id,title:posting.title,location:posting.locationsText,url:pub+path,path,posted:ago(posting.postedOn),country:null,countryUnresolved:true,payObserved:false});
+    }
+    if(offset+current.jobPostings.length>=scopedTotal){paginationComplete=rows.length===scopedTotal;paginationEnd=paginationComplete?'reported-total':'invalid-or-duplicate-rows';break;}
+    if(current.jobPostings.length<20){paginationEnd='short-before-total';break;}
+    if(attempts>=100){paginationEnd='request-cap';sourceRequestCap=true;break;}
+  }
+  phase='detail';
+  for(const row of rows){
+    if(attempts>=100){sourceRequestCap=true;break;}
+    const d=await getJson(counted,base+row.path),info=d?.jobPostingInfo;
+    const placement={...row,country:countryCode(info?.country?.descriptor)};
+    const place=strictWorkdayPlace(info,placement,site);
+    if(!place||place.country!==src.country)continue;
+    row.country=place.country;row.location=place.location;row.countryUnresolved=false;
+    row.payObserved=typeof info.jobDescription==='string';row.text=row.payObserved?info.jobDescription:'';
+    row.posted=dateTs(info.startDate)||row.posted;row.closing=dateTs(info.endDate)||null;detailValidated++;
+  }
+  log(`${src.name}: ${phaseHttp.listing} listing HTTP; ${phaseHttp.detail} detail HTTP; ${detailValidated}/${rows.length} detailed; pagination complete ${paginationComplete}`);
+  return result(!paginationComplete?'workday-pagination-incomplete':detailValidated<rows.length?'workday-details-incomplete':'workday-scope-verified');
+}
 // Workday: jobs are read country by country (using the site's own country filter), pay from the job page where it is published.
 async function workday(f, src, log) {
+  if(src.automatic)return automaticWorkday(f,src,log);
   const [host, tenant, site] = src.args;
   const base = `https://${host}/wday/cxs/${tenant}/${site}`;
   const pub = host.includes('myworkdaysite') ? `https://${host}/recruiting/${tenant}/${site}` : `https://${host}/${site}`;
@@ -859,7 +932,7 @@ export async function fxRates(fetchImpl = fetch) {
 // Only authoritative complete snapshots authorize removal, including confirmed zero.
 // Partial lists still contribute jobs and diagnostics without deleting unseen rows.
 export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null, options = {}) {
-  fetchImpl = createJobFetch(fetchImpl, options.requestDelayMs);
+  fetchImpl = createJobFetch(fetchImpl, options.requestDelayMs, options.platformPace);
   const fx = await fxRates(fetchImpl);
   if (!fx) log('Exchange rates unavailable: retaining employer pay in its original currency');
   const rows = [], ok = [], diagnostics = [];
@@ -867,24 +940,25 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
   await Promise.all(Array.from({ length: 6 }, async () => {
     for (let s; (s = queue.shift());) {
       const attemptedAt = Date.now();
-      const sourceFetch = s.automatic ? options.automaticFetch?.(s) : fetchImpl;
+      const sourceFetch = s.automatic ? options.automaticFetch?.(s) : (url,options)=>fetchImpl(url,options,platformForReader(s.ats));
       let result = null;
       if (s.ats === 'dpsa') {
         diagnostics.push({ src: s.id, status: 'partial', rawCount: 0, acceptedCount: 0, reason: 'external-reader', attemptedAt });
         continue;
       }
       try { result = sourceFetch ? await COLLECT[s.ats]?.(sourceFetch, s, log) : null; } catch { /* recorded below without raw provider data */ }
-      const transportState=s.automatic ? sourceFetch?.diagnostics?.() : null;
-      const budgetReason=transportState?.sourceRequestCap ? 'source-request-cap' : transportState?.budgetExhausted ? (transportState.httpRequests===0 ? 'not-attempted-budget' : 'budget-exhausted') : '';
+      let transportState=s.automatic ? sourceFetch?.diagnostics?.() : null;
+      let telemetry=transportState ? {pagesFetched:result?.pagesFetched,reportedTotal:result?.reportedTotal,paginationEnd:result?.paginationEnd,...(result?.phaseHttp?{phaseHttp:result.phaseHttp}:{}),httpRequests:transportState.httpRequests,elapsedMs:transportState.elapsedMs,budgetExhausted:transportState.budgetExhausted,sourceRequestCap:result?.sourceRequestCap===true||transportState.sourceRequestCap,paginationComplete:result?.paginationComplete===true||result?.paginationComplete==null&&result?.complete===true} : {};
+      let budgetReason=transportState?.sourceRequestCap ? 'source-request-cap' : transportState?.budgetExhausted ? (transportState.httpRequests===0 ? 'not-attempted-budget' : 'budget-exhausted') : '';
       if (!result) {
-        diagnostics.push({ src: s.id, status: 'failed', rawCount: 0, acceptedCount: 0, reason: budgetReason || 'source-unavailable', attemptedAt });
+        diagnostics.push({ src: s.id, status: 'failed', rawCount: 0, acceptedCount: 0, reason: budgetReason || 'source-unavailable', attemptedAt, ...telemetry });
         log(`${s.name}: no valid answer`); continue;
       }
       const list = result.rows;
       if (s.detailGeography || s.sfScope) for (const row of list) row.countryUnresolved = true;
       if (s.detailDates || s.detailGeography || s.sfScope) for (const row of list.slice(0, DETAILS)) {
         if (!/^https:\/\//.test(row.url || '')) continue;
-        const html = await getText(fetchImpl, row.url);
+        const html = await getText(sourceFetch, row.url);
         if (!html) continue;
         let datesHtml = html;
         if (s.detailGeography || s.sfScope) {
@@ -898,18 +972,20 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
         if (dates.closing != null) row.closing = dates.closing;
         if (dates.location && countryOf(dates.location) === (row.country || countryOf(row.location))) row.location = dates.location;
       }
+      if(s.automatic){transportState=sourceFetch?.diagnostics?.();telemetry={httpRequests:transportState?.httpRequests,elapsedMs:transportState?.elapsedMs,budgetExhausted:transportState?.budgetExhausted,sourceRequestCap:result.sourceRequestCap===true||transportState?.sourceRequestCap,paginationComplete:result.paginationComplete===true||result.paginationComplete==null&&result.complete===true,pagesFetched:result.pagesFetched,reportedTotal:result.reportedTotal,paginationEnd:result.paginationEnd,...(result.phaseHttp?{phaseHttp:result.phaseHttp}:{})};}
       const got = list.map(x => normalizeCollectedJob(s, x, fx)).filter(Boolean);
       const seen = new Set();
       const uniq = got.filter(r => (!s.automatic || !r.closing_ts || r.closing_ts > Date.now()) && !seen.has(r.id) && seen.add(r.id));
       if (s.automatic && !auditAutomaticOutput(s, uniq, list.length).ok) {
-        diagnostics.push({ src:s.id,status:'failed',rawCount:list.length,acceptedCount:0,reason:'automatic-quality-breaker',attemptedAt });
+        diagnostics.push({ src:s.id,status:'failed',rawCount:list.length,acceptedCount:0,reason:'automatic-quality-breaker',attemptedAt,...telemetry });
         continue;
       }
       // Invalid/unlocated rows or duplicate IDs cannot prove a full replacement snapshot.
       const complete = !s.automatic && result.complete && got.length === list.length && uniq.length === got.length;
-      const reason = complete ? '' : budgetReason || result.reason || 'rows-rejected-or-duplicated';
-      diagnostics.push({ src: s.id, status: complete ? 'complete' : 'partial', rawCount: list.length, acceptedCount: uniq.length, reason, attemptedAt });
-      log(`${s.name}: ${list.length} jobs, ${uniq.length} placed, ${complete ? 'complete' : 'partial'} (${Math.round((Date.now() - attemptedAt) / 1000)}s)`);
+      const refresh=s.automatic?automaticRefreshHealth({status:'partial',rawCount:list.length,acceptedCount:uniq.length,...telemetry}):null;
+      const reason = s.automatic ? refresh.reason : complete ? '' : result.reason || 'rows-rejected-or-duplicated';
+      diagnostics.push({ src: s.id, status: s.automatic ? (refresh.healthy?'partial':'failed') : complete ? 'complete' : 'partial', rawCount: list.length, acceptedCount: uniq.length, reason, attemptedAt, ...telemetry });
+      log(`${s.name}: ${list.length} jobs, ${uniq.length} placed, ${s.automatic&&!refresh.healthy?'failed':complete?'complete':'partial'} (${Math.round((Date.now() - attemptedAt) / 1000)}s)`);
       rows.push(...uniq);
       if (complete) ok.push(s.id);
     }

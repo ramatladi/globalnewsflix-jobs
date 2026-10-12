@@ -1,10 +1,11 @@
 // Scheduled collector. GitHub OIDC is short-lived and scoped by the site to this workflow.
+import { createPlatformPacer } from './jobs-pacing.js';
 import { automaticTransport, loadDiscoveredManifest } from './jobs-discovered-fetch.mjs';
 import { registeredDiscoveredSources } from './jobs-discovered-sources.js';
 import { collectJobs, normalizeCollectedJob, fxRates, SOURCES } from './jobs.js';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { readFile, mkdtemp, rm } from 'node:fs/promises';
+import { readFile, mkdtemp, rm, writeFile, rename } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -79,15 +80,19 @@ async function main() {
     console.log(`jobs preflight: ${preflight.status}, acknowledged ${check.ok===true && check.n===0}`);
     if (!preflight.ok || check.ok!==true || check.n!==0) throw new Error('Jobs upload preflight failed');
   }
-  const data = await collectJobs(fetch,console.log,only,{sources,automaticFetch:automaticTransport()});
+  const platformPace=createPlatformPacer(),automaticFetch=automaticTransport({platformPace});
+  const data = await collectJobs(fetch,console.log,only,{sources,automaticFetch,platformPace});
+  const transport=automaticFetch.diagnostics();
   if (!only || only.includes('za-dpsa')) {
     const gov = await governmentJobs();
     data.rows.push(...gov.rows);
     data.diagnostics = data.diagnostics.filter(d=>d.src!=='za-dpsa').concat(gov.diagnostic);
   }
   console.log(`jobs: ${data.rows.length} from ${new Set(data.rows.map(r=>r.src)).size} sources; ${data.ok.length} complete snapshots`);
+  const report={runTs,automaticTransport:transport,diagnostics:data.diagnostics,...(dryRun?data:{})};
+  const temporary=`jobs-collection-report.${process.pid}.tmp`;
+  await writeFile(temporary,JSON.stringify(report,null,2));await rename(temporary,'jobs-collection-report.json');
   if (dryRun) {
-    await (await import('node:fs/promises')).writeFile('jobs-collection-report.json', JSON.stringify({runTs,...data},null,2));
     if (!data.diagnostics.some(d=>d.status!=='failed')) process.exitCode=1;
     return;
   }
