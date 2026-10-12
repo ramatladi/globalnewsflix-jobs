@@ -54,6 +54,24 @@ export async function governmentJobs(fetchImpl = fetch, log = console.log) {
   } finally { await rm(directory,{recursive:true,force:true}); }
 }
 
+export async function timedGovernmentJobs(collect=governmentJobs,now=()=>performance.now()) {
+  const started=now(),data=await collect();
+  return {...data,governmentElapsedMs:Math.max(0,Math.ceil(now()-started))};
+}
+
+// Publishing is reached only after every collection phase and the initial report succeed.
+export async function runCollectedJobs({collect,writeReport,publish,dryRun=false,now=()=>performance.now(),log=console.log}) {
+  const data=await collect();
+  await writeReport(data,{uploadElapsedMs:null});
+  if(dryRun)return {data,result:null};
+  const started=now();
+  const result=await publish(data);
+  const uploadElapsedMs=Math.max(0,Math.ceil(now()-started));
+  log('jobs upload telemetry:',JSON.stringify({uploadElapsedMs,ok:result.ok===true}));
+  await writeReport(data,{uploadElapsedMs,uploadAcknowledged:result.ok===true});
+  return {data,result};
+}
+
 async function main() {
   const site = process.env.SITE || 'https://globalnewsflix.com';
   if (site !== 'https://globalnewsflix.com') throw new Error('Unexpected destination');
@@ -81,22 +99,34 @@ async function main() {
     if (!preflight.ok || check.ok!==true || check.n!==0) throw new Error('Jobs upload preflight failed');
   }
   const platformPace=createPlatformPacer(),automaticFetch=automaticTransport({platformPace});
-  const data = await collectJobs(fetch,console.log,only,{sources,automaticFetch,platformPace});
-  const transport=automaticFetch.diagnostics();
+  // Main JavaScript collector duration; government collection is measured separately.
+  const collectionStarted=performance.now(),phaseElapsedMs={};
+  const pacingSnapshot=()=>({collectionElapsedMs:Math.ceil(performance.now()-collectionStarted),automaticTransport:automaticFetch.diagnostics(),platformPacing:platformPace.diagnostics(),phaseElapsedMs:{...phaseElapsedMs}});
+  // Bounded progress survives an Actions timeout even if the final artifact cannot be written.
+  const progress=setInterval(()=>console.log('jobs collection telemetry:',JSON.stringify(pacingSnapshot())),60000);progress.unref?.();
+  let collectionTelemetry,transport;
+  const outcome=await runCollectedJobs({dryRun,collect:async()=>{
+  let data;
+  try {data=await collectJobs(fetch,console.log,only,{sources,automaticFetch,platformPace,onPhaseEnd:(phase,elapsedMs)=>{phaseElapsedMs[phase]=elapsedMs;}});}
+  finally {clearInterval(progress);}
+  collectionTelemetry=pacingSnapshot();
+  console.log('jobs collection telemetry:',JSON.stringify(collectionTelemetry));
+  transport=automaticFetch.diagnostics();
+  collectionTelemetry.governmentElapsedMs=0;
   if (!only || only.includes('za-dpsa')) {
-    const gov = await governmentJobs();
+    const gov = await timedGovernmentJobs();
+    collectionTelemetry.governmentElapsedMs=gov.governmentElapsedMs;
+    console.log('jobs government telemetry:',JSON.stringify({governmentElapsedMs:gov.governmentElapsedMs}));
     data.rows.push(...gov.rows);
     data.diagnostics = data.diagnostics.filter(d=>d.src!=='za-dpsa').concat(gov.diagnostic);
   }
+  return data;
+  },writeReport:async(data,uploadTelemetry)=>{
   console.log(`jobs: ${data.rows.length} from ${new Set(data.rows.map(r=>r.src)).size} sources; ${data.ok.length} complete snapshots`);
-  const report={runTs,automaticTransport:transport,diagnostics:data.diagnostics,...(dryRun?data:{})};
+  const report={runTs,...collectionTelemetry,...uploadTelemetry,automaticTransport:transport,diagnostics:data.diagnostics,...(dryRun?data:{})};
   const temporary=`jobs-collection-report.${process.pid}.tmp`;
   await writeFile(temporary,JSON.stringify(report,null,2));await rename(temporary,'jobs-collection-report.json');
-  if (dryRun) {
-    if (!data.diagnostics.some(d=>d.status!=='failed')) process.exitCode=1;
-    return;
-  }
-  const result = await uploadJobs({...data,runTs,site,getToken});
-  if (!result.ok || !data.diagnostics.some(d=>d.status!=='failed')) process.exitCode=1;
+  },publish:data=>uploadJobs({...data,runTs,site,getToken})});
+  if ((!dryRun&&!outcome.result.ok)||!outcome.data.diagnostics.some(d=>d.status!=='failed'))process.exitCode=1;
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) await main();

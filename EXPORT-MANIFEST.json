@@ -37,7 +37,7 @@
   },
   {
     "file": "jobs-discovered-fetch.mjs",
-    "sha256": "231243716de1855ce9906948aeec99ac09dae368000131c66ee9556d282f9529"
+    "sha256": "2c3f8605c3ddc464de1d67765ba20b5d7107318fe11d4278ee9a52acf15b936b"
   },
   {
     "file": "jobs-discovered-sources.js",
@@ -65,11 +65,11 @@
   },
   {
     "file": "jobs-pacing.js",
-    "sha256": "66ed94da83c6d5980d452b26e300fd25518afa4d1eb09801cf15b8007a5a1697"
+    "sha256": "19df9dd92f118f389261bbfad795c3a21022c0976857631403f4a3e01d29d740"
   },
   {
     "file": "jobs-runner.mjs",
-    "sha256": "2495cd80646d6cec25ff37f91eec62f23496936a0a9846fab0c403b7adebfe04"
+    "sha256": "fa53f3208265c79c4894f57ecbc976ba7fb8abc8eb250871ecde44cb8ac7475b"
   },
   {
     "file": "jobs-simplify.js",
@@ -93,7 +93,7 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "7e8c62a6b0405d6675ac805efef02cb85682809f6659d6df27f7f603f775a37a"
+    "sha256": "c3067f7401585ec356ef29c47ef1b802f35cfd24dca6d3a19b35d515d2c313ce"
   },
   {
     "file": "package.json",
@@ -265,7 +265,7 @@
   },
   {
     "file": "tests/jobs-pacing.test.mjs",
-    "sha256": "bb2e5e1a3a72fff964fed596f5081736a948ab892de303e7c6a08d67371e0c99"
+    "sha256": "c97296a75955d9e7137585cda31eb951faa633790d036bdf82092577dee5ffba"
   },
   {
     "file": "tests/jobs-query-scope.test.mjs",
@@ -273,7 +273,7 @@
   },
   {
     "file": "tests/jobs-runner.test.mjs",
-    "sha256": "e7f875666777673befc61bf33c75b075a21a315e84a3e435a6f8102f9a5d6f51"
+    "sha256": "09b1dd725f51531339987e802bc644f5810ae0f5c6d31dce1ba52b5954f7c9ec"
   },
   {
     "file": "tests/jobs-sf-scope.test.mjs",
@@ -285,7 +285,7 @@
   },
   {
     "file": "tests/jobs-workday-automatic.test.mjs",
-    "sha256": "c4e3e2558b4e1115bb32418a30e4041d8f094a5cd6e21cbc41ac74755111ac25"
+    "sha256": "aed6047e0ed540d6784264dcaded6487e7da18320061e1a2554b8e96dab2a828"
   },
   {
     "file": "tests/jobs-workday.test.mjs",

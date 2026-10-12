@@ -34,6 +34,7 @@ export function automaticTransport({ resolver = lookup, transport = request, now
       checkBudget(source);
       const u = new URL(url), host = u.hostname;
       if (cooled.has(host)) throw new Error('Automatic host cooldown');
+      const waitStarted=now();
       let release;
       const prior = locks.get(host) || Promise.resolve(); locks.set(host, new Promise(r => { release = r; }));
       await prior;
@@ -57,7 +58,7 @@ export function automaticTransport({ resolver = lookup, transport = request, now
           req.on('close',()=>clearTimeout(timer));req.on('error',reject);
           req.end(method === 'POST' ? options.body : undefined);
         });
-        },platformForReader(source.ats));
+        },platformForReader(source.ats),'automatic',now()-waitStarted);
         if ([401,403,429].includes(result.status)) cooled.add(host);
         if ([301,302,303,307,308].includes(result.status)) { url = new URL(result.headers.location,url).href; if (method === 'POST' && [301,302,303].includes(result.status)) method='GET'; continue; }
         return new Response(result.body,{status:result.status,headers:result.headers});

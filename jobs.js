@@ -296,12 +296,13 @@ export function createJobFetch(fetchImpl, delayMs = fetchImpl === fetch ? 1000 :
   const delay = Number.isFinite(delayMs) ? Math.max(0, Math.min(60000, delayMs)) : 1000;
   const hosts = new Map();
   return async (url, options, platform) => {
+    const queuedAt=performance.now();
     const host = new URL(url).host, previous = hosts.get(host) || { tail: Promise.resolve(), next: 0 };
     const task = previous.tail.then(async () => {
       if (previous.blockedUntil > Date.now()) return new Response('', { status: 429, headers: { 'retry-after': String(Math.ceil((previous.blockedUntil - Date.now()) / 1000)) } });
       if (previous.next > Date.now()) await sleep(previous.next - Date.now());
       try {
-        const response = await platformPace(url,()=>fetchImpl(url, options),platform);
+        const response = await platformPace(url,()=>fetchImpl(url, options),platform,'manual',performance.now()-queuedAt);
         if (response.status === 429) {
           const value = response.headers.get('retry-after');
           const until = /^\d+$/.test(value || '') ? Date.now() + Number(value) * 1000 : Date.parse(value || '');
@@ -503,13 +504,17 @@ export async function automaticWorkday(f, src, log=()=>{}) {
   const result=reason=>({rows,complete:false,reason,paginationComplete,scopedTotal,reportedTotal:scopedTotal,pagesFetched,paginationEnd,phaseHttp,detailValidated,sourceRequestCap});
   const probe=await page({},0);
   if(!probe||!Array.isArray(probe.jobPostings)||!Number.isSafeInteger(probe.total)||probe.total<0)return result('invalid-workday-list');
+  if(probe.total===0){paginationEnd=probe.jobPostings.length?'total-zero-with-rows':'empty-tenant';return result(probe.jobPostings.length?'total-zero-with-rows':'empty-workday-tenant');}
   const scope=registeredWorkdayScope(probe,src);
   if(!scope){paginationEnd='registered-filter-unconfirmed';return result('registered-workday-filter-unconfirmed');}
   const {facets,bounds}=scope;
   let current=Object.keys(facets).length?await page(facets,0):probe;
   if(!current||!Array.isArray(current.jobPostings)||!Number.isSafeInteger(current.total)||current.total<0)return result('invalid-workday-list');
-  if(bounds.some(bound=>current.total>bound||(probe.total>bound&&current.total>=probe.total))){paginationEnd='registered-filter-unconfirmed';return result('registered-workday-filter-unconfirmed');}
-  scopedTotal=current.total;paginationEnd='row-limit';
+  if(current.total===0&&current.jobPostings.length){paginationEnd='total-zero-with-rows';return result('total-zero-with-rows');}
+  if(bounds.length&&(current.total>=probe.total||bounds.some(bound=>current.total>bound))){paginationEnd='registered-filter-unconfirmed';return result('registered-workday-filter-unconfirmed');}
+  scopedTotal=current.total;
+  if(scopedTotal===0){paginationEnd='empty-scope';return result('empty-workday-scope');}
+  paginationEnd='row-limit';
   for(let offset=0;offset<PER_SOURCE;offset+=20){
     if(offset)current=await page(facets,offset);
     if(!current||!Array.isArray(current.jobPostings)||current.jobPostings.length>20){paginationEnd=attempts>=100?'request-cap':'invalid-page';break;}
@@ -518,7 +523,12 @@ export async function automaticWorkday(f, src, log=()=>{}) {
     if(current.total!==scopedTotal&&!(offset>0&&current.total===0)){paginationEnd='changed-total';break;}
     for(const posting of current.jobPostings){
       const path=posting.externalPath,id=typeof path==='string'?path.split('_').at(-1):'';
-      if(!id||!/^\/job\/[^?#]+$/.test(path)||path.includes('..')||!posting.title||seen.has(path))continue;
+      if(!id||!/^\/job\/[^?#]+$/.test(path)||path.includes('..')||/%2e|%2f|%5c/i.test(path)||/[\\\x00-\x20\x7f]/.test(path)||!posting.title||seen.has(path))continue;
+      // Reject normalization that would escape either the exact API tenant or public job prefix.
+      const apiUrl=new URL(base+path),publicUrl=new URL(pub+path);
+      if(apiUrl.origin!==new URL(base).origin||publicUrl.origin!==new URL(pub).origin||
+         apiUrl.pathname!==new URL(base).pathname+path||publicUrl.pathname!==new URL(pub).pathname+path||
+         !apiUrl.pathname.startsWith(new URL(base).pathname+'/job/')||!publicUrl.pathname.startsWith(new URL(pub).pathname+'/job/'))continue;
       seen.add(path);rows.push({id,title:posting.title,location:posting.locationsText,url:pub+path,path,posted:ago(posting.postedOn),country:null,countryUnresolved:true,payObserved:false});
     }
     if(offset+current.jobPostings.length>=scopedTotal){paginationComplete=rows.length===scopedTotal;paginationEnd=paginationComplete?'reported-total':'invalid-or-duplicate-rows';break;}
@@ -952,7 +962,11 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
   const fx = await fxRates(fetchImpl);
   if (!fx) log('Exchange rates unavailable: retaining employer pay in its original currency');
   const rows = [], ok = [], diagnostics = [];
-  const queue = (options.sources || SOURCES).filter(s => !only || only.includes(s.id));
+  const selected = (options.sources || SOURCES).filter(s => !only || only.includes(s.id));
+  // Complete bounded automatic work before manual readers start; manual per-host pacing is unchanged.
+  // Each phase retains the existing six-reader concurrency and source budgets.
+  for(const [phase,queue] of [['automatic',selected.filter(s=>s.automatic)],['manual',selected.filter(s=>!s.automatic)]]){
+  const phaseStarted=performance.now();
   await Promise.all(Array.from({ length: 6 }, async () => {
     for (let s; (s = queue.shift());) {
       const attemptedAt = Date.now();
@@ -999,13 +1013,16 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
       // Invalid/unlocated rows or duplicate IDs cannot prove a full replacement snapshot.
       const complete = !s.automatic && result.complete && got.length === list.length && uniq.length === got.length;
       const refresh=s.automatic?automaticRefreshHealth({status:'partial',rawCount:list.length,acceptedCount:uniq.length,...telemetry}):null;
-      const reason = s.automatic ? refresh.reason : complete ? '' : result.reason || 'rows-rejected-or-duplicated';
+      const readerFailure=['total-zero-with-rows','empty-workday-tenant','empty-workday-scope','registered-workday-filter-unconfirmed'].includes(result.reason)?result.reason:null;
+      const reason = s.automatic ? (!refresh.healthy&&readerFailure?readerFailure:refresh.reason) : complete ? '' : result.reason || 'rows-rejected-or-duplicated';
       diagnostics.push({ src: s.id, status: s.automatic ? (refresh.healthy?'partial':'failed') : complete ? 'complete' : 'partial', rawCount: list.length, acceptedCount: uniq.length, reason, attemptedAt, ...telemetry });
       log(`${s.name}: ${list.length} jobs, ${uniq.length} placed, ${s.automatic&&!refresh.healthy?'failed':complete?'complete':'partial'} (${Math.round((Date.now() - attemptedAt) / 1000)}s)`);
       rows.push(...uniq);
       if (complete) ok.push(s.id);
     }
   }));
+  options.onPhaseEnd?.(phase,Math.ceil(performance.now()-phaseStarted));
+  }
   return { rows, ok, diagnostics };
 }
 
