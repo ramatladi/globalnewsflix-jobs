@@ -1,4 +1,4 @@
-import { automaticSourceRequestLimit, emptyWorkdayDetailReasons, validWorkdayDetailReasons, workdayDetailSummaries } from './jobs-request-policy.js';
+import { automaticSourceRequestLimit, NTU_AUTOMATIC_SOURCE_ID, emptyWorkdayDetailReasons, validWorkdayDetailReasons, workdayDetailSummaries } from './jobs-request-policy.js';
 // Jobs from employers' own career sites: publicly listed companies, governments and international organisations.
 // Collected by a GitHub Actions job every six hours; the site lists them by country, with categories and filters.
 // Pay is shown only where the employer publishes it.
@@ -499,6 +499,18 @@ function registeredWorkdayScope(first, source) {
 export function registeredWorkdayFacets(first, source) {
   return registeredWorkdayScope(first,source)?.facets??null;
 }
+// NTU's observed posting URLs append '-1' to a separate R+8-digit requisition.
+// Permit only the recorded shape with independent listing/detail agreement and
+// an exact posting slug. This is a temporary placement ID, never the stored ID.
+function ntuWorkdayPlacementId(info,row,source) {
+  if(source.id!==NTU_AUTOMATIC_SOURCE_ID||source.args.join('|')!=='ntu.wd3.myworkdayjobs.com|ntu|Careers')return row.id;
+  const req=info?.jobReqId;
+  if(typeof req!=='string'||!/^R\d{8}$/.test(req)||row.id!==req+'-1')return row.id;
+  if(!Array.isArray(row.bulletFields)||row.bulletFields.length!==1||row.bulletFields[0]!==req)return row.id;
+  if(typeof row.path!=='string'||info.jobPostingId!==row.path.split('/').at(-1))return row.id;
+  if(info.externalUrl!==row.url)return row.id;
+  return req;
+}
 export async function automaticWorkday(f, src, log=()=>{}) {
   const [host,tenant,site]=src.args,base=`https://${host}/wday/cxs/${tenant}/${site}`;
   const pub=host.includes('myworkdaysite')?`https://${host}/recruiting/${tenant}/${site}`:`https://${host}/${site}`;
@@ -545,7 +557,7 @@ export async function automaticWorkday(f, src, log=()=>{}) {
       if(apiUrl.origin!==new URL(base).origin||publicUrl.origin!==new URL(pub).origin||
          apiUrl.pathname!==new URL(base).pathname+path||publicUrl.pathname!==new URL(pub).pathname+path||
          !apiUrl.pathname.startsWith(new URL(base).pathname+'/job/')||!publicUrl.pathname.startsWith(new URL(pub).pathname+'/job/'))continue;
-      const listed={id,title:posting.title,location:posting.locationsText,url:pub+path,path,posted:ago(posting.postedOn),country:null,countryUnresolved:true,payObserved:false};
+      const listed={id,title:posting.title,location:posting.locationsText,url:pub+path,path,bulletFields:Array.isArray(posting.bulletFields)&&posting.bulletFields.length===1&&typeof posting.bulletFields[0]==='string'?[posting.bulletFields[0]]:null,posted:ago(posting.postedOn),country:null,countryUnresolved:true,payObserved:false};
       seen.add(path);rows.push(listed);acceptedListing=true;
       } catch(error) {if(['AUTOMATIC_SOURCE_REQUEST_CAP','AUTOMATIC_BUDGET_EXHAUSTED'].includes(error?.code))throw error;}
       finally {if(!acceptedListing)listingRejected++;}
@@ -586,7 +598,7 @@ export async function automaticWorkday(f, src, log=()=>{}) {
     try {
       const info=d?.jobPostingInfo;
       if(info?.title!=null&&typeof info.title!=='string'||info?.externalUrl!=null&&typeof info.externalUrl!=='string'||info?.country?.descriptor!=null&&typeof info.country.descriptor!=='string'){detailReasons.other++;continue;}
-      const placement={...row,country:countryCode(info?.country?.descriptor)};
+      const placement={...row,id:ntuWorkdayPlacementId(info,row,src),country:countryCode(info?.country?.descriptor)};
       const place=strictWorkdayPlace(info,placement,site);
       if(!place){detailReasons[workdayDetailRejection(info,placement,site)]++;continue;}
       if(place.country!==src.country){detailReasons['wrong-country']++;continue;}
