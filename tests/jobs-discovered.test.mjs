@@ -136,3 +136,12 @@ test('accepted partial rows cannot hide a selected source budget failure',async(
  const result=await collectJobs(async()=>Response.json({rates:{}}),()=>{},[s.id],{sources:[s],requestDelayMs:0,automaticFetch:()=>scoped});
  assert.equal(result.rows.length,1);assert.equal(result.diagnostics[0].status,'failed');assert.equal(result.diagnostics[0].reason,'source-request-cap');assert.equal(result.diagnostics[0].httpRequests,100);assert.equal(result.diagnostics[0].elapsedMs,45000);assert.deepEqual(result.ok,[]);
 });
+
+
+test('generic complete non-Workday snapshots cannot claim automatic pagination evidence',async()=>{
+ const base=source(),s={...base,automatic:true,ats:'gh',args:['acme'],careerUrl:'https://boards.greenhouse.io/acme'};
+ const scoped=async()=>Response.json({jobs:[{id:1,title:'Engineer',location:{name:'Cape Town, South Africa'},absolute_url:'https://boards.greenhouse.io/acme/jobs/1'}]});
+ scoped.diagnostics=()=>({httpRequests:1,elapsedMs:10,budgetExhausted:false,sourceRequestCap:false});
+ const result=await collectJobs(async()=>Response.json({rates:{}}),()=>{},[s.id],{sources:[s],requestDelayMs:0,automaticFetch:()=>scoped});
+ assert.equal(result.diagnostics[0].paginationComplete,false);assert.equal(result.diagnostics[0].status,'failed');assert.equal(result.diagnostics[0].reason,'pagination-incomplete');assert.deepEqual(result.ok,[]);
+});

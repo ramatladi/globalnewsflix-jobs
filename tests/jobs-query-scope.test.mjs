@@ -25,7 +25,7 @@ test('non-Workday readers never widen a query-filtered registration to the whole
  for(const [ats,url] of urls){
   const reader=discoveredReader(url,official);assert.equal(reader.ats,ats,url);
   assert.doesNotThrow(()=>validateDiscoveredManifest({version:1,sources:[source(url,reader)]},now));
-  for(const query of ['?department=engineering','?location=Singapore','?q=nurse','?locale=en-US','?utm_source=site','?department=one&department=two','?%71=nurse','?unknown=']){
+  for(const query of ['?department=engineering','?location=Singapore','?q=nurse','?locale=en-US','?utm_source=site','?department=one&department=two','?%71=nurse','?unknown=','#','#department=engineering']){
    const filtered=url+query;assert.equal(discoveredReader(filtered,official),null,filtered);
    // A pre-existing tenant-only args array cannot bypass URL scope validation.
    const attempted={...reader,args:ats==='jsonld'?[filtered]:reader.args};
@@ -37,12 +37,13 @@ test('Workday registration accepts bounded facet syntax only; metadata remains r
  for(const url of ['https://acme.wd3.myworkdayjobs.com/External','https://wd3.myworkdaysite.com/recruiting/acme/External']){
   const facet='a'.repeat(32);
   assert.equal(discoveredReader(url+'?jobFamilyGroup='+facet,official)?.ats,'wd');
-  for(const query of ['?q=nurse','?locale=en-US','?jobFamilyGroup=engineering','?jobFamilyGroup='+facet+'&jobFamilyGroup='+facet,'?unknown='+facet])assert.equal(discoveredReader(url+query,official),null,url+query);
+  for(const query of ['?q=nurse','?locale=en-US','?jobFamilyGroup=engineering','?jobFamilyGroup='+facet+'&jobFamilyGroup='+facet,'?unknown='+facet,'#','#jobFamilyGroup='+facet])assert.equal(discoveredReader(url+query,official),null,url+query);
  }
 });
 test('current active registrations retain valid scoped reader contracts',async()=>{
  const manifest=JSON.parse(await readFile(new URL('../data/discovered-sources/manifest.json',import.meta.url),'utf8'));
  assert.doesNotThrow(()=>validateDiscoveredManifest(manifest,now));
+ assert.ok(manifest.sources.length<=2,'interim capacity also binds direct manifest changes');
 });
 test('rejected remote query scopes visibly fail with source ID and never become an empty registry',async()=>{
  const url='https://jobs.lever.co/acme',s=source(url+'?location=Singapore',discoveredReader(url,official));
