@@ -37,7 +37,7 @@
   },
   {
     "file": "jobs-discovered-fetch.mjs",
-    "sha256": "6fd05b0f66f98f9b78a3a4444af0b9183e06bd8676799d84d7f0c641e2af5518"
+    "sha256": "6baeec55a345fa0ebf17d83e8b0445af1a7b078c99973dcab871830c5de28987"
   },
   {
     "file": "jobs-discovered-sources.js",
@@ -68,8 +68,12 @@
     "sha256": "1cd69d83d9b488b4a65fe67887144d1b1d4b485223c0381e196803aee342927d"
   },
   {
+    "file": "jobs-request-policy.js",
+    "sha256": "0df654a6dc2d947e95b92508254d6ce32284ea8a84a610dc751f43e3c6e0f51a"
+  },
+  {
     "file": "jobs-runner.mjs",
-    "sha256": "fa53f3208265c79c4894f57ecbc976ba7fb8abc8eb250871ecde44cb8ac7475b"
+    "sha256": "2b85ab7dd5746306596ab288e5c4e0cb9a2d77ddbeb64ebc717705c64e645076"
   },
   {
     "file": "jobs-simplify.js",
@@ -77,7 +81,7 @@
   },
   {
     "file": "jobs-source-health.js",
-    "sha256": "a00bd0ac389f64dc897be1dec97463bd85f85f33c51b5aad4c96e90f8f8a5d78"
+    "sha256": "82e84c58d5fac014692f87dcd290c792186aa36eac4309d1705ce47ed68c7274"
   },
   {
     "file": "jobs-uct.js",
@@ -93,7 +97,7 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "d45ae6e6d3ab80c658d4069736bd733926ac0777e423b81d27f7b1380963b571"
+    "sha256": "a7050b081b50ded57bb2972d91a223f6aeedce47d6c44d129ec354afd912354b"
   },
   {
     "file": "package.json",
@@ -264,6 +268,10 @@
     "sha256": "9a4c8c97168c4a63f8a1f5899a288eaa6d2f30b0fc90fc61c6b9427ec83ce1d0"
   },
   {
+    "file": "tests/jobs-ntu-diagnostics.test.mjs",
+    "sha256": "377da9513324696e4b215a00f268205b50bf661649adbeeb1a6270c5d2fd5b9b"
+  },
+  {
     "file": "tests/jobs-pacing.test.mjs",
     "sha256": "c97296a75955d9e7137585cda31eb951faa633790d036bdf82092577dee5ffba"
   },
@@ -285,7 +293,7 @@
   },
   {
     "file": "tests/jobs-workday-automatic.test.mjs",
-    "sha256": "6e644199872c38fcb7ee780b974f56270b886b0ad560db2cb9df5a051f8e2c20"
+    "sha256": "390098d7070463a6abb9a34f6488d405ed4a119f0757a738104d607266d95cd9"
   },
   {
     "file": "tests/jobs-workday.test.mjs",

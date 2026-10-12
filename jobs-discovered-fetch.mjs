@@ -1,3 +1,4 @@
+import { automaticSourceRequestLimit } from './jobs-request-policy.js';
 // Restricted transport for automatically registered employers only.
 import { request } from 'node:https';
 import { lookup } from 'node:dns/promises';
@@ -19,7 +20,7 @@ export function automaticTransport({ resolver = lookup, transport = request, now
   const locks = new Map(), counts = new Map(), cooled = new Set(), budgetStopped = new Set(), sourceCapped = new Set();
   const budgetError = source => {budgetStopped.add(source.id);return Object.assign(new Error('Automatic request budget exhausted'),{code:'AUTOMATIC_BUDGET_EXHAUSTED'});};
   const checkBudget = source => {
-    if ((counts.get(source.id) || 0) >= 100) {sourceCapped.add(source.id);throw Object.assign(new Error('Automatic source request cap exhausted'),{code:'AUTOMATIC_SOURCE_REQUEST_CAP'});}
+    if ((counts.get(source.id) || 0) >= automaticSourceRequestLimit(source.id)) {sourceCapped.add(source.id);throw Object.assign(new Error('Automatic source request cap exhausted'),{code:'AUTOMATIC_SOURCE_REQUEST_CAP'});}
     if (now() >= deadline || total >= maxRequests) throw budgetError(source);
   };
   const factory = source => {const perform = async function(value, options = {}) {

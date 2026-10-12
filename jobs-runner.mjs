@@ -1,3 +1,4 @@
+import { workdayDetailSummaries } from './jobs-request-policy.js';
 // Scheduled collector. GitHub OIDC is short-lived and scoped by the site to this workflow.
 import { createPlatformPacer } from './jobs-pacing.js';
 import { automaticTransport, loadDiscoveredManifest } from './jobs-discovered-fetch.mjs';
@@ -123,7 +124,7 @@ async function main() {
   return data;
   },writeReport:async(data,uploadTelemetry)=>{
   console.log(`jobs: ${data.rows.length} from ${new Set(data.rows.map(r=>r.src)).size} sources; ${data.ok.length} complete snapshots`);
-  const report={runTs,...collectionTelemetry,...uploadTelemetry,automaticTransport:transport,diagnostics:data.diagnostics,...(dryRun?data:{})};
+  const report={runTs,...collectionTelemetry,...uploadTelemetry,automaticTransport:transport,diagnostics:data.diagnostics,workdayDetailReasons:workdayDetailSummaries(data.diagnostics),...(dryRun?data:{})};
   const temporary=`jobs-collection-report.${process.pid}.tmp`;
   await writeFile(temporary,JSON.stringify(report,null,2));await rename(temporary,'jobs-collection-report.json');
   },publish:data=>uploadJobs({...data,runTs,site,getToken})});
