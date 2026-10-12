@@ -31,7 +31,7 @@ test('automatic jobs must name the correct country, employer and scoped source U
   assert.equal(discoveredJobAllowed(s,{...job,source_url:'https://other.wd3.myworkdayjobs.com/External/job/1'}),false);
 });
 test('transport rejects private addresses and cross-tenant destinations before sending',async()=>{
-  let calls=0;const f=automaticTransport({pause:async()=>{},resolver:async()=>[{address:'127.0.0.1'}],transport:()=>{calls++;throw new Error('must not send');}})(source());
+  let calls=0;const f=automaticTransport({platformPace:async(_url,send)=>send(),pause:async()=>{},resolver:async()=>[{address:'127.0.0.1'}],transport:()=>{calls++;throw new Error('must not send');}})(source());
   await assert.rejects(f('https://acme.wd3.myworkdayjobs.com/wday/cxs/acme/External/jobs',{method:'POST',body:'{}'}),/Non-public/);
   await assert.rejects(f('https://evil.example.com/'),/scope/);assert.equal(calls,0);
 });
@@ -40,10 +40,11 @@ test('collector cannot use an unrestricted fetch for an automatic source',async(
   const result=await collectJobs(async()=>{requests++;return new Response(JSON.stringify({rates:{}}));},()=>{},[s.id],{sources:[s],requestDelayMs:0});
   assert.equal(requests,1);assert.deepEqual(result.rows,[]);assert.deepEqual(result.ok,[]);assert.equal(result.diagnostics[0].status,'failed');
 });
-test('trusted manifest fetch retains the last valid data on failure or invalid schema',async()=>{
+test('trusted manifest fetch retains cache on outage but visibly stops on invalid schema',async()=>{
   const cachePath=join(await mkdtemp(join(tmpdir(),'gnf-manifest-')),'manifest.json');const manifest={version:1,sources:[source()]};
   const good=await loadDiscoveredManifest({cachePath,fetchImpl:async(url,options)=>{assert.equal(url,'https://globalnewsflix.com/api/jobs/sources');assert.equal(options.redirect,'error');return Response.json(manifest);},log:()=>{}});assert.deepEqual(good,manifest);
-  for(const fetchImpl of [async()=>{throw new Error('network');},async()=>Response.json({version:1,sources:[{...source(),args:['bad']}]})])assert.deepEqual(await loadDiscoveredManifest({cachePath,fetchImpl,log:()=>{}}),manifest);
+  assert.deepEqual(await loadDiscoveredManifest({cachePath,fetchImpl:async()=>{throw new Error('network');},log:()=>{}}),manifest);
+  await assert.rejects(loadDiscoveredManifest({cachePath,fetchImpl:async()=>Response.json({version:1,sources:[{...source(),args:['bad']}]}),log:()=>{}}),error=>error.code==='DISCOVERED_MANIFEST_INVALID'&&error.message.includes(source().id));
   assert.deepEqual(JSON.parse(await readFile(cachePath,'utf8')),manifest);
 });
 test('automatic Workday retains exact local details without country facets and preserves expiry',async()=>{
@@ -70,7 +71,7 @@ function fakeHttps(onRequest=()=>{}) {
 }
 test('automatic budget starts after unrelated manual work and stays shared across sources',async()=>{
   let clock=0,dns=0,http=0;
-  const scoped=automaticTransport({now:()=>clock,pause:async()=>{},resolver:async()=>{dns++;return [{address:'8.8.8.8'}];},transport:fakeHttps(()=>http++)});
+  const scoped=automaticTransport({platformPace:async(_url,send)=>send(),now:()=>clock,pause:async()=>{},resolver:async()=>{dns++;return [{address:'8.8.8.8'}];},transport:fakeHttps(()=>http++)});
   const s=source(),url='https://acme.wd3.myworkdayjobs.com/wday/cxs/acme/External/jobs',options={method:'POST',body:'{}'};
   const first=scoped(s);clock=20*60000; // Production failure: automatic employers reached the queue after20 minutes.
   assert.equal((await first(url,options)).status,200);assert.equal(http,1);
@@ -84,25 +85,25 @@ test('automatic budget cannot expire during pacing or DNS and still send a reque
   const url='https://acme.wd3.myworkdayjobs.com/wday/cxs/acme/External/jobs',options={method:'POST',body:'{}'};
   for(const delayed of ['pacing','dns']){
     let clock=0,http=0;
-    const f=automaticTransport({now:()=>clock,maxSeconds:1,pause:async()=>{if(delayed==='pacing')clock=1000;},resolver:async()=>{clock=1000;return [{address:'8.8.8.8'}];},transport:fakeHttps(()=>http++)})(source());
+    const f=automaticTransport({platformPace:async(_url,send)=>send(),now:()=>clock,maxSeconds:1,pause:async()=>{if(delayed==='pacing')clock=1000;},resolver:async()=>{clock=1000;return [{address:'8.8.8.8'}];},transport:fakeHttps(()=>http++)})(source());
     await assert.rejects(f(url,options),/budget/);assert.equal(http,0,delayed);
   }
 });
 test('delayed automatic start preserves the shared hard request limit',async()=>{
-  let clock=0,http=0;const scoped=automaticTransport({now:()=>clock,maxRequests:2,pause:async()=>{},resolver:async()=>[{address:'8.8.8.8'}],transport:fakeHttps(()=>http++)});
+  let clock=0,http=0;const scoped=automaticTransport({platformPace:async(_url,send)=>send(),now:()=>clock,maxRequests:2,pause:async()=>{},resolver:async()=>[{address:'8.8.8.8'}],transport:fakeHttps(()=>http++)});
   clock=20*60000;const s=source(),url='https://acme.wd3.myworkdayjobs.com/wday/cxs/acme/External/jobs',options={method:'POST',body:'{}'};
   await scoped(s)(url,options);await scoped({...s,id:'auto-'+'d'.repeat(24)})(url,options);await assert.rejects(scoped(s)(url,options),/budget/);assert.equal(http,2);
 });
 
 test('queued concurrent requests cannot exceed the per-employer100 request cap',async()=>{
- let http=0;const f=automaticTransport({now:()=>0,pause:async()=>{},resolver:async()=>[{address:'8.8.8.8'}],transport:fakeHttps(()=>http++)})(source());const url='https://acme.wd3.myworkdayjobs.com/wday/cxs/acme/External/jobs',options={method:'POST',body:'{}'};
+ let http=0;const f=automaticTransport({platformPace:async(_url,send)=>send(),now:()=>0,pause:async()=>{},resolver:async()=>[{address:'8.8.8.8'}],transport:fakeHttps(()=>http++)})(source());const url='https://acme.wd3.myworkdayjobs.com/wday/cxs/acme/External/jobs',options={method:'POST',body:'{}'};
  for(let i=0;i<99;i++)await f(url,options);
  const results=await Promise.allSettled([f(url,options),f(url,options)]);assert.equal(results.filter(r=>r.status==='fulfilled').length,1);assert.equal(http,100);assert.equal(f.diagnostics().httpRequests,100);assert.equal(f.diagnostics().sourceRequestCap,true);assert.equal(results.find(r=>r.status==='rejected').reason.code,'AUTOMATIC_SOURCE_REQUEST_CAP');
 });
 test('budget diagnostics distinguish zero HTTP from attempted collection and still trip health',async()=>{
  const now=Date.now(),s={...source(),discoveredAt:new Date(now-1000).toISOString(),automatic:true};const url='https://acme.wd3.myworkdayjobs.com/wday/cxs/acme/External/jobs',options={method:'POST',body:'{}'};
  for(const attempted of [false,true]){
-  let clock=0,http=0;const factory=automaticTransport({now:()=>clock,maxSeconds:attempted?1:0,pause:async()=>{},resolver:async()=>[{address:'8.8.8.8'}],transport:fakeHttps(()=>http++)});const scoped=factory(s);
+  let clock=0,http=0;const factory=automaticTransport({platformPace:async(_url,send)=>send(),now:()=>clock,maxSeconds:attempted?1:0,pause:async()=>{},resolver:async()=>[{address:'8.8.8.8'}],transport:fakeHttps(()=>http++)});const scoped=factory(s);
   if(attempted){await scoped(url,options);clock=1000;}
   const result=await collectJobs(async()=>Response.json({rates:{}}),()=>{},[s.id],{sources:[s],requestDelayMs:0,automaticFetch:()=>scoped});
   const d=result.diagnostics[0];assert.equal(d.status,'failed');assert.equal(d.reason,attempted?'budget-exhausted':'not-attempted-budget');assert.equal(http,attempted?1:0);assert.equal(scoped.diagnostics().httpRequests,http);assert.deepEqual(result.rows,[]);assert.deepEqual(result.ok,[]);
@@ -113,7 +114,7 @@ test('budget diagnostics distinguish zero HTTP from attempted collection and sti
 
 test('source cap has its own failed diagnostic and still trips health',async()=>{
  const now=Date.now(),s={...source(),discoveredAt:new Date(now-1000).toISOString(),automatic:true};let http=0;
- const scoped=automaticTransport({now:()=>0,pause:async()=>{},resolver:async()=>[{address:'8.8.8.8'}],transport:fakeHttps(()=>http++)})(s);
+ const scoped=automaticTransport({platformPace:async(_url,send)=>send(),now:()=>0,pause:async()=>{},resolver:async()=>[{address:'8.8.8.8'}],transport:fakeHttps(()=>http++)})(s);
  for(let i=0;i<100;i++)await scoped('https://acme.wd3.myworkdayjobs.com/wday/cxs/acme/External/jobs',{method:'POST',body:'{}'});
  const result=await collectJobs(async()=>Response.json({rates:{}}),()=>{},[s.id],{sources:[s],requestDelayMs:0,automaticFetch:()=>scoped});
  const d=result.diagnostics[0];assert.equal(d.status,'failed');assert.equal(d.reason,'source-request-cap');assert.equal(http,100);assert.equal(scoped.diagnostics().budgetExhausted,false);assert.deepEqual(result.rows,[]);assert.deepEqual(result.ok,[]);
@@ -125,6 +126,13 @@ test('runtime manifest validation rejects future source and identity timestamps'
   const manifest={version:1,sources:[{...source(),...change}]};
   assert.throws(()=>registeredDiscoveredSources(manifest));
   const cachePath=join(await mkdtemp(join(tmpdir(),'gnf-future-manifest-')),'manifest.json');
-  assert.deepEqual(await loadDiscoveredManifest({cachePath,fetchImpl:async()=>Response.json(manifest),log:()=>{}}),{version:1,sources:[]});
+  await assert.rejects(loadDiscoveredManifest({cachePath,fetchImpl:async()=>Response.json(manifest),log:()=>{}}),error=>error.code==='DISCOVERED_MANIFEST_INVALID'&&error.message.includes(source().id));
  }
+});
+test('accepted partial rows cannot hide a selected source budget failure',async()=>{
+ const s={...source(),ats:'gh',args:['acme'],automatic:true};
+ const scoped=async()=>Response.json({jobs:[{id:1,title:'Engineer',absolute_url:'https://boards.greenhouse.io/acme/jobs/1',location:{name:'Johannesburg, South Africa'},content:'Engineering role'}]});
+ scoped.diagnostics=()=>({httpRequests:100,elapsedMs:45000,sourceRequestCap:true,budgetExhausted:false});
+ const result=await collectJobs(async()=>Response.json({rates:{}}),()=>{},[s.id],{sources:[s],requestDelayMs:0,automaticFetch:()=>scoped});
+ assert.equal(result.rows.length,1);assert.equal(result.diagnostics[0].status,'failed');assert.equal(result.diagnostics[0].reason,'source-request-cap');assert.equal(result.diagnostics[0].httpRequests,100);assert.equal(result.diagnostics[0].elapsedMs,45000);assert.deepEqual(result.ok,[]);
 });
