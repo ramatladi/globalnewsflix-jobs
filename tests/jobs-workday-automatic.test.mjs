@@ -4,8 +4,10 @@ import {readFileSync} from 'node:fs';
 import {workdayQueryFacets} from '../jobs-workday-query.js';
 import {automaticWorkday,registeredWorkdayFacets,collectJobs} from '../jobs.js';
 const fixture=JSON.parse(readFileSync(new URL('./fixtures/jobs-workday-ntu-list-shape.json',import.meta.url)));
+// Preserve generic 100-request regressions; NTU's exact-ID exception has dedicated tests.
+const genericSource={...fixture.source,id:'auto-'+'a'.repeat(24)};
 const posting=i=>({externalPath:`/job/Synthetic-Campus/Synthetic-engineer_SYN${i}`,title:`Synthetic engineer ${i}`,locationsText:'Singapore',postedOn:'Posted Today'});
-async function run({total=5,filteredTotal=4,facets,source=fixture.source,detailChange={},pageChange=x=>x,collect=false,transportChange={}}={}){
+async function run({total=5,filteredTotal=4,facets,source=genericSource,detailChange={},pageChange=x=>x,collect=false,transportChange={}}={}){
  facets??=fixture.facets.map(f=>({...f,values:f.values.map(v=>({...v,count:filteredTotal}))}));
  const requests=[],posts=Array.from({length:Math.max(total,filteredTotal)},(_,i)=>posting(i));
  const f=async(url,opt)=>{
@@ -27,7 +29,7 @@ test('missing, duplicate or ambiguous registered filter evidence holds without a
  for(const facets of [[],[...fixture.facets,...fixture.facets],[{...fixture.facets[0],values:[...fixture.facets[0].values,...fixture.facets[0].values]}]]){
   const {result,requests}=await run({facets});assert.equal(requests.length,1);assert.equal(result.rows.length,0);assert.equal(result.paginationComplete,false);assert.equal(result.reason,'registered-workday-filter-unconfirmed');
  }
- assert.equal(registeredWorkdayFacets({facets:fixture.facets},{...fixture.source,careerUrl:fixture.source.careerUrl+'&unknown=value'}),null);
+ assert.equal(registeredWorkdayFacets({facets:fixture.facets},{...genericSource,careerUrl:genericSource.careerUrl+'&unknown=value'}),null);
 });
 test('742-row synthetic tenant stays under100requests and cannot claim a full strict-detail refresh',async()=>{
  const {result,requests}=await run({total:743,filteredTotal:742});
@@ -51,20 +53,20 @@ test('query selectors reject unknown, free-text, duplicate and oversized values 
  for(const query of ['searchText=engineer','locale=en-US','utm_campaign=x','jobFamilyGroup=not-an-id',`jobFamilyGroup=${'A'.repeat(32)}`,`jobFamilyGroup=${id}&jobFamilyGroup=${id}`,Array.from({length:6},(_,i)=>'jobFamilyGroup='+String(i).repeat(32)).join('&')])assert.equal(workdayQueryFacets(base+'?'+query),null,query);
 });
 test('queryless automatic source remains scoped and posted date stays publisher-derived',async()=>{
- const source={...fixture.source,careerUrl:'https://ntu.wd3.myworkdayjobs.com/Careers'};
+ const source={...genericSource,careerUrl:'https://ntu.wd3.myworkdayjobs.com/Careers'};
  const {result,requests}=await run({source,total:3,detailChange:{startDate:'2026-10-10'}});
  assert.equal(result.rows.length,3);assert.equal(result.phaseHttp.listing,1);assert.equal(result.pagesFetched,1);assert.equal(result.paginationComplete,true);assert.ok(result.rows.every(r=>r.posted===Date.parse('2026-10-10')));
  assert.deepEqual(requests[0].body.appliedFacets,{});
 });
 
 test('ninety-five percent accepted cannot conceal pending detail work stopped by the source cap',async()=>{
- const {result,requests}=await run({total:100,source:{...fixture.source,careerUrl:'https://ntu.wd3.myworkdayjobs.com/Careers'}});
+ const {result,requests}=await run({total:100,source:{...genericSource,careerUrl:'https://ntu.wd3.myworkdayjobs.com/Careers'}});
  assert.equal(requests.length,100);assert.equal(result.detailValidated,95);assert.equal(result.paginationComplete,true);assert.equal(result.sourceRequestCap,true);
  const complete=await run({total:95,filteredTotal:94});assert.equal(complete.requests.length,100);assert.equal(complete.result.detailValidated,94);assert.equal(complete.result.sourceRequestCap,false,'all work completed exactly at budget');
 });
 
 test('collector health rejects local detail-cap truncation while permitting exact-budget natural completion',async()=>{
- const failed=await run({total:100,collect:true,source:{...fixture.source,careerUrl:'https://ntu.wd3.myworkdayjobs.com/Careers'}});
+ const failed=await run({total:100,collect:true,source:{...genericSource,careerUrl:'https://ntu.wd3.myworkdayjobs.com/Careers'}});
  assert.equal(failed.result.rows.length,0);assert.equal(failed.result.diagnostics[0].acceptedCount,95);assert.equal(failed.result.diagnostics[0].status,'failed');assert.equal(failed.result.diagnostics[0].sourceRequestCap,true);
  const healthy=await run({total:95,filteredTotal:94,collect:true});assert.equal(healthy.requests.length,100);assert.equal(healthy.result.rows.length,94);assert.equal(healthy.result.diagnostics[0].status,'partial');assert.equal(healthy.result.diagnostics[0].reason,'healthy-automatic-refresh');assert.deepEqual(healthy.result.ok,[],'automatic refresh never authorizes pruning');
 });
@@ -82,7 +84,7 @@ test('registered facet counts must be bounded, unambiguous and reflected in scop
  const over=await run({total:742,filteredTotal:25,facets});assert.equal(over.result.reason,'registered-workday-filter-unconfirmed');
 });
 test('Workday selectors reject all fragments including an empty trailing fragment',()=>{
- for(const suffix of ['#','#jobs','#?jobFamilyGroup='+ 'a'.repeat(32)])assert.equal(workdayQueryFacets(fixture.source.careerUrl+suffix),null);
+ for(const suffix of ['#','#jobs','#?jobFamilyGroup='+ 'a'.repeat(32)])assert.equal(workdayQueryFacets(genericSource.careerUrl+suffix),null);
 });
 test('full paths retain separate postings with a shared requisition suffix for mandatory detail validation',async()=>{
  const paths=['/job/Campus-One/Engineer_SHARED','/job/Campus-Two/Engineer_SHARED'];let detailCalls=0;
@@ -90,7 +92,7 @@ test('full paths retain separate postings with a shared requisition suffix for m
   if(url.endsWith('/jobs'))return Response.json({total:2,jobPostings:paths.map(externalPath=>({externalPath,title:'Engineer'}))});
   detailCalls++;return Response.json({jobPostingInfo:{jobReqId:'SHARED',jobPostingSiteId:'Careers',title:'Engineer',externalUrl:'https://ntu.wd3.myworkdayjobs.com/Careers'+paths.find(p=>url.endsWith(p)),location:'Singapore',country:{descriptor:'Singapore'}}});
  };
- const result=await automaticWorkday(f,{...fixture.source,careerUrl:fixture.source.careerUrl.split('?')[0]});
+ const result=await automaticWorkday(f,{...genericSource,careerUrl:genericSource.careerUrl.split('?')[0]});
  assert.equal(result.rows.length,2);assert.equal(detailCalls,2);assert.equal(result.detailValidated,2);assert.equal(result.paginationComplete,true);
 });
 
@@ -104,7 +106,7 @@ test('recorded NTU continuation total zero retains synthetic first-page total an
   const row=all.find(x=>url.endsWith(x.externalPath));
   return Response.json({jobPostingInfo:{jobReqId:row.externalPath.split('_').at(-1),jobPostingSiteId:'Careers',title:row.title,externalUrl:'https://ntu.wd3.myworkdayjobs.com/Careers'+row.externalPath,location:'Singapore',country:{descriptor:'Singapore'}}});
  };
- const result=await automaticWorkday(f,{...fixture.source,careerUrl:fixture.source.careerUrl.split('?')[0]});
+ const result=await automaticWorkday(f,{...genericSource,careerUrl:genericSource.careerUrl.split('?')[0]});
  assert.equal(result.reportedTotal,40);assert.equal(result.rows.length,40);assert.equal(result.paginationComplete,true);assert.equal(result.detailValidated,40);assert.deepEqual(result.phaseHttp,{listing:2,detail:40});
 });
 test('later zero totals never excuse short or duplicated continuation rows',async()=>{
@@ -117,7 +119,7 @@ test('later zero totals never excuse short or duplicated continuation rows',asyn
 test('multiple selected facet values sum within a key while every selected key constrains the result',async()=>{
  const id1=fixture.facets[0].values[0].id,id2='b'.repeat(32),id3='c'.repeat(32);
  const facets=[{facetParameter:'jobFamilyGroup',values:[{id:id1,count:12},{id:id2,count:12}]},{facetParameter:'timeType',values:[{id:id3,count:20}]}];
- const source={...fixture.source,careerUrl:fixture.source.careerUrl+'&jobFamilyGroup='+id2+'&timeType='+id3};
+ const source={...genericSource,careerUrl:genericSource.careerUrl+'&jobFamilyGroup='+id2+'&timeType='+id3};
  const held=await run({total:742,filteredTotal:24,facets,source});assert.equal(held.result.reason,'registered-workday-filter-unconfirmed');assert.equal(held.requests.length,2);
  const accepted=await run({total:742,filteredTotal:20,facets,source});assert.equal(accepted.result.paginationComplete,true);assert.equal(accepted.result.detailValidated,20);
  assert.deepEqual(accepted.requests[1].body.appliedFacets,{jobFamilyGroup:[id1,id2],timeType:[id3]});
@@ -126,12 +128,12 @@ test('multiple selected facet values sum within a key while every selected key c
 test('registered filtering must strictly reduce the probe total even when option counts overlap',async()=>{
  const id=fixture.facets[0].values[0].id,other='b'.repeat(32);
  const facets=[{facetParameter:'jobFamilyGroup',values:[{id,count:5},{id:other,count:5}]}];
- const source={...fixture.source,careerUrl:fixture.source.careerUrl+'&jobFamilyGroup='+other};
+ const source={...genericSource,careerUrl:genericSource.careerUrl+'&jobFamilyGroup='+other};
  const {result,requests}=await run({total:5,filteredTotal:5,facets,source});
  assert.equal(result.reason,'registered-workday-filter-unconfirmed');assert.equal(result.rows.length,0);assert.equal(requests.length,2);
 });
 test('zero page-zero total with rows and truly empty tenants or scopes fail closed distinctly',async()=>{
- const queryless={...fixture.source,careerUrl:fixture.source.careerUrl.split('?')[0]};
+ const queryless={...genericSource,careerUrl:genericSource.careerUrl.split('?')[0]};
  const contradictory=await run({total:0,filteredTotal:0,source:queryless,pageChange:p=>({...p,jobPostings:[posting(1)]})});
  assert.equal(contradictory.result.reason,'total-zero-with-rows');assert.equal(contradictory.requests.length,1);
  const empty=await run({total:0,filteredTotal:0,source:queryless});assert.equal(empty.result.reason,'empty-workday-tenant');assert.equal(empty.result.paginationComplete,false);assert.equal(empty.result.rows.length,0);
@@ -145,13 +147,13 @@ test('encoded separators, traversal and URL normalization never trigger a Workda
  for(const path of attacks){
   let calls=0;
   const f=async()=>{calls++;return Response.json({total:1,jobPostings:[{externalPath:path,title:'Engineer'}]});};
-  const result=await automaticWorkday(f,{...fixture.source,careerUrl:fixture.source.careerUrl.split('?')[0]});
+  const result=await automaticWorkday(f,{...genericSource,careerUrl:genericSource.careerUrl.split('?')[0]});
   assert.equal(calls,1,path);assert.equal(result.rows.length,0,path);assert.equal(result.paginationComplete,false,path);
  }
 });
 
 test('all selected automatic readers finish before manual Workday requests share the platform',async()=>{
- const automatic={...fixture.source,careerUrl:fixture.source.careerUrl.split('?')[0]};
+ const automatic={...genericSource,careerUrl:genericSource.careerUrl.split('?')[0]};
  const second={...automatic,id:'auto-'+ 'c'.repeat(24)};
  const manual={...automatic,automatic:false,id:'manual-tenant'};
  const releases=[],events=[];let started;const bothStarted=new Promise(resolve=>{started=resolve;});
@@ -167,7 +169,7 @@ test('all selected automatic readers finish before manual Workday requests share
 });
 
 test('myworkdaysite detail and public URLs remain inside their separate exact tenant prefixes',async()=>{
- const source={...fixture.source,args:['wd5.myworkdaysite.com','ntu','Careers'],careerUrl:'https://wd5.myworkdaysite.com/recruiting/ntu/Careers'};
+ const source={...genericSource,args:['wd5.myworkdaysite.com','ntu','Careers'],careerUrl:'https://wd5.myworkdaysite.com/recruiting/ntu/Careers'};
  const path='/job/Campus/Engineer_JR1',urls=[];
  const f=async url=>{urls.push(url);return Response.json(url.endsWith('/jobs')?{total:1,jobPostings:[{externalPath:path,title:'Engineer'}]}:{jobPostingInfo:{jobReqId:'JR1',jobPostingSiteId:'Careers',title:'Engineer',externalUrl:source.careerUrl+path,location:'Singapore',country:{descriptor:'Singapore'}}});};
  const result=await automaticWorkday(f,source);
@@ -176,7 +178,7 @@ test('myworkdaysite detail and public URLs remain inside their separate exact te
 });
 
 test('manual phase retains registered order and exactly six concurrent readers',async()=>{
- const sources=Array.from({length:7},(_,i)=>({...fixture.source,automatic:false,id:'manual-'+i,args:[`manual${i}.wd3.myworkdayjobs.com`,'tenant','Careers']}));
+ const sources=Array.from({length:7},(_,i)=>({...genericSource,automatic:false,id:'manual-'+i,args:[`manual${i}.wd3.myworkdayjobs.com`,'tenant','Careers']}));
  const starts=[],release=[];let sixStarted;const ready=new Promise(resolve=>{sixStarted=resolve;});
  const f=async url=>{
   if(url.includes('frankfurter'))return Response.json({rates:{}});

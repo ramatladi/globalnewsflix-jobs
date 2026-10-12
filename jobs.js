@@ -1,3 +1,4 @@
+import { automaticSourceRequestLimit, emptyWorkdayDetailReasons, validWorkdayDetailReasons, workdayDetailSummaries } from './jobs-request-policy.js';
 // Jobs from employers' own career sites: publicly listed companies, governments and international organisations.
 // Collected by a GitHub Actions job every six hours; the site lists them by country, with categories and filters.
 // Pay is shown only where the employer publishes it.
@@ -454,6 +455,18 @@ export function strictWorkdayPlace(info, row, site) {
   const match = (info.additionalLocations || []).find(location => suffixCountry(location) === row.country);
   return match ? { country: row.country, location: plain(match) } : null;
 }
+// Fixed diagnostics explain strict rejection; they never relax placement checks.
+export function workdayDetailRejection(info,row,site) {
+ try {
+  if(!info||typeof info!=='object')return 'place-null';
+  if(info.jobReqId!==row.id)return 'reqid-mismatch';
+  if(info.jobPostingSiteId!==site)return 'site-mismatch';
+  const key=value=>plain(value).normalize('NFKC').toLowerCase();
+  if(!row.title||key(info.title)!==key(row.title))return 'title-mismatch';
+  try{if(new URL(info.externalUrl).href!==new URL(row.url).href)return 'external-url-mismatch';}catch{return 'external-url-mismatch';}
+  return 'place-null';
+ } catch(error) {if(['AUTOMATIC_SOURCE_REQUEST_CAP','AUTOMATIC_BUDGET_EXHAUSTED'].includes(error?.code))throw error;return 'other'; }
+}
 // Automatic Workday sources retain the exact registered listing scope.
 // Metadata discovery is not a job snapshot and its unfiltered rows are not accepted.
 function registeredWorkdayScope(first, source) {
@@ -489,19 +502,19 @@ export function registeredWorkdayFacets(first, source) {
 export async function automaticWorkday(f, src, log=()=>{}) {
   const [host,tenant,site]=src.args,base=`https://${host}/wday/cxs/${tenant}/${site}`;
   const pub=host.includes('myworkdaysite')?`https://${host}/recruiting/${tenant}/${site}`:`https://${host}/${site}`;
-  const phaseHttp={listing:0,detail:0};let phase='listing',attempts=0,detailValidated=0,sourceRequestCap=false;
+  const phaseHttp={listing:0,detail:0},detailReasons=emptyWorkdayDetailReasons(),requestLimit=automaticSourceRequestLimit(src.id);let phase='listing',attempts=0,detailValidated=0,listingRejected=0,sourceRequestCap=false;
   const counted=async(...args)=>{
     const before=f.diagnostics?.().httpRequests;
     attempts++;
-    if(attempts>100){sourceRequestCap=true;throw Object.assign(new Error('Automatic source request cap exhausted'),{code:'AUTOMATIC_SOURCE_REQUEST_CAP'});}
-    try{return await f(...args);}finally{
+    if(attempts>requestLimit){sourceRequestCap=true;throw Object.assign(new Error('Automatic source request cap exhausted'),{code:'AUTOMATIC_SOURCE_REQUEST_CAP'});}
+    try{return await f(...args);}catch(error){if(error?.code==='AUTOMATIC_SOURCE_REQUEST_CAP')sourceRequestCap=true;throw error;}finally{
       const after=f.diagnostics?.().httpRequests;
       phaseHttp[phase]+=Number.isSafeInteger(before)&&Number.isSafeInteger(after)?Math.max(0,after-before):1;
     }
   };
   const page=(facets,offset)=>postJson(counted,base+'/jobs',{limit:20,offset,searchText:'',appliedFacets:facets});
   const rows=[],seen=new Set();let paginationComplete=false,scopedTotal=null,pagesFetched=0,paginationEnd='unavailable';
-  const result=reason=>({rows,complete:false,reason,paginationComplete,scopedTotal,reportedTotal:scopedTotal,pagesFetched,paginationEnd,phaseHttp,detailValidated,sourceRequestCap});
+  const result=reason=>({rows,complete:false,reason,paginationComplete,scopedTotal,reportedTotal:scopedTotal,pagesFetched,paginationEnd,phaseHttp,detailReasons,listingRejected,detailValidated,sourceRequestCap});
   const probe=await page({},0);
   if(!probe||!Array.isArray(probe.jobPostings)||!Number.isSafeInteger(probe.total)||probe.total<0)return result('invalid-workday-list');
   if(probe.total===0){paginationEnd=probe.jobPostings.length?'total-zero-with-rows':'empty-tenant';return result(probe.jobPostings.length?'total-zero-with-rows':'empty-workday-tenant');}
@@ -517,35 +530,73 @@ export async function automaticWorkday(f, src, log=()=>{}) {
   paginationEnd='row-limit';
   for(let offset=0;offset<PER_SOURCE;offset+=20){
     if(offset)current=await page(facets,offset);
-    if(!current||!Array.isArray(current.jobPostings)||current.jobPostings.length>20){paginationEnd=attempts>=100?'request-cap':'invalid-page';break;}
+    if(!current||!Array.isArray(current.jobPostings)||current.jobPostings.length>20){paginationEnd=attempts>=requestLimit?'request-cap':'invalid-page';break;}
     pagesFetched++;
     // Workday's observed continuation pages use total:0; only page zero owns the total.
     if(current.total!==scopedTotal&&!(offset>0&&current.total===0)){paginationEnd='changed-total';break;}
     for(const posting of current.jobPostings){
+      let acceptedListing=false;
+      try {
+      if(!posting||typeof posting!=='object'||Array.isArray(posting))continue;
       const path=posting.externalPath,id=typeof path==='string'?path.split('_').at(-1):'';
-      if(!id||!/^\/job\/[^?#]+$/.test(path)||path.includes('..')||/%2e|%2f|%5c/i.test(path)||/[\\\x00-\x20\x7f]/.test(path)||!posting.title||seen.has(path))continue;
+      if(!id||!/^\/job\/[^?#]+$/.test(path)||path.includes('..')||/%2e|%2f|%5c/i.test(path)||/[\\\x00-\x20\x7f]/.test(path)||typeof posting.title!=='string'||!posting.title.trim()||seen.has(path))continue;
       // Reject normalization that would escape either the exact API tenant or public job prefix.
       const apiUrl=new URL(base+path),publicUrl=new URL(pub+path);
       if(apiUrl.origin!==new URL(base).origin||publicUrl.origin!==new URL(pub).origin||
          apiUrl.pathname!==new URL(base).pathname+path||publicUrl.pathname!==new URL(pub).pathname+path||
          !apiUrl.pathname.startsWith(new URL(base).pathname+'/job/')||!publicUrl.pathname.startsWith(new URL(pub).pathname+'/job/'))continue;
-      seen.add(path);rows.push({id,title:posting.title,location:posting.locationsText,url:pub+path,path,posted:ago(posting.postedOn),country:null,countryUnresolved:true,payObserved:false});
+      const listed={id,title:posting.title,location:posting.locationsText,url:pub+path,path,posted:ago(posting.postedOn),country:null,countryUnresolved:true,payObserved:false};
+      seen.add(path);rows.push(listed);acceptedListing=true;
+      } catch(error) {if(['AUTOMATIC_SOURCE_REQUEST_CAP','AUTOMATIC_BUDGET_EXHAUSTED'].includes(error?.code))throw error;}
+      finally {if(!acceptedListing)listingRejected++;}
     }
     if(offset+current.jobPostings.length>=scopedTotal){paginationComplete=rows.length===scopedTotal;paginationEnd=paginationComplete?'reported-total':'invalid-or-duplicate-rows';break;}
     if(current.jobPostings.length<20){paginationEnd='short-before-total';break;}
-    if(attempts>=100){paginationEnd='request-cap';sourceRequestCap=true;break;}
+    if(attempts>=requestLimit){paginationEnd='request-cap';sourceRequestCap=true;break;}
   }
   phase='detail';
-  for(const row of rows){
-    if(attempts>=100){sourceRequestCap=true;break;}
-    const d=await getJson(counted,base+row.path),info=d?.jobPostingInfo;
-    const placement={...row,country:countryCode(info?.country?.descriptor)};
-    const place=strictWorkdayPlace(info,placement,site);
-    if(!place||place.country!==src.country)continue;
-    row.country=place.country;row.location=place.location;row.countryUnresolved=false;
-    row.payObserved=typeof info.jobDescription==='string';row.text=row.payObserved?info.jobDescription:'';
-    row.posted=dateTs(info.startDate)||row.posted;row.closing=dateTs(info.endDate)||null;detailValidated++;
+  for(const [index,row] of rows.entries()){
+    if(attempts>=requestLimit){sourceRequestCap=true;detailReasons['unattempted-cap']+=rows.length-index;break;}
+    const detailBefore=phaseHttp.detail;
+    let failure=null,stopped=null;
+    // Preserve the existing headers, timeout, retry and provider-cooldown policy
+    // while retaining a fixed last-failure category; no provider body is stored.
+    const observed=async(...args)=>{
+      let response;
+      try{response=await counted(...args);}catch(error){if(error?.code==='AUTOMATIC_SOURCE_REQUEST_CAP')stopped='unattempted-cap';else if(error?.code==='AUTOMATIC_BUDGET_EXHAUSTED')stopped='other';else failure='detail-http-error';throw error;}
+      if(!response.ok)failure='detail-http-error';
+      return {ok:response.ok,status:response.status,headers:response.headers,json:async()=>{
+        try{const value=await response.json();failure=null;return value;}catch(error){failure='detail-invalid-json';throw error;}
+      }};
+    };
+    const d=await getJson(observed,base+row.path);
+    if(!d&&stopped){
+      if(stopped==='unattempted-cap')sourceRequestCap=true;
+      // A failed first attempt followed by a blocked retry is still an attempted
+      // detail. Only the untouched rows belong to the unattempted count.
+      const attempted=phaseHttp.detail>detailBefore;
+      if(attempted)detailReasons[failure||'other']++;
+      detailReasons['unattempted-cap']+=rows.length-index-(attempted?1:0);break;
+    }
+    if(!d&&failure){if(phaseHttp.detail>detailBefore)detailReasons[failure]++;continue;}
+    // Treat every provider-derived conversion as fallible. Commit row fields only
+    // after placement and metadata are both validated, so one malformed JSON
+    // object cannot abort the source or leave a partly accepted row behind.
+    let detail;
+    try {
+      const info=d?.jobPostingInfo;
+      if(info?.title!=null&&typeof info.title!=='string'||info?.externalUrl!=null&&typeof info.externalUrl!=='string'||info?.country?.descriptor!=null&&typeof info.country.descriptor!=='string'){detailReasons.other++;continue;}
+      const placement={...row,country:countryCode(info?.country?.descriptor)};
+      const place=strictWorkdayPlace(info,placement,site);
+      if(!place){detailReasons[workdayDetailRejection(info,placement,site)]++;continue;}
+      if(place.country!==src.country){detailReasons['wrong-country']++;continue;}
+      const payObserved=typeof info.jobDescription==='string';
+      detail={country:place.country,location:place.location,countryUnresolved:false,payObserved,text:payObserved?info.jobDescription:'',posted:dateTs(info.startDate)||row.posted,closing:dateTs(info.endDate)||null};
+    } catch(error) {if(['AUTOMATIC_SOURCE_REQUEST_CAP','AUTOMATIC_BUDGET_EXHAUSTED'].includes(error?.code))throw error;detailReasons.other++;continue;}
+    Object.assign(row,detail);detailValidated++;
   }
+  const detailSummary=workdayDetailSummaries([{src:src.id,rawCount:rows.length,phaseHttp,detailReasons}])[0];
+  if(detailSummary)log(`${src.id}: Workday detail rejection counts: ${detailSummary.summary}; listingRejected=${listingRejected}`);
   log(`${src.name}: ${phaseHttp.listing} listing HTTP; ${phaseHttp.detail} detail HTTP; ${detailValidated}/${rows.length} detailed; pagination complete ${paginationComplete}`);
   return result(!paginationComplete?'workday-pagination-incomplete':detailValidated<rows.length?'workday-details-incomplete':'workday-scope-verified');
 }
@@ -978,7 +1029,7 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
       }
       try { result = sourceFetch ? await COLLECT[s.ats]?.(sourceFetch, s, log) : null; } catch { /* recorded below without raw provider data */ }
       let transportState=s.automatic ? sourceFetch?.diagnostics?.() : null;
-      let telemetry=transportState ? {pagesFetched:result?.pagesFetched,reportedTotal:result?.reportedTotal,paginationEnd:result?.paginationEnd,...(result?.phaseHttp?{phaseHttp:result.phaseHttp}:{}),httpRequests:transportState.httpRequests,elapsedMs:transportState.elapsedMs,budgetExhausted:transportState.budgetExhausted,sourceRequestCap:result?.sourceRequestCap===true||transportState.sourceRequestCap,paginationComplete:s.ats==='wd'&&result?.paginationComplete===true} : {};
+      let telemetry=transportState ? {pagesFetched:result?.pagesFetched,reportedTotal:result?.reportedTotal,paginationEnd:result?.paginationEnd,...(result?.phaseHttp?{phaseHttp:result.phaseHttp}:{}),...(result?.detailReasons?{detailReasons:result.detailReasons,listingRejected:result.listingRejected}:{}),httpRequests:transportState.httpRequests,elapsedMs:transportState.elapsedMs,budgetExhausted:transportState.budgetExhausted,sourceRequestCap:result?.sourceRequestCap===true||transportState.sourceRequestCap,paginationComplete:s.ats==='wd'&&result?.paginationComplete===true} : {};
       let budgetReason=transportState?.sourceRequestCap ? 'source-request-cap' : transportState?.budgetExhausted ? (transportState.httpRequests===0 ? 'not-attempted-budget' : 'budget-exhausted') : '';
       if (!result) {
         diagnostics.push({ src: s.id, status: 'failed', rawCount: 0, acceptedCount: 0, reason: budgetReason || 'source-unavailable', attemptedAt, ...telemetry });
@@ -1002,7 +1053,7 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
         if (dates.closing != null) row.closing = dates.closing;
         if (dates.location && countryOf(dates.location) === (row.country || countryOf(row.location))) row.location = dates.location;
       }
-      if(s.automatic){transportState=sourceFetch?.diagnostics?.();telemetry={httpRequests:transportState?.httpRequests,elapsedMs:transportState?.elapsedMs,budgetExhausted:transportState?.budgetExhausted,sourceRequestCap:result.sourceRequestCap===true||transportState?.sourceRequestCap,paginationComplete:s.ats==='wd'&&result.paginationComplete===true,pagesFetched:result.pagesFetched,reportedTotal:result.reportedTotal,paginationEnd:result.paginationEnd,...(result.phaseHttp?{phaseHttp:result.phaseHttp}:{})};}
+      if(s.automatic){transportState=sourceFetch?.diagnostics?.();telemetry={httpRequests:transportState?.httpRequests,elapsedMs:transportState?.elapsedMs,budgetExhausted:transportState?.budgetExhausted,sourceRequestCap:result.sourceRequestCap===true||transportState?.sourceRequestCap,paginationComplete:s.ats==='wd'&&result.paginationComplete===true,pagesFetched:result.pagesFetched,reportedTotal:result.reportedTotal,paginationEnd:result.paginationEnd,...(result.phaseHttp?{phaseHttp:result.phaseHttp}:{}),...(result.detailReasons?{detailReasons:result.detailReasons,listingRejected:result.listingRejected}:{})};}
       const got = list.map(x => normalizeCollectedJob(s, x, fx)).filter(Boolean);
       const seen = new Set();
       const uniq = got.filter(r => (!s.automatic || !r.closing_ts || r.closing_ts > Date.now()) && !seen.has(r.id) && seen.add(r.id));
@@ -1012,7 +1063,7 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
       }
       // Invalid/unlocated rows or duplicate IDs cannot prove a full replacement snapshot.
       const complete = !s.automatic && result.complete && got.length === list.length && uniq.length === got.length;
-      const refresh=s.automatic?automaticRefreshHealth({status:'partial',rawCount:list.length,acceptedCount:uniq.length,...telemetry}):null;
+      const refresh=s.automatic?automaticRefreshHealth({src:s.id,status:'partial',rawCount:list.length,acceptedCount:uniq.length,...telemetry}):null;
       const readerFailure=['total-zero-with-rows','empty-workday-tenant','empty-workday-scope','registered-workday-filter-unconfirmed'].includes(result.reason)?result.reason:null;
       const reason = s.automatic ? (!refresh.healthy&&readerFailure?readerFailure:refresh.reason) : complete ? '' : result.reason || 'rows-rejected-or-duplicated';
       diagnostics.push({ src: s.id, status: s.automatic ? (refresh.healthy?'partial':'failed') : complete ? 'complete' : 'partial', rawCount: list.length, acceptedCount: uniq.length, reason, attemptedAt, ...telemetry });
