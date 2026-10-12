@@ -97,7 +97,7 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "a7050b081b50ded57bb2972d91a223f6aeedce47d6c44d129ec354afd912354b"
+    "sha256": "75e5d9b43b1ef24b0e43b8d679c5d6a1b9e0fa036f94810f5e6a29572c8444b6"
   },
   {
     "file": "package.json",
@@ -269,7 +269,7 @@
   },
   {
     "file": "tests/jobs-ntu-diagnostics.test.mjs",
-    "sha256": "377da9513324696e4b215a00f268205b50bf661649adbeeb1a6270c5d2fd5b9b"
+    "sha256": "1de630e340afcfbdf126becde3270c07612f93c3983814a1975937c577867177"
   },
   {
     "file": "tests/jobs-pacing.test.mjs",
