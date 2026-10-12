@@ -37,7 +37,7 @@
   },
   {
     "file": "jobs-discovered-fetch.mjs",
-    "sha256": "618d7a91b402890aaa1a4c967f4c0d3c2c29dc0b995649d9b285b2c962d531cb"
+    "sha256": "e5ad7f88f8240d4342af22693e03f74238088d2147c80bf999b98b4778ceba79"
   },
   {
     "file": "jobs-discovered-sources.js",
@@ -85,7 +85,7 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "e338fb3b0e53c872d2d8fef2f1f43f2da8cde651e44d04140565cce73e50aaf6"
+    "sha256": "9d96d80ae936d9396b77b333329f8be4cde6ed2292b426457de8f5603154012d"
   },
   {
     "file": "package.json",
@@ -225,7 +225,7 @@
   },
   {
     "file": "tests/jobs-discovered.test.mjs",
-    "sha256": "bd5097b2b4fde66bf57c8e45355f493204dabe4444cd4686d6c11bcaaf9422f6"
+    "sha256": "3b438e6b5ab2fe705797102806361f48782673819617a6ce7014a93e700cd1c3"
   },
   {
     "file": "tests/jobs-employers.test.mjs",
