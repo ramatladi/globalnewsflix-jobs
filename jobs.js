@@ -1018,6 +1018,12 @@ export async function fxRates(fetchImpl = fetch) {
   const j = await getJson(fetchImpl, 'https://api.frankfurter.app/latest?from=USD');
   return j?.rates ? { USD: 1, ...j.rates } : null;
 }
+// Start the long-running Diageo reader with the first manual wave.
+// Preserve selection, membership and every other reader's relative order.
+export function manualCollectionOrder(selected) {
+  const manual = selected.filter(s => !s.automatic);
+  return [...manual.filter(s => s.id === 'diageo'), ...manual.filter(s => s.id !== 'diageo')];
+}
 // Only authoritative complete snapshots authorize removal, including confirmed zero.
 // Partial lists still contribute jobs and diagnostics without deleting unseen rows.
 export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null, options = {}) {
@@ -1028,7 +1034,7 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
   const selected = (options.sources || SOURCES).filter(s => !only || only.includes(s.id));
   // Complete bounded automatic work before manual readers start; manual per-host pacing is unchanged.
   // Each phase retains the existing six-reader concurrency and source budgets.
-  for(const [phase,queue] of [['automatic',selected.filter(s=>s.automatic)],['manual',selected.filter(s=>!s.automatic)]]){
+  for(const [phase,queue] of [['automatic',selected.filter(s=>s.automatic)],['manual',manualCollectionOrder(selected)]]){
   const phaseStarted=performance.now();
   await Promise.all(Array.from({ length: 6 }, async () => {
     for (let s; (s = queue.shift());) {

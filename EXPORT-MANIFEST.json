@@ -97,7 +97,7 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "75e5d9b43b1ef24b0e43b8d679c5d6a1b9e0fa036f94810f5e6a29572c8444b6"
+    "sha256": "c58c3da2564a6a39834fe48674f790eeb589d3060c8365e2f89559813613b15b"
   },
   {
     "file": "package.json",
@@ -293,7 +293,7 @@
   },
   {
     "file": "tests/jobs-workday-automatic.test.mjs",
-    "sha256": "390098d7070463a6abb9a34f6488d405ed4a119f0757a738104d607266d95cd9"
+    "sha256": "959348eb27ce61f23f2ff342558a04f3f6f599cbd5895da98b6f112a9346cf9a"
   },
   {
     "file": "tests/jobs-workday.test.mjs",
