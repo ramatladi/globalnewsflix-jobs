@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {workdayQueryFacets} from '../jobs-workday-query.js';
-import {automaticWorkday,registeredWorkdayFacets,collectJobs} from '../jobs.js';
+import {automaticWorkday,registeredWorkdayFacets,collectJobs,manualCollectionOrder,SOURCES} from '../jobs.js';
 const fixture=JSON.parse(readFileSync(new URL('./fixtures/jobs-workday-ntu-list-shape.json',import.meta.url)));
 // Preserve generic 100-request regressions; NTU's exact-ID exception has dedicated tests.
 const genericSource={...fixture.source,id:'auto-'+'a'.repeat(24)};
@@ -155,7 +155,7 @@ test('encoded separators, traversal and URL normalization never trigger a Workda
 test('all selected automatic readers finish before manual Workday requests share the platform',async()=>{
  const automatic={...genericSource,careerUrl:genericSource.careerUrl.split('?')[0]};
  const second={...automatic,id:'auto-'+ 'c'.repeat(24)};
- const manual={...automatic,automatic:false,id:'manual-tenant'};
+ const manual={...automatic,automatic:false,id:'diageo'};
  const releases=[],events=[];let started;const bothStarted=new Promise(resolve=>{started=resolve;});
  const f=async url=>{if(url.includes('frankfurter'))return Response.json({rates:{}});events.push('manual');return Response.json({total:0,jobPostings:[]});};
  const pending=collectJobs(f,()=>{},null,{sources:[manual,automatic,second],requestDelayMs:0,automaticFetch:s=>async()=>{
@@ -200,4 +200,51 @@ test('otherwise valid automatic candidates are not emitted after either transpor
   const {result}=await run({collect:true,transportChange});
   assert.equal(result.rows.length,0);assert.equal(result.diagnostics[0].status,'failed');assert.equal(result.diagnostics[0].acceptedCount,4);assert.equal(result.diagnostics[0].rawCount,4);assert.deepEqual(result.ok,[]);
  }
+});
+
+
+test('Diageo-first ordering preserves complete registered membership and every selected subset',()=>{
+  const ids=SOURCES.map(s=>s.id);
+  assert.equal(new Set(ids).size,ids.length);
+  assert.equal(SOURCES.filter(s=>s.id==='diageo'&&!s.automatic).length,1);
+  const subsets=[SOURCES,[],SOURCES.filter(s=>s.automatic),SOURCES.filter(s=>s.id==='diageo'),
+    SOURCES.filter(s=>s.id!=='diageo'),SOURCES.filter((s,i)=>i%2===0||s.id==='diageo'),
+    SOURCES.filter((s,i)=>i%3===0)];
+  for(const selected of subsets){
+    const before=[...selected],manual=selected.filter(s=>!s.automatic);
+    const actual=manualCollectionOrder(selected);
+    const expected=[...manual.filter(s=>s.id==='diageo'),...manual.filter(s=>s.id!=='diageo')];
+    assert.deepEqual(actual,expected);
+    assert.deepEqual(actual.filter(s=>s.id!=='diageo'),manual.filter(s=>s.id!=='diageo'));
+    assert.deepEqual(actual.map(s=>s.id).sort(),manual.map(s=>s.id).sort());
+    assert.equal(new Set(actual).size,manual.length);
+    assert.deepEqual(selected,before);
+  }
+});
+
+test('selected Diageo joins the first manual wave without exceeding six readers or changing finish eligibility',async()=>{
+  const sources=Array.from({length:8},(_,i)=>({...genericSource,automatic:false,
+    id:i===7?'diageo':'manual-'+i,args:[`manual${i}.wd3.myworkdayjobs.com`,'tenant','Careers']}));
+  const only=sources.filter(s=>s.id!=='manual-2').map(s=>s.id);
+  const expected=manualCollectionOrder(sources.filter(s=>only.includes(s.id)));
+  const starts=[],release=[];let sixStarted;
+  const ready=new Promise(resolve=>{sixStarted=resolve});
+  const f=async url=>{
+    if(url.includes('frankfurter'))return Response.json({rates:{}});
+    starts.push(new URL(url).hostname);
+    await new Promise(resolve=>{release.push(resolve);if(release.length===6)sixStarted()});
+    return Response.json({total:0,jobPostings:[]});
+  };
+  const run=collectJobs(f,()=>{},only,{sources,requestDelayMs:0});
+  await ready;
+  assert.deepEqual(starts,expected.slice(0,6).map(s=>s.args[0]));
+  assert.equal(starts[0],sources[7].args[0]);
+  release[0]();await new Promise(resolve=>setImmediate(resolve));
+  assert.deepEqual(starts,expected.map(s=>s.args[0]));
+  for(const resolve of release.slice(1))resolve();
+  const result=await run;
+  assert.deepEqual(result.diagnostics.map(d=>d.src).sort(),only.slice().sort());
+  assert.deepEqual(result.ok.slice().sort(),only.slice().sort());
+  assert.ok(result.diagnostics.every(d=>d.status==='complete'&&d.acceptedCount===0));
+  assert.deepEqual(result.rows,[]);
 });
