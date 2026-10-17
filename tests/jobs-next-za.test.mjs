@@ -33,7 +33,8 @@ test('Oracle actual public detail binds ID/title/country and preserves exact dea
  assert.equal(parseOracleDetail({items:[{...oracle.detail.items[0],requisitionFlexFields:{}}]},row),null);
  assert.equal(parseOracleDetail(oracle.detail,row,{now:Date.parse('2026-10-08T00:00:00Z')}),null);
 });
-test('actual fixture replay through all five collectors imports only validated rows and partial sources never prune',async()=>{
+test('actual fixture replay through all five collectors imports only validated rows and partial sources never prune',async t=>{
+ t.mock.method(Date,'now',()=>Date.parse('2026-10-13T12:00:00Z'));
  const results={};
  for(const id of ['avi','oceana','ethekwini','uct','shoprite']){
   results[id]=await collectJobs(async url=>{
@@ -49,7 +50,7 @@ test('actual fixture replay through all five collectors imports only validated r
   },()=>{},[id],{requestDelayMs:0});
   assert.ok(results[id].rows.length>0,id);assert.deepEqual(results[id].ok,[],id);
  }
- assert.equal(results.avi.rows.length,15);assert.equal(results.oceana.rows.length,2);assert.equal(results.uct.rows.length,1);assert.equal(results.shoprite.rows.length,2);assert.equal(results.ethekwini.rows[0].cur,'ZAR');
+ assert.equal(results.avi.rows.length,15,'avi');assert.equal(results.oceana.rows.length,2,'oceana');assert.equal(results.uct.rows.length,1,'uct');assert.equal(results.shoprite.rows.length,2,'shoprite');assert.equal(results.ethekwini.rows[0].cur,'ZAR');
 });
 
 test('invalid opt-in Oracle details never degrade into unknown-deadline imports or permit source cleanup',async()=>{
