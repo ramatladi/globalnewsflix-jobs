@@ -68,12 +68,12 @@ test('transport enforces134 under concurrent NTU calls and ignores manifest budg
  for(let i=0;i<133;i++)await f(url,options);
  const final=await Promise.allSettled([f(url,options),f(url,options)]);assert.equal(final.filter(x=>x.status==='fulfilled').length,1);assert.equal(f.diagnostics().httpRequests,134);assert.equal(f.diagnostics().sourceRequestCap,true);
 });
-test('shared transport still stops at1000 requests and exactly300 seconds regardless of NTU exception',async()=>{
- const factory=automaticTransport(transportOptions);assert.equal(factory.diagnostics().maxRequests,1000);assert.equal(factory.diagnostics().maxSeconds,300);
+test('shared transport still stops at2500 requests and exactly3000 seconds regardless of NTU exception',async()=>{
+ const factory=automaticTransport(transportOptions);assert.equal(factory.diagnostics().maxRequests,2500);assert.equal(factory.diagnostics().maxSeconds,3000);
  const ntu=factory(src);for(let i=0;i<134;i++)await ntu(url,options);
- for(let n=0;n<8;n++){const f=factory({...generic,id:'auto-'+String(n).repeat(24)});for(let i=0;i<100;i++)await f(url,options);}
- const last=factory({...generic,id:'auto-'+'f'.repeat(24)});for(let i=0;i<66;i++)await last(url,options);await assert.rejects(last(url,options),{code:'AUTOMATIC_BUDGET_EXHAUSTED'});assert.equal(factory.diagnostics().httpRequests,1000);
- let clock=0;const timed=automaticTransport({...transportOptions,now:()=>clock})(src);await timed(url,options);clock=300000;await assert.rejects(timed(url,options),{code:'AUTOMATIC_BUDGET_EXHAUSTED'});assert.equal(timed.diagnostics().httpRequests,1);
+ for(let n=0;n<23;n++){const f=factory({...generic,id:'auto-'+n.toString(16).padStart(24,'0')});for(let i=0;i<100;i++)await f(url,options);}
+ const last=factory({...generic,id:'auto-'+'f'.repeat(24)});for(let i=0;i<66;i++)await last(url,options);await assert.rejects(last(url,options),{code:'AUTOMATIC_BUDGET_EXHAUSTED'});assert.equal(factory.diagnostics().httpRequests,2500);
+ let clock=0;const timed=automaticTransport({...transportOptions,now:()=>clock})(src);await timed(url,options);clock=2999999;await timed(url,options);clock=3000000;await assert.rejects(timed(url,options),{code:'AUTOMATIC_BUDGET_EXHAUSTED'});assert.equal(timed.diagnostics().httpRequests,2);
 });
 test('rejection telemetry accepts only exact fixed integer counts bounded by raw denominator',()=>{
  assert.equal(WORKDAY_DETAIL_REASONS.length,10);assert.equal(validWorkdayDetailReasons(emptyWorkdayDetailReasons(),0,0),true);

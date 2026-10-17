@@ -7,6 +7,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { discoveredReader, validateDiscoveredManifest, registeredDiscoveredSources, allowedDiscoveredRequest, discoveredJobAllowed } from '../jobs-discovered-sources.js';
 import { loadDiscoveredManifest, automaticTransport } from '../jobs-discovered-fetch.mjs';
+import { AUTOMATIC_COLLECTION_MAX_SECONDS } from '../jobs-request-policy.js';
 import { normalizeCollectedJob, collectJobs } from '../jobs.js';
 import {evaluateSourceHealth} from '../jobs-source-health.js';
 const time='2026-01-01T00:00:00.000Z';
@@ -79,9 +80,9 @@ test('automatic budget starts after unrelated manual work and stays shared acros
   const s=source(),url='https://acme.wd3.myworkdayjobs.com/wday/cxs/acme/External/jobs',options={method:'POST',body:'{}'};
   const first=scoped(s);clock=20*60000; // Production failure: automatic employers reached the queue after20 minutes.
   assert.equal((await first(url,options)).status,200);assert.equal(http,1);
-  const start=clock;clock=start+300000-1;
+  const start=clock,window=AUTOMATIC_COLLECTION_MAX_SECONDS*1000;clock=start+window-1;
   assert.equal((await scoped({...s,id:'auto-'+'d'.repeat(24)})(url,options)).status,200,'another employer shares the same active budget');
-  clock=start+300000;
+  clock=start+window;
   await assert.rejects(first(url,options),/budget/);await assert.rejects(scoped({...s,id:'auto-'+'e'.repeat(24)})(url,options),/budget/);
   assert.equal(dns,2);assert.equal(http,2,'no request starts at or beyond the fixed deadline');
 });

@@ -71,15 +71,13 @@ export function sourceCareerUrls(source) {
     case 'uct':
     case 'gauteng':
     case 'jsonld': careersUrl = a; collectionUrl = a; break;
-    // A government's actual configured source URL is required; no guessed PDF.
-    case 'dpsa': careersUrl = a || null; collectionUrl = careersUrl; break;
   }
   return { careersUrl: httpsUrl(careersUrl), collectionUrl: httpsUrl(collectionUrl) };
 }
 export function employerMetadata(source, observation = source.verifiedAt ? source : JOBS_SOURCE_OBSERVATIONS[source.id] || null, now = Date.now()) {
   const urls = sourceCareerUrls(source);
   const verified = observation && Number.isSafeInteger(observation.verifiedAt) && observation.verifiedAt > 0 && observation.verifiedAt <= now && httpsUrl(observation.provenanceUrl);
-  const configuredCountries = source.ats === 'nhs' ? ['GB'] : source.ats === 'dpsa' ? ['ZA'] : source.ats === 'amazon' ? AMAZON_COUNTRIES : [];
+  const configuredCountries = source.ats === 'nhs' ? ['GB'] : source.ats === 'amazon' ? AMAZON_COUNTRIES : [];
   const observedCountries = verified && Array.isArray(observation.countries) ? [...new Set(observation.countries.filter(cc => COUNTRY[cc] && cc !== 'WW'))] : [];
   return {
     id: source.id, name: source.name, ticker: source.ticker || null, ats: source.ats,

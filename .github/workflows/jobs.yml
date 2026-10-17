@@ -1,5 +1,7 @@
 name: Jobs
-# Collects jobs from listed companies', governments' and international organisations' own career sites every six hours.
+# Production Jobs collector: collects jobs from listed companies', governments' and international
+# organisations' own career sites every six hours. The site accepts uploads only from this workflow
+# on main (scheduled or manual), signed by GitHub for this exact repository; never from pull requests.
 on:
   schedule:
     - cron: "41 */6 * * *"
@@ -22,10 +24,15 @@ concurrency:
   cancel-in-progress: false
 jobs:
   jobs:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    # Automatic sources run first under a 3,000 s shared deadline (up to 24 employers), then the
+    # manual phase (~28 min measured). 120 minutes leaves a healthy margin.
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22

@@ -5,6 +5,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {discoveredReader,validateDiscoveredManifest} from '../jobs-discovered-sources.js';
 import {loadDiscoveredManifest} from '../jobs-discovered-fetch.mjs';
+import {automaticSourcesFit} from '../jobs-request-policy.js';
 
 const official='https://acme.example.com/';
 const urls=[
@@ -42,8 +43,13 @@ test('Workday registration accepts bounded facet syntax only; metadata remains r
 });
 test('current active registrations retain valid scoped reader contracts',async()=>{
  const manifest=JSON.parse(await readFile(new URL('../data/discovered-sources/manifest.json',import.meta.url),'utf8'));
- assert.doesNotThrow(()=>validateDiscoveredManifest(manifest,now));
- assert.ok(manifest.sources.length<=2,'interim capacity also binds direct manifest changes');
+ // The daily publisher runs this suite on the registry it is about to push.
+ // Sources are registered when it runs, after this file's fixed fixture time,
+ // so the registry is checked against the real clock. Its bound is the
+ // collector's shared automatic budget (24 sources since 17 Oct 2026), not the
+ // earlier interim limit of two.
+ assert.doesNotThrow(()=>validateDiscoveredManifest(manifest,Date.now()));
+ assert.ok(automaticSourcesFit(manifest.sources.map(s=>s.id)),'the collector budget also binds direct manifest changes');
 });
 test('rejected remote query scopes visibly fail with source ID and never become an empty registry',async()=>{
  const url='https://jobs.lever.co/acme',s=source(url+'?location=Singapore',discoveredReader(url,official));

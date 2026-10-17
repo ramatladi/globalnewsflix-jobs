@@ -85,7 +85,6 @@ colgate|Colgate-Palmolive|CL|c|sf|jobs.colgate.com
 kcb|KCB Group|KCB|c|orc|eoin.fa.em3.oraclecloud.com|CX_3001
 amazon|Amazon|AMZN|c|amazon|
 nhs|NHS||g|nhs|
-za-dpsa|South African Public Service||g|dpsa|https://www.gov.za/government-jobs-week
 un|United Nations||i|un|
 unhcr|UNHCR||i|wd|unhcr.wd3.myworkdayjobs.com|unhcr|External
 wfp|World Food Programme||i|wd|wd3.myworkdaysite.com|wfp|job_openings
@@ -1041,10 +1040,6 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
       const attemptedAt = Date.now();
       const sourceFetch = s.automatic ? options.automaticFetch?.(s) : (url,options)=>fetchImpl(url,options,platformForReader(s.ats));
       let result = null;
-      if (s.ats === 'dpsa') {
-        diagnostics.push({ src: s.id, status: 'partial', rawCount: 0, acceptedCount: 0, reason: 'external-reader', attemptedAt });
-        continue;
-      }
       try { result = sourceFetch ? await COLLECT[s.ats]?.(sourceFetch, s, log) : null; } catch { /* recorded below without raw provider data */ }
       let transportState=s.automatic ? sourceFetch?.diagnostics?.() : null;
       let telemetry=transportState ? {pagesFetched:result?.pagesFetched,reportedTotal:result?.reportedTotal,paginationEnd:result?.paginationEnd,...(result?.phaseHttp?{phaseHttp:result.phaseHttp}:{}),...(result?.detailReasons?{detailReasons:result.detailReasons,listingRejected:result.listingRejected}:{}),httpRequests:transportState.httpRequests,elapsedMs:transportState.elapsedMs,budgetExhausted:transportState.budgetExhausted,sourceRequestCap:result?.sourceRequestCap===true||transportState.sourceRequestCap,paginationComplete:s.ats==='wd'&&result?.paginationComplete===true} : {};

@@ -1,4 +1,5 @@
 // Automatic-only platform pacing and a shared hostname mutex; authorization remains in each transport.
+import { AUTOMATIC_PLATFORM_INTERVAL_MS } from './jobs-request-policy.js';
 export function jobPlatform(value) {
   const host = new URL(value).hostname.toLowerCase();
   const groups = {workday:['myworkdayjobs.com','myworkdaysite.com'],greenhouse:['greenhouse.io'],lever:['lever.co'],ashby:['ashbyhq.com'],smartrecruiters:['smartrecruiters.com'],oracle:['oraclecloud.com'],successfactors:['successfactors.com','successfactors.eu'],workable:['workable.com'],icims:['icims.com'],taleo:['taleo.net']};
@@ -29,7 +30,7 @@ export function createPlatformPacer({now=()=>performance.now(),pause=ms=>new Pro
       // Platform lock protects admission only, while the hostname lock lasts
       // through the response. Do not await dispatch while holding platform lock.
       const admit=async()=>{
-        try {while(now()<state.next)await pause(state.next-now());state.next=now()+1000;return dispatch();}
+        try {while(now()<state.next)await pause(state.next-now());state.next=now()+AUTOMATIC_PLATFORM_INTERVAL_MS;return dispatch();}
         finally {release();}
       };
       return await admit();

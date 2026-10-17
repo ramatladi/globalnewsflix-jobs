@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { uploadJobs,runCollectedJobs,timedGovernmentJobs } from '../jobs-runner.mjs';
+import { uploadJobs,runCollectedJobs } from '../jobs-runner.mjs';
+import * as runner from '../jobs-runner.mjs';
 const payload={rows:[{src:'absa'},{src:'nedbank'}],ok:['absa','nedbank'],diagnostics:[],runTs:123,site:'https://globalnewsflix.com',log:()=>{}};
 test('partial upload acknowledgement never prunes affected sources',async()=>{
  const posts=[];let tokens=0;
@@ -35,8 +36,26 @@ test('report failure and dry-run both prevent publishing',async()=>{
  await runCollectedJobs({collect:async()=>payload,writeReport:async()=>{},publish,dryRun:true});assert.equal(uploads,0);
 });
 
-test('government duration is measured separately and preserves returned jobs and diagnostics',async()=>{
- let clock=100;const data={rows:[{src:'za-dpsa'}],diagnostic:{src:'za-dpsa',status:'partial'}};
- const result=await timedGovernmentJobs(async()=>{clock=160100;return data;},()=>clock);
- assert.equal(result.governmentElapsedMs,160000);assert.equal(result.rows,data.rows);assert.equal(result.diagnostic,data.diagnostic);
+test('the runner no longer reads the DPSA PDF circular',()=>{
+ assert.equal(runner.governmentJobs,undefined);assert.equal(runner.timedGovernmentJobs,undefined);
+});
+
+test('a held prune (409 with blocked sources) is a warning once rows and reports are stored',async()=>{
+ const logs=[];const result=await uploadJobs({...payload,log:s=>logs.push(s),getToken:async()=>'',fetchImpl:async u=>u.endsWith('/finish')?Response.json({ok:false,removed:0,why:'pruning limit or stale run',blockedSources:['absa']},{status:409}):Response.json({ok:true,n:2})});
+ assert.equal(result.ok,true);assert.deepEqual(result.pruneBlocked,['absa']);
+ const verdict=runner.jobsRunVerdict({result,diagnostics:[{src:'absa',status:'partial',reason:'prune-limit-or-stale-run'},{src:'nedbank',status:'partial',reason:'html-total-unverified'}]});
+ assert.equal(verdict.exitCode,0);assert.ok(verdict.warnings.some(w=>w.includes('absa')));assert.ok(verdict.warnings.includes('1 partial:html-total-unverified'));
+});
+test('a 409 naming sources the run never finished, or a plain 409, still fails',async()=>{
+ for(const body of [{ok:false,blockedSources:['unknown-source']},{ok:false,why:'x'},{ok:false,blockedSources:[]}]){
+  const result=await uploadJobs({...payload,getToken:async()=>'',fetchImpl:async u=>u.endsWith('/finish')?Response.json(body,{status:409}):Response.json({ok:true,n:2})});
+  assert.equal(result.ok,false);assert.equal(runner.jobsRunVerdict({result,diagnostics:[{src:'absa',status:'complete'}]}).exitCode,1);
+ }
+});
+test('verdict: partials and some failed sources warn; failed uploads or nothing usable fail',()=>{
+ const ok={ok:true,failedSources:[],pruneBlocked:[]};
+ assert.equal(runner.jobsRunVerdict({result:ok,diagnostics:[{status:'partial',reason:'html-total-unverified'},{status:'failed',reason:'source-unavailable'}]}).exitCode,0);
+ assert.equal(runner.jobsRunVerdict({result:ok,diagnostics:[{status:'failed',reason:'source-unavailable'}]}).exitCode,1);
+ assert.equal(runner.jobsRunVerdict({result:{ok:false,failedSources:['absa']},diagnostics:[{status:'complete'}]}).exitCode,1);
+ assert.equal(runner.jobsRunVerdict({dryRun:true,result:null,diagnostics:[{status:'partial',reason:'page-limit'}]}).exitCode,0);
 });

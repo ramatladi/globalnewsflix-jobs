@@ -4,7 +4,7 @@ import { SOURCES } from '../jobs.js';
 import { sourceCareerUrls, employerMetadata, employerRegistry, registryCoverage } from '../jobs-employers.js';
 
 test('every supported configured source has deterministic HTTPS career provenance', () => {
-  for (const source of SOURCES.filter(source => source.ats !== 'dpsa' && !source.automatic)) {
+  for (const source of SOURCES.filter(source => !source.automatic)) {
     const row = employerMetadata(source);
     assert.match(row.careersUrl, /^https:\/\//, source.id);
     assert.match(row.collectionUrl, /^https:\/\//, source.id);

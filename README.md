@@ -12,9 +12,11 @@ Existing readers cover Greenhouse, Lever, Ashby, Workday, SuccessFactors, Oracle
 
 Application commands use Node 22 and Python 3.12; workflow actions use reviewed Node24-compatible releases pinned to commit SHAs. Install requirements.txt, run npm test and python -m unittest discover -s tests -p 'test_*.py'. Set JOBS_DRY_RUN=1 to collect without authentication or ingestion writes. Optional JOB_SOURCES selects registered IDs.
 
-Scheduled runs occur at minute41 every six hours. Manual workflow_dispatch accepts sources and dry_run. Publishing requires repository variable PUBLISH_RESULTS=true and the separately configured Jobs-only OIDC trust; manual dry_run always disables publishing. Reports are uploaded as the jobs-collection-report artifact, including after collection failures where a report exists.
+This repository is the production collector. Scheduled runs occur at minute 41 every six hours. Manual workflow_dispatch accepts sources and dry_run. Publishing requires repository variable PUBLISH_RESULTS=true and the separately configured Jobs-only OIDC trust; manual dry_run always disables publishing. Reports are uploaded as the jobs-collection-report artifact, including after collection failures where a report exists. The signed identity and any rejection are reported as check-run annotations.
 
-The site accepts only reviewed signed GitHub tokens for the exact authorized main-branch Jobs workflow and Jobs ingestion endpoints. No long-lived Cloudflare token or site deployment secret belongs here. Other site APIs remain private-repository-only.
+The site accepts only signed GitHub tokens for this exact repository (pinned to its numeric owner and repository IDs, immutable subject form), from the direct Jobs workflow on main started by the schedule or a manual dispatch, and only on the Jobs ingestion endpoints. Pull requests, forks, other branches and other workflows never receive site access. No long-lived Cloudflare token or site deployment secret belongs here. Other site APIs remain private-repository-only.
+
+GitHub disables scheduled workflows in public repositories after 60 days without repository activity; publishing an export (or any commit) keeps the schedule active.
 
 Only complete source snapshots may prune disappeared jobs. Partial, capped, blocked and failed reads preserve existing listings. Official PDF circulars are incremental; expiry uses published deadlines. Pay is shown only as advertised, and ambiguous geography is withheld. No login, access-control bypass, paid API or guessed source data is used.
 
