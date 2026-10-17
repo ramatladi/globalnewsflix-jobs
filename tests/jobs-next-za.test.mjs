@@ -33,7 +33,10 @@ test('Oracle actual public detail binds ID/title/country and preserves exact dea
  assert.equal(parseOracleDetail({items:[{...oracle.detail.items[0],requisitionFlexFields:{}}]},row),null);
  assert.equal(parseOracleDetail(oracle.detail,row,{now:Date.parse('2026-10-08T00:00:00Z')}),null);
 });
-test('actual fixture replay through all five collectors imports only validated rows and partial sources never prune',async()=>{
+test('actual fixture replay through all five collectors imports only validated rows and partial sources never prune',async t=>{
+ // Replay captured vacancies at their capture date: a real 14 Oct closure must
+ // expire in production, while this historical fixture must remain reproducible.
+ t.mock.method(Date,'now',()=>Date.parse('2026-10-10T12:00:00Z'));
  const results={};
  for(const id of ['avi','oceana','ethekwini','uct','shoprite']){
   results[id]=await collectJobs(async url=>{
