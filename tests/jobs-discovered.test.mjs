@@ -136,7 +136,7 @@ test('runtime manifest validation rejects future source and identity timestamps'
 });
 test('accepted partial rows cannot hide a selected source budget failure',async()=>{
  const s={...source(),ats:'gh',args:['acme'],automatic:true};
- const scoped=async()=>Response.json({jobs:[{id:1,title:'Engineer',absolute_url:'https://boards.greenhouse.io/acme/jobs/1',location:{name:'Johannesburg, South Africa'},content:'Engineering role'}]});
+ const scoped=async()=>Response.json({jobs:[{id:1,title:'Engineer',company_name:'Acme Limited',absolute_url:'https://boards.greenhouse.io/acme/jobs/1',location:{name:'Johannesburg, South Africa'},content:'Engineering role'}],meta:{total:1}});
  scoped.diagnostics=()=>({httpRequests:100,elapsedMs:45000,sourceRequestCap:true,budgetExhausted:false});
  const result=await collectJobs(async()=>Response.json({rates:{}}),()=>{},[s.id],{sources:[s],requestDelayMs:0,automaticFetch:()=>scoped});
  assert.equal(result.rows.length,0);assert.equal(result.diagnostics[0].acceptedCount,1);assert.equal(result.diagnostics[0].status,'failed');assert.equal(result.diagnostics[0].reason,'source-request-cap');assert.equal(result.diagnostics[0].httpRequests,100);assert.equal(result.diagnostics[0].elapsedMs,45000);assert.deepEqual(result.ok,[]);
@@ -144,9 +144,16 @@ test('accepted partial rows cannot hide a selected source budget failure',async(
 
 
 test('generic complete non-Workday snapshots cannot claim automatic pagination evidence',async()=>{
- const base=source(),s={...base,automatic:true,ats:'gh',args:['acme'],careerUrl:'https://boards.greenhouse.io/acme'};
- const scoped=async()=>Response.json({jobs:[{id:1,title:'Engineer',location:{name:'Cape Town, South Africa'},absolute_url:'https://boards.greenhouse.io/acme/jobs/1'}]});
+ // SmartRecruiters' generic reader has no refresh evidence (and is not refreshable);
+ // a Greenhouse board without its reported total cannot claim completion either.
+ const base=source(),sr={...base,automatic:true,ats:'sr',args:['acme'],careerUrl:'https://careers.smartrecruiters.com/acme'};
+ const srFetch=async()=>Response.json({totalFound:1,content:[{id:'1',name:'Engineer',location:{country:'za',fullLocation:'Cape Town, South Africa'}}]});
+ srFetch.diagnostics=()=>({httpRequests:1,elapsedMs:10,budgetExhausted:false,sourceRequestCap:false});
+ const generic=await collectJobs(async()=>Response.json({rates:{}}),()=>{},[sr.id],{sources:[sr],requestDelayMs:0,automaticFetch:()=>srFetch});
+ assert.equal(generic.diagnostics[0].paginationComplete,false);assert.equal(generic.diagnostics[0].status,'failed');assert.equal(generic.diagnostics[0].reason,'pagination-incomplete');assert.deepEqual(generic.ok,[]);assert.deepEqual(generic.rows,[]);
+ const s={...base,automatic:true,ats:'gh',args:['acme'],careerUrl:'https://boards.greenhouse.io/acme'};
+ const scoped=async()=>Response.json({jobs:[{id:1,title:'Engineer',company_name:'Acme Limited',location:{name:'Cape Town, South Africa'},absolute_url:'https://boards.greenhouse.io/acme/jobs/1'}]});
  scoped.diagnostics=()=>({httpRequests:1,elapsedMs:10,budgetExhausted:false,sourceRequestCap:false});
  const result=await collectJobs(async()=>Response.json({rates:{}}),()=>{},[s.id],{sources:[s],requestDelayMs:0,automaticFetch:()=>scoped});
- assert.equal(result.diagnostics[0].paginationComplete,false);assert.equal(result.diagnostics[0].status,'failed');assert.equal(result.diagnostics[0].reason,'pagination-incomplete');assert.deepEqual(result.ok,[]);
+ assert.equal(result.diagnostics[0].paginationComplete,false);assert.equal(result.diagnostics[0].status,'failed');assert.equal(result.diagnostics[0].reason,'board-total-mismatch');assert.deepEqual(result.ok,[]);assert.deepEqual(result.rows,[]);
 });

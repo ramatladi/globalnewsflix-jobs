@@ -1,4 +1,4 @@
-import { automaticSourceRequestLimit, AUTOMATIC_COLLECTION_MAX_REQUESTS, AUTOMATIC_COLLECTION_MAX_SECONDS } from './jobs-request-policy.js';
+import { automaticSourceRequestLimit, AUTOMATIC_COLLECTION_MAX_REQUESTS, AUTOMATIC_COLLECTION_MAX_SECONDS, REFRESHABLE_AUTOMATIC_READERS } from './jobs-request-policy.js';
 // Restricted transport for automatically registered employers only.
 import { request } from 'node:https';
 import { lookup } from 'node:dns/promises';
@@ -13,17 +13,71 @@ export function publicAddress(a) {
   const [x,y] = a.split('.').map(Number);
   return !(x === 0 || x === 10 || x === 127 || x >= 224 || x === 100 && y >= 64 && y <= 127 || x === 169 && y === 254 || x === 172 && y >= 16 && y <= 31 || x === 192 && [0,168].includes(y) || x === 198 && [18,19,51].includes(y) || x === 203 && y === 0);
 }
+// robots.txt (RFC 9309) for the automatic careers agent. The group naming this
+// agent, else "*", decides; the longest matching rule wins and Allow wins a tie.
+// Crawl-delay is honoured up to ten seconds; a longer delay cannot fit the run.
+export const AUTOMATIC_ROBOTS_TOKEN = 'globalnewsflix-careers';
+export const AUTOMATIC_USER_AGENT = 'GlobalNewsflix-careers/1.0 (+https://globalnewsflix.com/contact)';
+export function parseRobots(txt, token = AUTOMATIC_ROBOTS_TOKEN) {
+  const groups = []; let current = null, agentLine = false;
+  for (const raw of String(txt || '').slice(0, 500000).split(/\r?\n/)) {
+    const line = raw.replace(/#.*$/, '').trim(); if (!line) continue;
+    const m = line.match(/^([A-Za-z-]+)\s*:\s*(.*)$/); if (!m) continue;
+    const key = m[1].toLowerCase(), value = m[2].trim();
+    if (key === 'user-agent') { if (!agentLine || !current) { current = { agents: [], rules: [], delay: null }; groups.push(current); } current.agents.push(value.toLowerCase()); agentLine = true; continue; }
+    agentLine = false;
+    if (!current) continue;
+    if (key === 'allow' || key === 'disallow') current.rules.push({ allow: key === 'allow', path: value });
+    if (key === 'crawl-delay' && /^\d+(?:\.\d+)?$/.test(value)) current.delay = Number(value);
+  }
+  const mine = groups.filter(g => g.agents.some(a => a !== '*' && a.replace(/\/.*$/, '') === token)), chosen = mine.length ? mine : groups.filter(g => g.agents.includes('*'));
+  const delays = chosen.map(g => g.delay).filter(d => d != null);
+  return { rules: chosen.flatMap(g => g.rules).filter(r => r.path), crawlDelaySeconds: delays.length ? Math.max(...delays) : null };
+}
+export function robotsAllows(parsed, path) {
+  let best = null;
+  for (const r of parsed?.rules || []) {
+    const pattern = new RegExp('^' + r.path.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*').replace(/\\\$$/, '$'));
+    if (pattern.test(path) && (!best || r.path.length > best.path.length || r.path.length === best.path.length && r.allow)) best = r;
+  }
+  return !best || best.allow;
+}
+// Workday tenants were reviewed (robots.txt allows /wday/cxs/ on 18 Oct 2026)
+// and keep their measured request counts; every other refreshable reader reads
+// robots.txt once per origin per run, counted in its own request budget.
+const robotsChecked = source => source.ats !== 'wd' && REFRESHABLE_AUTOMATIC_READERS.has(source.ats);
+// Board readers receive a whole board (or 100 postings) with descriptions in one
+// response: Recruitee offers carry every translation (about 30 kB each), Lever
+// pages run near 2 MB. They may read up to 8 MB; Workday pages keep 2 MB.
+export const maxResponseBytes = source => robotsChecked(source) ? 8000000 : 2000000;
 export function automaticTransport({ resolver = lookup, transport = request, now = () => performance.now(), pause = ms => new Promise(r => setTimeout(r,ms)), maxRequests = AUTOMATIC_COLLECTION_MAX_REQUESTS, maxSeconds = AUTOMATIC_COLLECTION_MAX_SECONDS, platformPace } = {}) {
   platformPace ||= createPlatformPacer({now,pause});
   let total = 0, deadline = null, ended = null;
   const timings = new Map();
   const locks = new Map(), counts = new Map(), cooled = new Set(), budgetStopped = new Set(), sourceCapped = new Set();
+  const robotsByOrigin = new Map(), hostDelayMs = new Map(), robotsBlocked = new Set();
   const budgetError = source => {budgetStopped.add(source.id);return Object.assign(new Error('Automatic request budget exhausted'),{code:'AUTOMATIC_BUDGET_EXHAUSTED'});};
   const checkBudget = source => {
-    if ((counts.get(source.id) || 0) >= automaticSourceRequestLimit(source.id)) {sourceCapped.add(source.id);throw Object.assign(new Error('Automatic source request cap exhausted'),{code:'AUTOMATIC_SOURCE_REQUEST_CAP'});}
+    if ((counts.get(source.id) || 0) >= automaticSourceRequestLimit(source.id, source.ats)) {sourceCapped.add(source.id);throw Object.assign(new Error('Automatic source request cap exhausted'),{code:'AUTOMATIC_SOURCE_REQUEST_CAP'});}
     if (now() >= deadline || total >= maxRequests) throw budgetError(source);
   };
-  const factory = source => {const perform = async function(value, options = {}) {
+  const factory = source => {
+  const robotsFor = origin => {
+    if (!robotsByOrigin.has(origin)) robotsByOrigin.set(origin, (async () => {
+      try {
+        const r = await perform(origin + '/robots.txt');
+        // RFC 9309: a missing file (4xx) allows everything; a server error disallows.
+        if (r.status >= 400 && r.status < 500) return { rules: [], crawlDelaySeconds: null };
+        if (r.status !== 200) return { rules: [{ allow: false, path: '/' }], crawlDelaySeconds: null };
+        return parseRobots(await r.text());
+      } catch (error) {
+        if (['AUTOMATIC_BUDGET_EXHAUSTED', 'AUTOMATIC_SOURCE_REQUEST_CAP'].includes(error?.code)) { robotsByOrigin.delete(origin); throw error; }
+        return { rules: [{ allow: false, path: '/' }], crawlDelaySeconds: null };
+      }
+    })());
+    return robotsByOrigin.get(origin);
+  };
+  const perform = async function(value, options = {}) {
     let url = String(value), method = String(options.method || 'GET').toUpperCase();
     if (options.body && (typeof options.body !== 'string' || Buffer.byteLength(options.body) > 10000)) throw new Error('Invalid request body');
     for (let hop = 0; hop < 4; hop++) {
@@ -34,13 +88,19 @@ export function automaticTransport({ resolver = lookup, transport = request, now
       if(!timings.has(source.id))timings.set(source.id,{started:now(),ended:now()});
       checkBudget(source);
       const u = new URL(url), host = u.hostname;
+      if (robotsChecked(source) && u.pathname !== '/robots.txt') {
+        const policy = await robotsFor(u.origin);
+        if (policy.crawlDelaySeconds > 10 || !robotsAllows(policy, u.pathname + u.search)) { robotsBlocked.add(source.id); throw Object.assign(new Error('Automatic request disallowed by robots.txt'), { code: 'AUTOMATIC_ROBOTS_DISALLOWED' }); }
+        if (policy.crawlDelaySeconds > 1) hostDelayMs.set(host, Math.ceil(policy.crawlDelaySeconds * 1000));
+        checkBudget(source);
+      }
       if (cooled.has(host)) throw new Error('Automatic host cooldown');
       const waitStarted=now();
       let release;
       const prior = locks.get(host) || Promise.resolve(); locks.set(host, new Promise(r => { release = r; }));
       await prior;
       try {
-        await pause(1000);
+        await pause(hostDelayMs.get(host) || 1000);
         checkBudget(source);
         if (cooled.has(host)) throw new Error('Automatic host cooldown');
         const addresses = await Promise.race([resolver(host,{all:true,family:4}), new Promise((_,reject) => { const t=setTimeout(()=>reject(new Error('DNS timeout')),5000); t.unref?.(); })]);
@@ -50,9 +110,9 @@ export function automaticTransport({ resolver = lookup, transport = request, now
         checkBudget(source);
         total++; counts.set(source.id,(counts.get(source.id) || 0)+1);
         return new Promise((resolve,reject) => {
-          const req = transport(u, { method, servername:host, family:4, autoSelectFamily:false, lookup:(_h,o,cb)=>o?.all?cb(null,[{address:addresses[0].address,family:4}]):cb(null,addresses[0].address,4), headers:{'user-agent':'GlobalNewsflix-careers/1.0','accept':'application/json,text/html','content-type':'application/json'} }, res => {
+          const req = transport(u, { method, servername:host, family:4, autoSelectFamily:false, lookup:(_h,o,cb)=>o?.all?cb(null,[{address:addresses[0].address,family:4}]):cb(null,addresses[0].address,4), headers:source.ats === 'wd' ? {'user-agent':'GlobalNewsflix-careers/1.0','accept':'application/json,text/html','content-type':'application/json'} : {'user-agent':AUTOMATIC_USER_AGENT,'accept':'application/json, application/rss+xml;q=0.9, application/xml;q=0.9, text/xml;q=0.9, text/plain;q=0.8, text/html;q=0.5'} }, res => {
             let size=0; const chunks=[];
-            res.on('data',chunk=>{size+=chunk.length;if(size>2000000)req.destroy(new Error('Response too large'));else chunks.push(chunk);});
+            res.on('data',chunk=>{size+=chunk.length;if(size>maxResponseBytes(source))req.destroy(new Error('Response too large'));else chunks.push(chunk);});
             res.on('error',reject); res.on('end',()=>resolve({status:res.statusCode,headers:res.headers,body:Buffer.concat(chunks)}));
           });
           const timer=setTimeout(()=>req.destroy(now()>=deadline ? budgetError(source) : new Error('Request timeout')),Math.min(18000,Math.max(1,deadline-now())));
@@ -60,7 +120,8 @@ export function automaticTransport({ resolver = lookup, transport = request, now
           req.end(method === 'POST' ? options.body : undefined);
         });
         },platformForReader(source.ats),'automatic',now()-waitStarted);
-        if ([401,403,429].includes(result.status)) cooled.add(host);
+        // A refused robots.txt is read as RFC 9309 says; it does not cool the host.
+        if (result.status === 429 || [401,403].includes(result.status) && u.pathname !== '/robots.txt') cooled.add(host);
         if ([301,302,303,307,308].includes(result.status)) { url = new URL(result.headers.location,url).href; if (method === 'POST' && [301,302,303].includes(result.status)) method='GET'; continue; }
         return new Response(result.body,{status:result.status,headers:result.headers});
       } finally { release(); }
@@ -68,7 +129,7 @@ export function automaticTransport({ resolver = lookup, transport = request, now
     throw new Error('Redirect limit');
   };
   const scopedFetch=async(...args)=>{try{return await perform(...args);}finally{ended=now();const timing=timings.get(source.id);if(timing)timing.ended=ended;}};
-  scopedFetch.diagnostics=()=>{const timing=timings.get(source.id);return {httpRequests:counts.get(source.id)||0,elapsedMs:timing?Math.max(0,Math.ceil(timing.ended-timing.started)):0,budgetExhausted:budgetStopped.has(source.id),sourceRequestCap:sourceCapped.has(source.id)};};
+  scopedFetch.diagnostics=()=>{const timing=timings.get(source.id);return {httpRequests:counts.get(source.id)||0,elapsedMs:timing?Math.max(0,Math.ceil(timing.ended-timing.started)):0,budgetExhausted:budgetStopped.has(source.id),sourceRequestCap:sourceCapped.has(source.id),...(robotsChecked(source)?{robotsDisallowed:robotsBlocked.has(source.id)}:{})};};
   return scopedFetch;};
   factory.diagnostics=()=>({httpRequests:total,elapsedMs:deadline===null?0:Math.max(0,Math.ceil((ended??now())-(deadline-maxSeconds*1000))),maxRequests,maxSeconds});
   return factory;

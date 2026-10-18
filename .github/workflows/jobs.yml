@@ -26,7 +26,7 @@ jobs:
   jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    # Automatic sources run first under a 3,000 s shared deadline (up to 24 employers), then the
+    # Automatic sources run first under a 3,000 s shared deadline (2,500 requests), then the
     # manual phase (~28 min measured). 120 minutes leaves a healthy margin.
     timeout-minutes: 120
     steps:

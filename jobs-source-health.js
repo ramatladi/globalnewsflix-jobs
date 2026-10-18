@@ -11,19 +11,21 @@ export function auditAutomaticOutput(source, rows, rawCount, now=Date.now()) {
 }
 // A successful automatic refresh is distinct from pruning authority. Require
 // positive transport evidence, natural pagination and >=90% accepted rows.
+// 'single-document' is a board the platform documents as one complete response
+// (Ashby, Recruitee, Personio); d.ats selects that reader's request limit.
 export function automaticRefreshHealth(d){
- if(d?.status==='failed'||['source-request-cap','budget-exhausted','not-attempted-budget','automatic-quality-breaker','upload-failed','source-unavailable'].includes(d?.reason))return {healthy:false,reason:d.reason||'automatic-refresh-failed'};
+ if(d?.status==='failed'||['source-request-cap','budget-exhausted','not-attempted-budget','automatic-quality-breaker','upload-failed','source-unavailable','robots-disallowed'].includes(d?.reason))return {healthy:false,reason:d.reason||'automatic-refresh-failed'};
  if(d?.sourceRequestCap===true)return {healthy:false,reason:'source-request-cap'};
  if(d?.budgetExhausted===true)return {healthy:false,reason:d.httpRequests===0?'not-attempted-budget':'budget-exhausted'};
- if(!Number.isSafeInteger(d?.httpRequests)||d.httpRequests<=0||d.httpRequests>automaticSourceRequestLimit(d.src)||d.budgetExhausted!==false||d.sourceRequestCap!==false)return {healthy:false,reason:'refresh-transport-unverified'};
- if(d.paginationComplete!==true||!Number.isSafeInteger(d.pagesFetched)||d.pagesFetched<1||d.pagesFetched>d.httpRequests||!['reported-total','short-page','empty-page'].includes(d.paginationEnd))return {healthy:false,reason:'pagination-incomplete'};
+ if(!Number.isSafeInteger(d?.httpRequests)||d.httpRequests<=0||d.httpRequests>automaticSourceRequestLimit(d.src,d.ats)||d.budgetExhausted!==false||d.sourceRequestCap!==false)return {healthy:false,reason:'refresh-transport-unverified'};
+ if(d.paginationComplete!==true||!Number.isSafeInteger(d.pagesFetched)||d.pagesFetched<1||d.pagesFetched>d.httpRequests||!['reported-total','short-page','empty-page','single-document'].includes(d.paginationEnd))return {healthy:false,reason:'pagination-incomplete'};
  if(d.paginationEnd==='reported-total'&&(!Number.isSafeInteger(d.reportedTotal)||d.reportedTotal!==d.rawCount)||d.reportedTotal!=null&&(!Number.isSafeInteger(d.reportedTotal)||d.reportedTotal<0||d.reportedTotal!==d.rawCount))return {healthy:false,reason:'pagination-total-mismatch'};
  if(!Number.isSafeInteger(d.rawCount)||d.rawCount<=0||d.rawCount>1000)return {healthy:false,reason:'empty-automatic-refresh'};
  if(!Number.isSafeInteger(d.acceptedCount)||d.acceptedCount<0||d.acceptedCount>d.rawCount||d.acceptedCount*10<d.rawCount*9)return {healthy:false,reason:'insufficient-accepted-coverage'};
  return {healthy:true,reason:'healthy-automatic-refresh'};
 }
-export function persistedRefreshHealth(d){
- return automaticRefreshHealth({src:d.src,status:d.status,reason:d.reason,httpRequests:d.http_requests,rawCount:d.raw_count,acceptedCount:d.accepted_count,paginationComplete:d.pagination_complete===1,budgetExhausted:d.budget_exhausted===0?false:d.budget_exhausted===1?true:undefined,sourceRequestCap:d.source_request_cap===0?false:d.source_request_cap===1?true:undefined,pagesFetched:d.pages_fetched,reportedTotal:d.reported_total,paginationEnd:d.pagination_end});
+export function persistedRefreshHealth(d,ats){
+ return automaticRefreshHealth({src:d.src,ats,status:d.status,reason:d.reason,httpRequests:d.http_requests,rawCount:d.raw_count,acceptedCount:d.accepted_count,paginationComplete:d.pagination_complete===1,budgetExhausted:d.budget_exhausted===0?false:d.budget_exhausted===1?true:undefined,sourceRequestCap:d.source_request_cap===0?false:d.source_request_cap===1?true:undefined,pagesFetched:d.pages_fetched,reportedTotal:d.reported_total,paginationEnd:d.pagination_end});
 }
 export function evaluateSourceHealth(sources, report, status, now=Date.now()) {
   const reasons=[],pending=[],groups=new Map(),backlog=[];
@@ -51,7 +53,7 @@ export function evaluateSourceHealth(sources, report, status, now=Date.now()) {
     }
     checked++;attempted++;
     const group=groups.get(day)||{attempted:0,failed:0};group.attempted++;groups.set(day,group);
-    if(!persistedRefreshHealth(d).healthy){group.failed++;failed++;}
+    if(!persistedRefreshHealth(d,s.ats).healthy){group.failed++;failed++;}
     if(d.accepted_count===0)empty++;
     if(d.reason==='automatic-quality-breaker')reasons.push(s.id+':output-quality');
     const initial=report.verificationBaselines?.entries.find(b=>b.sourceId===s.id&&b.discoveredAt===s.discoveredAt)?.acceptedJobs ?? report.results?.find(r=>r.source?.id===s.id)?.acceptedJobs;

@@ -1,7 +1,7 @@
 [
   {
     "file": ".github/workflows/jobs.yml",
-    "sha256": "5560da4a0b0f212d8385e11873deca3aec164cb343e7f1b3a23eefe36e6373e8"
+    "sha256": "f1cc232452c6b00c75cb7e5ac43b4e49d1a2abd542a3d946d378e76f39533d88"
   },
   {
     "file": ".github/workflows/tests.yml",
@@ -13,7 +13,7 @@
   },
   {
     "file": "README.md",
-    "sha256": "e2c511770db1e114cf5dc89fda602f351340c463fd2797b857a08e8a563e130b"
+    "sha256": "67130080076bedade7db69a8f409fead17e89fd6cfe1cb5c3a6da7bfd1658a0e"
   },
   {
     "file": "data.js",
@@ -25,7 +25,7 @@
   },
   {
     "file": "jobs-adapters.js",
-    "sha256": "f17ebc442e948a1183b506ca534766946e0a0c724d6e60616bd6ac6fb65094a8"
+    "sha256": "7753afaa685570083ba89eab94580f8d7fb74f9e2b4f75f651bec9a5c3cfde21"
   },
   {
     "file": "jobs-africa-sources.js",
@@ -37,15 +37,15 @@
   },
   {
     "file": "jobs-discovered-fetch.mjs",
-    "sha256": "5b2dd3e3a8b7843721989ded77891e341df4b7c5240aa47908d736c3e582ba36"
+    "sha256": "62b7780d933112e5a6113880d739d1697ead88688abac4c9b8dbf3dd4271d223"
   },
   {
     "file": "jobs-discovered-sources.js",
-    "sha256": "a2b4e4567844c50e0a25793fde55c187f7f1e7fded5197185cf8719d3af6607b"
+    "sha256": "dc17074f7fa5a4fccfd23a378e8ebb30a8c2e50fbafbbaf2571e864625c4f5d7"
   },
   {
     "file": "jobs-employers.js",
-    "sha256": "549fda6407314f41cf0f55de424acade278aaddc8e9ac3d31b3f95f3350b3672"
+    "sha256": "ff13802b9488752740fc10a225a259cc6e94963095742a37f680a7862371d9d1"
   },
   {
     "file": "jobs-erecruit.js",
@@ -60,16 +60,20 @@
     "sha256": "3f9b66f8e261caa6ac8761d3bc5405cfa9db8ce4dd22a12d08e091ca9c10b8c6"
   },
   {
+    "file": "jobs-identity-name.js",
+    "sha256": "d85521a81995a3c48296d9d0cfb4174a57c652605e5b5316a3d9226db9027865"
+  },
+  {
     "file": "jobs-oracle-detail.js",
     "sha256": "a5679937146e8680812a7c78d6a9293a2073b49c4784006221005b143b32cdec"
   },
   {
     "file": "jobs-pacing.js",
-    "sha256": "e00ab657aebe26b9c824f078926bdb9ba608c4dfcb51272c825003ad2bf9a762"
+    "sha256": "6db49d6898f32041ce64d692ee2bf7cc99c57b1acae4d3bc54d0bf95baf3478d"
   },
   {
     "file": "jobs-request-policy.js",
-    "sha256": "803b1f4abe5da107374f0a5acbc7c53450646fdad37d94ba40625c822e2847cc"
+    "sha256": "3f8dc15ef67dd3e5d015e1a995f7622d2f5d5de69cabd3cdb02ec88affc39666"
   },
   {
     "file": "jobs-runner.mjs",
@@ -81,7 +85,7 @@
   },
   {
     "file": "jobs-source-health.js",
-    "sha256": "82e84c58d5fac014692f87dcd290c792186aa36eac4309d1705ce47ed68c7274"
+    "sha256": "b6f67e5cb6f4161f02eb32eb307b2b3fd8886d0532a5ba3d3060a69710fc1928"
   },
   {
     "file": "jobs-uct.js",
@@ -97,7 +101,7 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "cb5fa9e14de3d8c3caa3fcff375f19df2056f2251adf854af4c22c95c15e78ca"
+    "sha256": "5fa1c506e6abe37acf9ff1068c292b4b8c84e0807e4eaa62e18454825517720e"
   },
   {
     "file": "package.json",
@@ -106,6 +110,30 @@
   {
     "file": "requirements.txt",
     "sha256": "af99a44c3e0e6ff026eb04308fc630b49b8bffddc508c4b4c69caf774fbcefca"
+  },
+  {
+    "file": "tests/fixtures/jobs-ats-ashby-prosus.json",
+    "sha256": "e43a61c84a7ff698e1203c0b10ee6436d2456cd5230e695410da509c80066007"
+  },
+  {
+    "file": "tests/fixtures/jobs-ats-greenhouse-jumia.json",
+    "sha256": "c67b670a2e576cc801209164315443b9d58058c68bb7e6818e9699def19a9893"
+  },
+  {
+    "file": "tests/fixtures/jobs-ats-lever-palantir.json",
+    "sha256": "3d9393a3b9eea0cfffc547f79b28b5fdfebc84ea5c85b92f79d66e7361e1011e"
+  },
+  {
+    "file": "tests/fixtures/jobs-ats-personio.json",
+    "sha256": "92df4b6c7097b504fd2b117e89a465e3e131f8df3017e7e46803accf639f7527"
+  },
+  {
+    "file": "tests/fixtures/jobs-ats-recruitee-bunq.json",
+    "sha256": "0a232c8a1b7f467a07907093eb7107fef47d4320fa30a4685ef5424e19db30a9"
+  },
+  {
+    "file": "tests/fixtures/jobs-ats-teamtailor-antonsport.json",
+    "sha256": "4b1ff842a6273c93eb884f1caba3f7c1420b2b03d92371c883d5bd44bad91651"
   },
   {
     "file": "tests/fixtures/jobs-avi-detail.html",
@@ -236,6 +264,10 @@
     "sha256": "a699e623f63dc270578a38fc14493299f657fbffd6ea50c8b2ed4c6d9d2c720f"
   },
   {
+    "file": "tests/jobs-ats-automatic.test.mjs",
+    "sha256": "7f14b9951b0ebd5a26c1107ec342a6a292f42c233d6eb8395962ff6397e78866"
+  },
+  {
     "file": "tests/jobs-collectors.test.mjs",
     "sha256": "24a9583ac505ee09093de8427fca15a376b73e8e94ee0f43b6e34e522b955e66"
   },
@@ -245,7 +277,7 @@
   },
   {
     "file": "tests/jobs-discovered.test.mjs",
-    "sha256": "19e1154fb63ae1296424b2237cbd63c64592953efe1cc2985e04efd0cf5ae911"
+    "sha256": "37caa21607c1caef9101b2b794d93fa40b7a7c15f5015dc3397c145682b580c3"
   },
   {
     "file": "tests/jobs-employers.test.mjs",
@@ -277,7 +309,7 @@
   },
   {
     "file": "tests/jobs-query-scope.test.mjs",
-    "sha256": "6fee9973409bfb8f22fbaa6be2c1d6368a0129ec24e5746992d6a7b627f26018"
+    "sha256": "a27e5c29cebe10594d1eac05122b67a24cb40349747b768073eea742c2ad5bcc"
   },
   {
     "file": "tests/jobs-runner.test.mjs",

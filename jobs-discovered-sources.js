@@ -1,7 +1,7 @@
 // Data-only source manifests. This module is shared by the site and collector.
 import { COUNTRY } from './data.js';
 import { workdayQueryFacets } from './jobs-workday-query.js';
-const atsHosts = /(?:^|\.)(?:myworkdayjobs\.com|myworkdaysite\.com|greenhouse\.io|lever\.co|ashbyhq\.com|smartrecruiters\.com|oraclecloud\.com|successfactors\.(?:com|eu)|workable\.com|icims\.com|taleo\.net)$/i;
+const atsHosts = /(?:^|\.)(?:myworkdayjobs\.com|myworkdaysite\.com|greenhouse\.io|lever\.co|ashbyhq\.com|smartrecruiters\.com|oraclecloud\.com|successfactors\.(?:com|eu)|workable\.com|icims\.com|taleo\.net|recruitee\.com|jobs\.personio\.(?:de|com)|teamtailor\.com)$/i;
 const excluded = ['indeed.com', 'indeed.co.uk', 'indeed.co.za', 'indeed.ca', 'indeed.com.au', 'indeed.co.in', 'linkedin.com', 'glassdoor.com', 'monster.com', 'ziprecruiter.com', 'careerjet.com', 'jooble.org', 'jobberman.com', 'jobberman.com.gh', 'myjobmag.com', 'myjobmag.co.ke', 'myjobmag.co.za', 'brightermonday.com', 'brightermonday.co.ke', 'brightermonday.co.ug', 'brightermonday.co.tz', 'pnet.co.za', 'careerjunction.co.za', 'careers24.com', 'nav.no', 'arbetsformedlingen.se', 'arbeitsagentur.de', 'francetravail.fr', 'ncs.gov.in', 'seek.com.au', 'seek.co.nz', 'totaljobs.com', 'reed.co.uk', 'adzuna.com', 'jobs.ac.uk'];
 export function excludedDiscoveryUrl(value) {
   try { const h = new URL(value).hostname.toLowerCase().replace(/\.$/, ''); return excluded.some(d => h === d || h.endsWith('.' + d)); } catch { return true; }
@@ -15,14 +15,54 @@ export function strictPublicHttps(value) {
   } catch { return null; }
 }
 const segment = s => typeof s === 'string' && /^[a-z0-9_-]{1,100}$/i.test(s) && !/^(?:jobs?|search|embed|api|v[01])$/i.test(s);
+// Platform-owned subdomains that are never one employer's board.
+const RESERVED_SUBDOMAINS = new Set(['www','app','api','admin','help','support','docs','status','blog','cdn','assets','static','mail','careers','career','jobs','partners','developers','hire','login','go','demo','test']);
+// Tracking and display parameters that never select which postings a board
+// lists, and deep links to one posting, are reduced to the employer's board
+// root before the reader is chosen. Any other parameter is kept, so a filtered
+// board link still has no reader.
+const BOARD_TRACKING = /^(?:utm_[a-z]+|source|src|ref|referrer|gclid|fbclid|mc_cid|mc_eid|gh_src|gh_jid|lever-source|lever-origin|ashby_jid|ashby_embed|language|lang|display)$/i;
+export function atsBoardUrl(value) {
+  let u; try { u = new URL(value); } catch { return value; }
+  const host = u.hostname.toLowerCase(), p = u.pathname.split('/').filter(Boolean);
+  if (u.protocol !== 'https:' && u.protocol !== 'http:' || !atsHosts.test(host)) return value;
+  // Greenhouse's embedded board names its board with ?for= (and the embedding page with ?b=).
+  if (/^(?:boards|job-boards)(?:\.eu)?\.greenhouse\.io$/.test(host) && p[0] === 'embed' && /^job_board(?:\/js)?$/.test(p.slice(1).join('/'))) {
+    const keys = [...u.searchParams.keys()], slug = u.searchParams.get('for');
+    return slug && keys.every(k => k === 'for' || k === 'b') && keys.filter(k => k === 'for').length === 1 && segment(slug) ? `https://job-boards${host.includes('.eu.') ? '.eu' : ''}.greenhouse.io/${slug}` : value;
+  }
+  // Ashby's embed script (/board/embed?version=2) takes display options only.
+  if (host === 'jobs.ashbyhq.com' && p.length === 2 && p[1] === 'embed' && segment(p[0])) return `https://jobs.ashbyhq.com/${p[0]}`;
+  for (const key of [...new Set(u.searchParams.keys())]) if (BOARD_TRACKING.test(key)) u.searchParams.delete(key);
+  u.hash = '';
+  if (u.search) return u.href;
+  const posting = s => typeof s === 'string' && /^[A-Za-z0-9_-]{1,100}$/.test(s);
+  if (/^(?:boards|job-boards)(?:\.eu)?\.greenhouse\.io$/.test(host) && segment(p[0]) && (p.length === 1 || p.length === 3 && p[1] === 'jobs' && /^\d{1,20}$/.test(p[2]))) return `https://job-boards${host.includes('.eu.') ? '.eu' : ''}.greenhouse.io/${p[0]}`;
+  if (/^jobs(?:\.eu)?\.lever\.co$/.test(host) && segment(p[0]) && p.length <= 3 && (p.length < 2 || posting(p[1])) && (p.length < 3 || p[2] === 'apply')) return `https://${host}/${p[0]}`;
+  if (host === 'jobs.ashbyhq.com' && segment(p[0]) && p.length <= 3 && (p.length < 2 || posting(p[1]) || p[1] === 'embed') && (p.length < 3 || p[2] === 'application')) return `https://${host}/${p[0]}`;
+  if (/^(?:careers|jobs)\.smartrecruiters\.com$/.test(host) && segment(p[0]) && p.length <= 2) return `https://careers.smartrecruiters.com/${p[0]}`;
+  if (/\.recruitee\.com$/.test(host) && (p.length === 0 || p.length === 2 && p[0] === 'o' && posting(p[1]))) return `https://${host}/`;
+  if (/\.jobs\.personio\.(?:de|com)$/.test(host) && (p.length === 0 || p.length === 2 && p[0] === 'job' && /^\d{1,12}$/.test(p[1]))) return `https://${host}/`;
+  if (/\.teamtailor\.com$/.test(host) && (p.length === 0 || p[0] === 'jobs' && p.length <= 2 && (p.length < 2 || posting(p[1])))) return `https://${host}/jobs`;
+  return u.href;
+}
 export function discoveredReader(careerUrl, officialDomain) {
   const u = strictPublicHttps(careerUrl), domain = strictPublicHttps(officialDomain);
   if (!u || !domain || domain.pathname !== '/' || domain.search || atsHosts.test(domain.hostname)) return null;
   const p = u.pathname.split('/').filter(Boolean), host = u.hostname;
-  const simple = { 'boards.greenhouse.io': 'gh', 'job-boards.greenhouse.io': 'gh', 'jobs.lever.co': 'lever', 'jobs.ashbyhq.com': 'ashby', 'careers.smartrecruiters.com': 'sr' };
+  const simple = { 'boards.greenhouse.io': 'gh', 'job-boards.greenhouse.io': 'gh', 'boards.eu.greenhouse.io': 'gh', 'job-boards.eu.greenhouse.io': 'gh', 'jobs.lever.co': 'lever', 'jobs.ashbyhq.com': 'ashby', 'careers.smartrecruiters.com': 'sr' };
   // These readers collect an entire tenant and have no metadata-bound query
   // filter implementation. Never silently widen a registered filtered URL.
   if (simple[host] && p.length === 1 && segment(p[0])) return u.search ? null : { ats: simple[host], args: [p[0]] };
+  // Lever's EU region has its own board and API hosts.
+  if (host === 'jobs.eu.lever.co' && p.length === 1 && segment(p[0])) return u.search ? null : { ats: 'lever', args: [p[0], 'eu'] };
+  // Boards on an employer's own platform subdomain: exactly the board root.
+  const sub = host.match(/^([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)\.(recruitee\.com|jobs\.personio\.(?:de|com)|teamtailor\.com)$/);
+  if (sub && !RESERVED_SUBDOMAINS.has(sub[1]) && !u.search) {
+    if (sub[2] === 'recruitee.com' && u.pathname === '/') return { ats: 'recruitee', args: [sub[1]] };
+    if (sub[2] !== 'recruitee.com' && sub[2] !== 'teamtailor.com' && u.pathname === '/') return { ats: 'personio', args: [sub[1], sub[2].split('.').pop()] };
+    if (sub[2] === 'teamtailor.com' && u.pathname === '/jobs') return { ats: 'teamtailor', args: [sub[1]] };
+  }
   if (/^[a-z0-9-]+\.wd\d+\.myworkdayjobs\.com$/.test(host)) {
     const parts = /^[a-z]{2}-[A-Z]{2}$/.test(p[0] || '') ? p.slice(1) : p;
     if (parts.length === 1 && segment(parts[0]) && workdayQueryFacets(u.href) !== null) return { ats: 'wd', args: [host, host.split('.')[0], parts[0]] };
@@ -61,25 +101,46 @@ export function allowedDiscoveredRequest(source, value, method = 'GET') {
   if (source.ats === 'jsonld') return method === 'GET' && [new URL(source.officialDomain).origin,new URL(source.careerUrl).origin].includes(u.origin);
   if (source.ats === 'wd') return u.hostname === a && (method === 'POST' ? u.pathname === `/wday/cxs/${b}/${c}/jobs` : u.pathname.startsWith(`/wday/cxs/${b}/${c}/job/`) || u.pathname.startsWith(`/${c}/job/`) || /^\/[a-z]{2}-[A-Z]{2}\//.test(u.pathname) && u.pathname.split('/')[2] === c);
   if (method !== 'GET') return false;
-  if (source.ats === 'gh') return u.hostname === 'boards-api.greenhouse.io' && u.pathname.startsWith(`/v1/boards/${a}/`) || ['boards.greenhouse.io', 'job-boards.greenhouse.io'].includes(u.hostname) && u.pathname.startsWith(`/${a}/`);
-  if (source.ats === 'lever') return u.hostname === 'api.lever.co' && (u.pathname === `/v0/postings/${a}` || u.pathname.startsWith(`/v0/postings/${a}/`)) || u.hostname === 'jobs.lever.co' && u.pathname.startsWith(`/${a}/`);
-  if (source.ats === 'ashby') return u.hostname === 'api.ashbyhq.com' && u.pathname === `/posting-api/job-board/${a}` || u.hostname === 'jobs.ashbyhq.com' && u.pathname.startsWith(`/${a}/`);
+  // robots.txt of the reader's own API host, or of the employer's own host when
+  // the platform redirects it there (Recruitee boards on a custom domain).
+  const robots = u.pathname === '/robots.txt' && !u.search;
+  if (robots && !['jsonld', 'wd'].includes(source.ats) && employerHost(u.hostname, new URL(source.officialDomain).hostname)) return true;
+  if (source.ats === 'gh') return u.hostname === 'boards-api.greenhouse.io' && (u.pathname.startsWith(`/v1/boards/${a}/`) || robots) || GREENHOUSE_BOARD_HOSTS.includes(u.hostname) && u.pathname.startsWith(`/${a}/`);
+  if (source.ats === 'lever') { const region = b === 'eu' ? '.eu' : ''; return u.hostname === `api${region}.lever.co` && (u.pathname === `/v0/postings/${a}` || u.pathname.startsWith(`/v0/postings/${a}/`) || robots) || u.hostname === `jobs${region}.lever.co` && u.pathname.startsWith(`/${a}/`); }
+  if (source.ats === 'ashby') return u.hostname === 'api.ashbyhq.com' && (u.pathname === `/posting-api/job-board/${a}` || robots) || u.hostname === 'jobs.ashbyhq.com' && u.pathname.startsWith(`/${a}/`);
+  if (source.ats === 'recruitee') return u.hostname === `${a}.recruitee.com` && (u.pathname === '/api/offers/' || robots || u.pathname.startsWith('/o/'));
+  if (source.ats === 'personio') return ['de', 'com'].includes(b) && u.hostname === `${a}.jobs.personio.${b}` && (u.pathname === '/xml' || robots || u.pathname.startsWith('/job/'));
+  if (source.ats === 'teamtailor') return u.hostname === `${a}.teamtailor.com` && (u.pathname === '/jobs.rss' || robots || u.pathname.startsWith('/jobs/') && !u.pathname.startsWith('/jobs/internal/'));
   if (source.ats === 'sr') return u.hostname === 'api.smartrecruiters.com' && (u.pathname === `/v1/companies/${a}/postings` || u.pathname.startsWith(`/v1/companies/${a}/postings/`)) || ['jobs.smartrecruiters.com', 'careers.smartrecruiters.com'].includes(u.hostname) && u.pathname.startsWith(`/${a}/`);
   return false;
 }
 
+// A posting link may be on the board or, where the board publishes it there, on
+// the employer's own verified domain (Greenhouse absolute_url, Recruitee and
+// Teamtailor custom career domains). Workday and own-site readers keep their scope.
+const OWN_DOMAIN_POSTING_READERS = new Set(['gh', 'lever', 'ashby', 'recruitee', 'personio', 'teamtailor']);
+export function discoveredJobUrlAllowed(source, value) {
+  if (allowedDiscoveredRequest(source, value)) return true;
+  if (!OWN_DOMAIN_POSTING_READERS.has(source.ats)) return false;
+  const u = strictPublicHttps(value);
+  return !!u && employerHost(u.hostname, new URL(source.officialDomain).hostname);
+}
 export function discoveredJobAllowed(source, row) {
   if (source.ats === 'jsonld' && !row.employer) return false;
   if (row.country !== source.country || row.employer && normalizedIdentity(row.employer) !== normalizedIdentity(source.name)) return false;
-  return [row.url, row.source_url || row.url, row.salary_url || row.url].every(url => allowedDiscoveredRequest(source, url));
+  return [row.url, row.source_url || row.url, row.salary_url || row.url].every(url => discoveredJobUrlAllowed(source, url));
 }
+const GREENHOUSE_BOARD_HOSTS = ['boards.greenhouse.io', 'job-boards.greenhouse.io', 'boards.eu.greenhouse.io', 'job-boards.eu.greenhouse.io'];
 export function normalizedIdentity(value) { return String(value || '').normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]/gu, ''); }
 
 export function employerHost(host, officialHost) { const base=officialHost.replace(/^www\./,'');return host===base||host.endsWith('.'+base); }
 export function dedicatedTenant(source) {
   if(source.ats==='jsonld')return true;
   const tenant=source.args[source.ats==='wd'?1:0].toLowerCase().replace(/[^a-z0-9]/g,'');
-  const words=source.name.normalize('NFKD').replace(/\p{M}/gu,'').toLowerCase().replace(/\b(?:the|limited|ltd|plc|inc|pty)\b/g,' ').match(/[a-z0-9]+/g)||[];
+  const folded=source.name.normalize('NFKD').replace(/\p{M}/gu,'').toLowerCase();
+  const words=folded.replace(/\b(?:the|limited|ltd|plc|inc|pty)\b/g,' ').match(/[a-z0-9]+/g)||[];
   const domain=new URL(source.officialDomain).hostname.replace(/^www\./,'').split('.')[0].replace(/[^a-z0-9]/g,'');
-  return [domain,words.join(''),words.map(w=>w[0]).join('')].filter(n=>n.length>=2).includes(tenant);
+  // The board is named after the employer's own domain, its name (with or
+  // without legal-form words) or its initials; any other board is shared.
+  return [domain,words.join(''),words.map(w=>w[0]).join(''),(folded.match(/[a-z0-9]+/g)||[]).join('')].filter(n=>n.length>=2).includes(tenant);
 }

@@ -7,6 +7,7 @@ export function detectJobSystem(url, html = '') {
     ['ashby', /(?:^|\.)ashbyhq\.com$/], ['wd', /(?:^|\.)(?:myworkdayjobs|myworkdaysite)\.com$/],
     ['sr', /(?:^|\.)smartrecruiters\.com$/], ['icims', /(?:^|\.)icims\.com$/],
     ['workable', /(?:^|\.)workable\.com$/], ['taleo', /(?:^|\.)taleo\.net$/],
+    ['recruitee', /\.recruitee\.com$/], ['personio', /\.jobs\.personio\.(?:de|com)$/], ['teamtailor', /\.teamtailor\.com$/],
   ];
   for (const [id, pattern] of rules) if (pattern.test(host)) return id;
   return parseJobPostings(html, url).length ? 'jsonld' : null;

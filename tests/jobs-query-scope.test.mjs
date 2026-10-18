@@ -46,10 +46,10 @@ test('current active registrations retain valid scoped reader contracts',async()
  // The daily publisher runs this suite on the registry it is about to push.
  // Sources are registered when it runs, after this file's fixed fixture time,
  // so the registry is checked against the real clock. Its bound is the
- // collector's shared automatic budget (24 sources since 17 Oct 2026), not the
+ // collector's shared automatic request budget (per-reader limits), not the
  // earlier interim limit of two.
  assert.doesNotThrow(()=>validateDiscoveredManifest(manifest,Date.now()));
- assert.ok(automaticSourcesFit(manifest.sources.map(s=>s.id)),'the collector budget also binds direct manifest changes');
+ assert.ok(automaticSourcesFit(manifest.sources),'the collector budget also binds direct manifest changes');
 });
 test('rejected remote query scopes visibly fail with source ID and never become an empty registry',async()=>{
  const url='https://jobs.lever.co/acme',s=source(url+'?location=Singapore',discoveredReader(url,official));

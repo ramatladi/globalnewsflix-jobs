@@ -56,7 +56,10 @@ export function sourceCareerUrls(source) {
   let careersUrl = null, collectionUrl = null;
   switch (source.ats) {
     case 'gh': careersUrl = `https://boards.greenhouse.io/${segment(a)}`; collectionUrl = `https://boards-api.greenhouse.io/v1/boards/${segment(a)}/jobs?content=true`; break;
-    case 'lever': careersUrl = `https://jobs.lever.co/${segment(a)}`; collectionUrl = `https://api.lever.co/v0/postings/${segment(a)}?mode=json`; break;
+    case 'lever': { const region = b === 'eu' ? '.eu' : ''; careersUrl = `https://jobs${region}.lever.co/${segment(a)}`; collectionUrl = `https://api${region}.lever.co/v0/postings/${segment(a)}?mode=json`; break; }
+    case 'recruitee': careersUrl = `https://${segment(a)}.recruitee.com/`; collectionUrl = `https://${segment(a)}.recruitee.com/api/offers/`; break;
+    case 'personio': careersUrl = `https://${segment(a)}.jobs.personio.${b === 'com' ? 'com' : 'de'}/`; collectionUrl = `${careersUrl}xml`; break;
+    case 'teamtailor': careersUrl = `https://${segment(a)}.teamtailor.com/jobs`; collectionUrl = `https://${segment(a)}.teamtailor.com/jobs.rss`; break;
     case 'ashby': careersUrl = `https://jobs.ashbyhq.com/${segment(a)}`; collectionUrl = `https://api.ashbyhq.com/posting-api/job-board/${segment(a)}?includeCompensation=true`; break;
     case 'wd': careersUrl = a?.includes('myworkdaysite') ? `https://${a}/recruiting/${segment(b)}/${segment(c)}` : `https://${a}/${segment(c)}`; collectionUrl = `https://${a}/wday/cxs/${segment(b)}/${segment(c)}/jobs`; break;
     case 'sf': careersUrl = `https://${a}${source.sfScope?.listPath || '/search/'}`; collectionUrl = careersUrl; break;

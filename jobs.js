@@ -1,4 +1,5 @@
-import { automaticSourceRequestLimit, NTU_AUTOMATIC_SOURCE_ID, emptyWorkdayDetailReasons, validWorkdayDetailReasons, workdayDetailSummaries } from './jobs-request-policy.js';
+import { automaticSourceRequestLimit, NTU_AUTOMATIC_SOURCE_ID, REFRESHABLE_AUTOMATIC_READERS, emptyWorkdayDetailReasons, validWorkdayDetailReasons, workdayDetailSummaries } from './jobs-request-policy.js';
+import { boardNamesOrganization } from './jobs-identity-name.js';
 // Jobs from employers' own career sites: publicly listed companies, governments and international organisations.
 // Collected by a GitHub Actions job every six hours; the site lists them by country, with categories and filters.
 // Pay is shown only where the employer publishes it.
@@ -287,7 +288,7 @@ async function req(fetchImpl, url, opt = {}, type = 'json') {
         continue;
       }
       if (r.status < 500) return null;
-    } catch (error) { if(['AUTOMATIC_BUDGET_EXHAUSTED','AUTOMATIC_SOURCE_REQUEST_CAP'].includes(error?.code))return null; }
+    } catch (error) { if(['AUTOMATIC_BUDGET_EXHAUSTED','AUTOMATIC_SOURCE_REQUEST_CAP','AUTOMATIC_ROBOTS_DISALLOWED'].includes(error?.code))return null; }
     if (a === 0) await sleep(1500);
   }
   return null;
@@ -1011,6 +1012,195 @@ async function oracleWithDetails(f, src) {
   result.rows = validated;
   return result;
 }
+// ---------- Automatic applicant-tracking boards ----------
+// Readers for employer boards that daily discovery activates. Each reads only the
+// platform's documented public listing (Greenhouse Job Board API, Lever Postings
+// API, Ashby Job Postings API, Recruitee Careers Site API, Personio XML feed,
+// Teamtailor RSS feed), places a posting only in a country the employer named for
+// it, binds the board to the registered employer where the platform names the
+// organization, and reports how it knows the listing is complete: a reported
+// total, a final short or empty page, or one documented complete response.
+const ATS_READER_FAILURES = ['board-response-invalid', 'board-total-mismatch', 'board-pagination-unconfirmed', 'board-organization-mismatch', 'board-row-limit'];
+// One explicit country for a place: the whole label, or exactly one country among
+// its comma/dash parts ("Lagos, Nigeria", "France - Paris", "Remote - Kenya"), or
+// an exact established city ("Nairobi"). Never a state, region or the employer's
+// own country. "Georgia" alone is the US state as often as the country.
+export function explicitPlaceCountry(value) {
+  let place = plain(value).trim();
+  const wrapped = place.match(/^(?:remote|hybrid|on-?site)\s*\((.*)\)$/i);
+  place = wrapped ? wrapped[1].trim() : place.replace(/^(?:remote|hybrid|on-?site)\s*(?:[-–:|]\s*|\s+(?=\S))/i, '').trim();
+  if (!place || place.length > 200 || /\b(?:except|excluding|outside|not)\b/i.test(place)) return null;
+  const named = part => fold(part) === 'georgia' ? null : countryCode(part);
+  const whole = named(place);
+  if (whole) return whole;
+  const parts = place.split(/\s*,\s*|\s+[-–]\s+/).filter(Boolean);
+  const found = [...new Set(parts.map(named).filter(Boolean))];
+  if (found.length === 1) return found[0];
+  if (found.length > 1) return null;
+  return Object.entries(CITIES).find(([, cities]) => cities.includes(fold(place)))?.[0] || null;
+}
+const zonedTs = value => {
+  const s = String(value || '').trim().replace(/^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2}) UTC$/, '$1T$2Z');
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:?\d{2})$/.test(s)) return null;
+  const t = Date.parse(s); return Number.isFinite(t) ? t : null;
+};
+const PAY_PERIOD = { year: 'year', yearly: 'year', annual: 'year', month: 'month', monthly: 'month', hour: 'hour', hourly: 'hour', 'per-year-salary': 'year', 'per-month-salary': 'month', 'per-hour-wage': 'hour' };
+const structuredPay = (currency, min, max, period) => {
+  const cur = String(currency || '').toUpperCase(), lo = Number(min), hi = Number(max), per = PAY_PERIOD[String(period || '').toLowerCase()];
+  return /^[A-Z]{3}$/.test(cur) && per && lo > 0 && hi >= lo && hi <= lo * 4 ? { cur, min: lo, max: hi, period: per } : undefined;
+};
+// Board organization names are compared with legal-form words removed; the
+// registered name or the verified domain's own label must be the board's name.
+const boardBound = (src, label) => {
+  let domain = ''; try { domain = new URL(src.officialDomain).hostname.replace(/^www\./, '').split('.')[0]; } catch { /* no domain label */ }
+  return boardNamesOrganization(label, [src.name, ...(domain.length >= 3 ? [domain] : [])]);
+};
+// A posting kept for the source country with the places that name it, or held
+// with the first other explicit country (rejected later), or unresolved.
+function placedRow(src, row, places) {
+  const named = places.map(place => [place, explicitPlaceCountry(place)]);
+  const local = named.filter(([, cc]) => cc === src.country).map(([place]) => plain(place));
+  if (local.length) return { ...row, country: src.country, location: [...new Set(local)].join('; '), countryUnresolved: false };
+  const other = named.find(([, cc]) => cc)?.[1];
+  return other ? { ...row, country: other, location: places.map(plain).join('; '), countryUnresolved: false } : { ...row, country: null, location: places.map(plain).join('; '), countryUnresolved: true };
+}
+function structuredRow(src, row, countries, location) {
+  const list = [...new Set(countries.filter(cc => typeof cc === 'string' && Object.hasOwn(COUNTRY, cc)))];
+  if (list.includes(src.country)) return { ...row, country: src.country, location, countryUnresolved: false };
+  return list.length ? { ...row, country: list[0], location, countryUnresolved: false } : { ...row, country: null, location, countryUnresolved: true };
+}
+const atsResult = () => ({ rows: [], complete: false, reason: '', paginationComplete: false, reportedTotal: null, pagesFetched: 0, paginationEnd: 'unavailable' });
+const atsFail = (out, reason) => ({ ...out, rows: reason === 'board-organization-mismatch' ? [] : out.rows, reason, paginationComplete: false });
+const xmlBlocks = (xml, tag) => [...String(xml).matchAll(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'g'))].map(m => m[1]);
+const xmlValue = (xml, tag) => { const m = String(xml).match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`)); return m ? m[1].replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim() : null; };
+const postingId = value => (typeof value === 'number' && Number.isSafeInteger(value) && value > 0) || (typeof value === 'string' && /^[A-Za-z0-9_-]{1,100}$/.test(value)) ? String(value) : null;
+const httpsLink = value => { try { const u = new URL(String(value)); return u.protocol === 'https:' && !u.username && !u.password ? u.href : null; } catch { return null; } };
+export async function automaticGreenhouse(f, src) {
+  const out = atsResult(), board = await getJson(f, `https://boards-api.greenhouse.io/v1/boards/${src.args[0]}/jobs?content=true`);
+  if (!board || !Array.isArray(board.jobs) || board.jobs.length > PER_SOURCE) return atsFail(out, 'board-response-invalid');
+  out.pagesFetched = 1; out.reportedTotal = Number.isSafeInteger(board.meta?.total) ? board.meta.total : null;
+  const seen = new Set();let bound = 0;
+  for (const x of board.jobs) {
+    const id = postingId(x?.id);
+    if (!id || seen.has(id) || typeof x.title !== 'string' || !x.title.trim()) return atsFail(out, 'board-response-invalid');
+    seen.add(id);
+    const own = typeof x.company_name === 'string' && boardBound(src, x.company_name);if (own) bound++;
+    const row = { id, title: x.title, url: httpsLink(x.absolute_url), text: typeof x.content === 'string' ? x.content : '', posted: dateTs(x.first_published || x.updated_at), closing: zonedTs(x.application_deadline), hint: x.departments?.[0]?.name };
+    const places = [...greenhousePlaces(x.location?.name), ...(x.metadata || []).filter(m => m?.name === 'Job Posting Location').flatMap(m => [m.value].flat()).filter(v => typeof v === 'string')];
+    const offices = (x.offices || []).flatMap(o => [o?.location, o?.name]).filter(v => typeof v === 'string' && v.trim());
+    let placed = placedRow(src, row, places);
+    if (placed.countryUnresolved && offices.length) placed = placedRow(src, row, offices);
+    out.rows.push(own ? placed : { ...placed, country: null, countryUnresolved: true });
+  }
+  if (out.rows.length && !bound) return atsFail(out, 'board-organization-mismatch');
+  if (out.reportedTotal !== out.rows.length) return atsFail(out, 'board-total-mismatch');
+  return { ...out, paginationComplete: true, paginationEnd: 'reported-total', reason: 'board-complete' };
+}
+export async function automaticLever(f, src) {
+  const out = atsResult(), [site, region] = src.args, host = region === 'eu' ? 'api.eu.lever.co' : 'api.lever.co', seen = new Set();
+  for (let page = 0; page <= PER_SOURCE / 100; page++) {
+    const list = await getJson(f, `https://${host}/v0/postings/${site}?mode=json&limit=100&skip=${page * 100}`);
+    if (!Array.isArray(list) || list.length > 100) return atsFail(out, 'board-response-invalid');
+    out.pagesFetched++;
+    for (const x of list) {
+      const id = postingId(x?.id);
+      if (!id || seen.has(id) || typeof x.text !== 'string' || !x.text.trim()) return atsFail(out, id && seen.has(id) ? 'board-pagination-unconfirmed' : 'board-response-invalid');
+      seen.add(id);
+      const range = x.salaryRange, pay = range ? structuredPay(range.currency, range.min, range.max, range.interval) : undefined;
+      const row = { id, title: x.text, url: httpsLink(x.hostedUrl), posted: Number.isSafeInteger(x.createdAt) ? x.createdAt : null, hint: x.categories?.team, text: [x.descriptionPlain, ...(x.lists || []).map(l => l?.content), x.additionalPlain].filter(v => typeof v === 'string').join(' '), ...(pay ? { pay } : {}) };
+      const where = [x.categories?.location, ...[x.categories?.allLocations].flat()].filter(v => typeof v === 'string' && v.trim());
+      out.rows.push(structuredRow(src, row, [typeof x.country === 'string' ? x.country.toUpperCase() : null], [...new Set(where.map(plain))].join('; ')));
+    }
+    if (list.length < 100) return { ...out, paginationComplete: true, paginationEnd: list.length || !page ? 'short-page' : 'empty-page', reason: 'board-complete' };
+    if (out.rows.length > 1000) return atsFail(out, 'board-row-limit');
+  }
+  return atsFail(out, 'board-row-limit');
+}
+export async function automaticAshby(f, src) {
+  const out = atsResult(), board = await getJson(f, `https://api.ashbyhq.com/posting-api/job-board/${src.args[0]}?includeCompensation=true`);
+  if (!board || !Array.isArray(board.jobs) || board.jobs.length > PER_SOURCE) return atsFail(out, 'board-response-invalid');
+  out.pagesFetched = 1;const seen = new Set();
+  for (const x of board.jobs) {
+    if (x?.isListed === false) continue;
+    const id = postingId(x?.id);
+    if (!id || seen.has(id) || typeof x.title !== 'string' || !x.title.trim()) return atsFail(out, 'board-response-invalid');
+    seen.add(id);
+    const summary = typeof x.compensation?.compensationTierSummary === 'string' ? x.compensation.compensationTierSummary : '';
+    const row = { id, title: x.title, url: httpsLink(x.jobUrl), posted: dateTs(x.publishedAt), hint: x.department, text: summary, salary_text: summary || null };
+    const places = [{ label: x.location, address: x.address }, ...(Array.isArray(x.secondaryLocations) ? x.secondaryLocations.map(s => ({ label: s?.location, address: s?.address })) : [])];
+    const countries = places.map(p => countryCode(p.address?.postalAddress?.addressCountry));
+    const local = places.filter((_, i) => countries[i] === src.country).map(p => plain(p.label)).filter(Boolean);
+    out.rows.push(structuredRow(src, row, countries, (local.length ? local : places.map(p => plain(p.label)).filter(Boolean)).join('; ')));
+  }
+  return { ...out, paginationComplete: true, paginationEnd: 'single-document', reason: 'board-complete' };
+}
+export async function automaticRecruitee(f, src) {
+  const out = atsResult(), board = await getJson(f, `https://${src.args[0]}.recruitee.com/api/offers/`);
+  if (!board || !Array.isArray(board.offers) || board.offers.length > PER_SOURCE) return atsFail(out, 'board-response-invalid');
+  out.pagesFetched = 1;const seen = new Set();let bound = 0;
+  for (const x of board.offers) {
+    if (x?.status != null && x.status !== 'published') continue;
+    const id = postingId(x?.id);
+    if (!id || seen.has(id) || typeof x.title !== 'string' || !x.title.trim()) return atsFail(out, 'board-response-invalid');
+    seen.add(id);
+    const own = typeof x.company_name === 'string' && boardBound(src, x.company_name);if (own) bound++;
+    const pay = x.salary ? structuredPay(x.salary.currency, x.salary.min, x.salary.max, x.salary.period) : undefined;
+    const row = { id, title: x.title, url: httpsLink(x.careers_url), posted: zonedTs(x.published_at), closing: zonedTs(x.close_at), hint: x.department, text: typeof x.description === 'string' ? x.description : '', ...(pay ? { pay } : {}) };
+    const locations = Array.isArray(x.locations) ? x.locations : [];
+    const codes = [x.country_code, ...locations.map(l => l?.country_code)].map(c => typeof c === 'string' ? c.toUpperCase() : null);
+    const local = locations.filter(l => typeof l?.country_code === 'string' && l.country_code.toUpperCase() === src.country).map(l => plain(l.city || l.name)).filter(Boolean);
+    const placed = structuredRow(src, row, codes, (local.length ? local : [plain(x.location)]).filter(Boolean).join('; '));
+    out.rows.push(own ? placed : { ...placed, country: null, countryUnresolved: true });
+  }
+  if (out.rows.length && !bound) return atsFail(out, 'board-organization-mismatch');
+  return { ...out, paginationComplete: true, paginationEnd: 'single-document', reason: 'board-complete' };
+}
+export async function automaticPersonio(f, src) {
+  const out = atsResult(), [company, tld] = src.args, origin = `https://${company}.jobs.personio.${tld}`;
+  const xml = await getText(f, `${origin}/xml`);
+  if (typeof xml !== 'string' || !/<workzag-jobs\b/.test(xml) || !/<\/workzag-jobs>|<workzag-jobs\s*\/>/.test(xml)) return atsFail(out, 'board-response-invalid');
+  out.pagesFetched = 1;const seen = new Set();
+  const positions = xmlBlocks(xml, 'position');
+  if (positions.length > PER_SOURCE) return atsFail(out, 'board-response-invalid');
+  for (const block of positions) {
+    const descriptions = xmlValue(block, 'jobDescriptions') || '', head = block.replace(/<jobDescriptions\b[\s\S]*?<\/jobDescriptions>/g, ''), additional = xmlValue(head, 'additionalOffices') || '';
+    const id = xmlValue(head, 'id'), title = plain(xmlValue(head.replace(/<additionalOffices\b[\s\S]*?<\/additionalOffices>/g, ''), 'name'));
+    if (!/^\d{1,12}$/.test(id || '') || seen.has(id) || !title) return atsFail(out, 'board-response-invalid');
+    seen.add(id);
+    const primary = xmlValue(head.replace(/<additionalOffices\b[\s\S]*?<\/additionalOffices>/g, ''), 'office');
+    const offices = [primary, ...xmlBlocks(additional, 'office')].map(v => v == null ? '' : plain(v.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1'))).filter(Boolean);
+    const row = { id, title, url: `${origin}/job/${id}`, posted: zonedTs(xmlValue(head, 'createdAt')), hint: plain(xmlValue(head, 'department')), text: xmlBlocks(descriptions, 'value').map(v => v.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')).join(' ') };
+    out.rows.push(placedRow(src, row, offices));
+  }
+  return { ...out, paginationComplete: true, paginationEnd: 'single-document', reason: 'board-complete' };
+}
+export async function automaticTeamtailor(f, src) {
+  const out = atsResult(), origin = `https://${src.args[0]}.teamtailor.com`, seen = new Set();
+  for (let page = 0; page <= PER_SOURCE / 100 + 1; page++) {
+    const xml = await getText(f, `${origin}/jobs.rss?per_page=100&offset=${page * 100}`);
+    if (typeof xml !== 'string' || !/<rss\b/.test(xml) || !/<channel\b/.test(xml)) return atsFail(out, 'board-response-invalid');
+    out.pagesFetched++;
+    // The feed's channel title is the employer's career site name.
+    const channel = xml.split(/<item\b/)[0];
+    if (!boardBound(src, plain(xmlValue(channel, 'title')))) return atsFail(out, 'board-organization-mismatch');
+    const items = xmlBlocks(xml, 'item');
+    if (items.length > 100) return atsFail(out, 'board-response-invalid');
+    if (!items.length) return { ...out, paginationComplete: true, paginationEnd: 'empty-page', reason: 'board-complete' };
+    for (const item of items) {
+      const id = xmlValue(item, 'guid'), title = plain(xmlValue(item, 'title'));
+      if (!postingId(id) || seen.has(id) || !title) return atsFail(out, id && seen.has(id) ? 'board-pagination-unconfirmed' : 'board-response-invalid');
+      seen.add(id);
+      const locations = xmlBlocks(item, 'tt:location').map(l => ({ city: plain(xmlValue(l, 'tt:city')), country: plain(xmlValue(l, 'tt:country')) }));
+      const countries = locations.map(l => countryCode(l.country));
+      const local = locations.filter((_, i) => countries[i] === src.country).map(l => l.city || l.country);
+      const row = { id, title, url: httpsLink(plain(xmlValue(item, 'link'))), posted: dateTs(plain(xmlValue(item, 'pubDate'))), hint: plain(xmlValue(item, 'tt:department')), text: xmlValue(item, 'description') || '' };
+      out.rows.push(structuredRow(src, row, countries, (local.length ? local : locations.map(l => [l.city, l.country].filter(Boolean).join(', '))).filter(Boolean).join('; ')));
+    }
+    if (out.rows.length > 1000) return atsFail(out, 'board-row-limit');
+  }
+  return atsFail(out, 'board-row-limit');
+}
+const AUTOMATIC_COLLECT = { gh: automaticGreenhouse, lever: automaticLever, ashby: automaticAshby, recruitee: automaticRecruitee, personio: automaticPersonio, teamtailor: automaticTeamtailor };
 const COLLECT = { erecruit, simplify, uct, gauteng, jsonld, gh: greenhouse, lever, ashby, wd: workday, sf: successfactors, orc: oracleWithDetails, sr: smartrecruiters, amazon, un, unicef, nhs };
 
 export async function fxRates(fetchImpl = fetch) {
@@ -1040,10 +1230,12 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
       const attemptedAt = Date.now();
       const sourceFetch = s.automatic ? options.automaticFetch?.(s) : (url,options)=>fetchImpl(url,options,platformForReader(s.ats));
       let result = null;
-      try { result = sourceFetch ? await COLLECT[s.ats]?.(sourceFetch, s, log) : null; } catch { /* recorded below without raw provider data */ }
+      // Automatic boards use their evidence-reporting readers; manual readers are unchanged.
+      const reader = (s.automatic && AUTOMATIC_COLLECT[s.ats]) || COLLECT[s.ats];
+      try { result = sourceFetch ? await reader?.(sourceFetch, s, log) : null; } catch { /* recorded below without raw provider data */ }
       let transportState=s.automatic ? sourceFetch?.diagnostics?.() : null;
-      let telemetry=transportState ? {pagesFetched:result?.pagesFetched,reportedTotal:result?.reportedTotal,paginationEnd:result?.paginationEnd,...(result?.phaseHttp?{phaseHttp:result.phaseHttp}:{}),...(result?.detailReasons?{detailReasons:result.detailReasons,listingRejected:result.listingRejected}:{}),httpRequests:transportState.httpRequests,elapsedMs:transportState.elapsedMs,budgetExhausted:transportState.budgetExhausted,sourceRequestCap:result?.sourceRequestCap===true||transportState.sourceRequestCap,paginationComplete:s.ats==='wd'&&result?.paginationComplete===true} : {};
-      let budgetReason=transportState?.sourceRequestCap ? 'source-request-cap' : transportState?.budgetExhausted ? (transportState.httpRequests===0 ? 'not-attempted-budget' : 'budget-exhausted') : '';
+      let telemetry=transportState ? {pagesFetched:result?.pagesFetched,reportedTotal:result?.reportedTotal,paginationEnd:result?.paginationEnd,...(result?.phaseHttp?{phaseHttp:result.phaseHttp}:{}),...(result?.detailReasons?{detailReasons:result.detailReasons,listingRejected:result.listingRejected}:{}),httpRequests:transportState.httpRequests,elapsedMs:transportState.elapsedMs,budgetExhausted:transportState.budgetExhausted,sourceRequestCap:result?.sourceRequestCap===true||transportState.sourceRequestCap,paginationComplete:REFRESHABLE_AUTOMATIC_READERS.has(s.ats)&&result?.paginationComplete===true} : {};
+      let budgetReason=transportState?.sourceRequestCap ? 'source-request-cap' : transportState?.budgetExhausted ? (transportState.httpRequests===0 ? 'not-attempted-budget' : 'budget-exhausted') : transportState?.robotsDisallowed ? 'robots-disallowed' : '';
       if (!result) {
         diagnostics.push({ src: s.id, status: 'failed', rawCount: 0, acceptedCount: 0, reason: budgetReason || 'source-unavailable', attemptedAt, ...telemetry });
         log(`${s.name}: no valid answer`); continue;
@@ -1066,7 +1258,7 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
         if (dates.closing != null) row.closing = dates.closing;
         if (dates.location && countryOf(dates.location) === (row.country || countryOf(row.location))) row.location = dates.location;
       }
-      if(s.automatic){transportState=sourceFetch?.diagnostics?.();telemetry={httpRequests:transportState?.httpRequests,elapsedMs:transportState?.elapsedMs,budgetExhausted:transportState?.budgetExhausted,sourceRequestCap:result.sourceRequestCap===true||transportState?.sourceRequestCap,paginationComplete:s.ats==='wd'&&result.paginationComplete===true,pagesFetched:result.pagesFetched,reportedTotal:result.reportedTotal,paginationEnd:result.paginationEnd,...(result.phaseHttp?{phaseHttp:result.phaseHttp}:{}),...(result.detailReasons?{detailReasons:result.detailReasons,listingRejected:result.listingRejected}:{})};}
+      if(s.automatic){transportState=sourceFetch?.diagnostics?.();telemetry={httpRequests:transportState?.httpRequests,elapsedMs:transportState?.elapsedMs,budgetExhausted:transportState?.budgetExhausted,sourceRequestCap:result.sourceRequestCap===true||transportState?.sourceRequestCap,paginationComplete:REFRESHABLE_AUTOMATIC_READERS.has(s.ats)&&result.paginationComplete===true,pagesFetched:result.pagesFetched,reportedTotal:result.reportedTotal,paginationEnd:result.paginationEnd,...(result.phaseHttp?{phaseHttp:result.phaseHttp}:{}),...(result.detailReasons?{detailReasons:result.detailReasons,listingRejected:result.listingRejected}:{})};}
       const got = list.map(x => normalizeCollectedJob(s, x, fx)).filter(Boolean);
       const seen = new Set();
       const uniq = got.filter(r => (!s.automatic || !r.closing_ts || r.closing_ts > Date.now()) && !seen.has(r.id) && seen.add(r.id));
@@ -1076,8 +1268,10 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
       }
       // Invalid/unlocated rows or duplicate IDs cannot prove a full replacement snapshot.
       const complete = !s.automatic && result.complete && got.length === list.length && uniq.length === got.length;
-      const refresh=s.automatic?automaticRefreshHealth({src:s.id,status:'partial',rawCount:list.length,acceptedCount:uniq.length,...telemetry}):null;
-      const readerFailure=['total-zero-with-rows','empty-workday-tenant','empty-workday-scope','registered-workday-filter-unconfirmed'].includes(result.reason)?result.reason:null;
+      const refresh=s.automatic?automaticRefreshHealth({src:s.id,ats:s.ats,status:'partial',rawCount:list.length,acceptedCount:uniq.length,...telemetry}):null;
+      // A transport stop (robots.txt, request cap or budget) explains a board reader's empty answer.
+      const transportFailure=transportState?.robotsDisallowed?'robots-disallowed':s.automatic&&s.ats!=='wd'&&budgetReason?budgetReason:null;
+      const readerFailure=transportFailure||(['total-zero-with-rows','empty-workday-tenant','empty-workday-scope','registered-workday-filter-unconfirmed',...ATS_READER_FAILURES].includes(result.reason)?result.reason:null);
       const reason = s.automatic ? (!refresh.healthy&&readerFailure?readerFailure:refresh.reason) : complete ? '' : result.reason || 'rows-rejected-or-duplicated';
       diagnostics.push({ src: s.id, status: s.automatic ? (refresh.healthy?'partial':'failed') : complete ? 'complete' : 'partial', rawCount: list.length, acceptedCount: uniq.length, reason, attemptedAt, ...telemetry });
       log(`${s.name}: ${list.length} jobs, ${uniq.length} placed, ${s.automatic&&!refresh.healthy?'failed':complete?'complete':'partial'} (${Math.round((Date.now() - attemptedAt) / 1000)}s)`);

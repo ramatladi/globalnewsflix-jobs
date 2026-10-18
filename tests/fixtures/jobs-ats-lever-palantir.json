@@ -1,0 +1,135 @@
+{
+ "source": "https://api.lever.co/v0/postings/palantir?mode=json&limit=2&skip={0,2}",
+ "capturedAt": "2026-10-18T09:08:37.667Z",
+ "note": "Two consecutive 2-posting pages; text values shortened.",
+ "pages": [
+  [
+   {
+    "additionalPlain": "Palantir is particularly interested in applicants who have a current right to work in Singapore, and we encourage Singap",
+    "additional": "<div>Palantir is particularly interested in applicants who have a current right to work in Singapore, and we encourage S",
+    "categories": {
+     "commitment": "Full-time",
+     "location": "Singapore, Singapore",
+     "team": "Administrative",
+     "allLocations": [
+      "Singapore, Singapore"
+     ]
+    },
+    "createdAt": 1786469891368,
+    "descriptionPlain": "A World-Changing Company\n \nPalantir builds the world’s leading software for data-driven decisions and operations. By bri",
+    "description": "<div><strong><span style=\"font-size: 18px;\">A World-Changing Company</span></strong></div>\n<div>&nbsp;</div>\n<div>Palant",
+    "id": "6ed76ce8-4156-4b60-b120-403538bd66cd",
+    "lists": [
+     {
+      "text": "Administrative Business Partner (Foundry)",
+      "content": "\n<li>Provide administrative support to a portfolio of individuals/teams across the business.</li>\n<li>Handle sophisticat"
+     }
+    ],
+    "text": "Administrative Business Partner",
+    "country": "SG",
+    "workplaceType": "hybrid",
+    "opening": "<div><strong><span style=\"font-size: 18px;\">A World-Changing Company</span></strong></div>\n<div>&nbsp;</div>\n<div>Palant",
+    "openingPlain": "A World-Changing Company\n \nPalantir builds the world’s leading software for data-driven decisions and operations. By bri",
+    "descriptionBody": "<div><strong style=\"font-size: 18px;\">The Role</strong></div>\n<div>&nbsp;</div>\n<div>Our team of Administrative Business",
+    "descriptionBodyPlain": "The Role\n \nOur team of Administrative Business Partners does more than just support our leaders: we're the backbone of t",
+    "hostedUrl": "https://jobs.lever.co/palantir/6ed76ce8-4156-4b60-b120-403538bd66cd",
+    "applyUrl": "https://jobs.lever.co/palantir/6ed76ce8-4156-4b60-b120-403538bd66cd/apply"
+   },
+   {
+    "additionalPlain": "Life at Palantir\n \nWe want every Palantirian to achieve their best outcomes, that’s why we celebrate individuals’ streng",
+    "additional": "<div><strong><span style=\"font-size: 18px;\">Life at Palantir</span></strong></div>\n<div>&nbsp;</div>\n<div>We want every ",
+    "categories": {
+     "commitment": "Full-time",
+     "location": "London, United Kingdom",
+     "team": "Administrative",
+     "allLocations": [
+      "London, United Kingdom"
+     ]
+    },
+    "createdAt": 1711403416463,
+    "descriptionPlain": "A World-Changing Company\n \nPalantir builds the world’s leading software for data-driven decisions and operations. By bri",
+    "description": "<div><strong><span style=\"font-size: 18px;\">A World-Changing Company</span></strong></div>\n<div>&nbsp;</div>\n<div>Palant",
+    "id": "ac978161-6f46-4f6b-ad9e-a258e642751c",
+    "lists": [
+     {
+      "text": "Administrative Business Partner (Foundry)",
+      "content": "\n<li>Provide administrative support to a portfolio of individuals/teams across the business.</li>\n<li>Handle sophisticat"
+     }
+    ],
+    "text": "Administrative Business Partner",
+    "country": "GB",
+    "workplaceType": "hybrid",
+    "opening": "<div><strong><span style=\"font-size: 18px;\">A World-Changing Company</span></strong></div>\n<div>&nbsp;</div>\n<div>Palant",
+    "openingPlain": "A World-Changing Company\n \nPalantir builds the world’s leading software for data-driven decisions and operations. By bri",
+    "descriptionBody": "<div><strong style=\"font-size: 18px;\">The Role</strong></div>\n<div>&nbsp;</div>\n<div>Our team of Administrative Business",
+    "descriptionBodyPlain": "The Role\n \nOur team of Administrative Business Partners does more than just support our leaders: we're the backbone of t",
+    "hostedUrl": "https://jobs.lever.co/palantir/ac978161-6f46-4f6b-ad9e-a258e642751c",
+    "applyUrl": "https://jobs.lever.co/palantir/ac978161-6f46-4f6b-ad9e-a258e642751c/apply"
+   }
+  ],
+  [
+   {
+    "additionalPlain": "Salary\nThe estimated salary range for this position is estimated to be $60,000 - $97,000/year. Total compensation for th",
+    "additional": "<h3><strong>Salary</strong></h3>\n<div>The estimated salary range for this position is estimated to be $60,000 - $97,000/",
+    "categories": {
+     "commitment": "Full-time",
+     "location": "Washington, D.C.",
+     "team": "Administrative",
+     "allLocations": [
+      "Washington, D.C."
+     ]
+    },
+    "createdAt": 1781771660468,
+    "descriptionPlain": "A World-Changing Company\n \nPalantir builds the world’s leading software for data-driven decisions and operations. By bri",
+    "description": "<div><strong><span style=\"font-size: 18px;\">A World-Changing Company</span></strong></div>\n<div>&nbsp;</div>\n<div>Palant",
+    "id": "a237973c-cb29-41fe-9c80-416e6f42e087",
+    "lists": [
+     {
+      "text": "Core Responsibilities",
+      "content": "\n<li>Own calendar management and deconfliction across multiple workstream leads — onsites, supplier visits, internal syn"
+     }
+    ],
+    "text": "Administrative Business Partner - ShipOS",
+    "country": "US",
+    "workplaceType": "hybrid",
+    "opening": "<div><strong><span style=\"font-size: 18px;\">A World-Changing Company</span></strong></div>\n<div>&nbsp;</div>\n<div>Palant",
+    "openingPlain": "A World-Changing Company\n \nPalantir builds the world’s leading software for data-driven decisions and operations. By bri",
+    "descriptionBody": "<h3><strong>The Role</strong></h3>\n<div>ShipOS is Palantir's partnership with the U.S. Navy to modernize the American ma",
+    "descriptionBodyPlain": "The Role\nShipOS is Palantir's partnership with the U.S. Navy to modernize the American maritime industrial base — accele",
+    "hostedUrl": "https://jobs.lever.co/palantir/a237973c-cb29-41fe-9c80-416e6f42e087",
+    "applyUrl": "https://jobs.lever.co/palantir/a237973c-cb29-41fe-9c80-416e6f42e087/apply"
+   },
+   {
+    "additionalPlain": "Salary\nThe estimated salary range for this position is estimated to be $60,000 - $97,000/year. Total compensation for th",
+    "additional": "<h3><strong>Salary</strong></h3>\n<div>The estimated salary range for this position is estimated to be $60,000 - $97,000/",
+    "categories": {
+     "commitment": "Full-time",
+     "location": "New York, NY",
+     "team": "Administrative",
+     "allLocations": [
+      "New York, NY"
+     ]
+    },
+    "createdAt": 1781771632092,
+    "descriptionPlain": "A World-Changing Company\n \nPalantir builds the world’s leading software for data-driven decisions and operations. By bri",
+    "description": "<div><strong><span style=\"font-size: 18px;\">A World-Changing Company</span></strong></div>\n<div>&nbsp;</div>\n<div>Palant",
+    "id": "a5f93bb6-4f13-4451-80a4-f63090830269",
+    "lists": [
+     {
+      "text": "Core Responsibilities",
+      "content": "\n<li>Own calendar management and deconfliction across multiple workstream leads — onsites, supplier visits, internal syn"
+     }
+    ],
+    "text": "Administrative Business Partner - ShipOS",
+    "country": "US",
+    "workplaceType": "hybrid",
+    "opening": "<div><strong><span style=\"font-size: 18px;\">A World-Changing Company</span></strong></div>\n<div>&nbsp;</div>\n<div>Palant",
+    "openingPlain": "A World-Changing Company\n \nPalantir builds the world’s leading software for data-driven decisions and operations. By bri",
+    "descriptionBody": "<h3><strong>The Role</strong></h3>\n<div>ShipOS is Palantir's partnership with the U.S. Navy to modernize the American ma",
+    "descriptionBodyPlain": "The Role\nShipOS is Palantir's partnership with the U.S. Navy to modernize the American maritime industrial base — accele",
+    "hostedUrl": "https://jobs.lever.co/palantir/a5f93bb6-4f13-4451-80a4-f63090830269",
+    "applyUrl": "https://jobs.lever.co/palantir/a5f93bb6-4f13-4451-80a4-f63090830269/apply"
+   }
+  ]
+ ]
+}

@@ -1,0 +1,399 @@
+{
+ "source": "https://api.ashbyhq.com/posting-api/job-board/prosus?includeCompensation=true",
+ "capturedAt": "2026-10-18T09:08:37.667Z",
+ "note": "Complete board (11 jobs); text values shortened.",
+ "response": {
+  "jobs": [
+   {
+    "id": "b1333a33-8bbe-44a8-b07f-fae1dd29552f",
+    "title": "Group Product Manager",
+    "department": "AI & ML",
+    "team": "AI & ML",
+    "employmentType": "FullTime",
+    "location": "Amsterdam",
+    "shouldDisplayCompensationOnJobPostings": false,
+    "secondaryLocations": [],
+    "publishedAt": "2026-10-15T23:49:03.659+00:00",
+    "isListed": true,
+    "isRemote": true,
+    "workplaceType": "Hybrid",
+    "address": {
+     "postalAddress": {
+      "postalCode": "1082 MS",
+      "addressRegion": "Noord-Holland",
+      "streetAddress": "Gustav Mahlerplein 5",
+      "addressCountry": "Netherlands",
+      "addressLocality": "Amsterdam"
+     }
+    },
+    "jobUrl": "https://jobs.ashbyhq.com/prosus/b1333a33-8bbe-44a8-b07f-fae1dd29552f",
+    "applyUrl": "https://jobs.ashbyhq.com/prosus/b1333a33-8bbe-44a8-b07f-fae1dd29552f/application",
+    "descriptionHtml": "<p style=\"min-height:1.5em\"><strong>Who We Are</strong></p><p style=\"min-height:1.5em\">You've ordered dinner through Jus",
+    "descriptionPlain": "Who We Are\n\nYou've ordered dinner through Just Eat Takeaway. You've bought and sold on OLX. You've paid with PayU. Chanc",
+    "compensation": {
+     "compensationTierSummary": null,
+     "scrapeableCompensationSalarySummary": null,
+     "compensationTiers": [],
+     "summaryComponents": []
+    }
+   },
+   {
+    "id": "62b6f958-713f-4313-b73c-3b8202d9bbc8",
+    "title": "Senior Machine Learning Engineer – LLMs",
+    "department": "AI & ML",
+    "team": "AI & ML",
+    "employmentType": "FullTime",
+    "location": "Amsterdam",
+    "shouldDisplayCompensationOnJobPostings": false,
+    "secondaryLocations": [],
+    "publishedAt": "2026-09-15T14:26:25.198+00:00",
+    "isListed": true,
+    "isRemote": true,
+    "workplaceType": "Hybrid",
+    "address": {
+     "postalAddress": {
+      "postalCode": "1082 MS",
+      "addressRegion": "Noord-Holland",
+      "streetAddress": "Gustav Mahlerplein 5",
+      "addressCountry": "Netherlands",
+      "addressLocality": "Amsterdam"
+     }
+    },
+    "jobUrl": "https://jobs.ashbyhq.com/prosus/62b6f958-713f-4313-b73c-3b8202d9bbc8",
+    "applyUrl": "https://jobs.ashbyhq.com/prosus/62b6f958-713f-4313-b73c-3b8202d9bbc8/application",
+    "descriptionHtml": "<p style=\"min-height:1.5em\"><strong>Who We Are</strong></p><p style=\"min-height:1.5em\">You've ordered dinner through Jus",
+    "descriptionPlain": "Who We Are\n\nYou've ordered dinner through Just Eat Takeaway. You've bought and sold on OLX. You've paid with PayU. Chanc",
+    "compensation": {
+     "compensationTierSummary": null,
+     "scrapeableCompensationSalarySummary": null,
+     "compensationTiers": [],
+     "summaryComponents": []
+    }
+   },
+   {
+    "id": "016c6c82-8f34-4f2d-94cd-6392b6cf2c43",
+    "title": "(MSc/PhD) AI Research Intern - LLMs, Causal Inference & Decision Making",
+    "department": "AI & ML",
+    "team": "AI & ML",
+    "employmentType": "Intern",
+    "location": "Amsterdam",
+    "shouldDisplayCompensationOnJobPostings": false,
+    "secondaryLocations": [],
+    "publishedAt": "2026-09-15T14:25:10.108+00:00",
+    "isListed": true,
+    "isRemote": null,
+    "workplaceType": null,
+    "address": {
+     "postalAddress": {
+      "postalCode": "1082 MS",
+      "addressRegion": "Noord-Holland",
+      "streetAddress": "Gustav Mahlerplein 5",
+      "addressCountry": "Netherlands",
+      "addressLocality": "Amsterdam"
+     }
+    },
+    "jobUrl": "https://jobs.ashbyhq.com/prosus/016c6c82-8f34-4f2d-94cd-6392b6cf2c43",
+    "applyUrl": "https://jobs.ashbyhq.com/prosus/016c6c82-8f34-4f2d-94cd-6392b6cf2c43/application",
+    "descriptionHtml": "<p style=\"min-height:1.5em\"><strong>Who We Are</strong></p><p style=\"min-height:1.5em\">You've ordered dinner through Jus",
+    "descriptionPlain": "Who We Are\n\nYou've ordered dinner through Just Eat Takeaway. You've bought and sold on OLX. You've paid with PayU. Chanc",
+    "compensation": {
+     "compensationTierSummary": null,
+     "scrapeableCompensationSalarySummary": null,
+     "compensationTiers": [],
+     "summaryComponents": []
+    }
+   },
+   {
+    "id": "eeb0e0d9-9d3f-4321-8acd-11558dde7c7d",
+    "title": "ML Engineering Intern - LLM Research & Development",
+    "department": "AI & ML",
+    "team": "AI & ML",
+    "employmentType": "Contract",
+    "location": "Amsterdam",
+    "shouldDisplayCompensationOnJobPostings": false,
+    "secondaryLocations": [],
+    "publishedAt": "2026-09-15T14:25:40.701+00:00",
+    "isListed": true,
+    "isRemote": null,
+    "workplaceType": null,
+    "address": {
+     "postalAddress": {
+      "postalCode": "1082 MS",
+      "addressRegion": "Noord-Holland",
+      "streetAddress": "Gustav Mahlerplein 5",
+      "addressCountry": "Netherlands",
+      "addressLocality": "Amsterdam"
+     }
+    },
+    "jobUrl": "https://jobs.ashbyhq.com/prosus/eeb0e0d9-9d3f-4321-8acd-11558dde7c7d",
+    "applyUrl": "https://jobs.ashbyhq.com/prosus/eeb0e0d9-9d3f-4321-8acd-11558dde7c7d/application",
+    "descriptionHtml": "<p style=\"min-height:1.5em\"><strong>Who We Are</strong></p><p style=\"min-height:1.5em\">You've ordered dinner through Jus",
+    "descriptionPlain": "Who We Are\n\nYou've ordered dinner through Just Eat Takeaway. You've bought and sold on OLX. You've paid with PayU. Chanc",
+    "compensation": {
+     "compensationTierSummary": null,
+     "scrapeableCompensationSalarySummary": null,
+     "compensationTiers": [],
+     "summaryComponents": []
+    }
+   },
+   {
+    "id": "57076bda-eb8b-466f-89eb-7bbe254e96a0",
+    "title": "Cyber Security Manager",
+    "department": "Investment Org. - Finance",
+    "team": "Investment Org. - Finance",
+    "employmentType": "FullTime",
+    "location": "Amsterdam",
+    "shouldDisplayCompensationOnJobPostings": false,
+    "secondaryLocations": [],
+    "publishedAt": "2026-09-15T14:24:46.428+00:00",
+    "isListed": true,
+    "isRemote": true,
+    "workplaceType": "Hybrid",
+    "address": {
+     "postalAddress": {
+      "postalCode": "1082 MS",
+      "addressRegion": "Noord-Holland",
+      "streetAddress": "Gustav Mahlerplein 5",
+      "addressCountry": "Netherlands",
+      "addressLocality": "Amsterdam"
+     }
+    },
+    "jobUrl": "https://jobs.ashbyhq.com/prosus/57076bda-eb8b-466f-89eb-7bbe254e96a0",
+    "applyUrl": "https://jobs.ashbyhq.com/prosus/57076bda-eb8b-466f-89eb-7bbe254e96a0/application",
+    "descriptionHtml": "<p style=\"min-height:1.5em\"><strong>Who We Are</strong></p><p style=\"min-height:1.5em\">You've ordered dinner through Jus",
+    "descriptionPlain": "Who We Are\n\nYou've ordered dinner through Just Eat Takeaway. You've bought and sold on OLX. You've paid with PayU. Chanc",
+    "compensation": {
+     "compensationTierSummary": null,
+     "scrapeableCompensationSalarySummary": null,
+     "compensationTiers": [],
+     "summaryComponents": []
+    }
+   },
+   {
+    "id": "2f015781-1719-44c7-b5b4-d2b9113d76a2",
+    "title": "Program Manager – Ecosystem Strategy & Operations",
+    "department": "Ecosystem Strategy & Operations",
+    "team": "Ecosystem Strategy & Operations",
+    "employmentType": "FullTime",
+    "location": "Amsterdam",
+    "shouldDisplayCompensationOnJobPostings": false,
+    "secondaryLocations": [],
+    "publishedAt": "2026-09-22T22:17:09.950+00:00",
+    "isListed": true,
+    "isRemote": true,
+    "workplaceType": "Hybrid",
+    "address": {
+     "postalAddress": {
+      "postalCode": "1082 MS",
+      "addressRegion": "Noord-Holland",
+      "streetAddress": "Gustav Mahlerplein 5",
+      "addressCountry": "Netherlands",
+      "addressLocality": "Amsterdam"
+     }
+    },
+    "jobUrl": "https://jobs.ashbyhq.com/prosus/2f015781-1719-44c7-b5b4-d2b9113d76a2",
+    "applyUrl": "https://jobs.ashbyhq.com/prosus/2f015781-1719-44c7-b5b4-d2b9113d76a2/application",
+    "descriptionHtml": "<p style=\"min-height:1.5em\"><strong>Who We Are</strong></p><p style=\"min-height:1.5em\">You've ordered dinner through Jus",
+    "descriptionPlain": "Who We Are\n\nYou've ordered dinner through Just Eat Takeaway. You've bought and sold on OLX. You've paid with PayU. Chanc",
+    "compensation": {
+     "compensationTierSummary": null,
+     "scrapeableCompensationSalarySummary": null,
+     "compensationTiers": [],
+     "summaryComponents": []
+    }
+   },
+   {
+    "id": "c0bebb3d-21f4-4c39-b406-81d2db54b906",
+    "title": "Director of Brand Experience",
+    "department": "Communications",
+    "team": "Communications",
+    "employmentType": "FullTime",
+    "location": "London",
+    "shouldDisplayCompensationOnJobPostings": false,
+    "secondaryLocations": [
+     {
+      "location": "Amsterdam",
+      "address": {
+       "postalAddress": {
+        "postalCode": "1082 MS",
+        "addressRegion": "Noord-Holland",
+        "streetAddress": "Gustav Mahlerplein 5",
+        "addressCountry": "Netherlands",
+        "addressLocality": "Amsterdam"
+       }
+      }
+     }
+    ],
+    "publishedAt": "2026-10-16T00:14:43.466+00:00",
+    "isListed": true,
+    "isRemote": false,
+    "workplaceType": "OnSite",
+    "address": {
+     "postalAddress": {
+      "postalCode": "W1S 3EP",
+      "addressRegion": "Greater London",
+      "streetAddress": "3 Burlington Gardens",
+      "addressCountry": "United Kingdom",
+      "addressLocality": "London"
+     }
+    },
+    "jobUrl": "https://jobs.ashbyhq.com/prosus/c0bebb3d-21f4-4c39-b406-81d2db54b906",
+    "applyUrl": "https://jobs.ashbyhq.com/prosus/c0bebb3d-21f4-4c39-b406-81d2db54b906/application",
+    "descriptionHtml": "<p style=\"min-height:1.5em\"><strong>Who We Are</strong></p><p style=\"min-height:1.5em\">You've ordered dinner through Jus",
+    "descriptionPlain": "Who We Are\n\nYou've ordered dinner through Just Eat Takeaway. You've bought and sold on OLX. You've paid with PayU. Chanc",
+    "compensation": {
+     "compensationTierSummary": null,
+     "scrapeableCompensationSalarySummary": null,
+     "compensationTiers": [],
+     "summaryComponents": []
+    }
+   },
+   {
+    "id": "19fb2867-b9e3-43f9-8d4c-29ca3b41d73c",
+    "title": "Director: Product Communications",
+    "department": "Communications",
+    "team": "Communications",
+    "employmentType": "FullTime",
+    "location": "Amsterdam",
+    "shouldDisplayCompensationOnJobPostings": false,
+    "secondaryLocations": [
+     {
+      "location": "London",
+      "address": {
+       "postalAddress": {
+        "postalCode": "W1S 3EP",
+        "addressRegion": "Greater London",
+        "streetAddress": "3 Burlington Gardens",
+        "addressCountry": "United Kingdom",
+        "addressLocality": "London"
+       }
+      }
+     }
+    ],
+    "publishedAt": "2026-10-05T11:16:58.437+00:00",
+    "isListed": true,
+    "isRemote": null,
+    "workplaceType": null,
+    "address": {
+     "postalAddress": {
+      "postalCode": "1082 MS",
+      "addressRegion": "Noord-Holland",
+      "streetAddress": "Gustav Mahlerplein 5",
+      "addressCountry": "Netherlands",
+      "addressLocality": "Amsterdam"
+     }
+    },
+    "jobUrl": "https://jobs.ashbyhq.com/prosus/19fb2867-b9e3-43f9-8d4c-29ca3b41d73c",
+    "applyUrl": "https://jobs.ashbyhq.com/prosus/19fb2867-b9e3-43f9-8d4c-29ca3b41d73c/application",
+    "descriptionHtml": "<p style=\"min-height:1.5em\"><strong>Who We Are</strong></p><p style=\"min-height:1.5em\">You've ordered dinner through Jus",
+    "descriptionPlain": "Who We Are\n\nYou've ordered dinner through Just Eat Takeaway. You've bought and sold on OLX. You've paid with PayU. Chanc",
+    "compensation": {
+     "compensationTierSummary": null,
+     "scrapeableCompensationSalarySummary": null,
+     "compensationTiers": [],
+     "summaryComponents": []
+    }
+   },
+   {
+    "id": "82974fe4-b803-40ed-b916-b057b753ab37",
+    "title": "Machine Learning Engineer - LLMs",
+    "department": "AI & ML",
+    "team": "AI & ML",
+    "employmentType": "FullTime",
+    "location": "Amsterdam",
+    "shouldDisplayCompensationOnJobPostings": false,
+    "secondaryLocations": [],
+    "publishedAt": "2026-10-07T13:44:59.712+00:00",
+    "isListed": true,
+    "isRemote": null,
+    "workplaceType": null,
+    "address": {
+     "postalAddress": {
+      "postalCode": "1082 MS",
+      "addressRegion": "Noord-Holland",
+      "streetAddress": "Gustav Mahlerplein 5",
+      "addressCountry": "Netherlands",
+      "addressLocality": "Amsterdam"
+     }
+    },
+    "jobUrl": "https://jobs.ashbyhq.com/prosus/82974fe4-b803-40ed-b916-b057b753ab37",
+    "applyUrl": "https://jobs.ashbyhq.com/prosus/82974fe4-b803-40ed-b916-b057b753ab37/application",
+    "descriptionHtml": "<p style=\"min-height:1.5em\"><strong>Who We Are</strong></p><p style=\"min-height:1.5em\">You've ordered dinner through Jus",
+    "descriptionPlain": "Who We Are\n\nYou've ordered dinner through Just Eat Takeaway. You've bought and sold on OLX. You've paid with PayU. Chanc",
+    "compensation": {
+     "compensationTierSummary": null,
+     "scrapeableCompensationSalarySummary": null,
+     "compensationTiers": [],
+     "summaryComponents": []
+    }
+   },
+   {
+    "id": "9e74dee2-08b6-4f99-8d84-171df8ff8064",
+    "title": "Community Engineer, Toqan (Prosus AI Platform)",
+    "department": "AI & ML",
+    "team": "AI & ML",
+    "employmentType": "FullTime",
+    "location": "Amsterdam",
+    "shouldDisplayCompensationOnJobPostings": false,
+    "secondaryLocations": [],
+    "publishedAt": "2026-10-12T10:22:04.529+00:00",
+    "isListed": true,
+    "isRemote": true,
+    "workplaceType": "Hybrid",
+    "address": {
+     "postalAddress": {
+      "postalCode": "1082 MS",
+      "addressRegion": "Noord-Holland",
+      "streetAddress": "Gustav Mahlerplein 5",
+      "addressCountry": "Netherlands",
+      "addressLocality": "Amsterdam"
+     }
+    },
+    "jobUrl": "https://jobs.ashbyhq.com/prosus/9e74dee2-08b6-4f99-8d84-171df8ff8064",
+    "applyUrl": "https://jobs.ashbyhq.com/prosus/9e74dee2-08b6-4f99-8d84-171df8ff8064/application",
+    "descriptionHtml": "<p style=\"min-height:1.5em\"><strong>Who We Are</strong></p><p style=\"min-height:1.5em\">You've ordered dinner through Jus",
+    "descriptionPlain": "Who We Are\n\nYou've ordered dinner through Just Eat Takeaway. You've bought and sold on OLX. You've paid with PayU. Chanc",
+    "compensation": {
+     "compensationTierSummary": null,
+     "scrapeableCompensationSalarySummary": null,
+     "compensationTiers": [],
+     "summaryComponents": []
+    }
+   },
+   {
+    "id": "2723fb57-213f-429f-994c-697528223e2c",
+    "title": "AI Automation Intern, Communications",
+    "department": "Communications",
+    "team": "Communications",
+    "employmentType": "Intern",
+    "location": "Amsterdam",
+    "shouldDisplayCompensationOnJobPostings": false,
+    "secondaryLocations": [],
+    "publishedAt": "2026-10-12T10:45:37.574+00:00",
+    "isListed": true,
+    "isRemote": true,
+    "workplaceType": "Hybrid",
+    "address": {
+     "postalAddress": {
+      "postalCode": "1082 MS",
+      "addressRegion": "Noord-Holland",
+      "streetAddress": "Gustav Mahlerplein 5",
+      "addressCountry": "Netherlands",
+      "addressLocality": "Amsterdam"
+     }
+    },
+    "jobUrl": "https://jobs.ashbyhq.com/prosus/2723fb57-213f-429f-994c-697528223e2c",
+    "applyUrl": "https://jobs.ashbyhq.com/prosus/2723fb57-213f-429f-994c-697528223e2c/application",
+    "descriptionHtml": "<p style=\"min-height:1.5em\"><strong>Who We Are</strong></p><p style=\"min-height:1.5em\">You've ordered dinner through Jus",
+    "descriptionPlain": "Who We Are\n\nYou've ordered dinner through Just Eat Takeaway. You've bought and sold on OLX. You've paid with PayU. Chanc",
+    "compensation": {
+     "compensationTierSummary": null,
+     "scrapeableCompensationSalarySummary": null,
+     "compensationTiers": [],
+     "summaryComponents": []
+    }
+   }
+  ],
+  "apiVersion": "1"
+ }
+}

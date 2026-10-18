@@ -6,7 +6,7 @@ Public vacancy collection only. The website, database, credentials and deploymen
 
 The reviewed registry includes global employers, South African government and employer sources, and selected Kenyan sources. It does not represent 1,000 employers in each country. Configured sources and catalogue candidates are not equivalent to current vacancies. Dangote is held because its official structured country metadata conflicts with visible job locations; no country corrections are guessed.
 
-Existing readers cover Greenhouse, Lever, Ashby, Workday, SuccessFactors, Oracle, SmartRecruiters, Simplify.hr, selected eRecruit pages and official portals. ATS detection alone does not validate a reader. Unsupported systems remain uncollected unless a separately validated public JobPosting fallback applies.
+Existing readers cover Greenhouse, Lever, Ashby, Workday, SuccessFactors, Oracle, SmartRecruiters, Simplify.hr, selected eRecruit pages and official portals. Employers activated automatically by daily discovery are read only through Workday or the documented public board listings of Greenhouse, Lever, Ashby, Recruitee, Personio and Teamtailor, with robots.txt honoured and per-source request limits. ATS detection alone does not validate a reader. Unsupported systems remain uncollected unless a separately validated public JobPosting fallback applies.
 
 ## Run
 

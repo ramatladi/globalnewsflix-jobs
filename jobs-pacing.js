@@ -2,11 +2,11 @@
 import { AUTOMATIC_PLATFORM_INTERVAL_MS } from './jobs-request-policy.js';
 export function jobPlatform(value) {
   const host = new URL(value).hostname.toLowerCase();
-  const groups = {workday:['myworkdayjobs.com','myworkdaysite.com'],greenhouse:['greenhouse.io'],lever:['lever.co'],ashby:['ashbyhq.com'],smartrecruiters:['smartrecruiters.com'],oracle:['oraclecloud.com'],successfactors:['successfactors.com','successfactors.eu'],workable:['workable.com'],icims:['icims.com'],taleo:['taleo.net']};
+  const groups = {workday:['myworkdayjobs.com','myworkdaysite.com'],greenhouse:['greenhouse.io'],lever:['lever.co'],ashby:['ashbyhq.com'],smartrecruiters:['smartrecruiters.com'],oracle:['oraclecloud.com'],successfactors:['successfactors.com','successfactors.eu'],workable:['workable.com'],icims:['icims.com'],taleo:['taleo.net'],recruitee:['recruitee.com'],personio:['jobs.personio.de','jobs.personio.com'],teamtailor:['teamtailor.com']};
   for (const [name,domains] of Object.entries(groups)) if (domains.some(d=>host===d||host.endsWith('.'+d))) return name;
   return 'host:'+host;
 }
-export const platformForReader = ats => ({wd:'workday',gh:'greenhouse',lever:'lever',ashby:'ashby',sr:'smartrecruiters',orc:'oracle',sf:'successfactors'})[ats] || null;
+export const platformForReader = ats => ({wd:'workday',gh:'greenhouse',lever:'lever',ashby:'ashby',sr:'smartrecruiters',orc:'oracle',sf:'successfactors',recruitee:'recruitee',personio:'personio',teamtailor:'teamtailor'})[ats] || null;
 export function createPlatformPacer({now=()=>performance.now(),pause=ms=>new Promise(r=>setTimeout(r,ms))}={}) {
   const states=new Map(),hosts=new Map(),metrics=new Map();
   const pace=async (value,send=()=>{},platform=null,kind='other',priorWaitMs=0)=>{

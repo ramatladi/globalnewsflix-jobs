@@ -1,0 +1,401 @@
+{
+ "source": "https://boards-api.greenhouse.io/v1/boards/jumia/jobs?content=true",
+ "capturedAt": "2026-10-18T09:08:37.667Z",
+ "note": "First 6 of 25 published jobs; meta.total set to 6 to match; text values shortened.",
+ "response": {
+  "jobs": [
+   {
+    "absolute_url": "https://job-boards.eu.greenhouse.io/jumia/jobs/4980196101",
+    "data_compliance": [
+     {
+      "type": "gdpr",
+      "requires_consent": true,
+      "requires_processing_consent": true,
+      "requires_retention_consent": true,
+      "retention_period": 730,
+      "demographic_data_consent_applies": false
+     }
+    ],
+    "internal_job_id": 4523958101,
+    "location": {
+     "name": "Nigeria"
+    },
+    "metadata": [
+     {
+      "id": 4016169101,
+      "name": "Employment Type",
+      "value": "Full-time",
+      "value_type": "single_select"
+     },
+     {
+      "id": 4026217101,
+      "name": "Seniority",
+      "value": "Mid-Senior",
+      "value_type": "single_select"
+     }
+    ],
+    "id": 4980196101,
+    "updated_at": "2026-09-30T09:53:16-04:00",
+    "requisition_id": "4355",
+    "title": "Defective Team Leader - Jumia (Full Time)",
+    "company_name": "Jumia",
+    "first_published": "2026-09-30T09:53:16-04:00",
+    "language": "en",
+    "application_deadline": null,
+    "content": "&lt;div class=&quot;content-intro&quot;&gt;&lt;p&gt;&lt;strong&gt;About Jumia&lt;/strong&gt;:&lt;/p&gt;\n&lt;p&gt;Jumia&amp;nbsp;is a leading pan-African e-comme",
+    "departments": [
+     {
+      "id": 4005265101,
+      "name": "Supply Chain",
+      "child_ids": [
+       4005267101,
+       4005285101,
+       4005277101,
+       4005268101,
+       4029308101,
+       4029309101,
+       4029310101
+      ],
+      "parent_id": null
+     }
+    ],
+    "offices": [
+     {
+      "id": 4001566101,
+      "name": "Nigeria",
+      "location": null,
+      "child_ids": [],
+      "parent_id": 4001554101
+     }
+    ],
+    "ai_disclaimer": null,
+    "include_ai_disclaimer": null,
+    "ai_opt_out_request_url": null
+   },
+   {
+    "absolute_url": "https://job-boards.eu.greenhouse.io/jumia/jobs/4974610101",
+    "data_compliance": [
+     {
+      "type": "gdpr",
+      "requires_consent": true,
+      "requires_processing_consent": true,
+      "requires_retention_consent": true,
+      "retention_period": 730,
+      "demographic_data_consent_applies": false
+     }
+    ],
+    "internal_job_id": 4521704101,
+    "location": {
+     "name": "Nigeria"
+    },
+    "metadata": [
+     {
+      "id": 4016169101,
+      "name": "Employment Type",
+      "value": "Full-time",
+      "value_type": "single_select"
+     },
+     {
+      "id": 4026217101,
+      "name": "Seniority",
+      "value": "Mid-Senior",
+      "value_type": "single_select"
+     }
+    ],
+    "id": 4974610101,
+    "updated_at": "2026-09-22T07:38:34-04:00",
+    "requisition_id": "4335",
+    "title": "First Mile & Last Mile Manager - Jumia (Full Time)",
+    "company_name": "Jumia",
+    "first_published": "2026-09-17T10:36:04-04:00",
+    "language": "en",
+    "application_deadline": null,
+    "content": "&lt;div class=&quot;content-intro&quot;&gt;&lt;p&gt;&lt;strong&gt;About Jumia&lt;/strong&gt;:&lt;/p&gt;\n&lt;p&gt;Jumia&amp;nbsp;is a leading pan-African e-comme",
+    "departments": [
+     {
+      "id": 4005265101,
+      "name": "Supply Chain",
+      "child_ids": [
+       4005267101,
+       4005285101,
+       4005277101,
+       4005268101,
+       4029308101,
+       4029309101,
+       4029310101
+      ],
+      "parent_id": null
+     }
+    ],
+    "offices": [
+     {
+      "id": 4001566101,
+      "name": "Nigeria",
+      "location": null,
+      "child_ids": [],
+      "parent_id": 4001554101
+     }
+    ],
+    "ai_disclaimer": null,
+    "include_ai_disclaimer": null,
+    "ai_opt_out_request_url": null
+   },
+   {
+    "absolute_url": "https://job-boards.eu.greenhouse.io/jumia/jobs/4921105101",
+    "data_compliance": [
+     {
+      "type": "gdpr",
+      "requires_consent": true,
+      "requires_processing_consent": true,
+      "requires_retention_consent": true,
+      "retention_period": 730,
+      "demographic_data_consent_applies": false
+     }
+    ],
+    "internal_job_id": 4498091101,
+    "location": {
+     "name": "Senegal"
+    },
+    "metadata": [
+     {
+      "id": 4016169101,
+      "name": "Employment Type",
+      "value": "Full-time",
+      "value_type": "single_select"
+     },
+     {
+      "id": 4026217101,
+      "name": "Seniority",
+      "value": "Manager",
+      "value_type": "single_select"
+     }
+    ],
+    "id": 4921105101,
+    "updated_at": "2026-09-22T08:28:02-04:00",
+    "requisition_id": "4219",
+    "title": "Head of CXP Country - Jumia (Full Time)",
+    "company_name": "Jumia",
+    "first_published": "2026-07-15T05:17:19-04:00",
+    "language": "en",
+    "application_deadline": null,
+    "content": "&lt;div class=&quot;content-intro&quot;&gt;&lt;p&gt;&lt;strong&gt;About Jumia&lt;/strong&gt;:&lt;/p&gt;\n&lt;p&gt;Jumia&amp;nbsp;is a leading pan-African e-comme",
+    "departments": [
+     {
+      "id": 4006401101,
+      "name": "Operations - Customer Experience",
+      "child_ids": [],
+      "parent_id": 4005251101
+     }
+    ],
+    "offices": [
+     {
+      "id": 4001632101,
+      "name": "Senegal",
+      "location": null,
+      "child_ids": [],
+      "parent_id": 4001554101
+     }
+    ],
+    "ai_disclaimer": null,
+    "include_ai_disclaimer": null,
+    "ai_opt_out_request_url": null
+   },
+   {
+    "absolute_url": "https://job-boards.eu.greenhouse.io/jumia/jobs/4906703101",
+    "data_compliance": [
+     {
+      "type": "gdpr",
+      "requires_consent": true,
+      "requires_processing_consent": true,
+      "requires_retention_consent": true,
+      "retention_period": 730,
+      "demographic_data_consent_applies": false
+     }
+    ],
+    "education": "education_required",
+    "internal_job_id": 4491296101,
+    "location": {
+     "name": "Uganda"
+    },
+    "metadata": [
+     {
+      "id": 4016169101,
+      "name": "Employment Type",
+      "value": "Full-time",
+      "value_type": "single_select"
+     },
+     {
+      "id": 4026217101,
+      "name": "Seniority",
+      "value": "Associate",
+      "value_type": "single_select"
+     }
+    ],
+    "id": 4906703101,
+    "updated_at": "2026-09-19T14:54:15-04:00",
+    "requisition_id": "4206",
+    "title": "Head of Sales Network  - Jumia (Full Time) ",
+    "company_name": "Jumia",
+    "first_published": "2026-07-07T12:38:44-04:00",
+    "language": "en",
+    "application_deadline": null,
+    "content": "&lt;div class=&quot;content-intro&quot;&gt;&lt;p&gt;&lt;strong&gt;About Jumia&lt;/strong&gt;:&lt;/p&gt;\n&lt;p&gt;Jumia&amp;nbsp;is a leading pan-African e-comme",
+    "departments": [
+     {
+      "id": 4005224101,
+      "name": "Marketing",
+      "child_ids": [
+       4005241101,
+       4006394101,
+       4006383101,
+       4005225101,
+       4029032101,
+       4006391101,
+       4006395101,
+       4006396101,
+       4006397101
+      ],
+      "parent_id": null
+     }
+    ],
+    "offices": [
+     {
+      "id": 4001568101,
+      "name": "Uganda",
+      "location": null,
+      "child_ids": [],
+      "parent_id": 4001554101
+     }
+    ],
+    "ai_disclaimer": null,
+    "include_ai_disclaimer": null,
+    "ai_opt_out_request_url": null
+   },
+   {
+    "absolute_url": "https://job-boards.eu.greenhouse.io/jumia/jobs/5004101101",
+    "data_compliance": [
+     {
+      "type": "gdpr",
+      "requires_consent": true,
+      "requires_processing_consent": true,
+      "requires_retention_consent": true,
+      "retention_period": 730,
+      "demographic_data_consent_applies": false
+     }
+    ],
+    "internal_job_id": 4534789101,
+    "location": {
+     "name": "Kenya"
+    },
+    "metadata": [
+     {
+      "id": 4016169101,
+      "name": "Employment Type",
+      "value": "Full-time",
+      "value_type": "single_select"
+     },
+     {
+      "id": 4026217101,
+      "name": "Seniority",
+      "value": "Associate",
+      "value_type": "single_select"
+     }
+    ],
+    "id": 5004101101,
+    "updated_at": "2026-10-15T07:45:16-04:00",
+    "requisition_id": "4393",
+    "title": "Incubation Agent - Jumia (Full Time)",
+    "company_name": "Jumia",
+    "first_published": "2026-10-15T07:44:49-04:00",
+    "language": "en",
+    "application_deadline": null,
+    "content": "&lt;div class=&quot;content-intro&quot;&gt;&lt;p&gt;&lt;strong&gt;About Jumia&lt;/strong&gt;:&lt;/p&gt;\n&lt;p&gt;Jumia&amp;nbsp;is a leading pan-African e-comme",
+    "departments": [
+     {
+      "id": 4029018101,
+      "name": "Commercial - Seller Management",
+      "child_ids": [],
+      "parent_id": 4005193101
+     }
+    ],
+    "offices": [
+     {
+      "id": 4001564101,
+      "name": "Kenya",
+      "location": null,
+      "child_ids": [],
+      "parent_id": 4001554101
+     }
+    ],
+    "ai_disclaimer": null,
+    "include_ai_disclaimer": null,
+    "ai_opt_out_request_url": null
+   },
+   {
+    "absolute_url": "https://job-boards.eu.greenhouse.io/jumia/jobs/4983751101",
+    "data_compliance": [
+     {
+      "type": "gdpr",
+      "requires_consent": true,
+      "requires_processing_consent": true,
+      "requires_retention_consent": true,
+      "retention_period": 730,
+      "demographic_data_consent_applies": false
+     }
+    ],
+    "internal_job_id": 4461218101,
+    "location": {
+     "name": "Porto; Portugal"
+    },
+    "metadata": [
+     {
+      "id": 4016169101,
+      "name": "Employment Type",
+      "value": "Intern",
+      "value_type": "single_select"
+     },
+     {
+      "id": 4026217101,
+      "name": "Seniority",
+      "value": "Internship",
+      "value_type": "single_select"
+     }
+    ],
+    "id": 4983751101,
+    "updated_at": "2026-09-23T08:18:27-04:00",
+    "requisition_id": "4136",
+    "title": "Internship Global Program - Service Management Intern - Jumia (Full Time)",
+    "company_name": "Jumia",
+    "first_published": "2026-09-23T08:15:49-04:00",
+    "language": "en",
+    "application_deadline": null,
+    "content": "&lt;div class=&quot;content-intro&quot;&gt;&lt;p&gt;&lt;strong&gt;About Jumia&lt;/strong&gt;:&lt;/p&gt;\n&lt;p&gt;Jumia&amp;nbsp;is a leading pan-African e-comme",
+    "departments": [
+     {
+      "id": 4005292101,
+      "name": "Tech - Support",
+      "child_ids": [],
+      "parent_id": 4005287101
+     }
+    ],
+    "offices": [
+     {
+      "id": 4001574101,
+      "name": "Portugal",
+      "location": null,
+      "child_ids": [
+       4001634101
+      ],
+      "parent_id": 4001569101
+     }
+    ],
+    "ai_disclaimer": null,
+    "include_ai_disclaimer": null,
+    "ai_opt_out_request_url": null
+   }
+  ],
+  "meta": {
+   "total": 6
+  }
+ }
+}
