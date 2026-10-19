@@ -1,27 +1,67 @@
 [
   {
+    "file": ".github/workflows/ingest.yml",
+    "sha256": "cd970be4d6e81aba4a0084e04705592205f637ff6429acb7572d5228151518ca"
+  },
+  {
     "file": ".github/workflows/jobs.yml",
     "sha256": "f1cc232452c6b00c75cb7e5ac43b4e49d1a2abd542a3d946d378e76f39533d88"
   },
   {
+    "file": ".github/workflows/keepalive.yml",
+    "sha256": "fc5b0b513d491e2b77029855d866b875ea39f442094af354928cfef3b03f7b03"
+  },
+  {
+    "file": ".github/workflows/photos.yml",
+    "sha256": "dccf9656b7a07334374a49a79db19266444bd91beb40661f8943c3446ba51b0b"
+  },
+  {
     "file": ".github/workflows/tests.yml",
-    "sha256": "20952d418c1d4700aff459c3db02ffe93ae938c54c8aa82f9e50a59b78777bd9"
+    "sha256": "72d9abe609d68d80496008c3289c6a921ec76b8680d8249db6668596d0b547a1"
   },
   {
     "file": ".gitignore",
-    "sha256": "4492c54bd12efd51066dc8b0ae848d7333b9f28b5c5f28e51a88ba44289f3113"
+    "sha256": "5b68c0c13292ca62601966b3ddfd456feba186d7ce3e1c0a440d295b4976895c"
   },
   {
     "file": "README.md",
-    "sha256": "67130080076bedade7db69a8f409fead17e89fd6cfe1cb5c3a6da7bfd1658a0e"
+    "sha256": "93e1af49886f94d18f1c0fdfbff6595728a8b3456ddf066bb5c6fd03fd373bbe"
+  },
+  {
+    "file": "article-images.js",
+    "sha256": "ca6ca6d54bf62f62a42e2905568563f99047247cde5796933a4a55a567f13e2b"
+  },
+  {
+    "file": "article_media.py",
+    "sha256": "0473a2fd38fcad7dec92f2588a0efb4b678b18ae9b695022eb7fc53f592c6396"
+  },
+  {
+    "file": "change-search.js",
+    "sha256": "b9990835ddacbfd428d01c304eab5264695133e1718f412bc36d276afbbe3c16"
   },
   {
     "file": "data.js",
-    "sha256": "573397a46bbf9e7e1a04fd8d5b95860e893ad1e3bf5e711536ef9273a33771ee"
+    "sha256": "95b0e43a3127ccd41875542b5849fcd4f5f81e4fa8e20f8ade5808fadee3a9a4"
   },
   {
     "file": "data/discovered-sources/manifest.json",
     "sha256": "c65b40284dd5851db681e9025d837f28a578e52e9b13e836731c547ec318ef9e"
+  },
+  {
+    "file": "event-search.js",
+    "sha256": "0abbd5faff10ec2ee58804a744c0d029c2ba4e85471c8e1b86526dee807bcddb"
+  },
+  {
+    "file": "google-news-url.js",
+    "sha256": "550946e3ed46b13acd8acc574fdcd3023d17318b140ee0545fd13cba4a4811e6"
+  },
+  {
+    "file": "ingest-resolve.js",
+    "sha256": "c0dcdb0e980a95a93c2b02b3fe1046283674971209c9187a13f15345d619daf8"
+  },
+  {
+    "file": "ingest-runner.mjs",
+    "sha256": "6c25fc860286c1e60a51b8bdfe858b9b071fe6dd7366dbdb2c649c889bdf3709"
   },
   {
     "file": "jobs-adapters.js",
@@ -104,12 +144,48 @@
     "sha256": "5fa1c506e6abe37acf9ff1068c292b4b8c84e0807e4eaa62e18454825517720e"
   },
   {
+    "file": "make_photos.py",
+    "sha256": "3892fae28d2fb1981b15a9473201da18d3b2d77894dfb6874723364cfa58521f"
+  },
+  {
+    "file": "make_video.py",
+    "sha256": "5cc3fc529f193c2bc4de2f0cb07d79b1cb41e6310cec9858c360420b368acbbc"
+  },
+  {
+    "file": "news-collect.js",
+    "sha256": "047e24f76863551f77a687926c8d25055f9f11ec574f3a79f9e50940aeb4e0b0"
+  },
+  {
+    "file": "news-freshness.js",
+    "sha256": "93d6e6848601f11d60d26d52d45f4a65168fc0f11bc1e64c9412314c3e32af39"
+  },
+  {
+    "file": "non-news.js",
+    "sha256": "31c6f403e0008adf3b98d6097cb849655300d970471f2ffdd4b920d068e409cc"
+  },
+  {
     "file": "package.json",
-    "sha256": "bf289e6946df29007b689de89b1d0f8778c25331685df37776e8d6c0ee1165f5"
+    "sha256": "568edcca4396633dcc32df000c3b5805183a32974149e2ba3eb09a46c6fc0031"
+  },
+  {
+    "file": "publisher-health.js",
+    "sha256": "6169cd7d5b5e7945f30a5064ee5a74f89954b17bb8e0b678a60f07436b3cd080"
+  },
+  {
+    "file": "requirements-photos.txt",
+    "sha256": "794d6854fa7adf7896999ec1c7134d4eef8c589d3886a8474247b16ad3b04a87"
   },
   {
     "file": "requirements.txt",
     "sha256": "af99a44c3e0e6ff026eb04308fc630b49b8bffddc508c4b4c69caf774fbcefca"
+  },
+  {
+    "file": "site-fetch.mjs",
+    "sha256": "cfe50259552af6e500542a73219401e6c0b8dc837a9f0d95f859452c2bb8bdc0"
+  },
+  {
+    "file": "sponsored-content.js",
+    "sha256": "bae196167372b9cfac401ccf99940eb7f937255cf7070c3c720e9fd4e40e7d94"
   },
   {
     "file": "tests/fixtures/jobs-ats-ashby-prosus.json",
@@ -260,6 +336,10 @@
     "sha256": "df6993ec7caac3031dc7baf6c4ae389da996f9ad71cd223af1532c28fade1840"
   },
   {
+    "file": "tests/ingest-runner.test.mjs",
+    "sha256": "33083bb41406ec4d4178b226d27f2623a65e329af1e0b30e6187972bd1bc7fca"
+  },
+  {
     "file": "tests/jobs-africa-sources.test.mjs",
     "sha256": "a699e623f63dc270578a38fc14493299f657fbffd6ea50c8b2ed4c6d9d2c720f"
   },
@@ -332,8 +412,24 @@
     "sha256": "98728988757b21d1da99849d72da74380a3f341d4cde0fc1db4b221068debfde"
   },
   {
+    "file": "tests/site-fetch.test.mjs",
+    "sha256": "456e705e34d5ca20f07f1e1fefe2c12637da0328c6f23d2af8a8e72523a7dd7d"
+  },
+  {
+    "file": "tests/test_article_media.py",
+    "sha256": "febb5f0c33e133750d5ef63bd8d78f54ef37f563af88ab98d23b92e0592114bd"
+  },
+  {
     "file": "tests/test_jobs_government.py",
     "sha256": "ff59ab07b74b0d8e1a71edd58c5956f5759a4896a77e874d1e8a04f93d025038"
+  },
+  {
+    "file": "tests/test_photo_fingerprints.py",
+    "sha256": "aa2a6104079ae20de621f8dc0a57ad4e3f0f0965a7bfd949498a4f9021270fb0"
+  },
+  {
+    "file": "tests/test_photo_runs.py",
+    "sha256": "d40de4ddeee944545ab30c8f76c82670738890db0ce6b8d06cb4d92e40aa1b86"
   },
   {
     "file": "za-government-directory.json",

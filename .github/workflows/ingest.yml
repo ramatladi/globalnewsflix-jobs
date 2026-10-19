@@ -1,0 +1,61 @@
+name: Collect news
+# Production news collection: reads Google News and Bing feeds for every edition and the publishers' own
+# pages (honest crawler user agent; Coming Up searches ask a host at most about once a second; refusals,
+# paywalls and bot challenges are respected, never bypassed), then uploads candidates to the site. The site
+# accepts uploads only from this workflow on main (scheduled or manual), signed by GitHub for this exact
+# repository; never from pull requests, forks, other branches or other workflows.
+on:
+  # GitHub drops many runs scheduled on busy minutes: two off-peak schedules, hourly together, and the
+  # photo job also starts collection once 55 minutes have passed since the last one began.
+  schedule:
+    - cron: "13 */2 * * *"
+    - cron: "41 1-23/2 * * *"
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: ingest
+  cancel-in-progress: false
+jobs:
+  ingest:
+    permissions:
+      id-token: write
+      contents: read
+      actions: write   # starts this repository's photo job, which in turn restarts collection when it is overdue
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          package-manager-cache: false
+      # Each run sweeps every edition (4 passes over the least-recently checked ones). The passes share a
+      # 26-minute deadline (the job limit is 30): each pass gets an even share of what is left and stops
+      # reading publisher pages a minute before its share ends, so uploads always complete.
+      - run: |
+          failed=0
+          export INGEST_DEADLINE=$(( $(date +%s) * 1000 + 26 * 60 * 1000 ))
+          for i in 1 2 3 4; do
+            PASS="$i" node ingest-runner.mjs || failed=1
+          done
+          exit "$failed"
+        env:
+          TARGETS_PER_RUN: "52"
+          PASSES: "4"
+          RESOLVE_CACHE: ${{ runner.temp }}/gn-resolve-cache.json
+          RESOLVE_MAX: "300"
+          RESOLVE_TOP: "16"
+          RESOLVE_BUDGET_MS: "180000"
+          ENRICH_TOP: "14"
+          ENRICH_TIMEOUT_MS: "10000"
+      # Keep the cycle alive even when GitHub skips schedules: the photo job runs next and starts the
+      # following collection once 55 minutes have passed.
+      - name: Start the photo job
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: gh workflow run photos.yml --repo "$REPO" --ref main || true

@@ -1,25 +1,35 @@
-# Global Newsflix Jobs collector
+# Global Newsflix public collectors
 
-Public vacancy collection only. The website, database, credentials and deployment configuration remain in the private site repository.
+Public collection jobs for Global Newsflix, run here on free public-repository GitHub Actions minutes: Jobs (vacancies), Collect news (news candidates) and Story photos (backup photo finder). The website, database, writing, credentials and deployment configuration remain in the private site repository.
 
-## Scope
+## Jobs
 
 The reviewed registry includes global employers, South African government and employer sources, and selected Kenyan sources. It does not represent 1,000 employers in each country. Configured sources and catalogue candidates are not equivalent to current vacancies. Dangote is held because its official structured country metadata conflicts with visible job locations; no country corrections are guessed.
 
 Existing readers cover Greenhouse, Lever, Ashby, Workday, SuccessFactors, Oracle, SmartRecruiters, Simplify.hr, selected eRecruit pages and official portals. Employers activated automatically by daily discovery are read only through Workday or the documented public board listings of Greenhouse, Lever, Ashby, Recruitee, Personio and Teamtailor, with robots.txt honoured and per-source request limits. ATS detection alone does not validate a reader. Unsupported systems remain uncollected unless a separately validated public JobPosting fallback applies.
 
-## Run
-
-Application commands use Node 22 and Python 3.12; workflow actions use reviewed Node24-compatible releases pinned to commit SHAs. Install requirements.txt, run npm test and python -m unittest discover -s tests -p 'test_*.py'. Set JOBS_DRY_RUN=1 to collect without authentication or ingestion writes. Optional JOB_SOURCES selects registered IDs.
-
-This repository is the production collector. Scheduled runs occur at minute 41 every six hours. Manual workflow_dispatch accepts sources and dry_run. Publishing requires repository variable PUBLISH_RESULTS=true and the separately configured Jobs-only OIDC trust; manual dry_run always disables publishing. Reports are uploaded as the jobs-collection-report artifact, including after collection failures where a report exists. The signed identity and any rejection are reported as check-run annotations.
-
-The site accepts only signed GitHub tokens for this exact repository (pinned to its numeric owner and repository IDs, immutable subject form), from the direct Jobs workflow on main started by the schedule or a manual dispatch, and only on the Jobs ingestion endpoints. Pull requests, forks, other branches and other workflows never receive site access. No long-lived Cloudflare token or site deployment secret belongs here. Other site APIs remain private-repository-only.
-
-GitHub disables scheduled workflows in public repositories after 60 days without repository activity; publishing an export (or any commit) keeps the schedule active.
+Scheduled runs occur at minute 41 every six hours. Manual workflow_dispatch accepts sources and dry_run. Publishing requires repository variable PUBLISH_RESULTS=true and the separately configured Jobs-only OIDC trust; manual dry_run always disables publishing. Set JOBS_DRY_RUN=1 to collect without authentication or ingestion writes. Optional JOB_SOURCES selects registered IDs. Reports are uploaded as the jobs-collection-report artifact, including after collection failures where a report exists.
 
 Only complete source snapshots may prune disappeared jobs. Partial, capped, blocked and failed reads preserve existing listings. Official PDF circulars are incremental; expiry uses published deadlines. Pay is shown only as advertised, and ambiguous geography is withheld. No login, access-control bypass, paid API or guessed source data is used.
 
+## Collect news
+
+ingest-runner.mjs asks the site which editions to collect, reads their Google News and Bing feeds, resolves Google News links within a per-run budget, reads the strongest reports' publisher pages for their publication date, description, lead image and opening text, and uploads the candidates. Every request names the crawler in its user agent; Coming Up searches ask a host at most about once a second; publishers that keep refusing are skipped; 401/403 answers, paywalls, consent pages and bot challenges are recorded and never retried, disguised or bypassed. The site decides what is written and published. Two off-peak schedules run hourly together; each run makes four passes under a 26-minute deadline and then starts the photo job.
+
+## Story photos
+
+make_photos.py claims stories that are waiting for a photo, finds other outlets' reports of the same story, and offers their lead photos to the site, which checks each one (native size, provenance, no watermark or news branding, relevance) before a story can publish. A run works for about ten minutes and starts the next run while more stories are due; it also starts news collection when none has begun for 55 minutes.
+
+## Site access
+
+The site accepts only signed GitHub OIDC tokens for this exact repository (pinned to its numeric owner and repository IDs, immutable subject form) from the direct workflow on main started by the schedule or a manual dispatch: jobs.yml only on the Jobs ingestion endpoints, ingest.yml only on the news ingestion endpoints and photos.yml only on the photo endpoints. Pull requests, forks, other branches and other workflows (tests.yml, keepalive.yml) never receive site access. No long-lived Cloudflare token, site deployment secret or other repository secret belongs here; every other site API remains private-repository-only. The private repository keeps manual fallback copies of these workflows.
+
+## Run
+
+Application commands use Node 22 and Python 3.12; workflow actions use reviewed Node24-compatible releases pinned to commit SHAs. Run npm test, then (after pip install -r requirements.txt -r requirements-photos.txt) python -m unittest discover -s tests -p 'test_*.py'. The collectors need a GitHub Actions identity token to talk to the site.
+
+GitHub disables scheduled workflows in public repositories after 60 days without repository activity. keepalive.yml records an empty commit on the 1st and 15th of each month when the last commit is 25 or more days old, and publishing an export also counts; the private repository's hourly health check reports any of these schedules that stops.
+
 ## Updating
 
-Generated by the private repository's scripts/export-jobs-collector.mjs into a new empty directory using an explicit allowlist. Review EXPORT-MANIFEST.json before publishing. Never copy the private repository, private research catalogues, reports or Git history. Public schedule and publishing controls are generated independently from the private manual fallback.
+Generated by the private repository's scripts/export-jobs-collector.mjs into a new empty directory using explicit allowlists, a closed import check and a secret-pattern check. Review EXPORT-MANIFEST.json before publishing. Never copy the private repository, private research catalogues, reports, data dumps or Git history. Public schedules and publishing controls are generated independently from the private manual fallbacks.

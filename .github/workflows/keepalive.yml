@@ -1,0 +1,26 @@
+name: Keep schedules active
+# GitHub disables scheduled workflows in a public repository after 60 days without activity. This records an
+# empty commit on main when the last commit is 25 or more days old, so the collectors' schedules stay active.
+on:
+  schedule:
+    - cron: "37 5 1,15 * *"
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: keepalive
+  cancel-in-progress: false
+jobs:
+  keepalive:
+    permissions:
+      contents: write
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: |
+          age=$(( ( $(date +%s) - $(git log -1 --format=%ct) ) / 86400 ))
+          echo "last commit $age days ago"
+          if [ "$age" -lt 25 ]; then exit 0; fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit --allow-empty -m "Keep scheduled collectors active"
+          git push origin HEAD:main

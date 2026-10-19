@@ -1,0 +1,80 @@
+name: Story photos
+# Backup photo finder for stories whose own report had no usable picture: looks at other outlets' reports
+# of the same story and offers their photos; the site checks each one (no watermark, no news branding,
+# native size, relevance) and stories wait, hidden, until one is accepted. The site accepts this workflow
+# only on main (scheduled or manual), signed by GitHub for this exact repository, and only on its photo routes.
+# GitHub delivers only some scheduled runs, so a run works for about ten minutes, picking up stories as the
+# writer saves them, and starts the next run while more are due soon. The chain stops when the writer is
+# quiet and nothing is due; the schedule and the news collection start it again.
+on:
+  schedule:
+    - cron: "4,14,24,34,44,54 * * * *"
+    - cron: "9,29,49 * * * *"
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: photos
+  cancel-in-progress: false
+jobs:
+  photos:
+    permissions:
+      id-token: write
+      contents: read
+      actions: write   # starts the next photo run, and news collection when it is overdue (this repository only)
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Start news collection if overdue
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          last=$(gh api "repos/$REPO/actions/workflows/ingest.yml/runs?per_page=1" --jq '.workflow_runs[0] | (.status + " " + .created_at)' || echo "")
+          status=${last%% *}; created=${last#* }
+          age=99999
+          if [ -n "$created" ] && [ "$created" != "$last" ]; then age=$(( ( $(date +%s) - $(date -d "$created" +%s) ) / 60 )); fi
+          echo "last ingest.yml: $last (age ${age} min)"
+          if [ "$status" != "in_progress" ] && [ "$status" != "queued" ] && [ "$age" -ge 55 ]; then
+            gh workflow run ingest.yml --repo "$REPO" --ref main && echo "started ingest.yml" || true
+          fi
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: pip install -q -r requirements-photos.txt
+      # Claims new stories for 9 minutes (only as many as there are free workers), polls every 45 seconds while
+      # the writer is saving stories or a retry is due within 6 minutes, and finishes its last stories by 11.
+      - name: Choose photos
+        id: photos
+        timeout-minutes: 12
+        env:
+          CLAIM_MINUTES: "9"
+          STOP_MINUTES: "11"
+          PARALLEL: "5"
+          POLL_SECONDS: "45"
+          IDLE_SECONDS: "360"
+        run: python make_photos.py
+      - name: Start the next run
+        if: always() && steps.photos.outputs.chain == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: gh workflow run photos.yml --repo "$REPO" --ref main || true
+      - name: Start news collection if overdue (after photos)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          last=$(gh api "repos/$REPO/actions/workflows/ingest.yml/runs?per_page=1" --jq '.workflow_runs[0] | (.status + " " + .created_at)' || echo "")
+          status=${last%% *}; created=${last#* }
+          age=99999
+          if [ -n "$created" ] && [ "$created" != "$last" ]; then age=$(( ( $(date +%s) - $(date -d "$created" +%s) ) / 60 )); fi
+          echo "last ingest.yml: $last (age ${age} min)"
+          if [ "$status" != "in_progress" ] && [ "$status" != "queued" ] && [ "$age" -ge 55 ]; then
+            gh workflow run ingest.yml --repo "$REPO" --ref main && echo "started ingest.yml" || true
+          fi

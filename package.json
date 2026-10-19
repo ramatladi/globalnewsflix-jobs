@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "node --test tests/*.test.mjs",
-    "collect": "node jobs-runner.mjs"
+    "collect": "node jobs-runner.mjs",
+    "news": "node ingest-runner.mjs",
+    "photos": "python make_photos.py"
   }
 }

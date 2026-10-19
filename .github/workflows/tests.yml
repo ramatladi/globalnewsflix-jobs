@@ -7,7 +7,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -20,5 +20,8 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: "3.12"
-      - run: pip install pypdf==6.20.0
+      - run: pip install -r requirements.txt -r requirements-photos.txt
       - run: python -m unittest discover -s tests -p test_jobs_government.py
+      - run: python -m unittest discover -s tests -p 'test_*photo*.py'
+      - run: python -m unittest discover -s tests -p test_article_media.py
+      - run: python -m py_compile make_photos.py make_video.py article_media.py
