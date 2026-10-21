@@ -39,7 +39,7 @@ test('Workday later-page failure retains earlier rows without full-source cleanu
   assert.equal(result.diagnostics[0].status, 'partial');
 });
 
-test('Workday full known total including zero is complete; country cap is partial', async () => {
+test('Workday full known total including zero is complete, with no per-country cap (owner, 22 Oct 2026)', async () => {
   for (const total of [0, 1, 81]) {
     const result = await run((url, options) => {
       if (!url.endsWith('/jobs')) return response({});
@@ -47,8 +47,8 @@ test('Workday full known total including zero is complete; country cap is partia
       if (!Object.keys(query.appliedFacets).length) return response({ total, jobPostings: [], facets: total ? [{ facetParameter: 'country', values: [{ id: 'za', descriptor: 'South Africa', count: total }] }] : [] });
       return response({ jobPostings: Array.from({ length: Math.min(20, total - query.offset) }, (_, i) => wdRow(i + query.offset)) });
     }, ['absa']);
-    assert.deepEqual(result.ok, total > 80 ? [] : ['absa']);
-    assert.equal(result.rows.length, Math.min(total, 80));
+    assert.deepEqual(result.ok, ['absa']);
+    assert.equal(result.rows.length, total);
   }
 });
 

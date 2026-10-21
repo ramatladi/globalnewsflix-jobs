@@ -81,7 +81,7 @@ test('captured Safaricom public Oracle response yields its two explicit Kenya jo
   assert.ok(result.rows.every(r => r.country === 'KE'));
 });
 
-test('Dangote detail enrichment attempts exactly250 of251 postings and never authorizes pruning', async () => {
+test('Dangote detail enrichment checks every one of 251 postings and never authorizes pruning', async () => {
   const tile = (id) => `<li class="job-tile x"><a href="/job/Role/${id}/">Role ${id}</a><div id="job-${id}-desktop-section-location-value">Ibese Plant</div></li>`;
   const listing = `<ul>${Array.from({length:251},(_,i)=>tile(i+1)).join('')}</ul>`;
   let attempts = 0;
@@ -91,8 +91,8 @@ test('Dangote detail enrichment attempts exactly250 of251 postings and never aut
     attempts++; const id = url.match(/\/(\d+)\/$/)[1];
     return new Response(`<link rel="canonical" href="${url}"><div itemscope itemtype="http://schema.org/JobPosting"><h1 itemprop="title">Role ${id}</h1><span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place"><span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><meta itemprop="addressCountry" content="NG"><meta itemprop="addressLocality" content="Ibese Plant"></span></span></div>`);
   });
-  assert.equal(attempts,250); assert.equal(result.rows.length,250);
-  assert.ok(!result.rows.some(r=>r.id==='fixture-dangote:251'));
+  assert.equal(attempts,251); assert.equal(result.rows.length,251);
+  assert.ok(result.rows.some(r=>r.id==='fixture-dangote:251'));
   assert.equal(result.diagnostics[0].rawCount,251); assert.equal(result.diagnostics[0].status,'partial'); assert.deepEqual(result.ok,[]);
 });
 
@@ -123,7 +123,7 @@ test('Diageo failed or contradictory details remain omitted and partial with no 
     assert.equal(result.rows.length,0);assert.equal(result.diagnostics[0].status,'partial');assert.deepEqual(result.ok,[]);
   }
 });
-test('Diageo targets Kenya within250 detail budget, omits unvalidated remainder and never claims full source',async()=>{
+test('Diageo checks Kenya first, then every other posting; a fully validated board is complete (owner, 22 Oct 2026)',async()=>{
   const names={IN:'India',US:'United States',GB:'United Kingdom',FR:'France',KE:'Kenya'};
   const boards=Object.fromEntries(Object.keys(names).map(cc=>[cc,Array.from({length:cc==='KE'?2:64},(_,i)=>({title:`Role ${cc}${i}`,externalPath:`/job/${cc}/Role_${cc}${i}`,locationsText:`Office, ${names[cc]}`}))]));
   const attempts=[];
@@ -137,8 +137,8 @@ test('Diageo targets Kenya within250 detail budget, omits unvalidated remainder 
     const id=url.split('_').at(-1),cc=id.slice(0,2);attempts.push(id);
     return json({jobPostingInfo:{jobReqId:id,title:`Role ${id}`,jobPostingSiteId:'Diageo_Careers',externalUrl:`https://diageo.wd3.myworkdayjobs.com/Diageo_Careers/job/${cc}/Role_${id}`,country:{descriptor:names[cc]},location:`Office, ${names[cc]}`}});
   },()=>{},['diageo'],{requestDelayMs:0});
-  assert.equal(attempts.length,250);assert.deepEqual(attempts.slice(0,2),['KE0','KE1']);
-  assert.equal(result.rows.length,250);assert.equal(result.rows.filter(r=>r.country==='KE').length,2);
-  assert.equal(result.diagnostics[0].rawCount,258);assert.equal(result.diagnostics[0].status,'partial');assert.deepEqual(result.ok,[]);
-  assert.ok(!result.rows.some(r=>r.id==='diageo:FR63'));
+  assert.equal(attempts.length,258);assert.deepEqual(attempts.slice(0,2),['KE0','KE1']);
+  assert.equal(result.rows.length,258);assert.equal(result.rows.filter(r=>r.country==='KE').length,2);
+  assert.equal(result.diagnostics[0].rawCount,258);assert.equal(result.diagnostics[0].status,'complete');assert.deepEqual(result.ok,['diageo']);
+  assert.ok(result.rows.some(r=>r.id==='diageo:FR63'));
 });

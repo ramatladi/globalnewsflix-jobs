@@ -158,12 +158,9 @@ au|African Union Commission||i|sf|jobs.au.int
 ebrd|EBRD||i|sf|jobs.ebrd.com
 oecd|OECD||i|sr|OECD
 `;
-// Large boards read past the usual 1,500 jobs an employer (owner, 21 Oct 2026), so that their smaller countries are
-// reached too: Bosch lists about 5,100 jobs and EY about 9,000.
-const SOURCE_MAX_JOBS = { bosch: 6000, ey: 10000 };
 export const SOURCES = SOURCE_ROWS.trim().split('\n').map(l => {
   const [id, name, ticker, type, ats, ...args] = l.split('|');
-  const source = { id, name, ticker, type, ats, args, ...(SOURCE_MAX_JOBS[id] ? { maxJobs: SOURCE_MAX_JOBS[id] } : {}) };
+  const source = { id, name, ticker, type, ats, args };
   return { ...source, ...employerMetadata(source) };
 }).concat([...ZA_EXTRA_SOURCES, ...ZA_GOVERNMENT_SOURCES, ...AFRICA_EXTRA_SOURCES].map(source => ({ ...source, ...employerMetadata(source, source) }))).concat(registeredDiscoveredSources(discoveredManifest).map(source => ({ ...source, ...employerMetadata(source, source) })));
 export const EMPLOYERS = SOURCES.map(({ args, type, ...metadata }) => metadata);
@@ -334,7 +331,10 @@ export function categorize(title, hint = '') {
 
 // ---------- Collection (GitHub Actions) ----------
 const UA = 'GlobalNewsflixJobs/1.0 (+https://globalnewsflix.com/contact)';
-const PER_COUNTRY = 80, PER_SOURCE = 1500, DETAILS = 250;
+// No limit on how many jobs an employer or a country gets (owner, 22 Oct 2026): configured employers are read to the
+// end of their boards. PER_SOURCE only stops a feed that never ends; job pages fetched only for pay stay bounded.
+// Automatically discovered employers keep their reviewed request budget and 1,500-job bound.
+const PER_SOURCE = 100000, PAY_DETAILS = 250, AUTOMATIC_PER_SOURCE = 1500;
 const PAY_COUNTRIES = new Set(['ZA', 'NG', 'KE', 'IN', 'US', 'CA', 'GB', 'IE', 'AU', 'NZ', 'NL', 'DE', 'AT', 'CH', 'SG', 'ES', 'PL', 'BE', 'FR', 'SE', 'DK', 'NO']);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 async function req(fetchImpl, url, opt = {}, type = 'json') {
@@ -604,7 +604,7 @@ export async function automaticWorkday(f, src, log=()=>{}) {
   scopedTotal=current.total;
   if(scopedTotal===0){paginationEnd='empty-scope';return result('empty-workday-scope');}
   paginationEnd='row-limit';
-  for(let offset=0;offset<PER_SOURCE;offset+=20){
+  for(let offset=0;offset<AUTOMATIC_PER_SOURCE;offset+=20){
     if(offset)current=await page(facets,offset);
     if(!current||!Array.isArray(current.jobPostings)||current.jobPostings.length>20){paginationEnd=attempts>=requestLimit?'request-cap':'invalid-page';break;}
     pagesFetched++;
@@ -705,8 +705,8 @@ async function workday(f, src, log) {
     for (const v of values) {
       const cc = countryCode(v.descriptor);
       if (!cc) { complete = false; continue; }
-      if (!Number.isFinite(v.count) || v.count > PER_COUNTRY) complete = false;
-      for (let off = 0; off < Math.min(v.count || 0, PER_COUNTRY) && out.length < PER_SOURCE; off += 20) {
+      if (!Number.isFinite(v.count)) complete = false;
+      for (let off = 0; off < (v.count || 0) && out.length < PER_SOURCE; off += 20) {
         const p = await page({ [param]: [v.id] }, off);
         if (!p?.jobPostings?.length) { complete = false; break; }
         take(p.jobPostings, cc);
@@ -732,11 +732,12 @@ async function workday(f, src, log) {
   const detailOrder = src.strictDetailGeography
     ? [...out.filter(x => preferred.has(x.country)), ...out.filter(x => !preferred.has(x.country))]
     : [...out.filter(x => !x.country), ...out.filter(x => PAY_COUNTRIES.has(x.country))];
-  let n = 0;
+  // Pages that decide a job's country are all read; pages read only for pay stay bounded.
+  let payChecks = 0, pagesRead = 0;
   for (const x of detailOrder) {
-    if (n >= DETAILS) break;
+    if (!src.strictDetailGeography && x.country && payChecks++ >= PAY_DETAILS) break;
     const cc = x.country;
-    n++;
+    pagesRead++;
     const d = await getJson(f, base + x.path);
     const i = d?.jobPostingInfo;
     if (src.strictDetailGeography) {
@@ -757,7 +758,7 @@ async function workday(f, src, log) {
     if (src.automatic) x.closing = dateTs(i.endDate) || null;
   }
   if (src.strictDetailGeography && out.some(x => x.countryUnresolved)) complete = false;
-  log(`${src.name}: ${values.length} countries in filter, ${n} job pages read`);
+  log(`${src.name}: ${values.length} countries in filter, ${pagesRead} job pages read`);
   return snapshot(out, complete, complete ? '' : 'incomplete-or-capped');
 }
 // Opt-in geography is accepted only from one detail posting bound to the exact
@@ -880,7 +881,7 @@ async function successfactors(f, src) {
     const size = Number(label?.[1]), total = Number(String(label?.[2] || '').replace(/[,.]/g, ''));
     const step = size >= 5 && size <= 100 && size === rows.length ? size : 25;
     // With the page's stated total, a page that does not answer is skipped (up to three) instead of ending the read.
-    const cap = src.maxJobs || PER_SOURCE;
+    const cap = PER_SOURCE;
     let missed = 0;
     for (let s = step; (total ? s < total : rows.length >= step) && (scope ? s < cap : out.length < cap); s += step) {
       const t = await getText(f, `${host}${listPath}?q=&sortColumn=referencedate&sortDirection=desc&startrow=${s}`);
@@ -897,7 +898,7 @@ async function successfactors(f, src) {
   if (!token) return null;
   const cookie = (first.headers.getSetCookie?.() || []).map(c => c.split(';')[0]).join('; ');
   const locale = (first.body.match(/"locale"\s*:\s*"([a-z]{2}_[A-Z]{2})"/) || first.body.match(/locale=([a-z]{2}_[A-Z]{2})/) || [])[1] || 'en_US';
-  for (let p = 0; p < 100 && out.length < (src.maxJobs || PER_SOURCE); p++) {
+  for (let p = 0; p < PER_SOURCE / 10 && out.length < PER_SOURCE; p++) {
     const j = await postJson(f, `${host}/services/recruiting/v1/jobs`, { locale, pageNumber: p, sortBy: 'date', keywords: '', location: '', facetFilters: {}, brand: '', skills: [], categoryId: 0, alertId: '', rcmCandidateId: '' }, { 'x-csrf-token': token, cookie });
     if (!Array.isArray(j?.jobSearchResult)) return snapshot(out, false, 'page-failed');
     const list = j.jobSearchResult;
@@ -927,8 +928,8 @@ async function oracle(f, src) {
   return snapshot(out, false, 'page-limit');
 }
 async function smartrecruiters(f, src) {
-  const out = [], cap = src.maxJobs || PER_SOURCE;
-  for (let off = 0; off < cap; off += 100) {
+  const out = [];
+  for (let off = 0; off < PER_SOURCE; off += 100) {
     const j = await getJson(f, `https://api.smartrecruiters.com/v1/companies/${src.args[0]}/postings?limit=100&offset=${off}`);
     if (!Array.isArray(j?.content)) return off ? snapshot(out, false, 'page-failed') : null;
     for (const x of j.content || []) out.push({ id: x.id, title: x.name, location: x.location?.fullLocation, country: (x.location?.country || '').toUpperCase(), url: `https://jobs.smartrecruiters.com/${src.args[0]}/${x.id}`, posted: dateTs(x.releasedDate), hint: x.function?.label || x.department?.label });
@@ -943,11 +944,18 @@ async function amazon(f, src) {
   const out = [];
   let ok = false, complete = true;
   for (const [iso3, cc] of AMAZON) {
-    const j = await getJson(f, `https://www.amazon.jobs/en/search.json?result_limit=100&offset=0&sort=recent&country=${iso3}`);
-    if (!Array.isArray(j?.jobs)) { complete = false; continue; }
-    ok = true;
-    if (j.jobs.length >= 100 || (j.hits !== undefined && (!Number.isSafeInteger(j.hits) || j.hits < 0 || j.hits !== j.jobs.length))) complete = false;
-    for (const x of j.jobs || []) out.push({ id: x.id_icims || x.id, title: x.title, location: x.normalized_location || x.location, country: cc, url: 'https://www.amazon.jobs' + x.job_path, posted: dateTs(x.posted_date), hint: x.job_category, text: x.preferred_qualifications + ' ' + x.description });
+    // Every page of the country's results. Amazon's own search stops at 10,000 a country.
+    let hits = null, read = 0;
+    for (let offset = 0; offset < PER_SOURCE && (hits === null || offset < Math.min(hits, 10000)); offset += 100) {
+      const j = await getJson(f, `https://www.amazon.jobs/en/search.json?result_limit=100&offset=${offset}&sort=recent&country=${iso3}`);
+      if (!Array.isArray(j?.jobs)) { complete = false; break; }
+      ok = true;
+      if (j.hits !== undefined) { if (Number.isSafeInteger(j.hits) && j.hits >= 0) hits = j.hits; else complete = false; }
+      read += j.jobs.length;
+      for (const x of j.jobs || []) out.push({ id: x.id_icims || x.id, title: x.title, location: x.normalized_location || x.location, country: cc, url: 'https://www.amazon.jobs' + x.job_path, posted: dateTs(x.posted_date), hint: x.job_category, text: x.preferred_qualifications + ' ' + x.description });
+      if (j.jobs.length < 100) break;
+    }
+    if (hits !== null && (read !== hits || hits >= 10000)) complete = false;
   }
   // Pay is published on the job page in the US and Canada.
   let n = 0;
@@ -961,7 +969,7 @@ async function un(f) {
   const ds = new Map();
   for (const g of filt?.data || []) if (/duty/i.test(g.name)) for (const v of g.values || []) ds.set(String(v.name || '').toUpperCase(), countryCode(v.countryName));
   const out = [];
-  for (let p = 0; p < 20; p++) {
+  for (let p = 0; p < PER_SOURCE / 100; p++) {
     const j = await postJson(f, `${base}/jo/list/filteredV2/en`, { filterConfig: { keyword: '' }, pagination: { page: p, itemPerPage: 100, sortBy: 'startDate', sortDirection: -1 } });
     if (!Array.isArray(j?.data?.list)) return p ? snapshot(out, false, 'page-failed') : null;
     const list = j.data.list;
@@ -976,7 +984,7 @@ async function un(f) {
 }
 async function unicef(f) {
   const out = [];
-  for (let p = 1; p <= 10; p++) {
+  for (let p = 1; p <= PER_SOURCE / 100; p++) {
     const t = await getText(f, `https://jobs.unicef.org/en-us/listing/?page=${p}&page-items=100`);
     if (!t) return p > 1 ? snapshot(out, false, 'page-failed') : null;
     const blocks = t.split('class="job-link"').slice(1);
@@ -993,7 +1001,7 @@ async function unicef(f) {
 // NHS Jobs (England and Wales): NHS bodies only, with the pay they advertise.
 async function nhs(f) {
   const out = [];
-  for (let p = 1; p <= 60; p++) {
+  for (let p = 1; p <= PER_SOURCE / 10; p++) {
     const t = await getText(f, `https://www.jobs.nhs.uk/candidate/search/results?sort=publicationDateDesc&page=${p}&language=en`);
     if (!t) return p > 1 ? snapshot(out, false, 'page-failed') : null;
     const items = t.split('data-test="search-result"').slice(1);
@@ -1038,10 +1046,10 @@ async function gauteng(f) {
 async function erecruit(f) {
   const categories = parseShopriteCategories(await getText(f, SHOPRITE_BROWSE_URL));
   const rows = [], seen = new Set();
-  for (const category of categories.slice(0, 30)) {
+  for (const category of categories) {
     const list = parseShopriteList(await getText(f, category.url), { sourceUrl: category.url });
     for (const listed of list.rows) {
-      if (seen.has(listed.url) || seen.size >= DETAILS) continue;
+      if (seen.has(listed.url) || seen.size >= PER_SOURCE) continue;
       seen.add(listed.url);
       const html = await getText(f, listed.url);
       const row = html && parseShopriteDetail(html, listed);
@@ -1066,7 +1074,7 @@ async function uct(f) {
   const result = parseUctSearch(await getText(f, UCT_SEARCH_URL));
   if (!result) return null;
   const rows = [];
-  for (const listed of result.rows.slice(0, DETAILS)) {
+  for (const listed of result.rows) {
     const detail = await getText(f, listed.url);
     const row = detail && parseUctDetail(detail, listed);
     if (row && !row.closed) rows.push(row);
@@ -1078,14 +1086,13 @@ async function oracleWithDetails(f, src) {
   if (!result || !src.detailOracle) return result;
   const [host, site] = src.args;
   const validated = [];
-  for (let i = 0; i < result.rows.length && i < DETAILS; i++) {
+  for (let i = 0; i < result.rows.length; i++) {
     const row = result.rows[i];
     const payload = await getJson(f, `https://${host}/hcmRestApi/resources/latest/recruitingCEJobRequisitionDetails?onlyData=true&expand=all&finder=ById;Id=${encodeURIComponent(row.id)},siteNumber=${encodeURIComponent(site)}`);
     const enriched = parseOracleDetail(payload, row);
     if (enriched) validated.push(enriched);
     else { result.complete = false; result.reason = 'detail-failed'; }
   }
-  if (result.rows.length > DETAILS) { result.complete = false; result.reason = 'detail-limit'; }
   result.rows = validated;
   return result;
 }
@@ -1154,7 +1161,7 @@ const postingId = value => (typeof value === 'number' && Number.isSafeInteger(va
 const httpsLink = value => { try { const u = new URL(String(value)); return u.protocol === 'https:' && !u.username && !u.password ? u.href : null; } catch { return null; } };
 export async function automaticGreenhouse(f, src) {
   const out = atsResult(), board = await getJson(f, `https://boards-api.greenhouse.io/v1/boards/${src.args[0]}/jobs?content=true`);
-  if (!board || !Array.isArray(board.jobs) || board.jobs.length > PER_SOURCE) return atsFail(out, 'board-response-invalid');
+  if (!board || !Array.isArray(board.jobs) || board.jobs.length > AUTOMATIC_PER_SOURCE) return atsFail(out, 'board-response-invalid');
   out.pagesFetched = 1; out.reportedTotal = Number.isSafeInteger(board.meta?.total) ? board.meta.total : null;
   const seen = new Set();let bound = 0;
   for (const x of board.jobs) {
@@ -1175,7 +1182,7 @@ export async function automaticGreenhouse(f, src) {
 }
 export async function automaticLever(f, src) {
   const out = atsResult(), [site, region] = src.args, host = region === 'eu' ? 'api.eu.lever.co' : 'api.lever.co', seen = new Set();
-  for (let page = 0; page <= PER_SOURCE / 100; page++) {
+  for (let page = 0; page <= AUTOMATIC_PER_SOURCE / 100; page++) {
     const list = await getJson(f, `https://${host}/v0/postings/${site}?mode=json&limit=100&skip=${page * 100}`);
     if (!Array.isArray(list) || list.length > 100) return atsFail(out, 'board-response-invalid');
     out.pagesFetched++;
@@ -1195,7 +1202,7 @@ export async function automaticLever(f, src) {
 }
 export async function automaticAshby(f, src) {
   const out = atsResult(), board = await getJson(f, `https://api.ashbyhq.com/posting-api/job-board/${src.args[0]}?includeCompensation=true`);
-  if (!board || !Array.isArray(board.jobs) || board.jobs.length > PER_SOURCE) return atsFail(out, 'board-response-invalid');
+  if (!board || !Array.isArray(board.jobs) || board.jobs.length > AUTOMATIC_PER_SOURCE) return atsFail(out, 'board-response-invalid');
   out.pagesFetched = 1;const seen = new Set();
   for (const x of board.jobs) {
     if (x?.isListed === false) continue;
@@ -1213,7 +1220,7 @@ export async function automaticAshby(f, src) {
 }
 export async function automaticRecruitee(f, src) {
   const out = atsResult(), board = await getJson(f, `https://${src.args[0]}.recruitee.com/api/offers/`);
-  if (!board || !Array.isArray(board.offers) || board.offers.length > PER_SOURCE) return atsFail(out, 'board-response-invalid');
+  if (!board || !Array.isArray(board.offers) || board.offers.length > AUTOMATIC_PER_SOURCE) return atsFail(out, 'board-response-invalid');
   out.pagesFetched = 1;const seen = new Set();let bound = 0;
   for (const x of board.offers) {
     if (x?.status != null && x.status !== 'published') continue;
@@ -1238,7 +1245,7 @@ export async function automaticPersonio(f, src) {
   if (typeof xml !== 'string' || !/<workzag-jobs\b/.test(xml) || !/<\/workzag-jobs>|<workzag-jobs\s*\/>/.test(xml)) return atsFail(out, 'board-response-invalid');
   out.pagesFetched = 1;const seen = new Set();
   const positions = xmlBlocks(xml, 'position');
-  if (positions.length > PER_SOURCE) return atsFail(out, 'board-response-invalid');
+  if (positions.length > AUTOMATIC_PER_SOURCE) return atsFail(out, 'board-response-invalid');
   for (const block of positions) {
     const descriptions = xmlValue(block, 'jobDescriptions') || '', head = block.replace(/<jobDescriptions\b[\s\S]*?<\/jobDescriptions>/g, ''), additional = xmlValue(head, 'additionalOffices') || '';
     const id = xmlValue(head, 'id'), title = plain(xmlValue(head.replace(/<additionalOffices\b[\s\S]*?<\/additionalOffices>/g, ''), 'name'));
@@ -1253,7 +1260,7 @@ export async function automaticPersonio(f, src) {
 }
 export async function automaticTeamtailor(f, src) {
   const out = atsResult(), origin = `https://${src.args[0]}.teamtailor.com`, seen = new Set();
-  for (let page = 0; page <= PER_SOURCE / 100 + 1; page++) {
+  for (let page = 0; page <= AUTOMATIC_PER_SOURCE / 100 + 1; page++) {
     const xml = await getText(f, `${origin}/jobs.rss?per_page=100&offset=${page * 100}`);
     if (typeof xml !== 'string' || !/<rss\b/.test(xml) || !/<channel\b/.test(xml)) return atsFail(out, 'board-response-invalid');
     out.pagesFetched++;
@@ -1319,7 +1326,7 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
       }
       const list = result.rows;
       if (s.detailGeography || s.sfScope) for (const row of list) row.countryUnresolved = true;
-      if (s.detailDates || s.detailGeography || s.sfScope) for (const row of list.slice(0, DETAILS)) {
+      if (s.detailDates || s.detailGeography || s.sfScope) for (const row of list) {
         if (!/^https:\/\//.test(row.url || '')) continue;
         const html = await getText(sourceFetch, row.url);
         if (!html) continue;

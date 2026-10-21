@@ -27,8 +27,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     # Automatic sources run first under a 3,000 s shared deadline (2,500 requests), then the
-    # manual phase (~28 min measured). 120 minutes leaves a healthy margin.
-    timeout-minutes: 120
+    # manual phase, which reads every configured board to the end. 240 minutes leaves a margin.
+    timeout-minutes: 240
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

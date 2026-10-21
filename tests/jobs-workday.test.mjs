@@ -23,13 +23,13 @@ async function collect(postings, detail = () => ({ jobPostingInfo: { country: { 
   return { ...result, requests };
 }
 
-test('late unresolved Workday rows get detail requests before located pay enrichment within the same 250 cap', async () => {
+test('late unresolved Workday rows get their country pages first; pay-only pages stay within 250', async () => {
   const located = Array.from({ length: 260 }, (_, i) => posting(`known-${i}`, 'Johannesburg'));
   const unresolved = Array.from({ length: 3 }, (_, i) => posting(`unknown-${i}`));
   const result = await collect([...located, ...unresolved]);
-  assert.equal(result.requests.length, 250);
+  assert.equal(result.requests.length, 253);
   assert.deepEqual(result.requests.slice(0, 3), ['unknown-0', 'unknown-1', 'unknown-2']);
-  assert.deepEqual(result.requests.slice(3), Array.from({ length: 247 }, (_, i) => `known-${i}`));
+  assert.deepEqual(result.requests.slice(3), Array.from({ length: 250 }, (_, i) => `known-${i}`));
   assert.equal(result.rows.length, 263);
   assert.deepEqual(result.rows.slice(-3).map(row => row.id), ['absa:unknown-0', 'absa:unknown-1', 'absa:unknown-2'], 'priority never changes source output order');
   assert.ok(result.rows.every(row => row.country === 'ZA'));
@@ -61,13 +61,12 @@ test('unresolved detail failures or absent country evidence never fabricate geog
   assert.equal(result.diagnostics[0].acceptedCount, 1);
 });
 
-test('more than 250 unresolved rows remain bounded and unlocated remainder keeps the snapshot partial', async () => {
+test('every unresolved row gets its country page, however many there are (owner, 22 Oct 2026)', async () => {
   const result = await collect(Array.from({ length: 251 }, (_, i) => posting(`unknown-${i}`)));
-  assert.equal(result.requests.length, 250);
-  assert.equal(result.rows.length, 250);
-  assert.ok(!result.rows.some(row => row.id === 'absa:unknown-250'));
-  assert.deepEqual(result.ok, []);
-  assert.equal(result.diagnostics[0].status, 'partial');
+  assert.equal(result.requests.length, 251);
+  assert.equal(result.rows.length, 251);
+  assert.ok(result.rows.some(row => row.id === 'absa:unknown-250'));
+  assert.deepEqual(result.ok, ['absa']);
 });
 
 test('Workday distinguishes unobserved pay from an observed description with no pay', async () => {

@@ -5,7 +5,7 @@
   },
   {
     "file": ".github/workflows/jobs.yml",
-    "sha256": "f1cc232452c6b00c75cb7e5ac43b4e49d1a2abd542a3d946d378e76f39533d88"
+    "sha256": "d80c0569b572f98bc415ebaae3960d3941b226d34e84cc60d78721333cae1a2f"
   },
   {
     "file": ".github/workflows/keepalive.yml",
@@ -145,7 +145,7 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "537e1608f54a60ab88f96f8b0d6c645f7e44b6e23c875e335b6dbb8ef6bcb5e1"
+    "sha256": "cd03f859c1315a06db7d2d3e0865db4e56f015a2e13a448c3fa2598a03ff2daf"
   },
   {
     "file": "make_photos.py",
@@ -345,7 +345,7 @@
   },
   {
     "file": "tests/jobs-africa-sources.test.mjs",
-    "sha256": "a699e623f63dc270578a38fc14493299f657fbffd6ea50c8b2ed4c6d9d2c720f"
+    "sha256": "7976bb740a0a8fc3587672e475130f0173364ce1cc90d3af0a23129697dfa8d3"
   },
   {
     "file": "tests/jobs-ats-automatic.test.mjs",
@@ -353,7 +353,7 @@
   },
   {
     "file": "tests/jobs-collectors.test.mjs",
-    "sha256": "24a9583ac505ee09093de8427fca15a376b73e8e94ee0f43b6e34e522b955e66"
+    "sha256": "5dae190b7892778ea52923774b92370273142afc8a4b276e7c691b514838638f"
   },
   {
     "file": "tests/jobs-dates.test.mjs",
@@ -393,7 +393,7 @@
   },
   {
     "file": "tests/jobs-private-sources.test.mjs",
-    "sha256": "53a23695a012d5e5a774f6926ec9117202563026417a3605331c5bb8da51efa9"
+    "sha256": "55a6dd8e894b00ba6105fd12c0c04704526b4138095becbea93403965f875847"
   },
   {
     "file": "tests/jobs-query-scope.test.mjs",
@@ -417,7 +417,7 @@
   },
   {
     "file": "tests/jobs-workday.test.mjs",
-    "sha256": "98728988757b21d1da99849d72da74380a3f341d4cde0fc1db4b221068debfde"
+    "sha256": "ee8a95a87f9617530d15457ee94084de8be3eb60f845472369dca81739ca35e8"
   },
   {
     "file": "tests/site-fetch.test.mjs",

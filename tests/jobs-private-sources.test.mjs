@@ -69,25 +69,39 @@ test('job tiles take their country from the location ("Jagiroad, AS, IN" is Indi
   assert.deepEqual(result.rows.map(r => r.country), ['IN', 'IN']);
 });
 
-test('Bosch and EY are read past the usual 1,500 jobs an employer; others keep it', async () => {
-  assert.equal(SOURCES.find(s => s.id === 'bosch').maxJobs, 6000);
-  assert.equal(SOURCES.find(s => s.id === 'ey').maxJobs, 10000);
-  assert.equal(SOURCES.find(s => s.id === 'stripe').maxJobs, undefined);
+test('configured employers have no job limit: a SmartRecruiters board of 1,700 is read in full', async () => {
+  assert.ok(SOURCES.every(s => s.maxJobs === undefined));
   const postings = Array.from({ length: 1700 }, (_, i) => ({ id: String(i + 1), name: 'Engineer ' + (i + 1), location: { fullLocation: 'Hanoi, Vietnam', country: 'vn' }, releasedDate: '2026-10-20T00:00:00Z' }));
-  const answer = url => {
-    if (url.includes('frankfurter')) return json({ rates: {} });
-    const off = Number(new URL(url).searchParams.get('offset'));
-    return json({ totalFound: postings.length, content: postings.slice(off, off + 100) });
-  };
-  const read = async extra => {
-    const source = { id: 'fixture-sr', name: 'Fixture', type: 'c', ats: 'sr', args: ['Fixture'], ...extra };
-    SOURCES.push(source);
-    try { return await collectJobs(async url => answer(url), () => {}, [source.id], { requestDelayMs: 0 }); }
-    finally { SOURCES.splice(SOURCES.indexOf(source), 1); }
-  };
-  assert.equal((await read({})).rows.length, 1500);
-  const big = await read({ maxJobs: 6000 });
-  assert.equal(big.rows.length, 1700); assert.deepEqual(big.ok, ['fixture-sr']);
+  const source = { id: 'fixture-sr', name: 'Fixture', type: 'c', ats: 'sr', args: ['Fixture'] };
+  SOURCES.push(source);
+  try {
+    const result = await collectJobs(async url => {
+      if (url.includes('frankfurter')) return json({ rates: {} });
+      const off = Number(new URL(url).searchParams.get('offset'));
+      return json({ totalFound: postings.length, content: postings.slice(off, off + 100) });
+    }, () => {}, [source.id], { requestDelayMs: 0 });
+    assert.equal(result.rows.length, 1700); assert.deepEqual(result.ok, ['fixture-sr']);
+  } finally { SOURCES.splice(SOURCES.indexOf(source), 1); }
+});
+
+test('a Workday country with more than 80 jobs is read in full', async () => {
+  const country = { facetParameter: 'locationCountry', values: [{ descriptor: 'Vietnam', id: 'a'.repeat(32), count: 130 }] };
+  const posting = n => ({ title: 'Analyst ' + n, externalPath: `/job/Hanoi/Analyst_R${1000 + n}`, locationsText: 'Hanoi', postedOn: 'Posted Today', bulletFields: [] });
+  const source = { id: 'fixture-wd', name: 'Fixture', type: 'c', ats: 'wd', args: ['fixture.wd3.myworkdayjobs.com', 'fixture', 'External'] };
+  SOURCES.push(source);
+  try {
+    const result = await collectJobs(async (url, opt) => {
+      if (url.includes('frankfurter')) return json({ rates: {} });
+      if (opt?.method === 'POST') {
+        const body = JSON.parse(opt.body);
+        const all = Array.from({ length: 130 }, (_, i) => posting(i + 1));
+        return json({ total: 130, facets: [country], jobPostings: all.slice(body.offset, body.offset + 20) });
+      }
+      return json({ jobPostingInfo: { country: { descriptor: 'Vietnam' }, location: 'Hanoi', jobDescription: '' } });
+    }, () => {}, [source.id], { requestDelayMs: 0 });
+    assert.equal(result.rows.length, 130);
+    assert.ok(result.rows.every(r => r.country === 'VN'));
+  } finally { SOURCES.splice(SOURCES.indexOf(source), 1); }
 });
 
 test('a career-site page that does not answer is skipped when the site states its total', async () => {
