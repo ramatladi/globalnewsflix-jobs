@@ -158,9 +158,12 @@ au|African Union Commission||i|sf|jobs.au.int
 ebrd|EBRD||i|sf|jobs.ebrd.com
 oecd|OECD||i|sr|OECD
 `;
+// Large boards read past the usual 1,500 jobs an employer (owner, 21 Oct 2026), so that their smaller countries are
+// reached too: Bosch lists about 5,100 jobs and EY about 9,000.
+const SOURCE_MAX_JOBS = { bosch: 6000, ey: 10000 };
 export const SOURCES = SOURCE_ROWS.trim().split('\n').map(l => {
   const [id, name, ticker, type, ats, ...args] = l.split('|');
-  const source = { id, name, ticker, type, ats, args };
+  const source = { id, name, ticker, type, ats, args, ...(SOURCE_MAX_JOBS[id] ? { maxJobs: SOURCE_MAX_JOBS[id] } : {}) };
   return { ...source, ...employerMetadata(source) };
 }).concat([...ZA_EXTRA_SOURCES, ...ZA_GOVERNMENT_SOURCES, ...AFRICA_EXTRA_SOURCES].map(source => ({ ...source, ...employerMetadata(source, source) }))).concat(registeredDiscoveredSources(discoveredManifest).map(source => ({ ...source, ...employerMetadata(source, source) })));
 export const EMPLOYERS = SOURCES.map(({ args, type, ...metadata }) => metadata);
@@ -876,9 +879,13 @@ async function successfactors(f, src) {
     const label = first.body.match(/(?:Results|Showing)\s*(?:<[^>]+>\s*)*1\s*(?:[–-]|to)\s*(\d+)\s*(?:<[^>]+>\s*)*of\s*(?:<[^>]+>\s*)*([\d,.]+)/);
     const size = Number(label?.[1]), total = Number(String(label?.[2] || '').replace(/[,.]/g, ''));
     const step = size >= 5 && size <= 100 && size === rows.length ? size : 25;
-    for (let s = step; rows.length >= step && (!total || s < total) && (scope ? s < PER_SOURCE : out.length < PER_SOURCE); s += step) {
+    // With the page's stated total, a page that does not answer is skipped (up to three) instead of ending the read.
+    const cap = src.maxJobs || PER_SOURCE;
+    let missed = 0;
+    for (let s = step; (total ? s < total : rows.length >= step) && (scope ? s < cap : out.length < cap); s += step) {
       const t = await getText(f, `${host}${listPath}?q=&sortColumn=referencedate&sortDirection=desc&startrow=${s}`);
       rows = t ? rowsOf(t) : [];
+      if (!rows.length) { if (total && ++missed <= 3) continue; break; }
       out.push(...rows.filter(allowed));
     }
     return snapshot(out, false, 'html-total-unverified');
@@ -890,7 +897,7 @@ async function successfactors(f, src) {
   if (!token) return null;
   const cookie = (first.headers.getSetCookie?.() || []).map(c => c.split(';')[0]).join('; ');
   const locale = (first.body.match(/"locale"\s*:\s*"([a-z]{2}_[A-Z]{2})"/) || first.body.match(/locale=([a-z]{2}_[A-Z]{2})/) || [])[1] || 'en_US';
-  for (let p = 0; p < 100 && out.length < PER_SOURCE; p++) {
+  for (let p = 0; p < 100 && out.length < (src.maxJobs || PER_SOURCE); p++) {
     const j = await postJson(f, `${host}/services/recruiting/v1/jobs`, { locale, pageNumber: p, sortBy: 'date', keywords: '', location: '', facetFilters: {}, brand: '', skills: [], categoryId: 0, alertId: '', rcmCandidateId: '' }, { 'x-csrf-token': token, cookie });
     if (!Array.isArray(j?.jobSearchResult)) return snapshot(out, false, 'page-failed');
     const list = j.jobSearchResult;
@@ -920,8 +927,8 @@ async function oracle(f, src) {
   return snapshot(out, false, 'page-limit');
 }
 async function smartrecruiters(f, src) {
-  const out = [];
-  for (let off = 0; off < PER_SOURCE; off += 100) {
+  const out = [], cap = src.maxJobs || PER_SOURCE;
+  for (let off = 0; off < cap; off += 100) {
     const j = await getJson(f, `https://api.smartrecruiters.com/v1/companies/${src.args[0]}/postings?limit=100&offset=${off}`);
     if (!Array.isArray(j?.content)) return off ? snapshot(out, false, 'page-failed') : null;
     for (const x of j.content || []) out.push({ id: x.id, title: x.name, location: x.location?.fullLocation, country: (x.location?.country || '').toUpperCase(), url: `https://jobs.smartrecruiters.com/${src.args[0]}/${x.id}`, posted: dateTs(x.releasedDate), hint: x.function?.label || x.department?.label });

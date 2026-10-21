@@ -68,3 +68,34 @@ test('job tiles take their country from the location ("Jagiroad, AS, IN" is Indi
   const { result } = await collectWith({ id: 'fixture-sf-tiles', name: 'Fixture', type: 'c', ats: 'sf', args: ['careers.example.com'] }, { 0: '<span>Showing 1 to 2 of 2 Jobs</span>' + tile(1, 'Jagiroad, AS, IN') + tile(2, 'Hosur, TN, IN') });
   assert.deepEqual(result.rows.map(r => r.country), ['IN', 'IN']);
 });
+
+test('Bosch and EY are read past the usual 1,500 jobs an employer; others keep it', async () => {
+  assert.equal(SOURCES.find(s => s.id === 'bosch').maxJobs, 6000);
+  assert.equal(SOURCES.find(s => s.id === 'ey').maxJobs, 10000);
+  assert.equal(SOURCES.find(s => s.id === 'stripe').maxJobs, undefined);
+  const postings = Array.from({ length: 1700 }, (_, i) => ({ id: String(i + 1), name: 'Engineer ' + (i + 1), location: { fullLocation: 'Hanoi, Vietnam', country: 'vn' }, releasedDate: '2026-10-20T00:00:00Z' }));
+  const answer = url => {
+    if (url.includes('frankfurter')) return json({ rates: {} });
+    const off = Number(new URL(url).searchParams.get('offset'));
+    return json({ totalFound: postings.length, content: postings.slice(off, off + 100) });
+  };
+  const read = async extra => {
+    const source = { id: 'fixture-sr', name: 'Fixture', type: 'c', ats: 'sr', args: ['Fixture'], ...extra };
+    SOURCES.push(source);
+    try { return await collectJobs(async url => answer(url), () => {}, [source.id], { requestDelayMs: 0 }); }
+    finally { SOURCES.splice(SOURCES.indexOf(source), 1); }
+  };
+  assert.equal((await read({})).rows.length, 1500);
+  const big = await read({ maxJobs: 6000 });
+  assert.equal(big.rows.length, 1700); assert.deepEqual(big.ok, ['fixture-sr']);
+});
+
+test('a career-site page that does not answer is skipped when the site states its total', async () => {
+  const all = Array.from({ length: 100 }, (_, i) => row(i + 1, 'Lima, LIM, PE'));
+  const pages = {};
+  for (let s = 0; s < 100; s += 25) pages[s] = label(s + 1, Math.min(s + 25, 100), 100) + all.slice(s, s + 25).join('');
+  delete pages[50];
+  const { result, asked } = await collectWith({ id: 'fixture-sf-gap', name: 'Fixture', type: 'c', ats: 'sf', args: ['careers.example.com'] }, pages);
+  assert.equal(result.rows.length, 75);
+  assert.deepEqual(asked.map(u => new URL(u).searchParams.get('startrow')), ['0', '25', '50', '75']);
+});
