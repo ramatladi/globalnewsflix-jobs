@@ -129,6 +129,12 @@ lalamove|Lalamove||c|lever|lalamove
 ninjavan|Ninja Van||c|lever|ninjavan
 xendit|Xendit||c|gh|xendit
 razorpay|Razorpay||c|gh|razorpaysoftwareprivatelimited
+bosch|Bosch||c|sr|BoschGroup
+louisdreyfus|Louis Dreyfus Company||c|sr|LouisDreyfusCompany
+deloitteafrica|Deloitte Africa||c|sr|Deloitte6
+phonepe|PhonePe||c|sr|PHONEPELIMITED
+canva|Canva||c|sr|Canva
+vitol|Vitol||c|sr|Vitol
 amazon|Amazon|AMZN|c|amazon|
 nhs|NHS||g|nhs|
 un|United Nations||i|un|

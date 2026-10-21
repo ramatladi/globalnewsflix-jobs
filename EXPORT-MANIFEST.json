@@ -145,7 +145,7 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "8dc44a0656e8990ff0bd82add8124f9603e79a35531f888f54626f76d5395f01"
+    "sha256": "ce4fe5dbb35d02a21d0f5f9799b58452a50a4b5a86a7cdc559fb5d30b27fe8eb"
   },
   {
     "file": "make_photos.py",
@@ -393,7 +393,7 @@
   },
   {
     "file": "tests/jobs-private-sources.test.mjs",
-    "sha256": "fcdf35d443f26aaefe07558925e28abfcb557c799f9fece1b6000b41b1028947"
+    "sha256": "adf82b521689b80be84fea6528e7c5acbba81030fb771d61b7d90be16a51e689"
   },
   {
     "file": "tests/jobs-query-scope.test.mjs",

@@ -30,6 +30,15 @@ test('large and well-known private companies are configured as companies without
   assert.equal(SOURCES.find(x => x.id === 'meesho').ticker, 'MEESHO');
 });
 
+test('reviewed private employers on SmartRecruiters are configured by company identifier (owner decision, 21 Oct 2026)', () => {
+  for (const [id, company] of [['bosch', 'BoschGroup'], ['louisdreyfus', 'LouisDreyfusCompany'], ['deloitteafrica', 'Deloitte6'], ['phonepe', 'PHONEPELIMITED'], ['canva', 'Canva'], ['vitol', 'Vitol']]) {
+    const s = SOURCES.find(x => x.id === id);
+    assert.equal(s.ats, 'sr', id); assert.deepEqual(s.args, [company], id); assert.equal(s.type, 'c', id); assert.equal(s.ticker, null, id);
+    assert.equal(s.collectionUrl, `https://api.smartrecruiters.com/v1/companies/${company}/postings`);
+  }
+  assert.ok(!SOURCES.some(s => s.automatic && s.ats === 'sr'), 'automatic discovery never reads SmartRecruiters');
+});
+
 test('a town, region code and country code is read by its last code, ISO-2 or ISO-3', () => {
   for (const [loc, cc] of [['Mumbai, MH, IND,', 'IN'], ['Pune, MH, IN', 'IN'], ['Hosur, TN, IN', 'IN'], ['Jagiroad, AS, IN', 'IN'], ['Tegucigalpa, FM, HND,', 'HN'],
     ['Shanghai, SH, CN, 201814', 'CN'], ['Wroclaw, DS, PL, 53-238', 'PL'], ['Durban, KZN, ZAF', 'ZA'], ['Austin, TX, US', 'US'], ['Toronto, ON, CA', 'CA'], ['San Francisco, CA', 'US'], ['Atlanta, GA', 'US']])
