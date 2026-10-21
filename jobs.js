@@ -1,11 +1,13 @@
 import { automaticSourceRequestLimit, NTU_AUTOMATIC_SOURCE_ID, REFRESHABLE_AUTOMATIC_READERS, emptyWorkdayDetailReasons, validWorkdayDetailReasons, workdayDetailSummaries } from './jobs-request-policy.js';
 import { boardNamesOrganization } from './jobs-identity-name.js';
-// Jobs from employers' own career sites: publicly listed companies, governments and international organisations.
+// Jobs from employers' own career sites: listed companies, large or well-known private companies, governments and
+// international organisations.
 // Collected by a GitHub Actions job every six hours; the site lists them by country, with categories and filters.
 // Pay is shown only where the employer publishes it.
 import discoveredManifest from './data/discovered-sources/manifest.json' with { type: 'json' };
 import { registeredDiscoveredSources, discoveredJobAllowed } from './jobs-discovered-sources.js';
 import { COUNTRY } from './data.js';
+import { iso3To2 } from './iso-codes.js';
 import { workdayQueryFacets } from './jobs-workday-query.js';
 import { platformForReader } from './jobs-pacing.js';
 import { auditAutomaticOutput, automaticRefreshHealth } from './jobs-source-health.js';
@@ -21,7 +23,7 @@ import { ZA_EXTRA_SOURCES, ZA_GOVERNMENT_SOURCES } from './jobs-za-sources.js';
 import { parseGautengJobs, parseGautengDetail, GAUTENG_JOBS_URL } from './jobs-gauteng.js';
 
 // ---------- Employers ----------
-// id|name|stock ticker|type (c = listed company, g = government, i = international organisation)|careers system|arguments
+// id|name|stock ticker (blank for a private company)|type (c = company, g = government, i = international organisation)|careers system|arguments
 const SOURCE_ROWS = `
 airbnb|Airbnb|ABNB|c|gh|airbnb
 pinterest|Pinterest|PINS|c|gh|pinterest
@@ -95,6 +97,38 @@ kelectric|K-Electric|KEL|c|sf|careers.ke.com.pk
 firstbank|FirstBank Nigeria (First HoldCo)|FIRSTHOLDCO|c|orc|hdbc.fa.em2.oraclecloud.com|CX
 safaricomet|Safaricom Ethiopia|SCOM|c|orc|egjd.fa.us6.oraclecloud.com|STEP
 ugandaairlines|Uganda Airlines||g|orc|fa-eptm-saasfaprod1.fa.ocs.oraclecloud.com|CX_4001
+meesho|Meesho|MEESHO|c|lever|meesho
+ey|EY||c|sf|careers.ey.com
+pwc|PwC||c|wd|pwc.wd3.myworkdayjobs.com|pwc|Global_Experienced_Careers
+kpmgindia|KPMG in India||c|orc|ejgk.fa.em2.oraclecloud.com|CX_3
+kpmgindiakdn|KPMG in India||c|orc|ejgk.fa.em2.oraclecloud.com|CX_3001
+kpmggulf|KPMG Lower Gulf||c|orc|elzw.fa.em8.oraclecloud.com|CX_1001
+mars|Mars||c|wd|mars.wd3.myworkdayjobs.com|mars|External
+zf|ZF Group||c|sf|jobs.zf.com
+foundever|Foundever||c|sf|jobs.foundever.com
+scjohnson|SC Johnson||c|wd|scj.wd5.myworkdayjobs.com|scj|External_Career_Site
+trafigura|Trafigura||c|wd|trafigura.wd3.myworkdayjobs.com|trafigura|TrafiguraCareerSite
+ofi|ofi (olam food ingredients)||c|sf|careers.ofi.com
+tataelectronics|Tata Electronics||c|sf|careers.tataelectronics.com
+stripe|Stripe||c|gh|stripe
+moniepoint|Moniepoint||c|gh|moniepoint
+mkopa|M-KOPA||c|ashby|m-kopa
+yassir|Yassir||c|lever|Yassir
+bosta|Bosta||c|lever|Bosta
+tamara|Tamara||c|gh|tamara
+careem|Careem||c|gh|careem
+trendyol|Trendyol||c|lever|trendyol
+insiderone|Insider One||c|lever|insiderone
+quintoandar|QuintoAndar||c|gh|quintoandar
+ebanx|EBANX||c|gh|ebanx
+wildlifestudios|Wildlife Studios||c|gh|wildlifestudios
+kavak|Kavak||c|wd|kavak.wd10.myworkdayjobs.com|kavak|External_Career_KAVAK_MX
+rappi|Rappi||c|wd|rappi.wd12.myworkdayjobs.com|rappi|Rappi_jobs
+addi|Addi||c|ashby|addi
+lalamove|Lalamove||c|lever|lalamove
+ninjavan|Ninja Van||c|lever|ninjavan
+xendit|Xendit||c|gh|xendit
+razorpay|Razorpay||c|gh|razorpaysoftwareprivatelimited
 amazon|Amazon|AMZN|c|amazon|
 nhs|NHS||g|nhs|
 un|United Nations||i|un|
@@ -250,6 +284,11 @@ export function countryOf(location, cur, given) {
   if (whole) return whole;
   const parts = loc.split(/[,;|/()]+|\s[-\u2013]\s/).map(s => s.trim()).filter(Boolean);
   for (const p of [...parts].reverse()) { const cc = countryCode(p); if (cc) return cc; }
+  // Town, region code, country code ("Mumbai, MH, IND", "Hosur, TN, IN", "Shanghai, SH, CN, 201814"): the last
+  // code is the country, so a region code such as MH (Maharashtra) or TN (Tamil Nadu) is never read as one.
+  const tail = loc.match(/^[^,]*\p{L}[^,]*,\s*[A-Z]{2,3}\s*,\s*([A-Z]{2,3})\s*(?:,\s*(?:\d[\w -]*)?)?\s*$/u);
+  const tailCc = tail && (tail[1].length === 3 ? iso3To2(tail[1]) : COUNTRY[tail[1]] ? tail[1] : null);
+  if (tailCc) return tailCc;
   const code = (loc.match(/,\s*([A-Z]{2})\b/) || [])[1];
   if (code && US_STATES.includes(code)) return 'US';
   if (code && CA_PROV.includes(code)) return 'CA';
@@ -790,6 +829,11 @@ export function parseJobGeography(html, row, { employerName } = {}) {
   return country ? { country, location: localities.length === 1 ? localities[0].attrs.content : row.location, datesHtml: html.slice(scope.start, scope.end) } : null;
 }
 // SAP SuccessFactors career sites, in either the older page layout or the newer one with a search service.
+// Country code at the end of a career-site location ("Pune, MH, IN", "Mumbai, MH, IND,", "Wroclaw, DS, PL, 53-238").
+const sfCountry = loc => {
+  const code = (String(loc || '').match(/,\s*([A-Z]{2,3})(?:\s*,\s*\d[\w -]*)?\s*,?\s*$/) || [])[1];
+  return !code ? null : code.length === 3 ? iso3To2(code) : COUNTRY[code] ? code : null;
+};
 async function successfactors(f, src) {
   const host = `https://${src.args[0]}`;
   const scope = src.sfScope;
@@ -809,20 +853,24 @@ async function successfactors(f, src) {
     const date = (r.match(/class="jobDate[^"]*">\s*([^<]+)</) || [])[1];
     const dept = (r.match(/class="jobDepartment">\s*([^<]+)</) || [])[1];
     if (!a) return null;
-    const code = (String(loc || '').match(/,\s*([A-Z]{2})(?:\s*,\s*\d[\w -]*)?\s*$/) || [])[1];
-    return { id: (a[1].match(/\/(\d+)\/?$/) || [])[1] || a[1], title: a[2], location: loc, country: code && COUNTRY[code] ? code : null, url: host + a[1], posted: dateTs(date), hint: dept };
+    return { id: (a[1].match(/\/(\d+)\/?$/) || [])[1] || a[1], title: a[2], location: loc, country: sfCountry(loc), url: host + a[1], posted: dateTs(date), hint: dept };
   }).filter(Boolean);
   const tileRows = t => t.split(/<li class="job-tile /).slice(1).map(block => {
     const a = block.match(scope ? /href="(\/(?:[A-Za-z-]+\/)?job\/[^"]+)"[^>]*>\s*([^<]+)</ : /href="(\/job\/[^"]+)"[^>]*>\s*([^<]+)</);
     const field = key => plain((block.match(new RegExp(`id="[^"]+-desktop-section-${key}-value">([^<]+)<`)) || [])[1]);
     if (!a) return null;
-    return { id: (a[1].match(/\/(\d+)\/?$/) || [])[1] || a[1], title: plain(a[2]), location: field('location') || field('city'), url: host + plain(a[1]), posted: dateTs(field('date')) };
+    const location = field('location') || field('city');
+    return { id: (a[1].match(/\/(\d+)\/?$/) || [])[1] || a[1], title: plain(a[2]), location, country: sfCountry(location), url: host + plain(a[1]), posted: dateTs(field('date')) };
   }).filter(Boolean);
   const rowsOf = t => t.includes('class="job-tile ') ? tileRows(t) : tableRows(t);
   let rows = rowsOf(first.body);
   if (rows.length) {
     out.push(...rows.filter(allowed));
-    for (let s = 25; rows.length >= 25 && (scope ? s < PER_SOURCE : out.length < PER_SOURCE); s += 25) {
+    // Page size from the page's own label ("Results 1 – 10 of 456", "Showing 1 to 25 of 132 Jobs"); 25 otherwise.
+    const label = first.body.match(/(?:Results|Showing)\s*(?:<[^>]+>\s*)*1\s*(?:[–-]|to)\s*(\d+)\s*(?:<[^>]+>\s*)*of\s*(?:<[^>]+>\s*)*([\d,.]+)/);
+    const size = Number(label?.[1]), total = Number(String(label?.[2] || '').replace(/[,.]/g, ''));
+    const step = size >= 5 && size <= 100 && size === rows.length ? size : 25;
+    for (let s = step; rows.length >= step && (!total || s < total) && (scope ? s < PER_SOURCE : out.length < PER_SOURCE); s += step) {
       const t = await getText(f, `${host}${listPath}?q=&sortColumn=referencedate&sortDirection=desc&startrow=${s}`);
       rows = t ? rowsOf(t) : [];
       out.push(...rows.filter(allowed));

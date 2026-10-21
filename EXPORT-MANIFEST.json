@@ -64,6 +64,10 @@
     "sha256": "6c25fc860286c1e60a51b8bdfe858b9b071fe6dd7366dbdb2c649c889bdf3709"
   },
   {
+    "file": "iso-codes.js",
+    "sha256": "573eefb1aa9aa9029cb186a7c529bacbdd60bcef571f4dc5e3878ed8d7dd44f7"
+  },
+  {
     "file": "jobs-adapters.js",
     "sha256": "7753afaa685570083ba89eab94580f8d7fb74f9e2b4f75f651bec9a5c3cfde21"
   },
@@ -141,7 +145,7 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "ba0682406511ab72a4af05a185320c1b7258f733ad0feec2f43779b139d84008"
+    "sha256": "8dc44a0656e8990ff0bd82add8124f9603e79a35531f888f54626f76d5395f01"
   },
   {
     "file": "make_photos.py",
@@ -386,6 +390,10 @@
   {
     "file": "tests/jobs-pacing.test.mjs",
     "sha256": "c97296a75955d9e7137585cda31eb951faa633790d036bdf82092577dee5ffba"
+  },
+  {
+    "file": "tests/jobs-private-sources.test.mjs",
+    "sha256": "fcdf35d443f26aaefe07558925e28abfcb557c799f9fece1b6000b41b1028947"
   },
   {
     "file": "tests/jobs-query-scope.test.mjs",
