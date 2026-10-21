@@ -4,7 +4,7 @@ Public collection jobs for Global Newsflix, run here on free public-repository G
 
 ## Jobs
 
-The reviewed registry includes global employers, South African government and employer sources, and selected Kenyan sources. It does not represent 1,000 employers in each country. Configured sources and catalogue candidates are not equivalent to current vacancies. Dangote is held because its official structured country metadata conflicts with visible job locations; no country corrections are guessed.
+The reviewed registry includes global employers, South African government and employer sources, selected Kenyan sources, and listed employers and international organisations that hire across Africa, Asia and Latin America. It does not represent 1,000 employers in each country. Configured sources and catalogue candidates are not equivalent to current vacancies. Dangote is held because its official structured country metadata conflicts with visible job locations; no country corrections are guessed.
 
 Existing readers cover Greenhouse, Lever, Ashby, Workday, SuccessFactors, Oracle, SmartRecruiters, Simplify.hr, selected eRecruit pages and official portals. Employers activated automatically by daily discovery are read only through Workday or the documented public board listings of Greenhouse, Lever, Ashby, Recruitee, Personio and Teamtailor, with robots.txt honoured and per-source request limits. ATS detection alone does not validate a reader. Unsupported systems remain uncollected unless a separately validated public JobPosting fallback applies.
 

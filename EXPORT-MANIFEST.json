@@ -25,7 +25,7 @@
   },
   {
     "file": "README.md",
-    "sha256": "93e1af49886f94d18f1c0fdfbff6595728a8b3456ddf066bb5c6fd03fd373bbe"
+    "sha256": "cfa346d407df744705a742a148814540ede51e51b63d4f30fae53f03326f288f"
   },
   {
     "file": "article-images.js",
@@ -141,7 +141,7 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "5fa1c506e6abe37acf9ff1068c292b4b8c84e0807e4eaa62e18454825517720e"
+    "sha256": "ba0682406511ab72a4af05a185320c1b7258f733ad0feec2f43779b139d84008"
   },
   {
     "file": "make_photos.py",
@@ -157,7 +157,7 @@
   },
   {
     "file": "news-freshness.js",
-    "sha256": "93d6e6848601f11d60d26d52d45f4a65168fc0f11bc1e64c9412314c3e32af39"
+    "sha256": "962fac7e986caaed8f80ec46d94886d3ad02e44c4e99eb8b965e6bbffeeb505e"
   },
   {
     "file": "non-news.js",

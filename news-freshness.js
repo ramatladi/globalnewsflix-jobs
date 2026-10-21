@@ -191,6 +191,13 @@ export function publicationReview(title,lead,publishedTs){
 // A repair is operational metadata, never a new report/publication date.
 export const PHOTO_HOLD_MAX_MS = 7 * 86400000;
 export const PHOTO_ATTEMPT_LIMIT = 6;
+// A new story's photo search runs once (owner, 21 Oct 2026). On 20 Oct the photo job found 351 photos for stories
+// waiting for one: 337 on the first search and 14 on the four later ones (20 minutes, 1, 6 and 24 hours). The later
+// searches are kept for a photo that was public and is being repaired (PHOTO_ATTEMPT_LIMIT), never for a new story.
+export const NEW_STORY_PHOTO_ATTEMPTS = 1;
+// Searches a story may have, per row: a public story or a repair keeps PHOTO_ATTEMPT_LIMIT, a new story gets one.
+export const PHOTO_ATTEMPTS_ALLOWED_SQL = `CASE WHEN pub_state='live' OR COALESCE(photo_archive_repair,0)=1 THEN ${PHOTO_ATTEMPT_LIMIT} ELSE ${NEW_STORY_PHOTO_ATTEMPTS} END`;
+export const photoAttemptsAllowed = a => a?.pub_state === 'live' || a?.photo_archive_repair === 1 ? PHOTO_ATTEMPT_LIMIT : NEW_STORY_PHOTO_ATTEMPTS;
 export function photoRetryDelayMs(attempts) { return [0,1200000,3600000,21600000,86400000,86400000,86400000][Math.max(0,Math.min(6,Math.floor(Number(attempts)||0)))]; }
 export function photoRepairState(a, now = Date.now()) {
   if (a?.photo_archive_repair !== 1 || a.pub_state === 'live') return null;

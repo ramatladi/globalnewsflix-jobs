@@ -84,6 +84,17 @@ stanchart|Standard Chartered|STAN|c|sf|jobs.standardchartered.com
 bhp|BHP|BHP|c|sf|careers.bhp.com
 colgate|Colgate-Palmolive|CL|c|sf|jobs.colgate.com
 kcb|KCB Group|KCB|c|orc|eoin.fa.em3.oraclecloud.com|CX_3001
+agoda|Agoda (Booking Holdings)|BKNG|c|gh|agoda
+nubank|Nu Holdings (Nubank)|NU|c|ashby|nubank
+gotogroup|GoTo Group|GOTO|c|lever|GoToGroup
+dlocal|dLocal|DLO|c|lever|dlocal
+bbva|BBVA|BBVA|c|wd|bbva.wd3.myworkdayjobs.com|bbva|BBVA
+aia|AIA Group|1299|c|wd|aia.wd3.myworkdayjobs.com|aia|External
+concentrix|Concentrix|CNXC|c|wd|cnx.wd1.myworkdayjobs.com|cnx|external_global
+kelectric|K-Electric|KEL|c|sf|careers.ke.com.pk
+firstbank|FirstBank Nigeria (First HoldCo)|FIRSTHOLDCO|c|orc|hdbc.fa.em2.oraclecloud.com|CX
+safaricomet|Safaricom Ethiopia|SCOM|c|orc|egjd.fa.us6.oraclecloud.com|STEP
+ugandaairlines|Uganda Airlines||g|orc|fa-eptm-saasfaprod1.fa.ocs.oraclecloud.com|CX_4001
 amazon|Amazon|AMZN|c|amazon|
 nhs|NHS||g|nhs|
 un|United Nations||i|un|
@@ -94,6 +105,11 @@ wto|World Trade Organization||i|wd|wto.wd103.myworkdayjobs.com|wto|External
 unicef|UNICEF||i|unicef|
 undp|UNDP||i|orc|estm.fa.em2.oraclecloud.com|CX_1
 unfpa|UNFPA||i|orc|estm.fa.em2.oraclecloud.com|CX_2003
+unwomen|UN Women||i|orc|estm.fa.em2.oraclecloud.com|CX_1001
+iom|International Organization for Migration (IOM)||i|orc|fa-evlj-saasfaprod1.fa.ocs.oraclecloud.com|CX_1001
+savethechildren|Save the Children International||i|orc|hcri.fa.em2.oraclecloud.com|CX_1
+worldvision|World Vision International||i|wd|worldvision.wd1.myworkdayjobs.com|worldvision|WorldVisionInternational
+irc|International Rescue Committee||i|wd|theirc.wd1.myworkdayjobs.com|theirc|External_Careers
 ilo|International Labour Organization||i|sf|jobs.ilo.org
 unesco|UNESCO||i|sf|careers.unesco.org
 unido|UNIDO||i|sf|careers.unido.org
