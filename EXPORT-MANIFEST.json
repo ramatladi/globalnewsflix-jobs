@@ -157,7 +157,7 @@
   },
   {
     "file": "news-collect.js",
-    "sha256": "7daf40419a4d920e92ca0dedcfd42e5e0eb1b9537ebe217d281de212c5f0ac7e"
+    "sha256": "df7efd8703957870a99e121097dbf885d56da0fc0fda288fd3013886b14594b7"
   },
   {
     "file": "news-freshness.js",
@@ -185,7 +185,7 @@
   },
   {
     "file": "section-search.js",
-    "sha256": "60b8f1930fd9a75fd5251e93dac3efdc66a5347569967446a655d3929370ba32"
+    "sha256": "cd3fe2bc58b0afbfcf3f84eb0b9ec73500a34ca05b82d72b4f9cf14838315313"
   },
   {
     "file": "site-fetch.mjs",

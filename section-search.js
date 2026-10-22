@@ -16,7 +16,7 @@ export const SECTION_TOPIC = Object.freeze({ business: 'BUSINESS', technology: '
   sports: 'SPORTS', entertainment: 'ENTERTAINMENT' });
 
 // Search words per edition language. A search asks for any of them. Random News (the 'odd' section, owner 22 Oct 2026)
-// searches odd-news words and the words for someone going viral or trending on social media. Languages with an edition of every country on
+// searches odd-news words and the words for something going viral or trending on social media. Languages with an edition of every country on
 // Google News need only the sections Google has no topic page for; languages of countries searched by name have all.
 // A language without a list (or a section without words) is not searched for that section.
 const T = {
@@ -34,7 +34,7 @@ const T = {
     crime: ['police', 'court', 'arrested', 'murder', 'trial', 'fraud'],
     ai: ['artificial intelligence', 'cyberattack', 'data breach', 'hackers', 'ransomware'],
     space: ['NASA', 'SpaceX', 'astronomers', 'satellite', 'rocket', 'space mission'],
-    odd: ['bizarre', 'weird', 'unusual', 'quirky', 'strange', 'went viral', 'viral video', 'trending on social media'],
+    odd: ['bizarre', 'weird', 'unusual', 'quirky', 'strange', 'went viral', 'viral video', 'trending on social media', 'viral trend', 'TikTok trend', 'meme'],
     living: ['cost of living', 'fuel price', 'food prices', 'inflation', 'rent', 'electricity tariff'],
   },
   fr: {
@@ -51,7 +51,7 @@ const T = {
     crime: ['police', 'tribunal', 'interpellé', 'meurtre', 'procès', 'escroquerie'],
     ai: ['intelligence artificielle', 'cyberattaque', 'fuite de données', 'pirates informatiques', 'rançongiciel'],
     space: ['NASA', 'SpaceX', 'astronomes', 'satellite', 'fusée', 'mission spatiale'],
-    odd: ['insolite', 'étrange', 'bizarre', 'incroyable', 'surprenant', 'buzz', 'viral', 'réseaux sociaux'],
+    odd: ['insolite', 'étrange', 'bizarre', 'incroyable', 'surprenant', 'buzz', 'viral', 'réseaux sociaux', 'tendance', 'TikTok', 'mème'],
     living: ["pouvoir d'achat", 'prix du carburant', 'prix alimentaires', 'inflation', 'loyer', "prix de l'électricité"],
   },
   es: {
@@ -68,7 +68,7 @@ const T = {
     crime: ['policía', 'tribunal', 'detenido', 'asesinato', 'juicio', 'fraude'],
     ai: ['inteligencia artificial', 'ciberataque', 'filtración de datos', 'hackers', 'ransomware'],
     space: ['NASA', 'SpaceX', 'astrónomos', 'satélite', 'cohete', 'misión espacial'],
-    odd: ['insólito', 'extraño', 'curioso', 'increíble', 'viral', 'redes sociales', 'se hizo viral'],
+    odd: ['insólito', 'extraño', 'curioso', 'increíble', 'viral', 'redes sociales', 'se hizo viral', 'tendencia', 'TikTok', 'reto viral'],
     living: ['costo de vida', 'precio de la gasolina', 'precios de los alimentos', 'inflación', 'alquiler', 'tarifa eléctrica'],
   },
   pt: {
@@ -85,7 +85,7 @@ const T = {
     crime: ['polícia', 'tribunal', 'preso', 'assassinato', 'julgamento', 'fraude'],
     ai: ['inteligência artificial', 'ataque hacker', 'vazamento de dados', 'hackers', 'ransomware'],
     space: ['NASA', 'SpaceX', 'astrônomos', 'satélite', 'foguete', 'missão espacial'],
-    odd: ['inusitado', 'curioso', 'estranho', 'bizarro', 'inacreditável', 'viralizou', 'viral', 'redes sociais'],
+    odd: ['inusitado', 'curioso', 'estranho', 'bizarro', 'inacreditável', 'viralizou', 'viral', 'redes sociais', 'trend', 'TikTok', 'meme'],
     living: ['custo de vida', 'preço da gasolina', 'preço dos alimentos', 'inflação', 'aluguel', 'conta de luz'],
   },
   de: {
@@ -102,7 +102,7 @@ const T = {
     crime: ['Polizei', 'Gericht', 'festgenommen', 'Mord', 'Prozess', 'Betrug'],
     ai: ['künstliche Intelligenz', 'Cyberangriff', 'Datenleck', 'Hacker', 'Ransomware'],
     space: ['NASA', 'SpaceX', 'ESA', 'Astronomen', 'Satellit', 'Rakete', 'Raumfahrt'],
-    odd: ['kurios', 'skurril', 'seltsam', 'ungewöhnlich', 'verrückt', 'viral', 'soziale Medien', 'TikTok'],
+    odd: ['kurios', 'skurril', 'seltsam', 'ungewöhnlich', 'verrückt', 'viral', 'soziale Medien', 'TikTok', 'Trend', 'Meme'],
     living: ['Lebenshaltungskosten', 'Spritpreise', 'Lebensmittelpreise', 'Inflation', 'Miete', 'Strompreis'],
   },
   it: {
@@ -119,7 +119,7 @@ const T = {
     crime: ['polizia', 'tribunale', 'arrestato', 'omicidio', 'processo', 'truffa'],
     ai: ['intelligenza artificiale', 'attacco informatico', 'furto di dati', 'hacker', 'ransomware'],
     space: ['NASA', 'SpaceX', 'ESA', 'astronomi', 'satellite', 'razzo', 'missione spaziale'],
-    odd: ['curioso', 'strano', 'bizzarro', 'incredibile', 'insolito', 'virale', 'social network', 'TikTok'],
+    odd: ['curioso', 'strano', 'bizzarro', 'incredibile', 'insolito', 'virale', 'social network', 'TikTok', 'tendenza', 'meme'],
     living: ['caro vita', 'prezzo della benzina', 'prezzi alimentari', 'inflazione', 'affitto', 'bollette'],
   },
   nl: {
@@ -136,7 +136,7 @@ const T = {
     crime: ['politie', 'rechtbank', 'aangehouden', 'moord', 'rechtszaak', 'fraude'],
     ai: ['kunstmatige intelligentie', 'cyberaanval', 'datalek', 'hackers', 'ransomware'],
     space: ['NASA', 'SpaceX', 'ESA', 'astronomen', 'satelliet', 'raket', 'ruimtevaart'],
-    odd: ['opmerkelijk', 'vreemd', 'bizar', 'bijzonder', 'curieus', 'viraal', 'sociale media', 'TikTok'],
+    odd: ['opmerkelijk', 'vreemd', 'bizar', 'bijzonder', 'curieus', 'viraal', 'sociale media', 'TikTok', 'trend', 'meme'],
     living: ['koopkracht', 'benzineprijs', 'boodschappen', 'inflatie', 'huur', 'energierekening'],
   },
   ar: {
@@ -153,7 +153,7 @@ const T = {
     crime: ['الشرطة', 'محكمة', 'القبض على', 'جريمة', 'قتل', 'احتيال'],
     ai: ['الذكاء الاصطناعي', 'هجوم سيبراني', 'تسريب بيانات', 'قراصنة', 'برامج الفدية'],
     space: ['ناسا', 'سبيس إكس', 'الفضاء', 'قمر صناعي', 'صاروخ', 'فلكيون'],
-    odd: ['غريب', 'طريف', 'عجيب', 'غير مألوف', 'مدهش', 'ترند', 'مواقع التواصل', 'فيديو متداول'],
+    odd: ['غريب', 'طريف', 'عجيب', 'غير مألوف', 'مدهش', 'ترند', 'مواقع التواصل', 'فيديو متداول', 'تحدي', 'هاشتاغ'],
     living: ['غلاء المعيشة', 'أسعار الوقود', 'أسعار البنزين', 'أسعار الغذاء', 'التضخم', 'الإيجار', 'أسعار الكهرباء'],
   },
   ru: {
@@ -170,7 +170,7 @@ const T = {
     crime: ['полиция', 'суд', 'задержан', 'убийство', 'мошенничество', 'приговор'],
     ai: ['искусственный интеллект', 'кибератака', 'утечка данных', 'хакеры'],
     space: ['Роскосмос', 'NASA', 'SpaceX', 'космос', 'спутник', 'ракета', 'астрономы'],
-    odd: ['необычный', 'странный', 'курьезный', 'удивительный', 'забавный', 'вирусное видео', 'соцсети', 'TikTok'],
+    odd: ['необычный', 'странный', 'курьезный', 'удивительный', 'забавный', 'вирусное видео', 'соцсети', 'TikTok', 'тренд', 'мем', 'челлендж'],
     living: ['цены на бензин', 'цены на продукты', 'инфляция', 'аренда', 'тарифы ЖКХ', 'подорожание'],
   },
   el: {
@@ -187,7 +187,7 @@ const T = {
     crime: ['αστυνομία', 'δικαστήριο', 'συνελήφθη', 'δολοφονία', 'δίκη', 'απάτη'],
     ai: ['τεχνητή νοημοσύνη', 'κυβερνοεπίθεση', 'διαρροή δεδομένων', 'χάκερ'],
     space: ['NASA', 'SpaceX', 'διάστημα', 'δορυφόρος', 'πύραυλος', 'αστρονόμοι'],
-    odd: ['παράξενο', 'απίστευτο', 'ασυνήθιστο', 'περίεργο', 'viral', 'social media', 'TikTok'],
+    odd: ['παράξενο', 'απίστευτο', 'ασυνήθιστο', 'περίεργο', 'viral', 'social media', 'TikTok', 'τάση', 'meme'],
     living: ['ακρίβεια', 'τιμή βενζίνης', 'τιμές τροφίμων', 'πληθωρισμός', 'ενοίκια', 'λογαριασμοί ρεύματος'],
   },
   ro: {
@@ -204,7 +204,7 @@ const T = {
     crime: ['poliția', 'tribunal', 'arestat', 'crimă', 'proces', 'fraudă'],
     ai: ['inteligență artificială', 'atac cibernetic', 'hackeri', 'scurgere de date'],
     space: ['NASA', 'SpaceX', 'spațiu', 'satelit', 'rachetă', 'astronomi'],
-    odd: ['inedit', 'ciudat', 'bizar', 'neobișnuit', 'incredibil', 'viral', 'rețelele sociale', 'TikTok'],
+    odd: ['inedit', 'ciudat', 'bizar', 'neobișnuit', 'incredibil', 'viral', 'rețelele sociale', 'TikTok', 'trend', 'meme'],
     living: ['scumpiri', 'prețul carburanților', 'prețuri alimente', 'inflație', 'chirie', 'factura la energie'],
   },
   sr: {
@@ -221,7 +221,7 @@ const T = {
     crime: ['полиција', 'суд', 'ухапшен', 'убиство', 'policija', 'uhapšen', 'ubistvo'],
     ai: ['вештачка интелигенција', 'veštačka inteligencija', 'vještačka inteligencija', 'хакери', 'hakeri'],
     space: ['NASA', 'SpaceX', 'свемир', 'сателит', 'ракета', 'svemir', 'satelit'],
-    odd: ['необично', 'бизарно', 'чудно', 'neobično', 'bizarno', 'viralan', 'društvene mreže', 'друштвене мреже'],
+    odd: ['необично', 'бизарно', 'чудно', 'neobično', 'bizarno', 'viralan', 'društvene mreže', 'друштвене мреже', 'trend', 'izazov'],
     living: ['поскупљење', 'цене горива', 'инфлација', 'poskupljenje', 'cijene goriva', 'cene goriva', 'inflacija'],
   },
   hr: {
@@ -238,7 +238,7 @@ const T = {
     crime: ['policija', 'sud', 'uhićen', 'ubojstvo', 'presuda', 'prijevara'],
     ai: ['umjetna inteligencija', 'kibernetički napad', 'hakeri', 'curenje podataka'],
     space: ['NASA', 'SpaceX', 'svemir', 'satelit', 'raketa', 'astronomi'],
-    odd: ['neobično', 'bizarno', 'čudno', 'nevjerojatno', 'viralan', 'društvene mreže', 'TikTok'],
+    odd: ['neobično', 'bizarno', 'čudno', 'nevjerojatno', 'viralan', 'društvene mreže', 'TikTok', 'trend', 'izazov'],
     living: ['poskupljenje', 'cijene goriva', 'cijene hrane', 'inflacija', 'najam', 'struja'],
   },
   bg: {
@@ -249,7 +249,7 @@ const T = {
     crime: ['полиция', 'съд', 'задържан', 'убийство', 'измама', 'присъда'],
     ai: ['изкуствен интелект', 'кибератака', 'хакери', 'изтичане на данни'],
     space: ['NASA', 'SpaceX', 'космос', 'сателит', 'ракета', 'астрономи'],
-    odd: ['любопитно', 'странно', 'необичайно', 'невероятно', 'вирусно', 'социалните мрежи', 'TikTok'],
+    odd: ['любопитно', 'странно', 'необичайно', 'невероятно', 'вирусно', 'социалните мрежи', 'TikTok', 'тренд', 'мем'],
     living: ['поскъпване', 'цени на горивата', 'цени на храните', 'инфлация', 'наем', 'ток'],
   },
   cs: {
@@ -260,7 +260,7 @@ const T = {
     crime: ['policie', 'soud', 'zadržen', 'vražda', 'podvod', 'rozsudek'],
     ai: ['umělá inteligence', 'kyberútok', 'hackeři', 'únik dat'],
     space: ['NASA', 'SpaceX', 'vesmír', 'družice', 'raketa', 'astronomové'],
-    odd: ['kuriozní', 'bizarní', 'neobvyklé', 'zvláštní', 'virální', 'sociální sítě', 'TikTok'],
+    odd: ['kuriozní', 'bizarní', 'neobvyklé', 'zvláštní', 'virální', 'sociální sítě', 'TikTok', 'trend', 'meme'],
     living: ['zdražování', 'ceny pohonných hmot', 'ceny potravin', 'inflace', 'nájem', 'ceny energií'],
   },
   sk: {
@@ -271,7 +271,7 @@ const T = {
     crime: ['polícia', 'súd', 'zadržaný', 'vražda', 'podvod', 'rozsudok'],
     ai: ['umelá inteligencia', 'kybernetický útok', 'hackeri', 'únik údajov'],
     space: ['NASA', 'SpaceX', 'vesmír', 'družica', 'raketa', 'astronómovia'],
-    odd: ['kuriózne', 'bizarné', 'nezvyčajné', 'zvláštne', 'virálne', 'sociálne siete', 'TikTok'],
+    odd: ['kuriózne', 'bizarné', 'nezvyčajné', 'zvláštne', 'virálne', 'sociálne siete', 'TikTok', 'trend', 'meme'],
     living: ['zdražovanie', 'ceny pohonných látok', 'ceny potravín', 'inflácia', 'nájom', 'ceny energií'],
   },
   sl: {
@@ -282,7 +282,7 @@ const T = {
     crime: ['policija', 'sodišče', 'aretiran', 'umor', 'goljufija', 'obsodba'],
     ai: ['umetna inteligenca', 'kibernetski napad', 'hekerji', 'uhajanje podatkov'],
     space: ['NASA', 'SpaceX', 'vesolje', 'satelit', 'raketa', 'astronomi'],
-    odd: ['nenavadno', 'bizarno', 'čudno', 'neverjetno', 'viralno', 'družbena omrežja', 'TikTok'],
+    odd: ['nenavadno', 'bizarno', 'čudno', 'neverjetno', 'viralno', 'družbena omrežja', 'TikTok', 'trend', 'izziv'],
     living: ['podražitve', 'cene goriv', 'cene hrane', 'inflacija', 'najemnina', 'elektrika'],
   },
   hu: {
@@ -293,7 +293,7 @@ const T = {
     crime: ['rendőrség', 'bíróság', 'őrizetbe vették', 'gyilkosság', 'csalás', 'ítélet'],
     ai: ['mesterséges intelligencia', 'kibertámadás', 'hackerek', 'adatszivárgás'],
     space: ['NASA', 'SpaceX', 'világűr', 'műhold', 'rakéta', 'csillagászok'],
-    odd: ['furcsa', 'bizarr', 'különös', 'hihetetlen', 'virális', 'közösségi média', 'TikTok'],
+    odd: ['furcsa', 'bizarr', 'különös', 'hihetetlen', 'virális', 'közösségi média', 'TikTok', 'trend', 'mém'],
     living: ['drágulás', 'benzinár', 'élelmiszerárak', 'infláció', 'albérlet', 'rezsi'],
   },
   pl: {
@@ -304,7 +304,7 @@ const T = {
     crime: ['policja', 'sąd', 'zatrzymany', 'zabójstwo', 'oszustwo', 'wyrok'],
     ai: ['sztuczna inteligencja', 'cyberatak', 'hakerzy', 'wyciek danych'],
     space: ['NASA', 'SpaceX', 'kosmos', 'satelita', 'rakieta', 'astronomowie'],
-    odd: ['nietypowe', 'dziwne', 'zaskakujące', 'niesamowite', 'viral', 'media społecznościowe', 'TikTok'],
+    odd: ['nietypowe', 'dziwne', 'zaskakujące', 'niesamowite', 'viral', 'media społecznościowe', 'TikTok', 'trend', 'mem', 'wyzwanie'],
     living: ['drożyzna', 'ceny paliw', 'ceny żywności', 'inflacja', 'czynsz', 'ceny prądu'],
   },
   uk: {
@@ -315,7 +315,7 @@ const T = {
     crime: ['поліція', 'суд', 'затримали', 'вбивство', 'шахрайство', 'вирок'],
     ai: ['штучний інтелект', 'кібератака', 'хакери', 'витік даних'],
     space: ['NASA', 'SpaceX', 'космос', 'супутник', 'ракета', 'астрономи'],
-    odd: ['незвичайний', 'дивний', 'курйоз', 'неймовірний', 'вірусне відео', 'соцмережі', 'TikTok'],
+    odd: ['незвичайний', 'дивний', 'курйоз', 'неймовірний', 'вірусне відео', 'соцмережі', 'TikTok', 'тренд', 'мем', 'челендж'],
     living: ['подорожчання', 'ціни на пальне', 'ціни на продукти', 'інфляція', 'оренда', 'тарифи'],
   },
   lv: {
@@ -326,7 +326,7 @@ const T = {
     crime: ['policija', 'tiesa', 'aizturēts', 'slepkavība', 'krāpšana', 'spriedums'],
     ai: ['mākslīgais intelekts', 'kiberuzbrukums', 'hakeri', 'datu noplūde'],
     space: ['NASA', 'SpaceX', 'kosmoss', 'satelīts', 'raķete', 'astronomi'],
-    odd: ['neparasts', 'dīvains', 'neticami', 'virāls', 'sociālie tīkli', 'TikTok'],
+    odd: ['neparasts', 'dīvains', 'neticami', 'virāls', 'sociālie tīkli', 'TikTok', 'trends', 'izaicinājums'],
     living: ['sadārdzinājums', 'degvielas cenas', 'pārtikas cenas', 'inflācija', 'īre', 'elektrības cena'],
   },
   lt: {
@@ -337,7 +337,7 @@ const T = {
     crime: ['policija', 'teismas', 'sulaikytas', 'nužudymas', 'sukčiavimas', 'nuosprendis'],
     ai: ['dirbtinis intelektas', 'kibernetinė ataka', 'įsilaužėliai', 'duomenų nutekėjimas'],
     space: ['NASA', 'SpaceX', 'kosmosas', 'palydovas', 'raketa', 'astronomai'],
-    odd: ['neįprasta', 'keista', 'neįtikėtina', 'viralus', 'socialiniai tinklai', 'TikTok'],
+    odd: ['neįprasta', 'keista', 'neįtikėtina', 'viralus', 'socialiniai tinklai', 'TikTok', 'tendencija', 'iššūkis'],
     living: ['brangimas', 'degalų kainos', 'maisto kainos', 'infliacija', 'nuoma', 'elektros kaina'],
   },
   no: {
@@ -348,7 +348,7 @@ const T = {
     crime: ['politiet', 'retten', 'pågrepet', 'drap', 'svindel', 'dømt'],
     ai: ['kunstig intelligens', 'dataangrep', 'hackere', 'datalekkasje'],
     space: ['NASA', 'SpaceX', 'verdensrommet', 'satellitt', 'rakett', 'astronomer'],
-    odd: ['kuriøst', 'merkelig', 'uvanlig', 'utrolig', 'viral', 'sosiale medier', 'TikTok'],
+    odd: ['kuriøst', 'merkelig', 'uvanlig', 'utrolig', 'viral', 'sosiale medier', 'TikTok', 'trend', 'meme'],
     living: ['dyrtid', 'bensinpris', 'matpriser', 'prisvekst', 'husleie', 'strømpris'],
   },
   sv: {
@@ -359,7 +359,7 @@ const T = {
     crime: ['polisen', 'tingsrätten', 'gripen', 'mord', 'bedrägeri', 'dömd'],
     ai: ['artificiell intelligens', 'cyberattack', 'hackare', 'dataläcka'],
     space: ['NASA', 'SpaceX', 'rymden', 'satellit', 'raket', 'astronomer'],
-    odd: ['kuriosa', 'märklig', 'ovanlig', 'otrolig', 'viral', 'sociala medier', 'TikTok'],
+    odd: ['kuriosa', 'märklig', 'ovanlig', 'otrolig', 'viral', 'sociala medier', 'TikTok', 'trend', 'meme'],
     living: ['dyrtid', 'bensinpris', 'matpriser', 'inflation', 'hyra', 'elpris'],
   },
   da: {
@@ -376,7 +376,7 @@ const T = {
     crime: ['politiet', 'retten', 'anholdt', 'drab', 'svindel', 'dømt'],
     ai: ['kunstig intelligens', 'cyberangreb', 'hackere', 'datalæk'],
     space: ['NASA', 'SpaceX', 'rummet', 'satellit', 'raket', 'astronomer'],
-    odd: ['kurios', 'mærkelig', 'usædvanlig', 'utrolig', 'viral', 'sociale medier', 'TikTok'],
+    odd: ['kurios', 'mærkelig', 'usædvanlig', 'utrolig', 'viral', 'sociale medier', 'TikTok', 'trend', 'meme'],
     living: ['dyrtid', 'benzinpris', 'fødevarepriser', 'inflation', 'husleje', 'elpris'],
   },
   fi: {
@@ -393,7 +393,7 @@ const T = {
     crime: ['poliisi', 'oikeus', 'pidätetty', 'murha', 'petos', 'tuomio'],
     ai: ['tekoäly', 'kyberhyökkäys', 'hakkerit', 'tietovuoto'],
     space: ['NASA', 'SpaceX', 'avaruus', 'satelliitti', 'raketti', 'tähtitieteilijät'],
-    odd: ['erikoinen', 'outo', 'kummallinen', 'uskomaton', 'viraali', 'sosiaalinen media', 'TikTok'],
+    odd: ['erikoinen', 'outo', 'kummallinen', 'uskomaton', 'viraali', 'sosiaalinen media', 'TikTok', 'trendi', 'meemi'],
     living: ['hinnannousu', 'bensan hinta', 'ruoan hinta', 'inflaatio', 'vuokra', 'sähkön hinta'],
   },
   et: {
@@ -410,7 +410,7 @@ const T = {
     crime: ['politsei', 'kohus', 'vahistati', 'mõrv', 'pettus', 'kohtuotsus'],
     ai: ['tehisintellekt', 'küberrünnak', 'häkkerid', 'andmeleke'],
     space: ['NASA', 'SpaceX', 'kosmos', 'satelliit', 'rakett', 'astronoomid'],
-    odd: ['veider', 'kummaline', 'ebatavaline', 'uskumatu', 'viraalne', 'sotsiaalmeedia', 'TikTok'],
+    odd: ['veider', 'kummaline', 'ebatavaline', 'uskumatu', 'viraalne', 'sotsiaalmeedia', 'TikTok', 'trend', 'meem'],
     living: ['hinnatõus', 'kütusehind', 'toiduhinnad', 'inflatsioon', 'üür', 'elektrihind'],
   },
   fa: {
@@ -427,7 +427,7 @@ const T = {
     crime: ['پلیس', 'دادگاه', 'دستگیری', 'قتل', 'کلاهبرداری'],
     ai: ['هوش مصنوعی', 'حمله سایبری', 'هکر', 'نشت اطلاعات'],
     space: ['ناسا', 'فضا', 'ماهواره', 'موشک', 'ستاره‌شناسان'],
-    odd: ['عجیب', 'جالب', 'غیرعادی', 'باورنکردنی', 'وایرال', 'فضای مجازی', 'ترند'],
+    odd: ['عجیب', 'جالب', 'غیرعادی', 'باورنکردنی', 'وایرال', 'فضای مجازی', 'ترند', 'چالش', 'هشتگ'],
     living: ['گرانی', 'قیمت بنزین', 'قیمت مواد غذایی', 'تورم', 'اجاره‌بها', 'قیمت برق'],
   },
   ms: {
@@ -444,7 +444,7 @@ const T = {
     crime: ['polis', 'mahkamah', 'ditahan', 'pembunuhan', 'penipuan'],
     ai: ['kecerdasan buatan', 'serangan siber', 'penggodam', 'kebocoran data'],
     space: ['NASA', 'SpaceX', 'angkasa', 'satelit', 'roket'],
-    odd: ['pelik', 'unik', 'luar biasa', 'aneh', 'tular', 'media sosial', 'TikTok'],
+    odd: ['pelik', 'unik', 'luar biasa', 'aneh', 'tular', 'media sosial', 'TikTok', 'trend', 'cabaran'],
     living: ['kos sara hidup', 'harga minyak', 'harga barang', 'inflasi', 'sewa', 'tarif elektrik'],
   },
   id: {
@@ -455,7 +455,7 @@ const T = {
     crime: ['polisi', 'pengadilan', 'ditangkap', 'pembunuhan', 'penipuan', 'vonis'],
     ai: ['kecerdasan buatan', 'serangan siber', 'peretas', 'kebocoran data'],
     space: ['NASA', 'SpaceX', 'BRIN', 'antariksa', 'satelit', 'roket'],
-    odd: ['unik', 'aneh', 'nyeleneh', 'langka', 'viral', 'media sosial', 'TikTok'],
+    odd: ['unik', 'aneh', 'nyeleneh', 'langka', 'viral', 'media sosial', 'TikTok', 'tren', 'tantangan'],
     living: ['harga BBM', 'harga pangan', 'harga beras', 'inflasi', 'tarif listrik', 'biaya hidup'],
   },
   he: {
@@ -466,7 +466,7 @@ const T = {
     crime: ['המשטרה', 'בית המשפט', 'נעצר', 'רצח', 'הונאה', 'גזר דין'],
     ai: ['בינה מלאכותית', 'מתקפת סייבר', 'האקרים', 'דליפת מידע'],
     space: ['NASA', 'SpaceX', 'חלל', 'לוויין', 'טיל', 'אסטרונומים'],
-    odd: ['מוזר', 'משונה', 'יוצא דופן', 'מפתיע', 'ויראלי', 'ברשתות החברתיות', 'טיקטוק'],
+    odd: ['מוזר', 'משונה', 'יוצא דופן', 'מפתיע', 'ויראלי', 'ברשתות החברתיות', 'טיקטוק', 'טרנד', 'מם'],
     living: ['יוקר המחיה', 'מחיר הדלק', 'מחירי המזון', 'אינפלציה', 'שכר דירה', 'תעריף החשמל'],
   },
   tr: {
@@ -477,7 +477,7 @@ const T = {
     crime: ['polis', 'mahkeme', 'gözaltı', 'cinayet', 'dolandırıcılık', 'tutuklandı'],
     ai: ['yapay zeka', 'siber saldırı', 'hacker', 'veri sızıntısı', 'fidye yazılımı'],
     space: ['NASA', 'SpaceX', 'TUA', 'uzay', 'uydu', 'roket'],
-    odd: ['ilginç', 'tuhaf', 'garip', 'şaşırtan', 'viral', 'sosyal medya', 'gündem oldu'],
+    odd: ['ilginç', 'tuhaf', 'garip', 'şaşırtan', 'viral', 'sosyal medya', 'gündem oldu', 'trend', 'akım'],
     living: ['hayat pahalılığı', 'akaryakıt fiyatları', 'gıda fiyatları', 'enflasyon', 'kira', 'elektrik zammı'],
   },
   vi: {
@@ -488,7 +488,7 @@ const T = {
     crime: ['công an', 'tòa án', 'bắt giữ', 'giết người', 'lừa đảo', 'tuyên án'],
     ai: ['trí tuệ nhân tạo', 'tấn công mạng', 'tin tặc', 'rò rỉ dữ liệu'],
     space: ['NASA', 'SpaceX', 'vũ trụ', 'vệ tinh', 'tên lửa', 'thiên văn'],
-    odd: ['kỳ lạ', 'lạ lùng', 'độc lạ', 'hiếm gặp', 'gây sốt', 'mạng xã hội', 'TikTok'],
+    odd: ['kỳ lạ', 'lạ lùng', 'độc lạ', 'hiếm gặp', 'gây sốt', 'mạng xã hội', 'TikTok', 'trend', 'thử thách'],
     living: ['giá xăng', 'giá thực phẩm', 'lạm phát', 'giá điện', 'tiền thuê nhà', 'giá cả'],
   },
   th: {
@@ -499,7 +499,7 @@ const T = {
     crime: ['ตำรวจ', 'ศาล', 'จับกุม', 'ฆาตกรรม', 'ฉ้อโกง', 'พิพากษา'],
     ai: ['ปัญญาประดิษฐ์', 'โจมตีทางไซเบอร์', 'แฮกเกอร์', 'ข้อมูลรั่วไหล'],
     space: ['NASA', 'SpaceX', 'อวกาศ', 'ดาวเทียม', 'จรวด', 'ดาราศาสตร์'],
-    odd: ['แปลก', 'ประหลาด', 'สุดแปลก', 'ไวรัล', 'โซเชียล', 'TikTok'],
+    odd: ['แปลก', 'ประหลาด', 'สุดแปลก', 'ไวรัล', 'โซเชียล', 'TikTok', 'เทรนด์', 'ชาเลนจ์'],
     living: ['ค่าครองชีพ', 'ราคาน้ำมัน', 'ราคาอาหาร', 'เงินเฟ้อ', 'ค่าเช่า', 'ค่าไฟ'],
   },
   bn: {
@@ -510,7 +510,7 @@ const T = {
     crime: ['পুলিশ', 'আদালত', 'গ্রেপ্তার', 'হত্যা', 'মামলা', 'প্রতারণা'],
     ai: ['কৃত্রিম বুদ্ধিমত্তা', 'সাইবার হামলা', 'হ্যাকার'],
     space: ['নাসা', 'মহাকাশ', 'স্যাটেলাইট', 'রকেট'],
-    odd: ['অদ্ভুত', 'বিচিত্র', 'আশ্চর্য', 'ভাইরাল', 'সামাজিক যোগাযোগমাধ্যম', 'টিকটক'],
+    odd: ['অদ্ভুত', 'বিচিত্র', 'আশ্চর্য', 'ভাইরাল', 'সামাজিক যোগাযোগমাধ্যম', 'টিকটক', 'ট্রেন্ড', 'চ্যালেঞ্জ'],
     living: ['দ্রব্যমূল্য', 'জ্বালানির দাম', 'মূল্যস্ফীতি', 'বাড়িভাড়া', 'বিদ্যুতের দাম'],
   },
   zh: {
@@ -527,7 +527,7 @@ const T = {
     crime: ['警方', '法院', '逮捕', '被捕', '谋杀', '謀殺', '诈骗', '詐騙', '判刑'],
     ai: ['人工智能', '人工智慧', '大模型', '网络攻击', '網絡攻擊', '数据泄露', '黑客', '駭客'],
     space: ['航天', '太空', '卫星', '衛星', '火箭', '天文', '神舟', '嫦娥'],
-    odd: ['奇闻', '奇聞', '罕见', '罕見', '离奇', '離奇', '怪事', '走红', '网红', '热搜', '爆红'],
+    odd: ['奇闻', '奇聞', '罕见', '罕見', '离奇', '離奇', '怪事', '走红', '网红', '热搜', '爆红', '挑战', '梗', '热议'],
     living: ['物价', '物價', '油价', '油價', '房租', '通胀', '通脹', '电价', '電價', '菜价'],
   },
   ja: {
@@ -538,7 +538,7 @@ const T = {
     crime: ['警察', '裁判', '逮捕', '殺人', '詐欺', '判決'],
     ai: ['人工知能', '生成AI', 'サイバー攻撃', '情報漏えい', 'ハッカー', 'ランサムウェア'],
     space: ['JAXA', 'NASA', '宇宙', '人工衛星', 'ロケット', '天文'],
-    odd: ['珍事', '奇妙', '珍しい', '驚き', 'バズ', 'SNS', 'TikTok'],
+    odd: ['珍事', '奇妙', '珍しい', '驚き', 'バズ', 'SNS', 'TikTok', 'トレンド', 'チャレンジ'],
     living: ['物価', '値上げ', 'ガソリン価格', '電気代', '家賃', 'インフレ'],
   },
   ko: {
@@ -555,7 +555,7 @@ const T = {
     crime: ['경찰', '법원', '체포', '살인', '사기', '선고'],
     ai: ['인공지능', '사이버 공격', '개인정보 유출', '해킹', '랜섬웨어'],
     space: ['누리호', 'NASA', '우주', '위성', '로켓', '천문'],
-    odd: ['황당', '이색', '기이한', '신기한', '화제', 'SNS', '틱톡', '바이럴'],
+    odd: ['황당', '이색', '기이한', '신기한', '화제', 'SNS', '틱톡', '바이럴', '챌린지', '밈', '트렌드'],
     living: ['물가', '기름값', '전기요금', '월세', '인플레이션', '장바구니'],
   },
 };
