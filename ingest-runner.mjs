@@ -3,7 +3,8 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { makeSiteFetch } from './site-fetch.mjs';
 import { collectTarget, enrichMulti, publisherHost } from './news-collect.js';
-import { createResolver, loadCache, dumpCache, languageWeight, targetWeight, resolveShare, enrichTop, upcomingPicks, UPCOMING_RESOLVE_TOP } from './ingest-resolve.js';
+import { createResolver, loadCache, dumpCache, languageWeight, targetWeight, resolveShare, enrichTop, upcomingPicks, UPCOMING_RESOLVE_TOP, sectionPicks, SECTION_RESOLVE_TOP } from './ingest-resolve.js';
+import { sectionForVisit } from './section-search.js';
 import { healthFromCollector, isFailingPublisher, datedShare } from './publisher-health.js';
 import { newsLang } from './data.js';
 
@@ -88,7 +89,10 @@ const weights = targets.map(t => targetWeight(t.need));
 
 const rows = [], errors = [];
 for (const [k, t] of targets.entries()) {
-  let { rows: collected, errors: e } = await collectTarget(t.target, t.rot);
+  // The site names the edition's sections with too few stories of their own; one is searched on this visit.
+  const sections = Array.isArray(t.sections) ? t.sections : [];
+  const visit = t.target === 'WORLD' || t.target === 'CELEB' || t.target === 'SOCIAL' ? '' : sectionForVisit(sections, t.rot);
+  let { rows: collected, errors: e } = await collectTarget(t.target, t.rot, { sections });
   errors.push(...e);
   const lang = newsLang(t.target === 'WORLD' || t.target === 'CELEB' || t.target === 'SOCIAL' ? 'WW' : t.target);
   const rank = rankFor(lang);
@@ -102,7 +106,15 @@ for (const [k, t] of targets.entries()) {
     const kept = new Set(await resolver.resolveRows(upcoming, { top: UPCOMING_RESOLVE_TOP, clusterLinks: 0, maxRequests: upShare, rank, skip: row => failing(hostOf(row)) }));
     collected = collected.filter(row => row.section !== 'upcoming' || kept.has(row));
   }
-  const r = RESOLVE_TOP > 0 ? await resolver.resolveRows(collected, { top: RESOLVE_TOP, maxRequests: Math.max(0, share - upShare), rank, skip: row => failing(hostOf(row)) }) : collected;
+  // Then the best reports of the section searched on this visit, from what is left of the share.
+  const sectionRows = visit ? collected.filter(row => row.section === visit) : [];
+  let secShare = 0;
+  if (RESOLVE_TOP > 0 && sectionRows.length) {
+    secShare = Math.min(SECTION_RESOLVE_TOP, Math.max(0, share - upShare));
+    const kept = new Set(await resolver.resolveRows(sectionRows, { top: SECTION_RESOLVE_TOP, clusterLinks: 0, maxRequests: secShare, rank, skip: row => failing(hostOf(row)) }));
+    collected = collected.filter(row => row.section !== visit || kept.has(row));
+  }
+  const r = RESOLVE_TOP > 0 ? await resolver.resolveRows(collected, { top: RESOLVE_TOP, maxRequests: Math.max(0, share - upShare - secShare), rank, skip: row => failing(hostOf(row)) }) : collected;
   // Enrich the strongest stories with a publisher URL (description, image, excerpt, publication date). Publishers that
   // keep failing are not requested; further reports' Google links use the same budgeted resolver.
   const more = { left: 4 };
@@ -110,7 +122,9 @@ for (const [k, t] of targets.entries()) {
   // An edition with a full day in hand gets a few reads; the rest of the pass's time goes to editions in need.
   const main = r.filter(row => !/news\.google\.com/.test(row.gn_link || '') && !failing(hostOf(row))).sort((a, b) => rank(b) - rank(a)).slice(0, enrichTop(t.need, ENRICH_TOP));
   // Plus the target's best Coming Up reports, whose pages the writer needs as much as any other report's.
-  const pick = [...main, ...upcomingPicks(r, main, rank, { skip: row => failing(hostOf(row)) })];
+  const withUpcoming = [...main, ...upcomingPicks(r, main, rank, { skip: row => failing(hostOf(row)) })];
+  // And the visit's section reports, likewise.
+  const pick = [...withUpcoming, ...sectionPicks(r, withUpcoming, rank, visit, { skip: row => failing(hostOf(row)) })];
   pages.skippedFailing += r.filter(row => failing(hostOf(row))).length;
   if (enrichOpen()) {
     await pool(pick, 6, async row => { if (!enrichOpen()) { pages.enrichStopped++; return; } row.facts = JSON.stringify(await enrichMulti(row, 4, opts)); pages.enriched++; if (!row.fl || row.fl === lang) pages.enrichedInLanguage++; });

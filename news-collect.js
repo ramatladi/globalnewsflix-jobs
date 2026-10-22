@@ -14,6 +14,7 @@ import { resolveGoogleNewsUrl } from './google-news-url.js';
 import { changeQuery, changeRotation, isOfficialHost, namesChange, OFFICIAL_SOURCE_BONUS } from './change-search.js';
 import { eventQuery, eventRotation, namesEvent } from './event-search.js';
 import { extractArticleImages } from './article-images.js';
+import { SECTION_TOPIC, sectionQuery, sectionForVisit } from './section-search.js';
 
 const UA = 'Mozilla/5.0 (compatible; GlobalNewsFlixBot/1.0; +https://globalnewsflix.com/about)';
 
@@ -262,6 +263,31 @@ export function changeFeedsFor(target, rot) {
   return [{ ...base, bing: true, url: lang === 'en' ? bingUrl(short) : bingUrl(short, lang, BING_MARKET[lang] || c.code) }];
 }
 export const COMING_UP_RESULTS = 12;
+// A section search keeps its first twenty results (each row is a write).
+export const SECTION_RESULTS = 20;
+// Section searches (owner, 22 Oct 2026; section-search.js): on each visit, one of the edition's sections with too few
+// stories of its own, in turn. An edition with its own Google News edition reads that section's topic page there
+// (Business, Technology, Science, Health, Sports, Entertainment) or searches its words there; any other country is
+// searched by name next to the section's words, in the edition language. The rows carry the section, so the writer's
+// queue can give the edition's short sections their turn; the writer still decides each story's section.
+export function sectionFeedsFor(target, rot, sections) {
+  const section = sectionForVisit(sections, rot);
+  const c = COUNTRY[target];
+  if (!section || !c) return [];
+  const lang = newsLang(c.code);
+  const own = c.edition && feedLanguage(feedUrl({ edition: c.edition })) === lang ? c.edition : '';
+  const base = { country: c.code, section, sectionSearch: true };
+  if (own && SECTION_TOPIC[section]) return [{ ...base, url: feedUrl({ edition: own, topic: SECTION_TOPIC[section] }) }];
+  const q = sectionQuery(lang, section);
+  if (!q) return [];
+  if (own) return [{ ...base, url: feedUrl({ edition: own, q: `${q} when:2d` }) }];
+  let name = lang === 'en' ? c.name : countryNameIn(c.code, lang);
+  if (!name || name === c.code) name = c.name;
+  const named = { ...base, search: true, names: [...new Set([name, c.name, c.q].filter(Boolean))] };
+  const edition = lang === 'en' ? 'en-US;US;US:en' : LANG_SEARCH_EDITION[lang];
+  if (edition) return [{ ...named, url: feedUrl({ edition, q: `"${name}" ${q} when:2d` }) }];
+  return [{ ...named, bing: true, url: lang === 'en' ? bingUrl(`"${name}" ${q}`) : bingUrl(`"${name}" ${q}`, lang, BING_MARKET[lang] || c.code) }];
+}
 // Coming Up: one search for scheduled events (elections, votes, court rulings, strikes, festivals, summits, matches,
 // exams; three groups in turn, event-search.js) on every visit, in the edition's own language next to the country's
 // name, on the other engine from the visit's change search.
@@ -291,7 +317,7 @@ export function hostTurn(url, fn) {
   HOST_TURN.set(h, run.then(() => {}, () => {}));
   return run;
 }
-export async function collectTarget(target, rot) {
+export async function collectTarget(target, rot, { sections } = {}) {
   const rows = [], errors = [];
   const read = async f => {
     try {
@@ -300,15 +326,15 @@ export async function collectTarget(target, rot) {
       if (f.change || f.event) await politeWait(f.url);
       try { xml = await fetchText(f.url); }
       catch (e) {
-        // A refused Coming Up search is not replaced by a general one.
-        if (f.bing || f.change || f.event || !COUNTRY[f.country]) throw e;
+        // A refused Coming Up or section search is not replaced by a general one.
+        if (f.bing || f.change || f.event || f.sectionSearch || !COUNTRY[f.country]) throw e;
         // Google refused: fall back to Bing for this country, in the same language.
         const c = COUNTRY[f.country], l = feedLanguage(f.url) || 'en', name = l === 'en' ? c.name : (countryNameIn(c.code, l) || c.name);
         xml = await fetchText(l === 'en' ? bingUrl(`"${name}"`) : bingUrl(`"${name}"`, l, BING_MARKET[l] || c.code)); f.bing = true;
       }
       // A Coming Up search keeps its first twelve results (its relevance falls off after that; each row is a write).
       let items = parseFeed(xml).filter(it => isFreshNews(it.pub) && !nonNewsReason(it.title) &&
-        !sponsoredContentReason({ url: it.link, title: it.title, source: it.source })).slice(0, f.change || f.event ? COMING_UP_RESULTS : 30);
+        !sponsoredContentReason({ url: it.link, title: it.title, source: it.source })).slice(0, f.change || f.event ? COMING_UP_RESULTS : f.sectionSearch ? SECTION_RESULTS : 30);
       if (f.bing) items = clusterBySimilarity(items);
       // Bing answers a change search with loosely related reports too: keep those whose title or summary names a change,
       // and in English (read worldwide) also the edition's country.
@@ -327,7 +353,7 @@ export async function collectTarget(target, rot) {
       }
     } catch (e) { errors.push(`${target}: ${e.message}`); }
   };
-  for (const f of feedsFor(target, rot)) await read(f);
+  for (const f of [...feedsFor(target, rot), ...sectionFeedsFor(target, rot, sections)]) await read(f);
   // The visit's two Coming Up searches normally go to different engines: they run side by side, never two at once to one
   // host. (One after the other they added minutes to every collector run.)
   await Promise.all([...changeFeedsFor(target, rot), ...eventFeedsFor(target, rot)].map(f => hostTurn(f.url, () => read(f))));

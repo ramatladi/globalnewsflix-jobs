@@ -110,6 +110,15 @@ export function upcomingPicks(rows, picked, rank, { isGoogle = u => /news\.googl
   return rows.filter(r => r.section === 'upcoming' && !already.has(r) && !isGoogle(r.gn_link) && !skip(r)).sort((a, b) => rank(b) - rank(a)).slice(0, top);
 }
 
+// The section searched on this visit (section-search.js) gets the same kind of share: its best reports' Google links
+// are resolved first and the best with a publisher URL are read, so the writer's queue has them for that section.
+export const SECTION_RESOLVE_TOP = 3, SECTION_ENRICH_TOP = 2;
+export function sectionPicks(rows, picked, rank, section, { isGoogle = u => /news\.google\.com/.test(u || ''), skip = () => false, top = SECTION_ENRICH_TOP } = {}) {
+  if (!section) return [];
+  const already = new Set(picked);
+  return rows.filter(r => r.section === section && !already.has(r) && !isGoogle(r.gn_link) && !skip(r)).sort((a, b) => rank(b) - rank(a)).slice(0, top);
+}
+
 // Publisher reads for one target: the full allowance, or at most four for an edition with a full day in hand.
 export const COVERED_ENRICH_TOP = 4;
 export function enrichTop(need, max) {

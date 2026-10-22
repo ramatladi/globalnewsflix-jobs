@@ -57,11 +57,11 @@
   },
   {
     "file": "ingest-resolve.js",
-    "sha256": "c0dcdb0e980a95a93c2b02b3fe1046283674971209c9187a13f15345d619daf8"
+    "sha256": "784bea6a09da42657f680356c150bd895852df59e4ef34d9e622ffce330706c7"
   },
   {
     "file": "ingest-runner.mjs",
-    "sha256": "6c25fc860286c1e60a51b8bdfe858b9b071fe6dd7366dbdb2c649c889bdf3709"
+    "sha256": "24996c2c90e82e4506ee3a8dcd52a2e1f22834b18e7e1623886f58ad14eb9a45"
   },
   {
     "file": "iso-codes.js",
@@ -157,7 +157,7 @@
   },
   {
     "file": "news-collect.js",
-    "sha256": "047e24f76863551f77a687926c8d25055f9f11ec574f3a79f9e50940aeb4e0b0"
+    "sha256": "e1b206994fcb6598d73de9b2c9f99f1428dbf3022cb52f0ce024f3c1564c9656"
   },
   {
     "file": "news-freshness.js",
@@ -182,6 +182,10 @@
   {
     "file": "requirements.txt",
     "sha256": "af99a44c3e0e6ff026eb04308fc630b49b8bffddc508c4b4c69caf774fbcefca"
+  },
+  {
+    "file": "section-search.js",
+    "sha256": "e514b4ae46860575cd848139fc8165842ea4a5ceca9319298377c36a18ce977c"
   },
   {
     "file": "site-fetch.mjs",
