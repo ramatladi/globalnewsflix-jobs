@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { parseUngmRows, ungmRow, ungmTime, collectUngm, collectTenders, UA, tedIssuer, tedTime, tedRow, tedQuery, collectTed, TED_API, isoTime, wbgRow, collectWbg, WBG_LIST,
+import { parseUngmRows, ungmRow, ungmTime, collectUngm, collectTenders, UA, tedIssuer, tedIssuerName, tedTime, tedRow, tedQuery, collectTed, TED_API, isoTime, wbgRow, collectWbg, WBG_LIST,
   parseAfdb, afdbRow, collectAfdb, AFDB_LIST } from '../tenders-collect.js';
 import { countryCode, countryFromIso3, TENDER_KINDS, UNGM_KIND } from '../tenders-kinds.js';
 import { uploadTenders } from '../tenders-runner.mjs';
@@ -83,6 +83,12 @@ test('TED: only EU institutions\' and international organisations\' notices, che
     'EESC Escp Europe', 'Johanniter Unfall Hilfe e.V.', 'INSTITUT CURIE', 'E.ON Észak-dunántúli Áramhálózati Zrt.']) assert.equal(tedIssuer(name), false, name);
   assert.equal(tedIssuer('Cour des comptes', 'LUX'), true, 'the European Court of Auditors');
   assert.equal(tedIssuer('Cour des comptes', 'FRA'), false, 'the French one');
+  // Names as readers should see them, without TED's repeats.
+  assert.equal(tedIssuerName('Health and Digital Executive Agency (HaDEA) , HADEA - Health and Digital Executive Agency'), 'Health and Digital Executive Agency (HaDEA)');
+  assert.equal(tedIssuerName('European Centre for the Development of Vocational Training, CEDEFOP - European Centre for the Development of Vocational'), 'European Centre for the Development of Vocational Training (CEDEFOP)');
+  assert.equal(tedIssuerName('European Commission, DG JRC - Joint Research Centre'), 'European Commission, DG JRC - Joint Research Centre');
+  assert.equal(tedIssuerName('European Parliament, SG - Directorate-General for Communication'), 'European Parliament, SG - Directorate-General for Communication');
+  assert.equal(tedIssuerName('Cour des comptes', 'LUX'), 'Cour des comptes européenne');
   assert.match(tedQuery(NOW), /buyer-legal-type IN \(eu-ins-bod-ag int-org\)/);
   assert.match(tedQuery(NOW), />= 20261022\b/);
 });

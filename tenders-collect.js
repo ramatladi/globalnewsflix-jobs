@@ -8,7 +8,8 @@
 // official notice. The crawler names itself and keeps to one request at a time.
 import { UNGM_KIND, countryCode, countryFromIso3, TENDER_MAX_AHEAD_MS } from './tenders-kinds.js';
 
-export const UA = 'GlobalNewsflixTenders/1.0 (+https://globalnewsflix.com/contact)';
+// The usual form for a named crawler (as the site's photo checks use): it says who is asking and where to reach us.
+export const UA = 'Mozilla/5.0 (compatible; GlobalNewsflixTenders/1.0; +https://globalnewsflix.com/contact)';
 export const UNGM = 'https://www.ungm.org';
 export const UNGM_PAGE_SIZE = 15; // the only page size UNGM's search accepts
 export const UNGM_MAX_PAGES = 200;
@@ -77,7 +78,7 @@ export async function collectUngm(fetchImpl = fetch, { now = Date.now(), delayMs
   const jar = new Map(), diag = { src: 'ungm', status: 'failed', reason: '', rawCount: 0, acceptedCount: 0, httpRequests: 0 };
   const rows = [], seen = new Set();
   try {
-    const page = await fetchImpl(`${UNGM}/Public/Notice`, { headers: { 'user-agent': UA, accept: 'text/html' }, signal: AbortSignal.timeout(30000) });
+    const page = await fetchImpl(`${UNGM}/Public/Notice`, { headers: { 'user-agent': UA, accept: 'text/html', 'accept-language': 'en' }, signal: AbortSignal.timeout(30000) });
     diag.httpRequests++;
     if (!page.ok) { diag.reason = `page-http-${page.status}`; return { rows, diagnostics: [diag] }; }
     const html = await page.text(), cookie = cookies(page, jar);
@@ -89,7 +90,7 @@ export async function collectUngm(fetchImpl = fetch, { now = Date.now(), delayMs
       const body = { PageIndex: p, PageSize: UNGM_PAGE_SIZE, Title: '', Description: '', Reference: '', PublishedFrom: '', PublishedTo: '', DeadlineFrom: '', DeadlineTo: '',
         Countries: [], Agencies: [], UNSPSCs: [], NoticeTypes: [], SortField: 'DatePublished', SortAscending: false, isPicker: false, IsSustainable: false, IsActive: true,
         NoticeDisplayType: null, NoticeSearchTotalLabelId: 'noticeSearchTotal', TypeOfCompetitions: [] };
-      const res = await fetchImpl(`${UNGM}/Public/Notice/Search`, { method: 'POST', headers: { 'user-agent': UA, accept: 'text/html', 'content-type': 'application/json', RequestVerificationToken: token, cookie, referer: `${UNGM}/Public/Notice` }, body: JSON.stringify(body), signal: AbortSignal.timeout(30000) });
+      const res = await fetchImpl(`${UNGM}/Public/Notice/Search`, { method: 'POST', headers: { 'user-agent': UA, accept: 'text/html', 'accept-language': 'en', 'content-type': 'application/json', RequestVerificationToken: token, cookie, referer: `${UNGM}/Public/Notice` }, body: JSON.stringify(body), signal: AbortSignal.timeout(30000) });
       diag.httpRequests++;
       if (!res.ok) { diag.reason = `search-http-${res.status}`; break; }
       const part = await res.text();
@@ -140,6 +141,18 @@ export function tedIssuer(name, country = '') {
   if (f === 'cour des comptes' && String(country).toUpperCase() === 'LUX') return true; // the European Court of Auditors, Luxembourg
   return TED_IO.some(re => re.test(f));
 }
+// The buyer's name without TED's repeats: "Health and Digital Executive Agency (HaDEA) , HADEA - Health and Digital
+// Executive Agency" -> "Health and Digital Executive Agency (HaDEA)"; "European Centre for the Development of Vocational
+// Training, CEDEFOP - European Centre ..." -> "European Centre for the Development of Vocational Training (CEDEFOP)".
+export function tedIssuerName(name, country = '') {
+  const n = String(name || '').replace(/\s+/g, ' ').trim();
+  if (foldName(n) === 'cour des comptes' && String(country).toUpperCase() === 'LUX') return 'Cour des comptes européenne';
+  const paren = /^(.+?\([A-Za-z][A-Za-z0-9-]{1,12}\))\s*,\s*[A-Z][A-Za-z0-9-]{1,12}\s+-\s+/.exec(n);
+  if (paren) return paren[1];
+  const rep = /^(.+?),\s*([A-Z][A-Z0-9-]{1,12})\s+-\s+(.+)$/.exec(n);
+  if (rep && foldName(rep[3]).startsWith(foldName(rep[1]).split(' ').slice(0, 3).join(' '))) return `${rep[1]} (${rep[2]})`;
+  return n;
+}
 const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 // TED's "2026-11-09+01:00" and "17:00:00+01:00" -> the time and the issuer's own wording ("09-Nov-2026 17:00 (GMT 1.00)",
 // the form the pages read). A day without a time closes at its end.
@@ -187,7 +200,7 @@ export function tedRow(n, now = Date.now()) {
   const published = day ? Date.UTC(+day[1], +day[2] - 1, +day[3], 12) : null;
   const ref = String(list(n['internal-identifier-proc'])[0] || '').trim();
   return {
-    id: `ted:${pub}`, src: 'ted', issuer: issuer.slice(0, 120), issuer_type: 'io', title: title.slice(0, 300), ref: ref ? ref.slice(0, 120) : null, kind,
+    id: `ted:${pub}`, src: 'ted', issuer: tedIssuerName(issuer, list(n['buyer-country'])[0]).slice(0, 120), issuer_type: 'io', title: title.slice(0, 300), ref: ref ? ref.slice(0, 120) : null, kind,
     countries: countries.slice(0, 60), published_ts: published && published <= now + 86400000 ? published : null, closes_ts: closes.ts, closes_text: closes.text,
     url: `${TED}/en/notice/-/detail/${pub}`,
   };

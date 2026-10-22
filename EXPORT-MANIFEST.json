@@ -201,11 +201,11 @@
   },
   {
     "file": "tenders-collect.js",
-    "sha256": "2ba836c7d82db6e5394c7e81d171c9f202815f240a4d0109de6f4c132f1cf190"
+    "sha256": "cef92b4d023ef8ffba088a0897846bcca9d0c4206df0a819be22148509a6d6d7"
   },
   {
     "file": "tenders-kinds.js",
-    "sha256": "50179c1a114de6ed76080a45a24d69d6415b451263be9965363ab167fae269a8"
+    "sha256": "5d3bd5c4e423221a033c4c164fac022331988b5b5cf6d7f697baa6b4a2b866dd"
   },
   {
     "file": "tenders-runner.mjs",
@@ -461,7 +461,7 @@
   },
   {
     "file": "tests/tenders-collect.test.mjs",
-    "sha256": "8f9a416dec80c793c86a5497ad781d40fdfaef6a7231b3f6d3c3fb5fdb0208ae"
+    "sha256": "2da8acd9e46af169a0f4ddc17d47c80852300332bce9d7d5a0635c7591fdaa3a"
   },
   {
     "file": "tests/test_article_media.py",
