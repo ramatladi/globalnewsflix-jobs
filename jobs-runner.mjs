@@ -7,14 +7,39 @@ import { collectJobs, SOURCES } from './jobs.js';
 import { writeFile, rename } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 
-export async function uploadJobs({ rows, ok, diagnostics = [], runTs, site, getToken, fetchImpl = fetch, log = console.log }) {
+export const UPLOAD_ATTEMPTS = 4;
+const pause = ms => new Promise(r => setTimeout(r, ms));
+// One request to the site, tried again when the site is briefly busy: its request limit (429, after the time it
+// asks for), a busy database or a deploy (5xx), or a dropped connection. Uploads and the finish are safe to repeat.
+async function postWithRetry(fetchImpl, url, init, { wait = pause, log = () => {} } = {}) {
+  let last = null;
+  for (let attempt = 1; attempt <= UPLOAD_ATTEMPTS; attempt++) {
+    try {
+      const r = await fetchImpl(url, await init());
+      if (r.status !== 429 && r.status < 500) return r;
+      last = r;
+      if (attempt === UPLOAD_ATTEMPTS) return r;
+      const after = Number(r.headers?.get?.('retry-after'));
+      const ms = r.status === 429 && Number.isFinite(after) && after > 0 ? Math.min(after, 75) * 1000 : 15000 * attempt;
+      log(`jobs upload: ${r.status}, trying again in ${Math.round(ms / 1000)}s`);
+      await wait(ms);
+    } catch (error) {
+      if (attempt === UPLOAD_ATTEMPTS) throw error;
+      log('jobs upload: connection failed, trying again');
+      await wait(15000 * attempt);
+    }
+  }
+  return last;
+}
+
+export async function uploadJobs({ rows, ok, diagnostics = [], runTs, site, getToken, fetchImpl = fetch, log = console.log, wait = pause }) {
   const failed = new Set();
   const tokenHeaders = async () => ({ authorization: `Bearer ${await getToken()}`, 'content-type': 'application/json' });
   for (let i = 0; i < rows.length; i += 500) {
     const chunk = rows.slice(i, i + 500);
     let acknowledged = false;
     try {
-      const r = await fetchImpl(`${site}/api/jobs`, { method: 'POST', headers: await tokenHeaders(), body: JSON.stringify({ runTs, rows: chunk }) });
+      const r = await postWithRetry(fetchImpl, `${site}/api/jobs`, async () => ({ method: 'POST', headers: await tokenHeaders(), body: JSON.stringify({ runTs, rows: chunk }) }), { wait, log });
       const out = await r.json().catch(() => ({}));
       acknowledged = r.ok && out.ok === true && out.n === chunk.length;
       log(`jobs upload: ${r.status}, accepted ${Number.isInteger(out.n) ? out.n : 0}/${chunk.length}`);
@@ -25,7 +50,7 @@ export async function uploadJobs({ rows, ok, diagnostics = [], runTs, site, getT
   const reported = diagnostics.map(d => failed.has(d.src) ? {...d,status:'failed',reason:'upload-failed',acceptedCount:0} : d);
   let finished = false, pruneBlocked = [];
   try {
-    const r = await fetchImpl(`${site}/api/jobs/finish`, { method: 'POST', headers: await tokenHeaders(), body: JSON.stringify({ runTs, sources, diagnostics: reported }) });
+    const r = await postWithRetry(fetchImpl, `${site}/api/jobs/finish`, async () => ({ method: 'POST', headers: await tokenHeaders(), body: JSON.stringify({ runTs, sources, diagnostics: reported }) }), { wait, log });
     const out = await r.json().catch(() => ({}));
     finished = r.ok && out.ok === true;
     // The site's prune breaker (too many of a source's rows would disappear at once) answers 409 with the

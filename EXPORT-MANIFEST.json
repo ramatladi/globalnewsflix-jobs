@@ -125,7 +125,7 @@
   },
   {
     "file": "jobs-runner.mjs",
-    "sha256": "7ebc3c7730760c0dcfab6b9e205aeaacbf306c91153d825ecdbbe86c964e9390"
+    "sha256": "f9b656a2db9031109273f353bd087f8c0cae06f383d2174dd85129a122bce0b8"
   },
   {
     "file": "jobs-simplify.js",
@@ -437,7 +437,7 @@
   },
   {
     "file": "tests/jobs-runner.test.mjs",
-    "sha256": "573ed5d1039e90771dd6c80e802a4ba8ae15bd8bbe88226a7f76c489a9f5f6bf"
+    "sha256": "ce947bcec429ab077da9a4ada14859ae7a364a77d1586e3dbd1cd87275df3a85"
   },
   {
     "file": "tests/jobs-sf-scope.test.mjs",

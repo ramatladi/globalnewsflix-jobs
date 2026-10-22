@@ -59,3 +59,18 @@ test('verdict: partials and some failed sources warn; failed uploads or nothing 
  assert.equal(runner.jobsRunVerdict({result:{ok:false,failedSources:['absa']},diagnostics:[{status:'complete'}]}).exitCode,1);
  assert.equal(runner.jobsRunVerdict({dryRun:true,result:null,diagnostics:[{status:'partial',reason:'page-limit'}]}).exitCode,0);
 });
+
+// 22 Oct 2026: the evening run's last uploads and its finish met a busy site and were lost; a busy answer is now
+// tried again (after the time a 429 asks for), so a brief refusal no longer drops sources or the run's report.
+test('a busy site (429, 5xx, a dropped connection) is tried again before an upload or the finish counts as failed',async()=>{
+ const waits=[],calls=[];let n=0;
+ const answers=[()=>new Response('{"ok":false,"why":"jobs request limit"}',{status:429,headers:{'retry-after':'40'}}),()=>{throw new TypeError('fetch failed');},()=>Response.json({ok:true,n:2}),
+  ()=>new Response('busy',{status:503}),()=>Response.json({ok:true,removed:0})];
+ const result=await uploadJobs({...payload,wait:async ms=>{waits.push(ms);},getToken:async()=>'t',fetchImpl:async(u,o)=>{calls.push(u);return answers[n++]();}});
+ assert.equal(result.ok,true);assert.deepEqual(result.failedSources,[]);
+ assert.deepEqual(calls.map(u=>u.replace('https://globalnewsflix.com','')),['/api/jobs','/api/jobs','/api/jobs','/api/jobs/finish','/api/jobs/finish']);
+ assert.deepEqual(waits,[40000,30000,15000]);
+ const stuck=await uploadJobs({...payload,wait:async()=>{},getToken:async()=>'t',fetchImpl:async u=>u.endsWith('/finish')?Response.json({ok:true}):new Response('busy',{status:503})});
+ assert.equal(stuck.ok,false);assert.deepEqual(stuck.failedSources.sort(),['absa','nedbank'],'still refused after every attempt: never pruned');
+ assert.equal(runner.UPLOAD_ATTEMPTS,4);
+});
