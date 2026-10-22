@@ -41,7 +41,7 @@
   },
   {
     "file": "data.js",
-    "sha256": "95b0e43a3127ccd41875542b5849fcd4f5f81e4fa8e20f8ade5808fadee3a9a4"
+    "sha256": "3076cc1bac029df2feede9e64749886be97dfe5b6f7bf6b41c0fc355cc536e54"
   },
   {
     "file": "data/discovered-sources/manifest.json",
@@ -157,7 +157,7 @@
   },
   {
     "file": "news-collect.js",
-    "sha256": "e1b206994fcb6598d73de9b2c9f99f1428dbf3022cb52f0ce024f3c1564c9656"
+    "sha256": "7daf40419a4d920e92ca0dedcfd42e5e0eb1b9537ebe217d281de212c5f0ac7e"
   },
   {
     "file": "news-freshness.js",
@@ -185,7 +185,7 @@
   },
   {
     "file": "section-search.js",
-    "sha256": "e514b4ae46860575cd848139fc8165842ea4a5ceca9319298377c36a18ce977c"
+    "sha256": "60b8f1930fd9a75fd5251e93dac3efdc66a5347569967446a655d3929370ba32"
   },
   {
     "file": "site-fetch.mjs",

@@ -158,6 +158,8 @@ const DESK_QUERIES = [
   ['ai', '("artificial intelligence" OR cyberattack OR "data breach" OR ransomware OR hackers) when:1d'],
   ['space', '(NASA OR SpaceX OR ESA OR ISRO OR astronomers OR "space mission" OR "rocket launch") when:1d'],
   ['odd', '(bizarre OR weird OR strange OR quirky OR unusual) when:1d'],
+  // Random News (owner, 22 Oct 2026): people trending on social media, and what made them trend.
+  ['odd', '("went viral" OR "goes viral" OR "viral video" OR "trending on" OR "internet sensation") (TikTok OR Instagram OR X OR YouTube OR Facebook OR Snapchat OR Threads OR Reddit) when:1d'],
   ['living', '("cost of living" OR "fuel price" OR "petrol price" OR "food prices" OR inflation OR "electricity tariff" OR rent) when:1d'],
   ['jobs', '(jobs OR hiring OR layoffs OR unemployment OR "job cuts" OR recruitment) when:1d'],
   ['goodnews', '("good news" OR breakthrough OR rescued OR celebrates OR "first-ever" OR reunited) when:1d'],
@@ -168,7 +170,7 @@ const DESK_QUERIES = [
 // stories that never outrank the big multi-source stories, so a section with
 // too few current stories gets one boosted candidate every ten minutes until
 // it fills. The writer still decides the final section.
-export const DESK_SECTIONS = Object.freeze(DESK_QUERIES.map(([section]) => section).filter(section => section !== 'jobs'));
+export const DESK_SECTIONS = Object.freeze([...new Set(DESK_QUERIES.map(([section]) => section))].filter(section => section !== 'jobs'));
 export const DESK_SECTION_MIN = 3;
 export function deskSectionsShort(liveCounts) {
   return new Set(DESK_SECTIONS.filter(section => (Number(liveCounts?.[section]) || 0) < DESK_SECTION_MIN));
@@ -184,11 +186,15 @@ export function feedsFor(target, rot) {
     return [{ country: 'WW', section: 'celebrity', celeb: slugify(name), bing: true, url: bingUrl(`"${name}"`) }];
   }
   if (target === 'SOCIAL') {
+    // People trending on social media, and what made them trend, for Random News (owner, 22 Oct 2026); celebrities'
+    // own social media posts for Celebrity. In turn, beside the entertainment page.
     const qs = [
-      '(Instagram OR TikTok OR "posted on X" OR YouTube) (celebrity OR singer OR rapper OR actress OR actor) when:1d',
-      '(celebrity OR star) (viral OR "social media" OR Instagram) when:1d',
+      ['odd', '("went viral" OR "goes viral" OR "viral video") (TikTok OR Instagram OR X OR YouTube OR Facebook)'],
+      ['odd', '("trending on" OR "internet sensation" OR "breaks the internet" OR "viral moment") ("social media" OR TikTok OR Instagram OR X)'],
+      ['celebrity', '(Instagram OR TikTok OR "posted on X" OR YouTube) (celebrity OR singer OR rapper OR actress OR actor)'],
     ];
-    return [{ country: 'WW', section: 'celebrity', bing: true, url: bingUrl(qs[rot % qs.length].replace(' when:1d', '')) },
+    const [section, q] = qs[rot % qs.length];
+    return [{ country: 'WW', section, bing: true, url: bingUrl(q) },
             { country: 'WW', section: 'celebrity', url: feedUrl({ edition: 'en-US;US;US:en', topic: 'ENTERTAINMENT' }) }];
   }
   if (target === 'WORLD') {

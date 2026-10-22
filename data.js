@@ -353,7 +353,7 @@ export const CATEGORIES = [
 { id: 'ai', name: 'AI & Cyber' },
 { id: 'space', name: 'Space' },
 { id: 'upcoming', name: 'Coming Up' },
-{ id: 'odd', name: 'Odd News' },
+{ id: 'odd', name: 'Random News' },
 { id: 'living', name: 'Cost of Living' },
 { id: 'jobs', name: 'Jobs' },
 { id: 'goodnews', name: 'Good News' },
