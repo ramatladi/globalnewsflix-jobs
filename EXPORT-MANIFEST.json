@@ -201,15 +201,19 @@
   },
   {
     "file": "tenders-collect.js",
-    "sha256": "dfb5efa8664897126c1ecb1281712df3348ac807d360d719ebbbad7673612a9a"
+    "sha256": "2ba836c7d82db6e5394c7e81d171c9f202815f240a4d0109de6f4c132f1cf190"
   },
   {
     "file": "tenders-kinds.js",
-    "sha256": "8f724f9cf1215cdfba25f2ada5097e8d18e47647ba0e5db6c94e0f1858754a5a"
+    "sha256": "50179c1a114de6ed76080a45a24d69d6415b451263be9965363ab167fae269a8"
   },
   {
     "file": "tenders-runner.mjs",
     "sha256": "5d84ed8f7147a36aeea3bc1380d55c28f0b9b51220f6789ee9751f5f52e3ea87"
+  },
+  {
+    "file": "tests/fixtures/afdb-solicitations.html",
+    "sha256": "371f158c18986f7214c106920ac06fcee352cd15232835547e2d21986d5b86f0"
   },
   {
     "file": "tests/fixtures/jobs-ats-ashby-prosus.json",
@@ -360,8 +364,16 @@
     "sha256": "df6993ec7caac3031dc7baf6c4ae389da996f9ad71cd223af1532c28fade1840"
   },
   {
+    "file": "tests/fixtures/ted-search.json",
+    "sha256": "1cd0caa4e91d3ffeef273ffbbf3c8d2d03ddb51f411529f6cbc7eecda3c33c9b"
+  },
+  {
     "file": "tests/fixtures/ungm-search.html",
     "sha256": "c0fd5b5174a0ec7890832dffc7000eadd0f8caf619b4110ffd7d1db4374e071f"
+  },
+  {
+    "file": "tests/fixtures/wbg-advertisements.json",
+    "sha256": "6c27a7cbd168fc3aed1710f582b9ff80e24efc035a9c51b94ee7c29db557110b"
   },
   {
     "file": "tests/ingest-runner.test.mjs",
@@ -449,7 +461,7 @@
   },
   {
     "file": "tests/tenders-collect.test.mjs",
-    "sha256": "7a357da3255efe7fd527596a44b1072b152399f0a6502100abf1b5a49c74b490"
+    "sha256": "8f9a416dec80c793c86a5497ad781d40fdfaef6a7231b3f6d3c3fb5fdb0208ae"
   },
   {
     "file": "tests/test_article_media.py",

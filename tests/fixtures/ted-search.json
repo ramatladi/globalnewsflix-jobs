@@ -1,0 +1,234 @@
+{
+"totalNoticeCount": 7,
+"notices": [
+{
+"title-proc": {
+"slv": "OBLAČILA IN OBUTEV IZVAJALCEV CIVILNE OBRAMBE, okoljsko manj obremenjujoče blago"
+},
+"deadline-receipt-tender-date-lot": [
+"2026-10-26+02:00",
+"2026-10-26+02:00"
+],
+"notice-type": "cn-standard",
+"publication-number": "586748-2026",
+"procedure-identifier": "3caa222c-b764-4360-987d-7c5c71284ce8",
+"buyer-country": [
+"SVN"
+],
+"place-of-performance-country-proc": [
+"SVN"
+],
+"place-of-performance-country-lot": [
+"SVN",
+"SVN"
+],
+"procedure-type": "open",
+"deadline-receipt-tender-time-lot": [
+"09:00:00+02:00",
+"09:00:00+02:00"
+],
+"buyer-name": {
+"slv": [
+"MINISTRSTVO ZA OBRAMBO"
+]
+},
+"publication-date": "2026-08-25+02:00",
+"internal-identifier-proc": "MORS 212/2026-ODP"
+},
+{
+"title-proc": {
+"eng": "Professional Services Dynamic Purchasing System (PROSERV DPS)"
+},
+"notice-type": "cn-standard",
+"procedure-type": "oth-mult",
+"publication-number": "210206-2024",
+"buyer-name": {
+"eng": [
+"European Commission, DG DIGIT - Digital Services"
+]
+},
+"publication-date": "2024-04-10Z",
+"procedure-identifier": "fce11b2a-c0ce-4c24-bad5-f7794b3918c3",
+"buyer-country": [
+"BEL"
+],
+"deadline-receipt-request-time-lot": [
+"00:00:59+02:00"
+],
+"deadline-receipt-request-date-lot": [
+"2028-04-08+02:00"
+],
+"internal-identifier-proc": "EC-DIGIT/2024/DPS/0001"
+},
+{
+"title-proc": {
+"eng": "Construction of the new waste treatment facility for the Queen Elizabeth Hospital in Barbados"
+},
+"deadline-receipt-tender-date-lot": [
+"2026-10-27-04:00"
+],
+"notice-type": "cn-standard",
+"publication-number": "692396-2026",
+"procedure-identifier": "7c822183-2eae-480f-aad6-015d57d2bc33",
+"buyer-country": [
+"BRB"
+],
+"place-of-performance-country-proc": [
+"BRB"
+],
+"place-of-performance-country-lot": [
+"BRB"
+],
+"procedure-type": "open",
+"deadline-receipt-tender-time-lot": [
+"19:00:00-04:00"
+],
+"buyer-name": {
+"eng": [
+"United Nations Office for Project Services (UNOPS)"
+]
+},
+"publication-date": "2026-10-07+02:00",
+"internal-identifier-proc": "ITB/2026/63895"
+},
+{
+"title-proc": {
+"fra": "Fourniture d’objets promotionnels et de communication"
+},
+"deadline-receipt-tender-date-lot": [
+"2026-10-23+02:00"
+],
+"notice-type": "cn-standard",
+"publication-number": "632753-2026",
+"procedure-identifier": "fff4df92-c51c-46bb-bc98-2a2f52dd02e0",
+"buyer-country": [
+"LUX"
+],
+"place-of-performance-country-proc": [
+"LUX"
+],
+"place-of-performance-country-lot": [
+"LUX"
+],
+"procedure-type": "open",
+"deadline-receipt-tender-time-lot": [
+"17:00:59+02:00"
+],
+"buyer-name": {
+"fra": [
+"Cour de justice de l’Union européenne"
+]
+},
+"publication-date": "2026-09-14+02:00",
+"internal-identifier-proc": "CURIA/2026/OP/0019"
+},
+{
+"buyer-country": [
+"LUX"
+],
+"deadline-receipt-tender-date-lot": [
+"2026-11-12+01:00",
+"2026-11-12+01:00"
+],
+"internal-identifier-proc": "EUROHPC/2026/OP/0008",
+"notice-type": "cn-standard",
+"place-of-performance-country-lot": [
+"CZE",
+"DNK",
+"EST",
+"FIN",
+"FRA",
+"LVA",
+"POL",
+"SWE",
+"DEU",
+"ESP",
+"GRC",
+"ITA",
+"PRT"
+],
+"place-of-performance-country-proc": [
+"CZE",
+"DEU",
+"DNK",
+"ESP",
+"EST",
+"FIN",
+"FRA",
+"GRC",
+"ITA",
+"LVA",
+"POL",
+"PRT",
+"SWE"
+],
+"procedure-identifier": "bc712395-692d-41ab-aa25-8e254ae86eb2",
+"procedure-type": "open",
+"publication-date": "2026-07-30+02:00",
+"publication-number": "529135-2026",
+"title-proc": {
+"eng": "Call for Tenders for the selection of Artificial Intelligence Gigafactory Consortia and the establishment of AI Gigafactories"
+},
+"buyer-name": {
+"eng": [
+"European High-Performance Computing Joint Undertaking"
+]
+}
+},
+{
+"buyer-country": [
+"BEL"
+],
+"deadline-receipt-tender-date-lot": [
+"2026-10-30+01:00"
+],
+"deadline-receipt-tender-time-lot": [
+"17:00:59+01:00"
+],
+"notice-type": "cn-standard",
+"publication-date": "2026-07-10+02:00",
+"publication-number": "476935-2026",
+"procedure-identifier": "a3f0d1c2-0000-4000-8000-000000000001",
+"procedure-type": "open",
+"title-proc": {
+"eng": "Efficient, experience-driven, proactive and resilient solutions and support services"
+},
+"buyer-name": {
+"eng": [
+"European Commission, DG DIGIT - Digital Services"
+]
+}
+},
+{
+"title-proc": {
+"eng": "Construction of the new waste treatment facility for the Queen Elizabeth Hospital in Barbados"
+},
+"deadline-receipt-tender-date-lot": [
+"2026-10-27-04:00"
+],
+"notice-type": "cn-standard",
+"publication-number": "650001-2026",
+"procedure-identifier": "7c822183-2eae-480f-aad6-015d57d2bc33",
+"buyer-country": [
+"BRB"
+],
+"place-of-performance-country-proc": [
+"BRB"
+],
+"place-of-performance-country-lot": [
+"BRB"
+],
+"procedure-type": "open",
+"deadline-receipt-tender-time-lot": [
+"19:00:00-04:00"
+],
+"buyer-name": {
+"eng": [
+"United Nations Office for Project Services (UNOPS)"
+]
+},
+"publication-date": "2026-09-20+02:00",
+"internal-identifier-proc": "ITB/2026/63895"
+}
+]
+}
