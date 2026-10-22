@@ -572,6 +572,22 @@ export function sectionQuery(lang, section) {
   return q.length === 1 ? q[0] : `(${q.join(' OR ')})`;
 }
 
+// Bing reads a word search loosely (21-22 Oct: a Danish "klima" search returned bank and retail news), so its
+// results are kept only when the title or summary holds one of the section's words: at a word start in alphabetic
+// scripts (so "klima" matches "klimaet" but "rent" never matches "current"), anywhere in scripts written without
+// spaces.
+const fold = s => String(s || '').normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase();
+const escapeRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+export function namesSection(lang, section, text) {
+  const t = fold(text);
+  return sectionTerms(lang, section).some(term => {
+    const w = fold(term);
+    if (!w) return false;
+    if (/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Thai}]/u.test(w)) return t.includes(w);
+    return new RegExp(`(?<![\\p{L}\\p{N}])${escapeRe(w)}`, 'u').test(t);
+  });
+}
+
 // The edition's sections to search, fewest stories first (ties in the fixed section order). counts: { section: n }.
 export function shortSections(counts, min = EDITION_SECTION_MIN) {
   return EDITION_SECTIONS.map((section, i) => ({ section, i, n: Number(counts?.[section]) || 0 }))

@@ -14,7 +14,7 @@ import { resolveGoogleNewsUrl } from './google-news-url.js';
 import { changeQuery, changeRotation, isOfficialHost, namesChange, OFFICIAL_SOURCE_BONUS } from './change-search.js';
 import { eventQuery, eventRotation, namesEvent } from './event-search.js';
 import { extractArticleImages } from './article-images.js';
-import { SECTION_TOPIC, sectionQuery, sectionForVisit } from './section-search.js';
+import { SECTION_TOPIC, sectionQuery, sectionForVisit, namesSection } from './section-search.js';
 
 const UA = 'Mozilla/5.0 (compatible; GlobalNewsFlixBot/1.0; +https://globalnewsflix.com/about)';
 
@@ -285,7 +285,7 @@ export function sectionFeedsFor(target, rot, sections) {
   if (!section || !c) return [];
   const lang = newsLang(c.code);
   const own = c.edition && feedLanguage(feedUrl({ edition: c.edition })) === lang ? c.edition : '';
-  const base = { country: c.code, section, sectionSearch: true };
+  const base = { country: c.code, section, sectionSearch: true, lang };
   if (own && SECTION_TOPIC[section]) return [{ ...base, url: feedUrl({ edition: own, topic: SECTION_TOPIC[section] }) }];
   const q = sectionQuery(lang, section);
   if (!q) return [];
@@ -345,6 +345,8 @@ export async function collectTarget(target, rot, { sections } = {}) {
       let items = parseFeed(xml).filter(it => isFreshNews(it.pub) && !nonNewsReason(it.title) &&
         !sponsoredContentReason({ url: it.link, title: it.title, source: it.source })).slice(0, f.change || f.event ? COMING_UP_RESULTS : f.sectionSearch ? SECTION_RESULTS : 30);
       if (f.bing) items = clusterBySimilarity(items);
+      // A Bing section search keeps the reports whose title or summary holds one of the section's words.
+      if (f.sectionSearch && f.bing) items = items.filter(it => namesSection(f.lang, f.section, it.cluster.map(x => `${x.t || ''} ${x.d || ''}`).join(' ') || it.title));
       // Bing answers a change search with loosely related reports too: keep those whose title or summary names a change,
       // and in English (read worldwide) also the edition's country.
       if ((f.change || f.event) && f.bing) items = items.filter(it => { const text = it.cluster.map(x => `${x.t || ''} ${x.d || ''}`).join(' ') || it.title;
