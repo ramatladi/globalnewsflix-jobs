@@ -16,12 +16,16 @@
     "sha256": "dccf9656b7a07334374a49a79db19266444bd91beb40661f8943c3446ba51b0b"
   },
   {
+    "file": ".github/workflows/tenders.yml",
+    "sha256": "1f23ced3eed7718b145d6a75875e7c39d6ecf6c6b21c7dfe3171add8db85b99b"
+  },
+  {
     "file": ".github/workflows/tests.yml",
     "sha256": "72d9abe609d68d80496008c3289c6a921ec76b8680d8249db6668596d0b547a1"
   },
   {
     "file": ".gitignore",
-    "sha256": "5b68c0c13292ca62601966b3ddfd456feba186d7ce3e1c0a440d295b4976895c"
+    "sha256": "84250fc9b38fead441d99b727e1e3b8a29ef6a09e884ad9864a1ce696f54741d"
   },
   {
     "file": "README.md",
@@ -29,7 +33,7 @@
   },
   {
     "file": "article-images.js",
-    "sha256": "ca6ca6d54bf62f62a42e2905568563f99047247cde5796933a4a55a567f13e2b"
+    "sha256": "1eb9b586d7929383e18396093f2b1ec443e79aee971ea0013c663ff923e4ef9d"
   },
   {
     "file": "article_media.py",
@@ -157,7 +161,7 @@
   },
   {
     "file": "news-collect.js",
-    "sha256": "b02b39c09ccb05db75614fc6c52c85f9a2f31d6ba6ac1dcc2c6594b7bd3271c3"
+    "sha256": "3a562babd57396c586087aacc0cebe6ceac663c410bcfdd46e518c2ab395973e"
   },
   {
     "file": "news-freshness.js",
@@ -194,6 +198,18 @@
   {
     "file": "sponsored-content.js",
     "sha256": "bae196167372b9cfac401ccf99940eb7f937255cf7070c3c720e9fd4e40e7d94"
+  },
+  {
+    "file": "tenders-collect.js",
+    "sha256": "dfb5efa8664897126c1ecb1281712df3348ac807d360d719ebbbad7673612a9a"
+  },
+  {
+    "file": "tenders-kinds.js",
+    "sha256": "8f724f9cf1215cdfba25f2ada5097e8d18e47647ba0e5db6c94e0f1858754a5a"
+  },
+  {
+    "file": "tenders-runner.mjs",
+    "sha256": "5d84ed8f7147a36aeea3bc1380d55c28f0b9b51220f6789ee9751f5f52e3ea87"
   },
   {
     "file": "tests/fixtures/jobs-ats-ashby-prosus.json",
@@ -344,6 +360,10 @@
     "sha256": "df6993ec7caac3031dc7baf6c4ae389da996f9ad71cd223af1532c28fade1840"
   },
   {
+    "file": "tests/fixtures/ungm-search.html",
+    "sha256": "c0fd5b5174a0ec7890832dffc7000eadd0f8caf619b4110ffd7d1db4374e071f"
+  },
+  {
     "file": "tests/ingest-runner.test.mjs",
     "sha256": "33083bb41406ec4d4178b226d27f2623a65e329af1e0b30e6187972bd1bc7fca"
   },
@@ -426,6 +446,10 @@
   {
     "file": "tests/site-fetch.test.mjs",
     "sha256": "456e705e34d5ca20f07f1e1fefe2c12637da0328c6f23d2af8a8e72523a7dd7d"
+  },
+  {
+    "file": "tests/tenders-collect.test.mjs",
+    "sha256": "7a357da3255efe7fd527596a44b1072b152399f0a6502100abf1b5a49c74b490"
   },
   {
     "file": "tests/test_article_media.py",

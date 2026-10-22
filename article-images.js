@@ -43,6 +43,7 @@ export const blockedImageCandidate = blockedImageUrl;
 export const publicArticleImage = article => article && (blockedImageUrl(article.image) || BLOCKED_ARTICLE_RESOURCES.get(article.id) === imageResourceKey(article.image))
   ? { ...article, image: null, image_credit: null } : article;
 
+export const AI_IMAGE_PATH = /(?:^|[\/_.-])(?:ai[-_]generated|chatgpt[-_ ]image|gemini[-_]generated|dall[-_]e[-_\d]|midjourney|stable[-_]diffusion)(?=$|[\/_.\-\d])/i;
 export function usablePublisherImage(url) {
   if (blockedImageCandidate(url)) return false;
   if (!url || !/^https:\/\//.test(url)) return false;
@@ -51,6 +52,8 @@ export function usablePublisherImage(url) {
   let filename;
   try { filename = new URL(url).pathname.split('/').at(-1); } catch { return false; }
   if (/^no[-_]?img\.(?:jpe?g|png|webp|gif)$/i.test(filename)) return false;
+  // Pictures their own address marks as AI-generated (owner rule: real photographs only).
+  if (AI_IMAGE_PATH.test(decodeURIComponent(url.split('?')[0]))) return false;
   // Width hints in the URL (e.g. w=120, /150x150/) below a sensible size mean a thumbnail.
   const w = url.match(/[?&/_-]w(?:idth)?[=_-]?(\d{2,4})\b/i) || url.match(/\/(\d{2,4})x\d{2,4}\//);
   if (w && Number(w[1]) < 500) return false;

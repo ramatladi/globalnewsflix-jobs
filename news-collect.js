@@ -554,8 +554,9 @@ export async function enrich(cand, opts = {}) {
     const paras = [];
     const pre = /<p[^>]*>([\s\S]*?)<\/p>/gi; let p, len = 0;
     while ((p = pre.exec(body)) && len < SOURCE_EXCERPT_MAX) {
-      const t = stripTags(p[1]);
-      if (t.length > 60 && !/cookie|subscribe|sign up|newsletter|all rights reserved/i.test(t)) { paras.push(t); len += t.length; }
+      // Cloudflare's hidden e-mail placeholder is dropped; a paragraph with undecodable characters is skipped.
+      const t = stripTags(p[1]).replace(/\[email(?:\s|&nbsp;|\u00a0)*protected\]/gi, '').replace(/\s{2,}/g, ' ').trim();
+      if (t.length > 60 && !/\uFFFD/.test(t) && !/cookie|subscribe|sign up|newsletter|all rights reserved/i.test(t)) { paras.push(t); len += t.length; }
     }
     out.excerpt = paras.join('\n').slice(0, SOURCE_EXCERPT_MAX);
   } catch { out.fetch_reason = out.fetch_reason || 'page could not be read'; }
@@ -589,7 +590,15 @@ async function readPublisherPage(url, { timeoutMs, retries, lang, fetchImpl }) {
   let html = await boundedPublisherText(r, PUBLISHER_FETCH_MAX_BYTES, { truncate: true });
   if (html === null) return { html: null, url: finalUrl, reason: 'undecodable text' };
   if (html.length > 600000) html = html.slice(0, 600000);
+  // A bot check or challenge page is not the report (owner, 22 Oct 2026: a story was written from one). It is never
+  // worked around: the report is simply unread.
+  if (challengePage(html)) return { html: null, url: finalUrl, reason: 'bot check page' };
   return { html, url: finalUrl };
+}
+export function challengePage(html) {
+  const head = String(html || '').slice(0, 8000);
+  return /<title>\s*(?:Just a moment|Attention Required|Access denied|Making sure you(?:'|&#39;|’)re not a bot|Website Protection\s*<|DDoS-Guard|Checking your browser|Verifying you are human)/i.test(head) ||
+    /cf-chl-|challenge-platform|_Incapsula_Resource|within\.website\/x\/cmd\/anubis|anubis_challenge|id="anubis|ddos-guard|perimeterx|px-captcha|captcha-delivery\.com/i.test(head);
 }
 
 export async function enrichMulti(cand, extra = 4, opts = {}) {
