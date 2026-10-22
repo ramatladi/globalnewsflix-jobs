@@ -556,6 +556,8 @@ PUBLISHER_UA = "Mozilla/5.0 (compatible; GlobalNewsFlixBot/1.0; +https://globaln
 # The site's native-photo gate (photo-policy.js PHOTO_MAX_PIXELS, media.js goodSize and fetchImageBytes).
 # A copy outside it is always refused there, so offering it only wastes one of the story's attempts.
 PHOTO_MAX_PIXELS = 1_600_000
+# The site's smallest native photo (photo-policy.js PHOTO_MIN_WIDTH/HEIGHT, owner 22 Oct 2026: 800x400, was 1200x600).
+PHOTO_MIN_W, PHOTO_MIN_H = 800, 400
 PHOTO_MAX_BYTES = 4_500_000
 BAD_IMG = re.compile(r"logo|icon|sprite|avatar|placeholder|default|blank|pixel|1x1|badge|banner|ads?[/_-]|advert|promo|newsletter|author|byline|favicon|\.svg|\.gif", re.I)
 MIN_MEDIA = int(os.environ.get("MIN_MEDIA", "1"))
@@ -671,8 +673,8 @@ def same_photo(a, b):
 
 def native_fits(w, h, size=0, fmt="JPEG", animated=False):
     """True when the site's own checks can accept these exact bytes (format, byte size and native pixel bounds)."""
-    return (fmt in ("JPEG", "PNG", "WEBP") and not animated and size <= PHOTO_MAX_BYTES and 1200 <= w <= 20000 and
-            600 <= h <= 20000 and w * h <= PHOTO_MAX_PIXELS and 0.5 <= w / h <= 2.5)
+    return (fmt in ("JPEG", "PNG", "WEBP") and not animated and size <= PHOTO_MAX_BYTES and PHOTO_MIN_W <= w <= 20000 and
+            PHOTO_MIN_H <= h <= 20000 and w * h <= PHOTO_MAX_PIXELS and 0.5 <= w / h <= 2.5)
 
 
 def load_image(url, referer, n, tag=""):
@@ -683,7 +685,7 @@ def load_image(url, referer, n, tag=""):
         # The site measures the stored (unrotated) header size, so the gate uses it too.
         fits = native_fits(raw.width, raw.height, len(data), raw.format, getattr(raw, "is_animated", False))
         im = ImageOps.exif_transpose(raw).convert("RGB")
-        if im.width < 1200 or im.height < 600 or im.width / im.height < 0.5 or im.width / im.height > 2.5: return None
+        if im.width < PHOTO_MIN_W or im.height < PHOTO_MIN_H or im.width / im.height < 0.5 or im.width / im.height > 2.5: return None
         dest = OUT / f"news_{tag}{n}.jpg"; im.save(dest, "JPEG", quality=92)
         # Copies outside the site's gate still count towards "several outlets used this photo"; they are just never offered.
         return {"path": str(dest), "url": url, "w": im.width, "h": im.height, "fits": fits, "fp": fingerprints(im), "feat": features(str(dest)), "perceptual": {"algorithm": "dhash-v1", "sha256": hashlib.sha256(data).hexdigest(), "hashes": [f"{value:016x}" for value in fingerprints(im)]}}

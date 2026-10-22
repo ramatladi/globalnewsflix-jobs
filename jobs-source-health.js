@@ -14,7 +14,7 @@ export function auditAutomaticOutput(source, rows, rawCount, now=Date.now()) {
 // 'single-document' is a board the platform documents as one complete response
 // (Ashby, Recruitee, Personio); d.ats selects that reader's request limit.
 export function automaticRefreshHealth(d){
- if(d?.status==='failed'||['source-request-cap','budget-exhausted','not-attempted-budget','automatic-quality-breaker','upload-failed','source-unavailable','robots-disallowed'].includes(d?.reason))return {healthy:false,reason:d.reason||'automatic-refresh-failed'};
+ if(d?.status==='failed'||['source-request-cap','budget-exhausted','not-attempted-budget','automatic-quality-breaker','upload-failed','source-unavailable','robots-disallowed'].includes(d?.reason)||/^source-unavailable-/.test(d?.reason||''))return {healthy:false,reason:d.reason||'automatic-refresh-failed'};
  if(d?.sourceRequestCap===true)return {healthy:false,reason:'source-request-cap'};
  if(d?.budgetExhausted===true)return {healthy:false,reason:d.httpRequests===0?'not-attempted-budget':'budget-exhausted'};
  if(!Number.isSafeInteger(d?.httpRequests)||d.httpRequests<=0||d.httpRequests>automaticSourceRequestLimit(d.src,d.ats)||d.budgetExhausted!==false||d.sourceRequestCap!==false)return {healthy:false,reason:'refresh-transport-unverified'};

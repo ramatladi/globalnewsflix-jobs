@@ -160,8 +160,11 @@ class NativeGate(unittest.TestCase):
         self.assertTrue(mv.native_fits(1200, 630))
         self.assertFalse(mv.native_fits(1920, 1080), 'over the 1.6 MP decode bound')
         self.assertFalse(mv.native_fits(1500, 1125), 'over the 1.6 MP decode bound')
-        self.assertFalse(mv.native_fits(1199, 800))
-        self.assertFalse(mv.native_fits(1600, 599))
+        # Since 22 Oct 2026 the smallest photo is 800x400 (photo-policy.js PHOTO_MIN_WIDTH/HEIGHT).
+        self.assertTrue(mv.native_fits(800, 450))
+        self.assertTrue(mv.native_fits(1199, 800))
+        self.assertFalse(mv.native_fits(799, 600))
+        self.assertFalse(mv.native_fits(1600, 399))
         self.assertFalse(mv.native_fits(1600, 1000, size=4_500_001))
         self.assertFalse(mv.native_fits(1600, 1000, fmt='GIF'))
         self.assertFalse(mv.native_fits(1600, 1000, animated=True))

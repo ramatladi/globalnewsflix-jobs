@@ -78,7 +78,7 @@ pg|Procter & Gamble|PG|c|wd|pg.wd5.myworkdayjobs.com|pg|1000
 unilever|Unilever|ULVR|c|wd|unilever.wd3.myworkdayjobs.com|unilever|Unilever_Experienced_Professionals
 visa|Visa|V|c|wd|visa.wd5.myworkdayjobs.com|visa|Visa
 abb|ABB|ABBN|c|wd|abb.wd3.myworkdayjobs.com|abb|External_Career_Page
-samsung|Samsung Electronics|005930|c|wd|samsung.wd1.myworkdayjobs.com|samsung|Samsung_Careers
+samsung|Samsung Electronics|005930|c|wd|sec.wd3.myworkdayjobs.com|sec|Samsung_Careers
 mondelez|Mondelez International|MDLZ|c|wd|wd3.myworkdaysite.com|mdlz|External
 riotinto|Rio Tinto|RIO|c|wd|wd3.myworkdaysite.com|riotinto|RioTinto_Careers
 nedbank|Nedbank Group|NED|c|sf|jobs.nedbank.co.za
@@ -1297,6 +1297,8 @@ export function manualCollectionOrder(selected) {
   const manual = selected.filter(s => !s.automatic);
   return [...manual.filter(s => s.id === 'diageo'), ...manual.filter(s => s.id !== 'diageo')];
 }
+// 'source-unavailable', with the last refusal when there was one (e.g. 'source-unavailable-http-403').
+export const unavailableReason = last => /^(http-\d{3}|network)$/.test(last || '') ? 'source-unavailable-' + last : 'source-unavailable';
 // Only authoritative complete snapshots authorize removal, including confirmed zero.
 // Partial lists still contribute jobs and diagnostics without deleting unseen rows.
 export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null, options = {}) {
@@ -1316,12 +1318,19 @@ export async function collectJobs(fetchImpl = fetch, log = () => {}, only = null
       let result = null;
       // Automatic boards use their evidence-reporting readers; manual readers are unchanged.
       const reader = (s.automatic && AUTOMATIC_COLLECT[s.ats]) || COLLECT[s.ats];
-      try { result = sourceFetch ? await reader?.(sourceFetch, s, log) : null; } catch { /* recorded below without raw provider data */ }
+      // The employer's last refusal (an HTTP status, or 'network' for no answer) is recorded with a failed source, so a
+      // source that fails only from the collector shows why (no response body is kept).
+      const refusal = { last: '' };
+      const watched = sourceFetch && Object.assign(async (...args) => {
+        try { const r = await sourceFetch(...args); if (r && !r.ok) refusal.last = 'http-' + r.status; return r; }
+        catch (error) { if (!String(error?.code || '').startsWith('AUTOMATIC_')) refusal.last = 'network'; throw error; }
+      }, sourceFetch.diagnostics ? { diagnostics: sourceFetch.diagnostics } : {});
+      try { result = watched ? await reader?.(watched, s, log) : null; } catch { /* recorded below without raw provider data */ }
       let transportState=s.automatic ? sourceFetch?.diagnostics?.() : null;
       let telemetry=transportState ? {pagesFetched:result?.pagesFetched,reportedTotal:result?.reportedTotal,paginationEnd:result?.paginationEnd,...(result?.phaseHttp?{phaseHttp:result.phaseHttp}:{}),...(result?.detailReasons?{detailReasons:result.detailReasons,listingRejected:result.listingRejected}:{}),httpRequests:transportState.httpRequests,elapsedMs:transportState.elapsedMs,budgetExhausted:transportState.budgetExhausted,sourceRequestCap:result?.sourceRequestCap===true||transportState.sourceRequestCap,paginationComplete:REFRESHABLE_AUTOMATIC_READERS.has(s.ats)&&result?.paginationComplete===true} : {};
       let budgetReason=transportState?.sourceRequestCap ? 'source-request-cap' : transportState?.budgetExhausted ? (transportState.httpRequests===0 ? 'not-attempted-budget' : 'budget-exhausted') : transportState?.robotsDisallowed ? 'robots-disallowed' : '';
       if (!result) {
-        diagnostics.push({ src: s.id, status: 'failed', rawCount: 0, acceptedCount: 0, reason: budgetReason || 'source-unavailable', attemptedAt, ...telemetry });
+        diagnostics.push({ src: s.id, status: 'failed', rawCount: 0, acceptedCount: 0, reason: budgetReason || unavailableReason(refusal.last), attemptedAt, ...telemetry });
         log(`${s.name}: no valid answer`); continue;
       }
       const list = result.rows;

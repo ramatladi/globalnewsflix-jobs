@@ -129,7 +129,7 @@
   },
   {
     "file": "jobs-source-health.js",
-    "sha256": "b6f67e5cb6f4161f02eb32eb307b2b3fd8886d0532a5ba3d3060a69710fc1928"
+    "sha256": "e46f8dac5982996f1140f244305ce1a63308fde1dbeaf1349c38c01ced52fd3e"
   },
   {
     "file": "jobs-uct.js",
@@ -145,7 +145,7 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "cd03f859c1315a06db7d2d3e0865db4e56f015a2e13a448c3fa2598a03ff2daf"
+    "sha256": "5388ffafa5a01e26409fb7dca7a011aca40487907f98e4aa81410250480a21ff"
   },
   {
     "file": "make_photos.py",
@@ -153,7 +153,7 @@
   },
   {
     "file": "make_video.py",
-    "sha256": "5cc3fc529f193c2bc4de2f0cb07d79b1cb41e6310cec9858c360420b368acbbc"
+    "sha256": "eb8233c7a0f8ad7622a92cddf0b85c6fa04661765bd0fde19324f77b715a235f"
   },
   {
     "file": "news-collect.js",
@@ -441,7 +441,7 @@
   },
   {
     "file": "tests/test_photo_runs.py",
-    "sha256": "d40de4ddeee944545ab30c8f76c82670738890db0ce6b8d06cb4d92e40aa1b86"
+    "sha256": "9c87b43f24d3b55d7a791d7249089c5a7d48be2d8b09f3571530dd74d48aed36"
   },
   {
     "file": "za-government-directory.json",
