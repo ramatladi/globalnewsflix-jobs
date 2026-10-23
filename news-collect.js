@@ -92,7 +92,7 @@ export const ROUTINE_SEARCH = /\b(?:lottery|lotto|sambad|powerball|mega ?million
 // A match ("Chiefs vs Arrows", "Flamengo x Palmeiras") trends as a match: its report stays in its own section.
 export const isMatchup = q => /\bvs\.?\b|\bversus\b|\bv\b|\s[xX]\s/.test(String(q || ''));
 export const trendScore = t => t.news.length * 10 + TREND_BONUS + Math.min(30, Math.round(5 * Math.log10(Math.max(1, t.traffic))));
-const trendKey = q => String(q).toLowerCase().normalize('NFKC').replace(/\s+/g, ' ').trim();
+export const trendKey = q => String(q).toLowerCase().normalize('NFKC').replace(/\s+/g, ' ').trim();
 
 function feedUrl({ edition, q, topic }) {
   const [hl, gl, ceid] = edition.split(';');
