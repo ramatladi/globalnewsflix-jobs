@@ -205,15 +205,15 @@
   },
   {
     "file": "tenders-collect.js",
-    "sha256": "4e92f98c7a199c5a8c9fee94b958d18e052ce884de016e66283bc86149e43c84"
+    "sha256": "d72ac2464fc1cb8b9c8d1fc8586154a39fc2988735c5597d2cec12039d2bf47f"
   },
   {
     "file": "tenders-kinds.js",
-    "sha256": "44962e8c1747288a2b63bd3ce3d92fae1d48ea87cf41ca1c336fc0118929b21d"
+    "sha256": "f32b3bbeda912fba18ff615594d9943186dba8f64c55bb4bb36a7b1f14fb209d"
   },
   {
     "file": "tenders-national.js",
-    "sha256": "2061344f5604bf564bfe88a0a89615df0f4c9fb33afb9f5d1ccc1478c59bd289"
+    "sha256": "2bd1247ee6fccd7629f3a70e267ab4d781db205d0d71c067ba7109123dabc1ab"
   },
   {
     "file": "tenders-runner.mjs",
@@ -246,6 +246,10 @@
   {
     "file": "tests/fixtures/gb-contracts-finder.json",
     "sha256": "ea24ee40512aa00ba1ee4e64e274219065323f3c0e4125f46e108ca371749d48"
+  },
+  {
+    "file": "tests/fixtures/gb-find-a-tender.json",
+    "sha256": "a45e3a044d020816bfdff03b52fe6ee4509dcd47a727fa83e8df2989fb5deba6"
   },
   {
     "file": "tests/fixtures/jobs-ats-ashby-prosus.json",
@@ -509,11 +513,11 @@
   },
   {
     "file": "tests/tenders-national.test.mjs",
-    "sha256": "f36ea6ca3d54dd1207d4f92c4cb8c879f95b52bb9c9a435d2bab9413516a9a8c"
+    "sha256": "d9d4cd0e90776cd7fea1e175f96eef6185dacf489f2b7294d9d6a4144fdfccf0"
   },
   {
     "file": "tests/tenders-public.test.mjs",
-    "sha256": "3248f74594903470ae04523c5e10ef0811e46f327b918113f705f3533b30ebae"
+    "sha256": "1e4bef7dce1a2ab2a486943d67bff2fa63441a16ba8ee4732814f9f7d4226d3a"
   },
   {
     "file": "tests/test_article_media.py",

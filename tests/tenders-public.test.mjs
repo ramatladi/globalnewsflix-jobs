@@ -6,7 +6,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { tedRow, tednRow, tedTexts, collectTed, tedAllQuery, tedQuery, TED_API, UA, etzaRow, etzaNature, zaTime, collectEtza, ETZA_LIST, collectTenders, shorten } from '../tenders-collect.js';
+import { tedRow, tednRow, tedTexts, collectTed, tedAllQuery, tedQuery, TED_API, UA, etzaRow, etzaNature, zaTime, collectEtza, ETZA_LIST, collectTenders, shorten, withoutRepeats, REPEATS } from '../tenders-collect.js';
 import { guessLang } from '../lang-guess.js';
 import { TENDER_SOURCES } from '../tenders-kinds.js';
 import { postWithRetry, fullRun, TENDER_ROWS_PER_UPLOAD } from '../tenders-runner.mjs';
@@ -112,13 +112,23 @@ test('every run reads every source; the daily one adds TED\'s public buyers and 
   const seen = [];
   const fetchImpl = async (url, init) => { seen.push(String(url)); return new Response('{}', { status: 404 }); };
   const out = await collectTenders(fetchImpl, { now: NOW, delayMs: 0, afdbDelayMs: 0 });
-  assert.deepEqual(out.diagnostics.map(d => d.src), ['ungm', 'ted', 'wbg', 'afdb', 'etza', 'ppke', 'gets', 'aust', 'secop', 'cabuy', 'cfgb']);
+  assert.deepEqual(out.diagnostics.map(d => d.src), ['ungm', 'ted', 'wbg', 'afdb', 'etza', 'ppke', 'gets', 'aust', 'secop', 'cabuy', 'ftsgb', 'cfgb']);
   const fullOut = await collectTenders(fetchImpl, { now: NOW, delayMs: 0, afdbDelayMs: 0, full: true });
-  assert.deepEqual(fullOut.diagnostics.map(d => d.src), ['ungm', 'ted', 'tedn', 'wbg', 'afdb', 'etza', 'ppke', 'gets', 'aust', 'secop', 'cabuy', 'cfgb', 'pncp']);
+  assert.deepEqual(fullOut.diagnostics.map(d => d.src), ['ungm', 'ted', 'tedn', 'wbg', 'afdb', 'etza', 'ppke', 'gets', 'aust', 'secop', 'cabuy', 'ftsgb', 'cfgb', 'pncp']);
   assert.equal(fullRun(Date.parse('2026-10-23T02:23:00Z'), {}), true, 'the first run of the day');
   assert.equal(fullRun(Date.parse('2026-10-23T10:23:00Z'), {}), false);
   assert.equal(fullRun(Date.parse('2026-10-23T10:23:00Z'), { TENDERS_FULL: '1' }), true, 'a manual run');
   assert.equal(TENDER_ROWS_PER_UPLOAD, 250);
+});
+
+test('a procurement announced on both of the UK\'s portals is listed once, from Find a Tender', () => {
+  const r = (src, id, title, closes, extra = {}) => ({ id: `${src}:${id}`, src, title, countries: ['GB'], closes_ts: Date.parse(closes), ...extra });
+  const rows = [r('ftsgb', 'a', 'Supply of Gates & Fittings', '2026-11-20T16:00:00Z'), r('cfgb', '1', 'Supply of gates and fittings', '2026-11-20T17:00:00Z'),
+    r('cfgb', '2', 'Supply of Gates & Fittings', '2026-11-27T16:00:00Z'), r('cfgb', '3', 'Grounds maintenance', '2026-11-20T16:00:00Z'), r('ungm', '9', 'Supply of Gates & Fittings', '2026-11-20T16:00:00Z')];
+  const diags = [{ src: 'ftsgb', acceptedCount: 1 }, { src: 'cfgb', acceptedCount: 3 }];
+  assert.deepEqual(withoutRepeats(rows, diags).map(x => x.id), ['ftsgb:a', 'cfgb:2', 'cfgb:3', 'ungm:9'], 'the same title closing the same day; "&" and "and" alike');
+  assert.deepEqual(diags.map(d => d.acceptedCount), [1, 2]);
+  assert.deepEqual(REPEATS, { cfgb: 'ftsgb' });
 });
 
 test('uploads are tried again after a refusal for too many requests or a server error, as long as asked', async () => {

@@ -1,13 +1,14 @@
 // National public procurement portals (owner, 23 Oct 2026: each country's public sector, from official systems only):
-// Kenya's PPIP, New Zealand's GETS, Australia's AusTender, Colombia's SECOP II, Brazil's PNCP and CanadaBuys. Fixtures
-// are the portals' answers as served, cut to a few notices (Kenya's: the officer who posted each tender, the bidders
-// and the subscribers removed; PNCP's: empty fields left out; CanadaBuys': long fields cut at 300 characters and contact
-// people replaced; Contracts Finder's: one long description shortened).
+// Kenya's PPIP, New Zealand's GETS, Australia's AusTender, Colombia's SECOP II, Brazil's PNCP, CanadaBuys and the UK's
+// Find a Tender and Contracts Finder. Fixtures are the portals' answers as served, cut to a few notices (Kenya's: the
+// officer who posted each tender, the bidders and the subscribers removed; PNCP's: empty fields left out; CanadaBuys':
+// long fields cut at 300 characters and contact people replaced; Contracts Finder's: one long description shortened;
+// Find a Tender's: the fields the reader uses, descriptions cut near 420 characters, a few places and lots).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { ppkeRow, collectPpke, PPKE, parseGets, getsRow, getsTime, collectGets, GETS_FEED, parseAusTender, ausTenderRow, ausTime, collectAusTender, AUSTENDER_LIST,
-  secopRow, secopQuery, collectSecop, SECOP_DATA, pncpRow, collectPncp, PNCP_SEARCH, BR_STATES, zonedTime, isoLocal, kindOfTitle, parseCsv, canadaBuysRow, caSlug, collectCanadaBuys, CANADABUYS_CSV, contractsFinderRow, collectContractsFinder, CF_SEARCH, retrying } from '../tenders-national.js';
+  secopRow, secopQuery, collectSecop, SECOP_DATA, pncpRow, collectPncp, PNCP_SEARCH, BR_STATES, zonedTime, isoLocal, kindOfTitle, parseCsv, canadaBuysRow, caSlug, collectCanadaBuys, CANADABUYS_CSV, contractsFinderRow, collectContractsFinder, CF_SEARCH, findTenderRow, collectFindATender, FTS_RELEASES, retrying } from '../tenders-national.js';
 import { TENDER_SOURCES } from '../tenders-kinds.js';
 
 const fx = name => readFileSync(new URL('./fixtures/' + name, import.meta.url), 'utf8');
@@ -26,6 +27,7 @@ test('local times in each portal\'s time zone, with the offset of that day', () 
   assert.deepEqual(['RFQ for laptops', 'Registration of Interest – roads', 'Request for Tender: bridge', 'Primary Sector Growth Fund', 'Panel'].map(t => kindOfTitle(t)), ['rfq', 'eoi', 'itb', 'grant', 'other']);
   for (const id of ['ppke', 'gets', 'aust', 'secop', 'pncp', 'cabuy']) assert.deepEqual(TENDER_SOURCES[id].issuerTypes, ['public'], id);
   assert.deepEqual(TENDER_SOURCES.cfgb.issuerTypes, ['public', 'private'], 'Contracts Finder also carries companies\' sub-contracts');
+  assert.deepEqual(TENDER_SOURCES.ftsgb.issuerTypes, ['public', 'private'], 'Find a Tender also carries private utilities\' tenders');
 });
 
 test('Kenya: the active tenders on PPIP, with their documents and nothing about the officers who posted them', async () => {
@@ -158,7 +160,7 @@ test('Canada: CanadaBuys\' daily file of open tender notices, in English with th
 test('United Kingdom: Contracts Finder\'s open notices, public bodies\' and the sub-contracts companies advertise, in UK time', async () => {
   const data = JSON.parse(fx('gb-contracts-finder.json'));
   const [leeds, school, dstl, amey] = data.noticeList;
-  assert.deepEqual(contractsFinderRow(leeds, NOW), { id: 'cfgb:382dcd02-e90d-46d3-a0d4-d58205dc7ca2', src: 'cfgb', issuer: 'University of Leeds', issuer_type: 'public', title: 'GB-Leeds: 202526 5920 Six Miele Glasswashers',
+  assert.deepEqual(contractsFinderRow(leeds, NOW), { id: 'cfgb:382dcd02-e90d-46d3-a0d4-d58205dc7ca2', src: 'cfgb', issuer: 'University of Leeds', issuer_type: 'public', title: '202526 5920 Six Miele Glasswashers',
     lang: 'en', langs: ['en'], ref: 'BIP1077224731', kind: 'itb', countries: ['GB'], published_ts: Date.parse('2026-10-23T12:00:00Z'), closes_ts: Date.parse('2026-11-13T17:00:00Z'), closes_text: '13-Nov-2026 17:00 (GMT 0.00)',
     url: 'https://www.contractsfinder.service.gov.uk/Notice/382dcd02-e90d-46d3-a0d4-d58205dc7ca2', category: 'Washer/dryers', nature: 'goods', region: 'Yorkshire and The Humber', value_amount: 100000, value_cur: 'GBP',
     summary: 'The Supply, Installation & Commissioning of Six (6) Miele PLW 8683 [LD DC10] Glasswashers and associated accessories.' });
@@ -176,6 +178,49 @@ test('United Kingdom: Contracts Finder\'s open notices, public bodies\' and the 
   assert.match(calls[0].init.headers['user-agent'], UA);
   const more = await collectContractsFinder(async () => new Response(JSON.stringify(data)), { now: NOW });
   assert.deepEqual([more.diagnostics[0].status, more.diagnostics[0].reason], ['partial', 'over-limit'], 'more open notices than one search returns: nothing pruned');
+});
+
+test('United Kingdom: Find a Tender\'s procurements whose latest notice invites tenders or requests to participate', async () => {
+  const data = JSON.parse(fx('gb-find-a-tender.json')), by = {};
+  for (const r of data.releases) (by[r.ocid] ||= []).push(r);
+  const row = ocid => findTenderRow(by[`ocds-h6vhtk-${ocid}`], NOW, { since: NOW - 60 * 86400000 });
+  assert.deepEqual(row('078e5d'), { id: 'ftsgb:h6vhtk-078e5d', src: 'ftsgb', issuer: 'Medway Council', issuer_type: 'public', title: 'ESPLANADE GARDENS, ROCHESTER LANDSCAPE IMPROVEMENTS - OCT 2026',
+    lang: 'en', langs: ['en'], ref: null, kind: 'itb', countries: ['GB'], published_ts: Date.parse('2026-10-22T12:00:00Z'), closes_ts: Date.parse('2026-11-10T12:00:00Z'), closes_text: '10-Nov-2026 12:00 (GMT 0.00)',
+    url: 'https://www.find-tender.service.gov.uk/Notice/100204-2026', category: 'Landscaping work for parks', nature: 'works', region: 'South East', value_amount: 400000, value_cur: 'GBP',
+    summary: row('078e5d').summary, info: null });
+  assert.match(row('078e5d').summary, /^Revised specification from July\/Aug opportunity .+…$/);
+  // Changed after it was published: the change is what is listed, linking to it, published when the tender was.
+  const guys = row('078d51');
+  assert.deepEqual([guys.url, guys.published_ts, guys.ref, guys.region, guys.value_amount], ['https://www.find-tender.service.gov.uk/Notice/099705-2026', Date.parse('2026-10-21T12:00:00Z'), '6297-26', 'London', 2600000]);
+  assert.match(guys.summary, /^Refurbishment of the Apheresis Suite/);
+  // A private utility's; requests to participate first (a pre-qualification), until the deadline for expressions of interest.
+  const yw = row('06d1fa');
+  assert.deepEqual([yw.issuer_type, yw.kind, yw.closes_text, yw.region, yw.category], ['private', 'prequal', '13-Nov-2026 23:59 (GMT 0.00)', null, 'Marketing services'], 'the whole UK names no region');
+  assert.deepEqual([row('078e63').issuer_type, row('078e63').kind], ['private', 'itb']);
+  assert.doesNotMatch(row('078e63').summary, /\*\*/);
+  const har = row('078d60');
+  assert.deepEqual([har.kind, har.closes_ts, har.closes_text, har.info, har.region, har.nature], ['prequal', Date.parse('2026-11-20T23:59:00Z'), '20-Nov-2026', { esub: true }, 'London', 'services'], 'a restricted procedure, closing at the end of the day');
+  assert.equal(row('078df0').region, null, 'delivered across several regions');
+  assert.equal(row('069b78').region, null, 'delivered abroad (an embassy): no UK region');
+  assert.equal(row('077919'), null, 'a change that awards the contract: no closing date, nothing to bid for');
+  assert.equal(row('078c55'), null, 'awarded');
+  assert.equal(findTenderRow([...by['ocds-h6vhtk-078e5d'], { ocid: 'ocds-h6vhtk-078e5d', id: '100300-2026', date: '2026-10-23T09:00:00+01:00', tag: ['tenderCancellation'] }], NOW), null, 'cancelled');
+  assert.equal(findTenderRow(by['ocds-h6vhtk-078e5d'], Date.parse('2026-11-11T00:00:00Z')), null, 'closed');
+  const upd = findTenderRow([by['ocds-h6vhtk-078d51'][0]], NOW, { since: Date.parse('2026-08-24T08:00:00Z') });
+  assert.equal(upd.published_ts, Date.parse('2026-08-24T12:00:00Z'), 'its tender notice is older than those read: no later than that');
+  assert.equal(findTenderRow([{ ...by['ocds-h6vhtk-078e5d'][0], tender: { ...by['ocds-h6vhtk-078e5d'][0].tender, title: 'GB-Chatham: Esplanade Gardens' } }], NOW).title, 'Esplanade Gardens');
+  // Sixty days of notices, page after page, each from the same service only, two seconds apart, naming itself.
+  const calls = [], pages = [{ releases: data.releases.slice(0, 5), links: { next: `${FTS_RELEASES}?limit=100&cursor=abc` } }, { releases: data.releases.slice(5), links: {} }];
+  const out = await collectFindATender(async (url, init) => { calls.push({ url, init }); return new Response(JSON.stringify(pages[calls.length - 1])); }, { now: NOW, delayMs: 0 });
+  assert.deepEqual([out.rows.length, out.diagnostics[0].status, out.diagnostics[0].rawCount, calls.length], [7, 'complete', 10, 2]);
+  assert.equal(calls[0].url, `${FTS_RELEASES}?limit=100&updatedFrom=2026-08-24T08:00:00`);
+  assert.equal(calls[1].url, `${FTS_RELEASES}?limit=100&cursor=abc`);
+  assert.match(calls[0].init.headers['user-agent'], UA);
+  assert.equal(out.rows.find(r => r.id === 'ftsgb:h6vhtk-078d51').url, 'https://www.find-tender.service.gov.uk/Notice/099705-2026', 'the change and its tender, read on one page or two');
+  const away = await collectFindATender(async () => new Response(JSON.stringify({ releases: [], links: { next: 'https://example.com/api?x' } })), { now: NOW, delayMs: 0 });
+  assert.deepEqual([away.diagnostics[0].status, away.diagnostics[0].reason], ['failed', 'bad-response'], 'a next page elsewhere is never followed');
+  const busy = await collectFindATender(async () => new Response('', { status: 429 }), { now: NOW, delayMs: 0, retryMs: 0 });
+  assert.deepEqual([busy.diagnostics[0].reason, busy.diagnostics[0].httpRequests], ['list-http-429', 5], 'asked to slow down: tried again, then left for the next run');
 });
 
 test('a portal that asks the crawler to slow down is waited for, as long as it asks, then asked again', async () => {

@@ -11,7 +11,7 @@
 import { UNGM_KIND, countryCode, countryFromIso3, TENDER_MAX_AHEAD_MS, TED_LANG } from './tenders-kinds.js';
 import { guessLang } from './lang-guess.js';
 import { COUNTRY, newsLang } from './data.js';
-import { collectPpke, collectGets, collectAusTender, collectSecop, collectPncp, collectCanadaBuys, collectContractsFinder, retrying } from './tenders-national.js';
+import { collectPpke, collectGets, collectAusTender, collectSecop, collectPncp, collectCanadaBuys, collectContractsFinder, collectFindATender, retrying } from './tenders-national.js';
 
 // The usual form for a named crawler (as the site's photo checks use): it says who is asking and where to reach us.
 export const UA = 'Mozilla/5.0 (compatible; GlobalNewsflixTenders/1.0; +https://globalnewsflix.com/contact)';
@@ -515,10 +515,23 @@ export async function collectEtza(fetchImpl = fetch, { now = Date.now(), delayMs
 }
 
 // Every source, one after another. `full` (once a day) adds the EU and EEA public sector's notices from TED and
-// Brazil's from PNCP (some 40,000 each).
+// Brazil's from PNCP (some 40,000 each). Find a Tender before Contracts Finder: the notices both list come from it.
 export async function collectTenders(fetchImpl = fetch, opts = {}) {
   const parts = [await collectUngm(fetchImpl, opts), await collectTed(fetchImpl, opts), await collectWbg(fetchImpl, opts), await collectAfdb(fetchImpl, opts), await collectEtza(fetchImpl, opts),
-    await collectPpke(fetchImpl, opts), await collectGets(fetchImpl, opts), await collectAusTender(fetchImpl, opts), await collectSecop(fetchImpl, opts), await collectCanadaBuys(fetchImpl, opts), await collectContractsFinder(fetchImpl, opts), ...(opts.full ? [await collectPncp(fetchImpl, opts)] : [])];
+    await collectPpke(fetchImpl, opts), await collectGets(fetchImpl, opts), await collectAusTender(fetchImpl, opts), await collectSecop(fetchImpl, opts), await collectCanadaBuys(fetchImpl, opts), await collectFindATender(fetchImpl, opts),
+    await collectContractsFinder(fetchImpl, opts), ...(opts.full ? [await collectPncp(fetchImpl, opts)] : [])];
   const diagnostics = parts.flatMap(p => p.diagnostics);
-  return { rows: parts.flatMap(p => p.rows), diagnostics, complete: diagnostics.filter(d => d.status === 'complete').map(d => d.src) };
+  return { rows: withoutRepeats(parts.flatMap(p => p.rows), diagnostics), diagnostics, complete: diagnostics.filter(d => d.status === 'complete').map(d => d.src) };
+}
+
+// A procurement some buyers announce on two of their country's portals is listed once: the UK's on Find a Tender, the
+// fuller notice, rather than Contracts Finder. The same notice: the same title, closing the same day.
+export const REPEATS = Object.freeze({ cfgb: 'ftsgb' });
+const sameKey = r => `${r.countries.join(',')}|${Math.floor(r.closes_ts / 86400000)}|${String(r.title).toLowerCase().replace(/&/g, 'and').replace(/[^\p{L}\p{N}]+/gu, '')}`;
+export function withoutRepeats(rows, diagnostics = []) {
+  const keys = {};
+  for (const r of rows) if (Object.values(REPEATS).includes(r.src)) (keys[r.src] ||= new Set()).add(sameKey(r));
+  const out = rows.filter(r => !(REPEATS[r.src] && keys[REPEATS[r.src]]?.has(sameKey(r))));
+  for (const d of diagnostics) if (REPEATS[d.src]) d.acceptedCount = out.filter(r => r.src === d.src).length;
+  return out;
 }

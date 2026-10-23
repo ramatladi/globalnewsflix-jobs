@@ -1,7 +1,8 @@
 // Tenders from national public procurement systems (owner, 23 Oct 2026): each country's official portal, never an
 // aggregator. Kenya's Public Procurement Information Portal (PPRA), New Zealand's GETS (MBIE), Australia's AusTender
-// (Department of Finance), Colombia's SECOP II (Colombia Compra Eficiente, through the national open data portal) and
-// Brazil's PNCP (Portal Nacional de Contratações Públicas, once a day: some 39,000 open notices). Each notice keeps
+// (Department of Finance), Colombia's SECOP II (Colombia Compra Eficiente, through the national open data portal),
+// Brazil's PNCP (Portal Nacional de Contratações Públicas, once a day: some 39,000 open notices), CanadaBuys (Public
+// Services and Procurement Canada) and the UK's Find a Tender (Cabinet Office) and Contracts Finder. Each notice keeps
 // what its portal states, links to its official page, and never the names, e-mail addresses or telephone numbers of
 // the officials who posted it. The crawler names itself (tenders-collect.js) and keeps to one request at a time.
 import { TENDER_MAX_AHEAD_MS } from './tenders-kinds.js';
@@ -389,14 +390,17 @@ const CF_TYPES = { Contract: 'itb', PreProcurement: 'rfi', EarlyEngagement: 'rfi
 // CPV divisions: 45 is works, those below goods, those above services (48, software packages, goods).
 const cpvNature = code => { const d = Number(String(code || '').slice(0, 2)); return !d ? null : d === 45 ? 'works' : d < 45 || d === 48 ? 'goods' : 'services'; };
 const company = name => /\b(limited|ltd|plc|llp|lp)\.?$/i.test(String(name || '').trim());
+// The time in UK time, as the site words it ("13-Nov-2026 17:00 (GMT 0.00)").
+const londonText = ts => { const off = offsetMinutes(ts, 'Europe/London'), l = new Date(ts + off * 60000); return zoneText(l.getUTCFullYear(), l.getUTCMonth() + 1, l.getUTCDate(), l.getUTCHours(), l.getUTCMinutes(), off); };
+// Titles some e-tendering systems prefix with the place, in the old European style ("GB-Leeds: ...").
+const ukTitle = v => clean(decode(v), 300).replace(/^GB-[A-Za-z .'&-]{2,40}:\s+/, '');
 export function contractsFinderRow(n, now = Date.now()) {
   const x = n?.item;
   if (!x || typeof x !== 'object' || x.noticeStatus !== 'Open' || !CF_TYPES[x.noticeType] || !/^[0-9a-f-]{36}$/.test(String(x.id || ''))) return null;
   const ts = Date.parse(x.deadlineDate || '');
-  const title = clean(decode(x.title), 300), issuer = clean(decode(x.organisationName), 120);
+  const title = ukTitle(x.title), issuer = clean(decode(x.organisationName), 120);
   if (!Number.isFinite(ts) || !closesOk(ts, now) || title.length < 4 || issuer.length < 2) return null;
-  const local = new Date(ts + offsetMinutes(ts, 'Europe/London') * 60000);
-  const closes_text = zoneText(local.getUTCFullYear(), local.getUTCMonth() + 1, local.getUTCDate(), local.getUTCHours(), local.getUTCMinutes(), offsetMinutes(ts, 'Europe/London'));
+  const closes_text = londonText(ts);
   const value = Number(x.valueHigh) > 0 ? Number(x.valueHigh) : Number(x.valueLow) > 0 ? Number(x.valueLow) : null;
   const region = clean(x.regionText || x.region, 60);
   return { id: `cfgb:${x.id}`, src: 'cfgb', issuer, issuer_type: company(issuer) ? 'private' : 'public', title, lang: 'en', langs: ['en'],
@@ -425,5 +429,85 @@ export async function collectContractsFinder(fetchImpl = fetch, { now = Date.now
       }
     }
   } catch (e) { diag.reason = diag.reason || failure(e); }
+  return finish(diag, rows, complete, log);
+}
+
+// --- United Kingdom: Find a Tender (Cabinet Office) ---
+// The UK's notices of contracts above the thresholds and, under the Procurement Act 2023, of public bodies' other open
+// competitions; Scotland's, Wales's and Northern Ireland's portals publish theirs there too. Its open data (OCDS) lists
+// every notice by date, newest first; a procurement is open while its latest notice still invites tenders or requests
+// to participate.
+export const FIND_A_TENDER = 'https://www.find-tender.service.gov.uk';
+export const FTS_RELEASES = `${FIND_A_TENDER}/api/1.0/ocdsReleasePackages`;
+// The notices of the last 60 days: a procurement's latest notice is among them (nearly every one closes within two
+// months of its last notice; one changed later is read again with its change). Some 300 requests, one at a time.
+export const FTS_DAYS = 60;
+const NUTS1 = Object.freeze({ UKC: 'North East', UKD: 'North West', UKE: 'Yorkshire and The Humber', UKF: 'East Midlands', UKG: 'West Midlands', UKH: 'East of England', UKI: 'London',
+  UKJ: 'South East', UKK: 'South West', UKL: 'Wales', UKM: 'Scotland', UKN: 'Northern Ireland' });
+const OPEN_TAGS = ['tender', 'tenderUpdate'];
+// "2026-11-20T16:00:00Z", or a day alone ("2026-11-20", which closes at its end, UK time).
+function ftsTime(v) {
+  const s = String(v || '');
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return isoLocal(s, 'Europe/London');
+  const ts = Date.parse(s);
+  return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(s) && Number.isFinite(ts) ? { ts, text: londonText(ts) } : null;
+}
+// One procurement's notices -> the row the site stores, or null. `since`: the earliest notice read, the most that can
+// be said of when a procurement first announced before it was published.
+export function findTenderRow(notices, now = Date.now(), { since = null } = {}) {
+  const list = (Array.isArray(notices) ? notices : []).filter(x => x && typeof x === 'object' && Array.isArray(x.tag) && Number.isFinite(Date.parse(x.date)))
+    .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+  const x = list[0], t = x?.tender;
+  // Awarded, cancelled or otherwise moved on: the latest notice is something other than the tender's.
+  if (!x || !x.tag.length || x.tag.some(g => !OPEN_TAGS.includes(g)) || !t || typeof t !== 'object' || (t.status != null && t.status !== 'active')) return null;
+  if (!/^\d{6}-\d{4}$/.test(String(x.id || ''))) return null;
+  const toTender = !!t.tenderPeriod?.endDate, closes = ftsTime(toTender ? t.tenderPeriod.endDate : t.expressionOfInterestDeadline);
+  const buyer = (Array.isArray(x.parties) ? x.parties : []).find(p => p?.roles?.includes?.('buyer'));
+  const title = ukTitle(t.title), issuer = clean(decode(x.buyer?.name || buyer?.name), 120);
+  if (!closes || !closesOk(closes.ts, now) || title.length < 4 || issuer.length < 2) return null;
+  const types = (buyer?.details?.classifications || []).map(c => c?.id);
+  // Where: the UK region all its places of delivery are in, when there is one.
+  const places = new Set((Array.isArray(t.items) ? t.items : []).flatMap(i => (Array.isArray(i?.deliveryAddresses) ? i.deliveryAddresses : []).map(a => NUTS1[String(a?.region || '').slice(0, 3)] || '')));
+  const region = places.size === 1 && !places.has('') ? [...places][0] : null;
+  const cpv = t.classification?.scheme === 'CPV' ? t.classification : (t.items || []).flatMap(i => i?.additionalClassifications || []).find(c => c?.scheme === 'CPV');
+  const v = t.value || {}, amount = Number(v.amount) > 0 ? Number(v.amount) : Number(v.amountGross) > 0 ? Number(v.amountGross) : null, cur = /^[A-Z]{3}$/.test(v.currency || '') ? v.currency : null;
+  const first = list.filter(r => r.tag.includes('tender')).pop();
+  // Requests to participate first (a restricted procedure, or a flexible one's first stage): a pre-qualification.
+  const prequal = !toTender || /restricted/i.test(t.procurementMethodDetails || '');
+  return { id: `ftsgb:${x.ocid.replace(/^ocds-/, '').replace(/[^A-Za-z0-9._-]/g, '')}`, src: 'ftsgb', issuer, issuer_type: types.includes('privateUtility') || company(issuer) ? 'private' : 'public', title,
+    lang: /^[a-z]{2}$/.test(x.language || '') ? x.language : 'en', langs: [/^[a-z]{2}$/.test(x.language || '') ? x.language : 'en'], ref: t.id && !String(t.id).startsWith('ocds-') ? clean(t.id, 120) : null,
+    kind: prequal ? 'prequal' : kindOfTitle(title, 'itb'), countries: ['GB'], published_ts: published(first?.date, now) ?? (since ? noon(...new Date(since).toISOString().slice(0, 10).split('-').map(Number)) : null),
+    closes_ts: closes.ts, closes_text: closes.text, url: `${FIND_A_TENDER}/Notice/${x.id}`, category: clean(cpv?.description, 80) || null,
+    nature: ['goods', 'works', 'services'].includes(t.mainProcurementCategory) ? t.mainProcurementCategory : cpvNature(cpv?.id), region,
+    value_amount: cur && amount >= 1000 ? amount : null, value_cur: cur && amount >= 1000 ? cur : null,
+    summary: summaryOf(text(String(t.description || '').replace(/\*\*|__/g, ''))), info: Array.isArray(t.submissionMethod) && t.submissionMethod.includes('electronicSubmission') ? { esub: true } : null };
+}
+export async function collectFindATender(fetchImpl = fetch, { now = Date.now(), days = FTS_DAYS, delayMs = 2000, maxPages = 600, retryMs = 20000, log = () => {} } = {}) {
+  const diag = diagnostic('ftsgb'), byOcid = new Map(), since = now - days * 86400000;
+  let url = `${FTS_RELEASES}?limit=100&updatedFrom=${new Date(since).toISOString().slice(0, 19)}`, complete = false;
+  try {
+    for (let page = 1; page <= maxPages; page++) {
+      if (page > 1) await sleep(delayMs);
+      const res = await retrying(fetchImpl, url, () => ({ headers: { 'user-agent': UA, accept: 'application/json' }, signal: AbortSignal.timeout(90000) }), { retryMs, count: () => diag.httpRequests++ });
+      if (!res.ok) { diag.reason = `list-http-${res.status}`; break; }
+      const data = await res.json().catch(() => null);
+      if (!data || !Array.isArray(data.releases)) { diag.reason = 'bad-response'; break; }
+      diag.rawCount += data.releases.length;
+      for (const x of data.releases) {
+        if (typeof x?.ocid !== 'string' || !Array.isArray(x.tag)) continue;
+        // Of a notice that invites nothing (an award, a cancellation), only its date and kind are kept.
+        const keep = x.tag.some(g => OPEN_TAGS.includes(g)) ? x : { ocid: x.ocid, id: x.id, date: x.date, tag: x.tag };
+        if (!byOcid.has(x.ocid)) byOcid.set(x.ocid, []);
+        byOcid.get(x.ocid).push(keep);
+      }
+      const next = data.links?.next;
+      if (!next) { complete = true; break; }
+      // The next page, only ever on the same service.
+      if (typeof next !== 'string' || !next.startsWith(`${FTS_RELEASES}?`)) { diag.reason = 'bad-response'; break; }
+      url = next;
+    }
+  } catch (e) { diag.reason = diag.reason || failure(e); }
+  const rows = [];
+  for (const list of byOcid.values()) { const r = findTenderRow(list, now, { since }); if (r) rows.push(r); }
   return finish(diag, rows, complete, log);
 }
