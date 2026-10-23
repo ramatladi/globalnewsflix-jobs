@@ -17,7 +17,7 @@
   },
   {
     "file": ".github/workflows/tenders.yml",
-    "sha256": "1f23ced3eed7718b145d6a75875e7c39d6ecf6c6b21c7dfe3171add8db85b99b"
+    "sha256": "959b9e85353b54c2afa39d600c95cbf2bd892db2231e32592ba5d06b26d7662f"
   },
   {
     "file": ".github/workflows/tests.yml",
@@ -149,7 +149,11 @@
   },
   {
     "file": "jobs.js",
-    "sha256": "5388ffafa5a01e26409fb7dca7a011aca40487907f98e4aa81410250480a21ff"
+    "sha256": "cb221d4c93c95b8b589670787ace71f2997e7a628694588ae96f853231ab5798"
+  },
+  {
+    "file": "lang-guess.js",
+    "sha256": "d19e612c377cf3327e6e97030dc42597f976e1a20a6e20ba6413bbaa80ec13c4"
   },
   {
     "file": "make_photos.py",
@@ -201,19 +205,23 @@
   },
   {
     "file": "tenders-collect.js",
-    "sha256": "cef92b4d023ef8ffba088a0897846bcca9d0c4206df0a819be22148509a6d6d7"
+    "sha256": "dadf4f13d2d939bdb07acffd7dbe047285a18726b96aa1df0a7262a97b0b84f9"
   },
   {
     "file": "tenders-kinds.js",
-    "sha256": "5d3bd5c4e423221a033c4c164fac022331988b5b5cf6d7f697baa6b4a2b866dd"
+    "sha256": "54c1fdea5218d50e9c2270c5fe5206b6ec426bb1f6b8acb22d544643c7c2a444"
   },
   {
     "file": "tenders-runner.mjs",
-    "sha256": "5d84ed8f7147a36aeea3bc1380d55c28f0b9b51220f6789ee9751f5f52e3ea87"
+    "sha256": "e3c4474d2c13869a242aa739db021f51b2d4d1bf4fc2b416a566c6c64dfd5525"
   },
   {
     "file": "tests/fixtures/afdb-solicitations.html",
     "sha256": "371f158c18986f7214c106920ac06fcee352cd15232835547e2d21986d5b86f0"
+  },
+  {
+    "file": "tests/fixtures/etenders-za-opportunities.json",
+    "sha256": "985cf7bfe4f8389d321b3f2e9f7034913f918a04bf3f83d66e293c8491144edb"
   },
   {
     "file": "tests/fixtures/jobs-ats-ashby-prosus.json",
@@ -364,6 +372,10 @@
     "sha256": "df6993ec7caac3031dc7baf6c4ae389da996f9ad71cd223af1532c28fade1840"
   },
   {
+    "file": "tests/fixtures/ted-public.json",
+    "sha256": "5cdb143087becfc4637d42ab22c56ded0278e56e4da245eb1bf24ff6ed081e9f"
+  },
+  {
     "file": "tests/fixtures/ted-search.json",
     "sha256": "1cd0caa4e91d3ffeef273ffbbf3c8d2d03ddb51f411529f6cbc7eecda3c33c9b"
   },
@@ -461,7 +473,11 @@
   },
   {
     "file": "tests/tenders-collect.test.mjs",
-    "sha256": "2da8acd9e46af169a0f4ddc17d47c80852300332bce9d7d5a0635c7591fdaa3a"
+    "sha256": "567248505e221d9d1532215ea964173b6b48d21dcad23e73ff85dd6385605154"
+  },
+  {
+    "file": "tests/tenders-public.test.mjs",
+    "sha256": "a3a8e9de2930b6eacc3b0d5a85a3563f95744b44859ccd586fcfb81dab9516d4"
   },
   {
     "file": "tests/test_article_media.py",

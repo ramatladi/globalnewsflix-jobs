@@ -6,7 +6,8 @@ import { boardNamesOrganization } from './jobs-identity-name.js';
 // Pay is shown only where the employer publishes it.
 import discoveredManifest from './data/discovered-sources/manifest.json' with { type: 'json' };
 import { registeredDiscoveredSources, discoveredJobAllowed } from './jobs-discovered-sources.js';
-import { COUNTRY } from './data.js';
+import { COUNTRY, newsLang } from './data.js';
+import { guessLang } from './lang-guess.js';
 import { iso3To2 } from './iso-codes.js';
 import { workdayQueryFacets } from './jobs-workday-query.js';
 import { platformForReader } from './jobs-pacing.js';

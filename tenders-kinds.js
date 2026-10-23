@@ -1,6 +1,6 @@
-// Tenders (owner, 22 Oct 2026): open tenders issued by international organisations and private companies only,
-// never by governments or state-owned bodies, each linking to the issuer's official notice. Shared by the
-// public collector (tenders-collect.js) and the site (tenders.js).
+// Tenders: open tenders from international organisations and private companies (owner, 22 Oct 2026) and, in each
+// country, from the public sector (owner, 23 Oct 2026), read only from official systems, never from aggregators, each
+// linking to the official notice. Shared by the public collector (tenders-collect.js) and the site (tenders.js).
 import { COUNTRIES } from './data.js';
 import { iso3To2 } from './iso-codes.js';
 
@@ -17,16 +17,36 @@ export const UNGM_KIND = Object.freeze({
   'call for individual consultants': 'consultant', 'grant support-call for proposal': 'grant', 'call for implementing partners': 'partner',
 });
 
-// The sources the site accepts, each with the hosts its notices live on. issuerType: 'io' (international
-// organisation) or 'private' (a company). Government and state-owned issuers are never sources.
+// Who issues a notice: the public sector (government, public bodies and state-owned companies), an international
+// organisation, or a private company. In display order.
+export const ISSUER_TYPES = Object.freeze(['public', 'io', 'private']);
+// What is being bought, where the source says: goods, works (construction) or services.
+export const TENDER_NATURES = Object.freeze(['goods', 'works', 'services']);
+
+// The sources the site accepts: the official systems where issuers publish their notices, with the hosts those
+// notices (and their documents) live on and the kinds of issuer each may carry.
 export const TENDER_SOURCES = Object.freeze({
-  ungm: Object.freeze({ id: 'ungm', name: 'United Nations Global Marketplace', issuerType: 'io', hosts: Object.freeze(['www.ungm.org']) }),
-  // The EU's official journal for tenders: only notices from EU institutions, bodies and agencies and from
-  // international organisations (the collector checks each buyer by name).
-  ted: Object.freeze({ id: 'ted', name: 'Tenders Electronic Daily', issuerType: 'io', hosts: Object.freeze(['ted.europa.eu']) }),
+  ungm: Object.freeze({ id: 'ungm', name: 'United Nations Global Marketplace', issuerTypes: Object.freeze(['io']), hosts: Object.freeze(['www.ungm.org']) }),
+  // The EU's official journal for tenders (the Supplement to the Official Journal of the European Union). ted: notices
+  // from EU institutions, bodies and agencies and from international organisations (the collector checks each buyer
+  // by name); tedn: every other buyer's, the public sector of the EU and EEA countries (and the few bodies TED lists
+  // as awarding subsidised contracts, which are private).
+  ted: Object.freeze({ id: 'ted', name: 'Tenders Electronic Daily', issuerTypes: Object.freeze(['io']), hosts: Object.freeze(['ted.europa.eu']) }),
+  tedn: Object.freeze({ id: 'tedn', name: 'Tenders Electronic Daily', issuerTypes: Object.freeze(['public', 'private']), hosts: Object.freeze(['ted.europa.eu']) }),
   // The World Bank Group's and the African Development Bank Group's own (corporate) procurement.
-  wbg: Object.freeze({ id: 'wbg', name: 'World Bank Group corporate procurement', issuerType: 'io', hosts: Object.freeze(['wbgeprocure-rfxnow.worldbank.org']) }),
-  afdb: Object.freeze({ id: 'afdb', name: 'African Development Bank Group corporate procurement', issuerType: 'io', hosts: Object.freeze(['www.afdb.org']) }),
+  wbg: Object.freeze({ id: 'wbg', name: 'World Bank Group corporate procurement', issuerTypes: Object.freeze(['io']), hosts: Object.freeze(['wbgeprocure-rfxnow.worldbank.org']) }),
+  afdb: Object.freeze({ id: 'afdb', name: 'African Development Bank Group corporate procurement', issuerTypes: Object.freeze(['io']), hosts: Object.freeze(['www.afdb.org']) }),
+  // South Africa's eTenders Publication Portal (National Treasury), where national and provincial departments,
+  // municipalities and state-owned companies must advertise their tenders.
+  etza: Object.freeze({ id: 'etza', name: 'eTenders Publication Portal (National Treasury)', issuerTypes: Object.freeze(['public']), hosts: Object.freeze(['www.etenders.gov.za']), countries: Object.freeze(['ZA']) }),
+});
+
+// TED's language codes (ISO 639-2/B and /T, as its multilingual fields are keyed) to the site's.
+export const TED_LANG = Object.freeze({
+  bul: 'bg', ces: 'cs', cze: 'cs', dan: 'da', deu: 'de', ger: 'de', ell: 'el', gre: 'el', eng: 'en', spa: 'es', est: 'et', fin: 'fi', fra: 'fr', fre: 'fr',
+  gle: 'ga', hrv: 'hr', hun: 'hu', ita: 'it', lit: 'lt', lav: 'lv', mlt: 'mt', nld: 'nl', dut: 'nl', pol: 'pl', por: 'pt', ron: 'ro', rum: 'ro', slk: 'sk',
+  slo: 'sk', slv: 'sl', swe: 'sv', nor: 'no', nob: 'no', nno: 'no', isl: 'is', ice: 'is', mkd: 'mk', srp: 'sr', sqi: 'sq', alb: 'sq', ukr: 'uk', tur: 'tr',
+  ltz: 'lb', cat: 'ca', eus: 'eu', glg: 'gl',
 });
 
 // Country names as UN notices write them ("Tanzania, United Republic of", "Congo, The Democratic Republic of the")

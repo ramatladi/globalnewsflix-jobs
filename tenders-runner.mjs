@@ -1,13 +1,40 @@
 // Scheduled Tenders collector (.github/workflows/tenders.yml in the public collector repository). GitHub OIDC is
 // short-lived and the site accepts it only from that repository's main tenders workflow. Each run reads every
 // source, uploads the open notices and tells the site which sources were read completely (their closed or
-// withdrawn notices are then removed).
+// withdrawn notices are then removed). The first run of the day (and a manual run) also reads the EU and EEA public
+// sector's notices from TED, some 40,000.
 import { writeFile, rename } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import { collectTenders } from './tenders-collect.js';
 
 const SITE = 'https://globalnewsflix.com';
-export const TENDER_ROWS_PER_UPLOAD = 500;
+// Notices with summaries in several languages are large: 250 a request keeps each well under the site's 2 MB limit.
+export const TENDER_ROWS_PER_UPLOAD = 250;
+export const UPLOAD_ATTEMPTS = 4;
+const pause = ms => new Promise(r => setTimeout(r, ms));
+export const fullRun = (runTs, env = process.env) => env.TENDERS_FULL === '1' || new Date(runTs).getUTCHours() < 6;
+
+// One request to the site, tried again after a refusal for too many requests (as long as it asks) or a server error.
+export async function postWithRetry(send, { wait = pause, log = () => {} } = {}) {
+  let last = null;
+  for (let attempt = 1; attempt <= UPLOAD_ATTEMPTS; attempt++) {
+    try {
+      const r = await send();
+      if (r.status !== 429 && r.status < 500) return r;
+      last = r;
+      if (attempt === UPLOAD_ATTEMPTS) return r;
+      const after = Number(r.headers?.get?.('retry-after'));
+      const ms = r.status === 429 && Number.isFinite(after) && after > 0 ? Math.min(after, 75) * 1000 : 15000 * attempt;
+      log(`tenders upload: ${r.status}, trying again in ${Math.round(ms / 1000)}s`);
+      await wait(ms);
+    } catch (error) {
+      if (attempt === UPLOAD_ATTEMPTS) throw error;
+      log('tenders upload: connection failed, trying again');
+      await wait(15000 * attempt);
+    }
+  }
+  return last;
+}
 
 export async function uploadTenders({ rows, diagnostics, complete, runTs, post, log = console.log }) {
   const failed = new Set();
@@ -40,7 +67,7 @@ async function main() {
     return token;
   };
   const post = async (path, body) => {
-    const r = await fetch(SITE + path, { method: 'POST', headers: { authorization: `Bearer ${await getToken()}`, 'content-type': 'application/json', 'user-agent': 'GlobalNewsflixTenders/1.0' }, body: JSON.stringify(body) });
+    const r = await postWithRetry(async () => fetch(SITE + path, { method: 'POST', headers: { authorization: `Bearer ${await getToken()}`, 'content-type': 'application/json', 'user-agent': 'GlobalNewsflixTenders/1.0' }, body: JSON.stringify(body) }), { log: console.log });
     return r.json().catch(() => ({ ok: false, status: r.status }));
   };
   const runTs = Date.now();
@@ -49,7 +76,9 @@ async function main() {
     console.log(`tenders preflight: ${pre?.ok === true && pre.n === 0}`);
     if (pre?.ok !== true) throw new Error('Tenders upload preflight failed');
   }
-  const data = await collectTenders(fetch, { now: runTs, log: console.log });
+  const full = fullRun(runTs);
+  console.log(`tenders: ${full ? 'full run (with the EU and EEA public sector)' : 'regular run'}`);
+  const data = await collectTenders(fetch, { now: runTs, full, log: console.log });
   const report = { runTs, rows: data.rows.length, diagnostics: data.diagnostics, ...(dryRun ? { sample: data.rows.slice(0, 20) } : {}) };
   await writeFile('tenders-report.json.tmp', JSON.stringify(report, null, 1)); await rename('tenders-report.json.tmp', 'tenders-report.json');
   console.log(`tenders: ${data.rows.length} open notices; complete: ${data.complete.join(',') || 'none'}`);

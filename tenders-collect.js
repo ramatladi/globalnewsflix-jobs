@@ -1,12 +1,16 @@
 // Tenders collector (runs in the public collector repository, tenders-runner.mjs): reads open notices from the
-// official issuers' own systems. International organisations: the United Nations Global Marketplace (UNGM), where
-// some 80 UN and other international organisations publish their tenders (owner, 22 Oct 2026: listed despite
-// UNGM's terms, his decision); and Tenders Electronic Daily (TED), the EU's official journal for tenders, through
-// its public search API, keeping only notices from EU institutions, bodies and agencies and from international
-// organisations; and the World Bank Group's and the African Development Bank Group's own corporate procurement
-// pages. Each notice keeps its title, issuer, type, reference, closing time and countries, and links to the
-// official notice. The crawler names itself and keeps to one request at a time.
-import { UNGM_KIND, countryCode, countryFromIso3, TENDER_MAX_AHEAD_MS } from './tenders-kinds.js';
+// official systems where issuers publish them, never from aggregators (owner, 23 Oct 2026). International
+// organisations: the United Nations Global Marketplace (UNGM), where some 80 UN and other international organisations
+// publish their tenders (owner, 22 Oct 2026: listed despite UNGM's terms, his decision); Tenders Electronic Daily
+// (TED), the EU's official journal for tenders, through its public search API; and the World Bank Group's and the
+// African Development Bank Group's own corporate procurement pages. The public sector: TED for the EU and EEA
+// countries (once a day: some 40,000 open notices) and South Africa's eTenders Publication Portal (National
+// Treasury). Each notice keeps its title (in each language it is given in), issuer, type, reference, closing time,
+// countries and the details its source gives, and links to the official notice. The crawler names itself and keeps
+// to one request at a time.
+import { UNGM_KIND, countryCode, countryFromIso3, TENDER_MAX_AHEAD_MS, TED_LANG } from './tenders-kinds.js';
+import { guessLang } from './lang-guess.js';
+import { COUNTRY, newsLang } from './data.js';
 
 // The usual form for a named crawler (as the site's photo checks use): it says who is asking and where to reach us.
 export const UA = 'Mozilla/5.0 (compatible; GlobalNewsflixTenders/1.0; +https://globalnewsflix.com/contact)';
@@ -50,6 +54,10 @@ export function parseUngmRows(html) {
   return out;
 }
 
+// The language of a notice from a system that publishes in English and sometimes in French, Spanish or Portuguese:
+// what its title shows, else English.
+export const titleLang = (title, hint = 'en') => { const lang = guessLang(title, { hint }) || hint; return { lang, langs: [lang] }; };
+
 // A parsed notice -> the row the site stores, or null.
 export function ungmRow(n, now = Date.now()) {
   const closes = ungmTime(n.deadline), published = ungmTime(n.published);
@@ -59,7 +67,7 @@ export function ungmRow(n, now = Date.now()) {
   const issuer = String(n.agency || '').trim().slice(0, 120);
   if (!issuer || !n.title) return null;
   return {
-    id: `ungm:${n.id}`, src: 'ungm', issuer, issuer_type: 'io', title: n.title.slice(0, 300), ref: n.ref ? n.ref.slice(0, 120) : null, kind,
+    id: `ungm:${n.id}`, src: 'ungm', issuer, issuer_type: 'io', title: n.title.slice(0, 300), ...titleLang(n.title), ref: n.ref ? n.ref.slice(0, 120) : null, kind,
     countries: [...new Set(countries)], published_ts: published && published <= now + 86400000 ? published : null, closes_ts: closes,
     closes_text: n.deadline.replace(/\s+[\d.]+$/, '').slice(0, 60), url: `${UNGM}/Public/Notice/${n.id}`,
   };
@@ -115,13 +123,22 @@ export const TED_PAGE_SIZE = 250;
 export const TED_MAX_PAGES = 12;
 export const TED_FIELDS = Object.freeze(['publication-number', 'notice-type', 'procedure-type', 'procedure-identifier', 'buyer-name', 'buyer-country', 'title-proc',
   'internal-identifier-proc', 'publication-date', 'deadline-receipt-tender-date-lot', 'deadline-receipt-tender-time-lot', 'deadline-receipt-request-date-lot',
-  'deadline-receipt-request-time-lot', 'place-of-performance-country-proc', 'place-of-performance-country-lot']);
+  'deadline-receipt-request-time-lot', 'place-of-performance-country-proc', 'place-of-performance-country-lot', 'buyer-legal-type', 'description-proc',
+  'estimated-value-proc', 'estimated-value-cur-proc', 'contract-nature-main-proc', 'buyer-city']);
+// The public sector's notices (once a day): every open call for competition, read with TED's iteration mode (its
+// page numbers stop at 15,000 results).
+export const TED_FULL_MAX_PAGES = 300;
+const TED_CALLS = 'notice-type IN (cn-standard cn-social cn-desg pin-cfc-standard pin-cfc-social qu-sy)';
+export function tedAllQuery(now = Date.now()) {
+  const d = new Date(now).toISOString().slice(0, 10).replace(/-/g, '');
+  return `${TED_CALLS} AND (deadline-receipt-tender-date-lot >= ${d} OR deadline-receipt-request-date-lot >= ${d})`;
+}
 // Open calls for competition whose buyer TED labels an EU institution, body or agency or an international
 // organisation. Those labels are not reliable (national ministries carry them too), so each buyer is also checked
 // by name (tedIssuer).
 export function tedQuery(now = Date.now()) {
   const d = new Date(now).toISOString().slice(0, 10).replace(/-/g, '');
-  return `buyer-legal-type IN (eu-ins-bod-ag int-org) AND notice-type IN (cn-standard cn-social cn-desg pin-cfc-standard pin-cfc-social qu-sy) AND (deadline-receipt-tender-date-lot >= ${d} OR deadline-receipt-request-date-lot >= ${d})`;
+  return `buyer-legal-type IN (eu-ins-bod-ag int-org) AND ${TED_CALLS} AND (deadline-receipt-tender-date-lot >= ${d} OR deadline-receipt-request-date-lot >= ${d})`;
 }
 const foldName = s => String(s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 // EU institutions, bodies, agencies, joint undertakings and missions, and international organisations, by the names
@@ -181,63 +198,135 @@ function nextDeadline(dates, times, now) {
   list(dates).forEach((d, i) => { const x = tedTime(d, list(times)[i]); if (x && x.ts > now && (!best || x.ts < best.ts)) best = x; });
   return best;
 }
-// A TED notice -> the row the site stores, or null (not an international organisation's, or no deadline ahead).
-export function tedRow(n, now = Date.now()) {
+const first = v => String(list(v)[0] || '').replace(/\s+/g, ' ').trim();
+// Countries whose notices TED gives in English as their own language.
+const ENGLISH_HOME = new Set(['IRL', 'MLT', 'GBR']);
+const MULTI = ['mul', 'MUL'];
+// A summary of at most 400 characters, cut at a word.
+export const shorten = (t, n = 400) => { const s = String(t || '').replace(/\s+/g, ' ').trim(); if (s.length <= n) return s; const cut = s.slice(0, n - 1); return cut.slice(0, Math.max(cut.lastIndexOf(' '), n - 40)).replace(/[\s,;:.-]+$/, '') + '…'; };
+// A notice's title and summary in each language TED gives them in, with the language its title is first read in:
+// English where given, else the language of its country's edition, else the first. TED files some notices'
+// own-language text under English as well; such a version counts as its real language.
+export function tedTexts(n) {
+  const country3 = String(list(n['buyer-country'])[0] || '').toUpperCase(), home = COUNTRY[countryFromIso3(country3)] ? newsLang(countryFromIso3(country3)) : '';
+  const obj = v => v && typeof v === 'object' && !Array.isArray(v) ? v : {};
+  const titles = obj(n['title-proc']), descs = obj(n['description-proc']), names = obj(n['buyer-name']);
+  const byLang = new Map();
+  for (const [key, value] of Object.entries(titles)) {
+    let lang = TED_LANG[key.toLowerCase()];
+    const title = first(value);
+    if (!lang || title.length < 4) continue;
+    if (lang === 'en' && !ENGLISH_HOME.has(country3)) { const seen = guessLang(title, { hint: home }); if (seen && seen !== 'en') lang = seen; }
+    if (byLang.has(lang)) continue;
+    byLang.set(lang, [title.slice(0, 300), shorten(first(descs[key])) || null, first(names[key]) || null]);
+  }
+  if (!byLang.size) return null;
+  const lang = byLang.has('en') ? 'en' : byLang.has(home) ? home : [...byLang.keys()][0];
+  const [title, summary, buyer] = byLang.get(lang);
+  byLang.delete(lang);
+  // Each other language's buyer name only where it differs ("FOD Justitie" for "SPF Justice").
+  const texts = [...byLang].slice(0, 7).map(([l, [t, d, b]]) => [l, b && b !== buyer ? [t, d, b] : [t, d]]);
+  return { title, summary, lang, langs: [lang, ...byLang.keys()].slice(0, 8), texts: texts.length ? Object.fromEntries(texts) : null, buyer };
+}
+const NATURE = { supplies: 'goods', works: 'works', services: 'services' };
+// What TED adds to every notice: goods/works/services, the estimated value and the buyer's town.
+function tedDetails(n) {
+  const amount = Number(first(n['estimated-value-proc'])), cur = first(n['estimated-value-cur-proc']).toUpperCase();
+  const city = n['buyer-city'] && typeof n['buyer-city'] === 'object' ? first(n['buyer-city'][MULTI.find(k => k in n['buyer-city'])] ?? Object.values(n['buyer-city'])[0]) : first(n['buyer-city']);
+  // Buyers sometimes state a token value ("1"): only a real amount is shown.
+  const value = Number.isFinite(amount) && amount >= 1000 && amount < 1e13 && /^[A-Z]{3}$/.test(cur);
+  return { nature: NATURE[first(n['contract-nature-main-proc'])] || null, value_amount: value ? amount : null, value_cur: value ? cur : null, place: city.slice(0, 80) || null };
+}
+// The notice's timing, kind, places and reference, shared by both TED readers.
+function tedCommon(n, now) {
   const pub = String(n?.['publication-number'] || '');
   if (!/^\d{1,8}-\d{4}$/.test(pub)) return null;
-  const issuer = String(pick(n['buyer-name'])[0] || '').replace(/\s+/g, ' ').trim();
-  if (!tedIssuer(issuer, list(n['buyer-country'])[0])) return null;
-  const title = String(pick(n['title-proc'])[0] || '').replace(/\s+/g, ' ').trim();
-  if (title.length < 4) return null;
   const tender = nextDeadline(n['deadline-receipt-tender-date-lot'], n['deadline-receipt-tender-time-lot'], now);
   const request = tender ? null : nextDeadline(n['deadline-receipt-request-date-lot'], n['deadline-receipt-request-time-lot'], now);
   const closes = tender || request;
   if (!closes || closes.ts > now + TENDER_MAX_AHEAD_MS) return null;
+  const texts = tedTexts(n);
+  if (!texts) return null;
   const type = String(n['notice-type'] || '');
   const kind = type === 'cn-desg' ? 'other' : /^pin-cfc/.test(type) ? 'eoi' : type === 'qu-sy' || !tender ? 'prequal' : 'itb';
-  const countries = [...new Set([...list(n['place-of-performance-country-proc']), ...list(n['place-of-performance-country-lot'])].map(countryFromIso3).filter(Boolean))];
+  const places = [...new Set([...list(n['place-of-performance-country-proc']), ...list(n['place-of-performance-country-lot'])].map(countryFromIso3).filter(Boolean))];
   const day = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(n['publication-date'] || ''));
   const published = day ? Date.UTC(+day[1], +day[2] - 1, +day[3], 12) : null;
-  const ref = String(list(n['internal-identifier-proc'])[0] || '').trim();
-  return {
-    id: `ted:${pub}`, src: 'ted', issuer: tedIssuerName(issuer, list(n['buyer-country'])[0]).slice(0, 120), issuer_type: 'io', title: title.slice(0, 300), ref: ref ? ref.slice(0, 120) : null, kind,
-    countries: countries.slice(0, 60), published_ts: published && published <= now + 86400000 ? published : null, closes_ts: closes.ts, closes_text: closes.text,
-    url: `${TED}/en/notice/-/detail/${pub}`,
-  };
+  const ref = first(n['internal-identifier-proc']);
+  return { pub, kind, places, ...texts, ref: ref ? ref.slice(0, 120) : null, published_ts: published && published <= now + 86400000 ? published : null, closes_ts: closes.ts, closes_text: closes.text,
+    url: `${TED}/en/notice/-/detail/${pub}`, ...tedDetails(n) };
+}
+const issuerOf = n => String(pick(n['buyer-name'])[0] || '').replace(/\s+/g, ' ').trim();
+const IO_TYPES = ['eu-ins-bod-ag', 'int-org'];
+// A TED notice from an EU institution, body or agency or an international organisation -> the row the site stores,
+// or null (another buyer's, or no deadline ahead).
+export function tedRow(n, now = Date.now()) {
+  const issuer = issuerOf(n), country3 = list(n['buyer-country'])[0];
+  if (!tedIssuer(issuer, country3)) return null;
+  // Read in full, a notice not labelled as an international buyer's is a national one, whatever its name.
+  if (n['buyer-legal-type'] != null && !list(n['buyer-legal-type']).some(t => IO_TYPES.includes(t))) return null;
+  const c = tedCommon(n, now);
+  if (!c) return null;
+  const { pub, places, buyer, ...row } = c;
+  return { id: `ted:${pub}`, src: 'ted', issuer: tedIssuerName(buyer || issuer, country3).slice(0, 120), issuer_type: 'io', ...row, countries: places.slice(0, 60) };
+}
+// Any other buyer's notice: the public sector of the EU and EEA countries (bodies that award subsidised contracts,
+// as TED labels them, are private). Notices without a place of performance are listed in the buyer's country.
+export function tednRow(n, now = Date.now()) {
+  const issuer = issuerOf(n), country3 = list(n['buyer-country'])[0];
+  if (issuer.length < 2 || tedRow(n, now)) return null;
+  const c = tedCommon(n, now);
+  if (!c) return null;
+  const { pub, places, buyer, ...row } = c, home = countryFromIso3(country3);
+  const countries = places.length ? places : home ? [home] : [];
+  if (!countries.length) return null;
+  return { id: `tedn:${pub}`, src: 'tedn', issuer: tedIssuerName(buyer || issuer, country3).slice(0, 120), issuer_type: list(n['buyer-legal-type']).includes('org-sub') ? 'private' : 'public', ...row, countries: countries.slice(0, 60) };
 }
 
 // Every open TED notice from EU institutions and international organisations, through the public search API, page
-// by page; where a procedure has several notices, its latest one.
-export async function collectTed(fetchImpl = fetch, { now = Date.now(), delayMs = 1000, maxPages = TED_MAX_PAGES, log = () => {} } = {}) {
+// by page; with `full`, every other buyer's too (the public sector, tedn). Where a procedure has several notices, its
+// latest one.
+export async function collectTed(fetchImpl = fetch, { now = Date.now(), delayMs = 1000, maxPages, full = false, log = () => {} } = {}) {
+  const pages = maxPages ?? (full ? TED_FULL_MAX_PAGES : TED_MAX_PAGES);
   const diag = { src: 'ted', status: 'failed', reason: '', rawCount: 0, acceptedCount: 0, httpRequests: 0 };
-  const byProcedure = new Map(), query = tedQuery(now);
-  let total = null, complete = false;
+  const byProcedure = { ted: new Map(), tedn: new Map() }, query = full ? tedAllQuery(now) : tedQuery(now);
+  const keep = (map, key, r) => { const prev = map.get(key); if (!prev || (r.published_ts || 0) > (prev.published_ts || 0) || ((r.published_ts || 0) === (prev.published_ts || 0) && r.id > prev.id)) map.set(key, r); };
+  let total = null, complete = false, token = null;
   try {
-    for (let page = 1; page <= maxPages; page++) {
+    for (let page = 1; page <= pages; page++) {
       if (page > 1) await sleep(delayMs);
-      const res = await fetchImpl(TED_API, { method: 'POST', headers: { 'user-agent': UA, accept: 'application/json', 'content-type': 'application/json' },
-        body: JSON.stringify({ query, fields: TED_FIELDS, page, limit: TED_PAGE_SIZE, paginationMode: 'PAGE_NUMBER', onlyLatestVersions: true }), signal: AbortSignal.timeout(60000) });
+      const body = { query, fields: TED_FIELDS, limit: TED_PAGE_SIZE, onlyLatestVersions: true, ...(full ? { paginationMode: 'ITERATION', ...(token ? { iterationNextToken: token } : {}) } : { page, paginationMode: 'PAGE_NUMBER' }) };
+      const res = await fetchImpl(TED_API, { method: 'POST', headers: { 'user-agent': UA, accept: 'application/json', 'content-type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(90000) });
       diag.httpRequests++;
       if (!res.ok) { diag.reason = `search-http-${res.status}`; break; }
       const data = await res.json().catch(() => null);
       if (!data || !Array.isArray(data.notices)) { diag.reason = 'bad-response'; break; }
+      if (data.timedOut === true) { diag.reason = 'search-timed-out'; break; }
       if (total == null && Number.isSafeInteger(data.totalNoticeCount)) total = data.totalNoticeCount;
       diag.rawCount += data.notices.length;
       for (const n of data.notices) {
+        const key = String(n['procedure-identifier'] || n['publication-number']);
         const r = tedRow(n, now);
-        if (!r) continue;
-        const key = String(n['procedure-identifier'] || r.id), prev = byProcedure.get(key);
-        if (!prev || (r.published_ts || 0) > (prev.published_ts || 0) || ((r.published_ts || 0) === (prev.published_ts || 0) && r.id > prev.id)) byProcedure.set(key, r);
+        if (r) { keep(byProcedure.ted, key, r); continue; }
+        const p = full ? tednRow(n, now) : null;
+        if (p) keep(byProcedure.tedn, key, p);
       }
-      if (data.notices.length < TED_PAGE_SIZE || (total != null && diag.rawCount >= total)) { complete = true; break; }
+      token = typeof data.iterationNextToken === 'string' && data.iterationNextToken ? data.iterationNextToken : null;
+      // Iterating, the last page is the one without a token for the next (or an empty one); by page number, a short one.
+      if ((total != null && diag.rawCount >= total) || (full ? !token || !data.notices.length : data.notices.length < TED_PAGE_SIZE)) { complete = true; break; }
     }
   } catch (e) { diag.reason = diag.reason || (e?.name === 'TimeoutError' ? 'timeout' : 'network'); }
-  const rows = [...byProcedure.values()];
-  diag.acceptedCount = rows.length;
-  diag.status = complete ? 'complete' : rows.length ? 'partial' : 'failed';
+  diag.status = complete ? 'complete' : 'failed';
   diag.reason = complete ? '' : diag.reason || 'page-limit';
-  log(`ted: ${rows.length} open notices from international organisations of ${total ?? '?'} listed; ${diag.httpRequests} requests; ${diag.status}`);
-  return { rows, diagnostics: [diag] };
+  const out = [], diagnostics = [];
+  for (const src of full ? ['ted', 'tedn'] : ['ted']) {
+    const rows = [...byProcedure[src].values()];
+    out.push(...rows);
+    const d = { ...diag, src, acceptedCount: rows.length, status: complete ? 'complete' : rows.length ? 'partial' : 'failed' };
+    diagnostics.push(d);
+    log(`${src}: ${rows.length} open notices${src === 'ted' ? ' from international organisations' : ' from the public sector'} of ${total ?? '?'} listed; ${diag.httpRequests} requests; ${d.status}${d.reason ? ' ' + d.reason : ''}`);
+  }
+  return { rows: out, diagnostics };
 }
 
 // "2026-10-30T03:59:00.000+0000" (or "+00:00") -> the time and its wording, in the time zone given.
@@ -268,7 +357,7 @@ export function wbgRow(a, now = Date.now()) {
   const list = (/Assignment Countries:\s*(?:<\/p>)?\s*<ul>([\s\S]*?)<\/ul>/i.exec(body) || [])[1] || '';
   const countries = [...new Set([...list.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/gi)].map(m => countryCode(text(m[1]))).filter(Boolean))];
   const published = noonOf(a.publicationDate), ref = text(a.procurementNumber);
-  return { id: `wbg:${id}`, src: 'wbg', issuer: 'World Bank Group', issuer_type: 'io', title: title.slice(0, 300), ref: ref ? ref.slice(0, 120) : null, kind: 'eoi',
+  return { id: `wbg:${id}`, src: 'wbg', issuer: 'World Bank Group', issuer_type: 'io', title: title.slice(0, 300), ...titleLang(title), ref: ref ? ref.slice(0, 120) : null, kind: 'eoi',
     countries, published_ts: published && published <= now + 86400000 ? published : null, closes_ts: closes.ts, closes_text: closes.text, url: `${WBG}/public/advertisement/${id}/view.html` };
 }
 export async function collectWbg(fetchImpl = fetch, { now = Date.now(), log = () => {} } = {}) {
@@ -320,7 +409,7 @@ export function afdbRow(n, now = Date.now()) {
   const kind = code ? AFDB_KIND[code.toUpperCase()] : /request for proposal|demande de proposition/i.test(n.title) ? 'rfp' : /quotation|cotation/i.test(n.title) ? 'rfq'
     : /expression of interest|manifestation d.int[eé]r[eê]t/i.test(n.title) ? 'eoi' : /invitation to (bid|tender)|appel d.offres/i.test(n.title) ? 'itb' : 'other';
   const published = noonOf(n.published);
-  return { id: `afdb:${id}`, src: 'afdb', issuer: 'African Development Bank Group', issuer_type: 'io', title: n.title.slice(0, 300), ref: n.ref ? n.ref.slice(0, 120) : null, kind,
+  return { id: `afdb:${id}`, src: 'afdb', issuer: 'African Development Bank Group', issuer_type: 'io', title: n.title.slice(0, 300), ...titleLang(n.title, n.path.startsWith('/fr/') ? 'fr' : 'en'), ref: n.ref ? n.ref.slice(0, 120) : null, kind,
     countries: [], published_ts: published && published <= now + 86400000 ? published : null, closes_ts: closes.ts, closes_text: closes.text, url: AFDB + n.path };
 }
 // The newest solicitations first, page by page, until a page lists nothing still open. A challenge page or a refusal
@@ -352,8 +441,80 @@ export async function collectAfdb(fetchImpl = fetch, { now = Date.now(), afdbDel
   return { rows, diagnostics: [diag] };
 }
 
+// --- South Africa: the eTenders Publication Portal (National Treasury) ---
+// Its list of advertised tenders, as its own Opportunities page reads it, 500 at a time (some 2,200 are open).
+export const ETZA = 'https://www.etenders.gov.za';
+export const ETZA_LIST = `${ETZA}/Home/PaginatedTenderOpportunities`;
+export const ETZA_PAGE = 500;
+export const ETZA_MAX_PAGES = 20;
+const ETZA_KIND = [[/^request for bid/i, 'itb'], [/^request for quotation/i, 'rfq'], [/^request for proposal/i, 'rfp'], [/^expression of interest/i, 'eoi'], [/^request for information/i, 'rfi']];
+// Goods, works or services, from the portal's category.
+export function etzaNature(category) {
+  const c = String(category || '');
+  if (/^disposals/i.test(c)) return null;
+  if (/^supplies|^manufacture|^mining|^agriculture/i.test(c)) return 'goods';
+  if (/construction|^services: (building|civil)|civil engineering|^specialised construction/i.test(c)) return 'works';
+  return c ? 'services' : null;
+}
+// "2026-12-08T10:00:00" (South African time, two hours ahead of GMT all year) -> the time and its wording.
+export function zaTime(v) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(String(v || ''));
+  if (!m || +m[2] < 1 || +m[2] > 12) return null;
+  const ts = Date.parse(`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:00+02:00`);
+  return Number.isFinite(ts) ? { ts, text: `${m[3]}-${MON[+m[2] - 1]}-${m[1]} ${m[4]}:${m[5]} (GMT 2.00)` } : null;
+}
+const titleWords = s => String(s || '').toLowerCase().replace(/(^|[\s-])(\p{L})/gu, (x, a, b) => a + b.toUpperCase());
+const clean = (v, n) => String(v ?? '').replace(/[\u0000-\u001f\u007f]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, n);
+const ETZA_DOC = d => `${ETZA}/home/Download?blobName=${encodeURIComponent(d.supportDocumentID + (d.extension || ''))}&downloadedFileName=${encodeURIComponent(d.fileName || 'document')}`;
+// One advertised tender -> the row the site stores, or null. The notice links to its documents on the portal (the
+// portal has no page per tender). Contact people's names, e-mail addresses and telephone numbers are not kept.
+export function etzaRow(x, now = Date.now()) {
+  if (!x || typeof x !== 'object') return null;
+  const id = Number(x.id);
+  if (!Number.isSafeInteger(id) || id <= 0 || (x.status && x.status !== 'Published')) return null;
+  const title = clean(x.description, 300), issuer = clean(x.organ_of_State || x.department, 120);
+  if (title.length < 4 || issuer.length < 2) return null;
+  const closes = zaTime(x.closing_Date);
+  if (!closes || !closesOk(closes.ts, now)) return null;
+  const type = clean(x.type, 80), kind = (ETZA_KIND.find(([re]) => re.test(type)) || [])[1] || 'other';
+  const docs = (Array.isArray(x.supportDocument) ? x.supportDocument : []).filter(d => d && d.active !== false && /^[0-9a-f-]{36}$/i.test(String(d.supportDocumentID || '')) && /^\.[a-z0-9]{2,5}$/i.test(String(d.extension || '')))
+    .slice(0, 6).map(d => ({ n: clean(d.fileName, 120) || 'Document', u: ETZA_DOC(d) }));
+  const brief = x.briefingSession === true ? zaTime(x.compulsory_briefing_session) : null;
+  const info = { ...(brief ? { brief: { ts: brief.ts, text: brief.text, compulsory: x.briefingCompulsory === true, venue: clean(x.briefingVenue, 200) || null } } : {}), ...(x.eSubmission === true ? { esub: true } : {}), ...(docs.length ? { docs } : {}) };
+  const published = noonOf(x.date_Published), category = clean(x.category, 80), province = clean(x.province, 60);
+  return { id: `etza:${id}`, src: 'etza', issuer, issuer_type: 'public', title, lang: 'en', langs: ['en'], ref: clean(x.tender_No, 120) || null, kind, countries: ['ZA'],
+    published_ts: published && published <= now + 86400000 ? published : null, closes_ts: closes.ts, closes_text: closes.text,
+    url: docs.length ? docs[0].u : `${ETZA}/Home/opportunities?id=1`, category: category || null, nature: etzaNature(category), region: province || null,
+    place: x.town ? titleWords(clean(x.town, 80)) : null, info: Object.keys(info).length ? info : null };
+}
+export async function collectEtza(fetchImpl = fetch, { now = Date.now(), delayMs = 2000, maxPages = ETZA_MAX_PAGES, log = () => {} } = {}) {
+  const diag = { src: 'etza', status: 'failed', reason: '', rawCount: 0, acceptedCount: 0, httpRequests: 0 };
+  const rows = [], seen = new Set();
+  let complete = false, total = null;
+  try {
+    for (let p = 0; p < maxPages; p++) {
+      if (p) await sleep(delayMs);
+      const res = await fetchImpl(`${ETZA_LIST}?draw=${p + 1}&start=${p * ETZA_PAGE}&length=${ETZA_PAGE}&status=1`, { headers: { 'user-agent': UA, accept: 'application/json', 'accept-language': 'en' }, signal: AbortSignal.timeout(60000) });
+      diag.httpRequests++;
+      if (!res.ok) { diag.reason = `list-http-${res.status}`; break; }
+      const data = await res.json().catch(() => null);
+      if (!data || !Array.isArray(data.data)) { diag.reason = 'bad-response'; break; }
+      if (total == null && Number.isSafeInteger(data.recordsTotal)) total = data.recordsTotal;
+      diag.rawCount += data.data.length;
+      for (const x of data.data) { const r = etzaRow(x, now); if (r && !seen.has(r.id)) { seen.add(r.id); rows.push(r); } }
+      if (data.data.length < ETZA_PAGE || (total != null && diag.rawCount >= total)) { complete = true; break; }
+    }
+  } catch (e) { diag.reason = diag.reason || (e?.name === 'TimeoutError' ? 'timeout' : 'network'); }
+  diag.acceptedCount = rows.length;
+  diag.status = complete ? 'complete' : rows.length ? 'partial' : 'failed';
+  diag.reason = complete ? '' : diag.reason || 'page-limit';
+  log(`etza: ${rows.length} open tenders of ${total ?? '?'} listed; ${diag.httpRequests} requests; ${diag.status}${diag.reason ? ' ' + diag.reason : ''}`);
+  return { rows, diagnostics: [diag] };
+}
+
+// Every source, one after another. `full` (once a day) adds the EU and EEA public sector's notices from TED.
 export async function collectTenders(fetchImpl = fetch, opts = {}) {
-  const parts = [await collectUngm(fetchImpl, opts), await collectTed(fetchImpl, opts), await collectWbg(fetchImpl, opts), await collectAfdb(fetchImpl, opts)];
+  const parts = [await collectUngm(fetchImpl, opts), await collectTed(fetchImpl, opts), await collectWbg(fetchImpl, opts), await collectAfdb(fetchImpl, opts), await collectEtza(fetchImpl, opts)];
   const diagnostics = parts.flatMap(p => p.diagnostics);
   return { rows: parts.flatMap(p => p.rows), diagnostics, complete: diagnostics.filter(d => d.status === 'complete').map(d => d.src) };
 }

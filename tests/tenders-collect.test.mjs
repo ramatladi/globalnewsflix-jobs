@@ -110,9 +110,11 @@ test('TED notices become rows: the official notice, issuer, kind, reference, pla
   assert.equal(tedRow(ministry, NOW), null, 'a national ministry, whatever TED labels it');
   assert.equal(tedRow(dps, NOW), null, 'a standing call closing more than 400 days ahead');
   assert.deepEqual(tedRow(unops, NOW), { id: 'ted:692396-2026', src: 'ted', issuer: 'United Nations Office for Project Services (UNOPS)', issuer_type: 'io',
-    title: 'Construction of the new waste treatment facility for the Queen Elizabeth Hospital in Barbados', ref: 'ITB/2026/63895', kind: 'itb', countries: ['BB'],
-    published_ts: Date.parse('2026-10-07T12:00:00Z'), closes_ts: Date.parse('2026-10-27T23:00:00Z'), closes_text: '27-Oct-2026 19:00 (GMT -4.00)', url: 'https://ted.europa.eu/en/notice/-/detail/692396-2026' });
+    title: 'Construction of the new waste treatment facility for the Queen Elizabeth Hospital in Barbados', summary: null, lang: 'en', langs: ['en'], texts: null, ref: 'ITB/2026/63895', kind: 'itb', countries: ['BB'],
+    published_ts: Date.parse('2026-10-07T12:00:00Z'), closes_ts: Date.parse('2026-10-27T23:00:00Z'), closes_text: '27-Oct-2026 19:00 (GMT -4.00)', url: 'https://ted.europa.eu/en/notice/-/detail/692396-2026',
+    nature: null, value_amount: null, value_cur: null, place: null });
   assert.equal(tedRow(curia, NOW).title, 'Fourniture d’objets promotionnels et de communication', 'the title as the buyer wrote it');
+  assert.deepEqual([tedRow(curia, NOW).lang, tedRow(curia, NOW).langs], ['fr', ['fr']], 'in its own language');
   assert.equal(tedRow(curia, NOW).issuer, 'Cour de justice de l’Union européenne');
   assert.equal(tedRow(eurohpc, NOW).countries.length, 13);
   assert.deepEqual(tedRow(digit, NOW).countries, [], 'no place of performance given');
@@ -146,7 +148,7 @@ test('upload: a failed request keeps the source from being pruned', async () => 
 
 test('World Bank Group: its open requests for expressions of interest, with the full title and countries, and nothing about its staff', async () => {
   const ads = JSON.parse(WBG_FIXTURE).advertisementList;
-  assert.deepEqual(wbgRow(ads[0], NOW), { id: 'wbg:7445', src: 'wbg', issuer: 'World Bank Group', issuer_type: 'io', title: 'Refugee Mental Health Study in Jordan', ref: '0002024139', kind: 'eoi',
+  assert.deepEqual(wbgRow(ads[0], NOW), { id: 'wbg:7445', src: 'wbg', issuer: 'World Bank Group', issuer_type: 'io', title: 'Refugee Mental Health Study in Jordan', lang: 'en', langs: ['en'], ref: '0002024139', kind: 'eoi',
     countries: ['JO'], published_ts: Date.parse('2026-10-22T12:00:00Z'), closes_ts: Date.parse('2026-10-30T03:59:00Z'), closes_text: '30-Oct-2026 03:59 (GMT 0.00)',
     url: 'https://wbgeprocure-rfxnow.worldbank.org/rfxnow/public/advertisement/7445/view.html' });
   assert.deepEqual(wbgRow(ads[1], NOW).countries, ['CI'], "Cote d'Ivoire");
@@ -169,12 +171,13 @@ test('African Development Bank Group: current solicitations still open, newest f
   const notices = parseAfdb(AFDB_FIXTURE);
   assert.equal(notices.length, 5);
   assert.deepEqual(afdbRow(notices[0], NOW), { id: 'afdb:97754', src: 'afdb', issuer: 'African Development Bank Group', issuer_type: 'io',
-    title: 'Acquisition of leased office premises for the African Development Bank’s Country Office in Cairo (Egypt)', ref: 'TCGS.1/RFP/FAD/BDE/2026/10/01', kind: 'rfp', countries: [],
+    title: 'Acquisition of leased office premises for the African Development Bank’s Country Office in Cairo (Egypt)', lang: 'en', langs: ['en'], ref: 'TCGS.1/RFP/FAD/BDE/2026/10/01', kind: 'rfp', countries: [],
     published_ts: Date.parse('2026-10-22T12:00:00Z'), closes_ts: Date.parse('2026-11-12T15:00:00Z'), closes_text: '12-Nov-2026 15:00 (GMT 0.00)',
     url: 'https://www.afdb.org/en/corporate-procurement/acquisition-leased-office-premises-african-97754' });
   assert.equal(afdbRow(notices[3], NOW), null, 'closed on 15 October');
   assert.equal(afdbRow({ ...notices[4], deadline: '2026-11-30T12:00:00+00:00' }, NOW).kind, 'itb', 'ADB/ITB/...');
   assert.equal(afdbRow({ ...notices[0], ref: '', title: "Avis à manifestation d'intérêt pour un audit" }, NOW).kind, 'eoi');
+  assert.equal(afdbRow({ ...notices[0], ref: '', title: "Avis à manifestation d'intérêt pour un audit des comptes" }, NOW).lang, 'fr', 'a notice in French is listed in French');
   const calls = [];
   const pages = [AFDB_FIXTURE, AFDB_FIXTURE.replace(/2026-1[01]-\d\dT/g, '2026-07-01T')];
   const out = await collectAfdb(async (url, init) => { calls.push({ url, init }); return new Response(pages[calls.length - 1] ?? ''); }, { now: NOW, afdbDelayMs: 0 });
