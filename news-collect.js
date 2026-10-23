@@ -61,6 +61,35 @@ export function parseFeed(xml) {
   return items;
 }
 
+// Google Trends' list of what a country is searching for right now (owner, 23 Oct 2026: Random News must carry trending
+// people and things and what made them trend; trending people's biographies go out the same day). Each trend comes with
+// the news reports that explain it, linked straight to their publishers.
+export const trendsUrl = geo => `https://trends.google.com/trending/rss?geo=${encodeURIComponent(geo)}`;
+// "500+", "2K+", "1M+" -> 500, 2000, 1000000.
+export const trendTraffic = s => { const m = /^([\d.,]+)\s*([KkMm])?\+?$/.exec(String(s || '').trim()); if (!m) return 0; const n = Number(m[1].replace(/,/g, '')); return Number.isFinite(n) ? Math.round(n * (m[2] ? (/k/i.test(m[2]) ? 1e3 : 1e6) : 1)) : 0; };
+export function parseTrends(xml) {
+  const out = [];
+  const re = /<item>([\s\S]*?)<\/item>/g;
+  let m;
+  while ((m = re.exec(String(xml || '')))) {
+    const it = m[1], query = decodeEntities(tag(it, 'title')).replace(/\s+/g, ' ').trim();
+    const news = [];
+    const nr = /<ht:news_item>([\s\S]*?)<\/ht:news_item>/g;
+    let n;
+    while ((n = nr.exec(it))) {
+      const t = decodeEntities(tag(n[1], 'ht:news_item_title')).replace(/\s+/g, ' ').trim(), u = decodeEntities(tag(n[1], 'ht:news_item_url')).trim(), s = decodeEntities(tag(n[1], 'ht:news_item_source')).trim();
+      if (t && /^https?:\/\//.test(u) && !/news\.google\.com|trends\.google\.com/.test(u)) news.push({ t, s, u });
+    }
+    if (query && news.length) out.push({ query, traffic: trendTraffic(tag(it, 'ht:approx_traffic')), pub: sourceTimestamp(tag(it, 'pubDate')), news });
+  }
+  return out;
+}
+// Trend rows: a trend's reports are one story about it, scored above an ordinary single report (several outlets explain
+// it, and people are looking for it now), more so the more people search for it.
+export const TREND_BONUS = 25;
+export const trendScore = t => t.news.length * 10 + TREND_BONUS + Math.min(30, Math.round(5 * Math.log10(Math.max(1, t.traffic))));
+const trendKey = q => String(q).toLowerCase().normalize('NFKC').replace(/\s+/g, ' ').trim();
+
 function feedUrl({ edition, q, topic }) {
   const [hl, gl, ceid] = edition.split(';');
   const params = `hl=${encodeURIComponent(hl)}&gl=${gl}&ceid=${encodeURIComponent(ceid)}`;
@@ -153,6 +182,7 @@ function scoreItem(it) {
   return it.cluster.length * 10 + Math.max(0, 30 - it.rank) + fresh;
 }
 
+export const TREND_GEOS_EN = Object.freeze(['US', 'GB', 'IN', 'CA', 'AU', 'ZA', 'NG', 'IE', 'NZ', 'PH', 'SG', 'KE']);
 // Extra searches for the world desk's newer sections (the writer still decides each story's section).
 const DESK_QUERIES = [
   ['ai', '("artificial intelligence" OR cyberattack OR "data breach" OR ransomware OR hackers) when:1d'],
@@ -174,8 +204,10 @@ const DESK_QUERIES = [
 // it fills. The writer still decides the final section.
 export const DESK_SECTIONS = Object.freeze([...new Set(DESK_QUERIES.map(([section]) => section))].filter(section => section !== 'jobs'));
 export const DESK_SECTION_MIN = 3;
+// Random News carries everything trending now (owner, 23 Oct 2026): the world desk keeps a fuller page of it.
+export const DESK_SECTION_MINS = Object.freeze({ odd: 10 });
 export function deskSectionsShort(liveCounts) {
-  return new Set(DESK_SECTIONS.filter(section => (Number(liveCounts?.[section]) || 0) < DESK_SECTION_MIN));
+  return new Set(DESK_SECTIONS.filter(section => (Number(liveCounts?.[section]) || 0) < (DESK_SECTION_MINS[section] ?? DESK_SECTION_MIN)));
 }
 export function deskBoost(c, short) {
   return c?.country === 'WW' && short?.has(c.section) ? 2000 : 0;
@@ -198,7 +230,9 @@ export function feedsFor(target, rot) {
     ];
     const [section, q] = qs[rot % qs.length];
     return [{ country: 'WW', section, bing: true, url: bingUrl(q) },
-            { country: 'WW', section: 'celebrity', url: feedUrl({ edition: 'en-US;US;US:en', topic: 'ENTERTAINMENT' }) }];
+            { country: 'WW', section: 'celebrity', url: feedUrl({ edition: 'en-US;US;US:en', topic: 'ENTERTAINMENT' }) },
+            // What English-speaking countries are searching for now, in turn, for Global Random News.
+            { country: 'WW', section: 'odd', trends: true, url: trendsUrl(TREND_GEOS_EN[rot % TREND_GEOS_EN.length]) }];
   }
   if (target === 'WORLD') {
     const eds = ['en-US;US;US:en', 'en-GB;GB;GB:en', 'en-IN;IN;IN:en', 'en-AU;AU;AU:en', 'en-ZA;ZA;ZA:en', 'en-NG;NG;NG:en', 'en-SG;SG;SG:en'];
@@ -219,6 +253,8 @@ export function feedsFor(target, rot) {
       { country: c.code, section: 'top', url: feedUrl({ edition: c.edition }) },
       { country: c.code, section: TOPICS[rot % TOPICS.length].toLowerCase(), url: feedUrl({ edition: c.edition, topic: TOPICS[rot % TOPICS.length] }) },
       ...editionLanguageFeeds(c, lang, rot).filter(f => f.bing),
+      // What the country is searching for now (Random News and the day's trending people).
+      { country: c.code, section: 'odd', trends: true, url: trendsUrl(c.code) },
     ];
   }
   // No Google News edition: searches for the country bring several publishers' reports of the same events. A country
@@ -333,6 +369,19 @@ export async function collectTarget(target, rot, { sections } = {}) {
       let xml;
       // The extra Coming Up searches ask a host at most once a second after the previous request to it.
       if (f.change || f.event) await politeWait(f.url);
+      if (f.trends) {
+        // A trend's reports become one row (a story about what is trending and why); a refused list is not replaced.
+        const day = new Date().toISOString().slice(0, 10);
+        for (const t of parseTrends(await fetchText(f.url)).filter(t => isFreshNews(t.pub)).slice(0, 20)) {
+          const news = t.news.filter(x => !nonNewsReason(x.t) && !sponsoredContentReason({ url: x.u, title: x.t, source: x.s }));
+          if (!news.length) continue;
+          let home = ''; try { home = new URL(news[0].u).origin; } catch { /* none */ }
+          rows.push({ id: await sha(`${f.country}|trend|${trendKey(t.query)}|${day}`), country: f.country, section: f.section, title: news[0].t, source: news[0].s, source_home: home,
+            gn_link: news[0].u, pub_ts: t.pub, date_verified: 1, fl: null,
+            cluster: JSON.stringify({ c: news.slice(0, 8), img: '', tr: { q: t.query.slice(0, 120), n: t.traffic } }), score: trendScore({ ...t, news }), celeb: null, facts: null });
+        }
+        return;
+      }
       try { xml = await fetchText(f.url); }
       catch (e) {
         // A refused Coming Up or section search is not replaced by a general one.
@@ -617,6 +666,13 @@ export async function enrichMulti(cand, extra = 4, opts = {}) {
   return lead;
 }
 
+// The trend a candidate was gathered for ({ q, n }: what people search for, about how many), or null.
+// The counters key under which the site keeps one of today's searches for an edition (pruned after three days).
+export const SEARCH_TREND_PREFIX = 'search-trend:';
+export const searchTrendKey = (day, cc, q) => `${SEARCH_TREND_PREFIX}${day}:${cc}:${String(q).toLowerCase().replace(/\s+/g, ' ').trim().slice(0, 120)}`;
+export function trendOf(c) {
+  try { const v = JSON.parse(c?.cluster || 'null'); return v && !Array.isArray(v) && v.tr && typeof v.tr.q === 'string' && v.tr.q.trim() ? { q: v.tr.q.trim().slice(0, 120), n: Number(v.tr.n) || 0 } : null; } catch { return null; }
+}
 export function readCluster(str) {
   const v = JSON.parse(str || '[]');
   const data = Array.isArray(v) ? { c: v, img: '' } : { c: v.c || [], img: v.img || '' };
