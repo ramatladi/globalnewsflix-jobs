@@ -1,0 +1,95 @@
+"title-titre-eng","title-titre-fra","referenceNumber-numeroReference","amendmentNumber-numeroModification","solicitationNumber-numeroSollicitation","publicationDate-datePublication","tenderClosingDate-appelOffresDateCloture","amendmentDate-dateModification","expectedContractStartDate-dateDebutContratPrevue","expectedContractEndDate-dateFinContratPrevue","tenderStatus-appelOffresStatut-eng","tenderStatus-appelOffresStatut-fra","gsin-nibs","gsinDescription-nibsDescription-eng","gsinDescription-nibsDescription-fra","unspsc","unspscDescription-eng","unspscDescription-fra","procurementCategory-categorieApprovisionnement","noticeType-avisType-eng","noticeType-avisType-fra","procurementMethod-methodeApprovisionnement-eng","procurementMethod-methodeApprovisionnement-fra","selectionCriteria-criteresSelection-eng","selectionCriteria-criteresSelection-fra","limitedTenderingReason-raisonAppelOffresLimite-eng","limitedTenderingReason-raisonAppelOffresLimite-fra","tradeAgreements-accordsCommerciaux-eng","tradeAgreements-accordsCommerciaux-fra","regionsOfOpportunity-regionAppelOffres-eng","regionsOfOpportunity-regionAppelOffres-fra","regionsOfDelivery-regionsLivraison-eng","regionsOfDelivery-regionsLivraison-fra","contractingEntityName-nomEntitContractante-eng","contractingEntityAddressLine-ligneAdresseEntiteContractante-eng","contractingEntityAddressCity-entiteContractanteAdresseVille-eng","contractingEntityAddressProvince-entiteContractanteAdresseProvince-eng","contractingEntityAddressPostalCode-entiteContractanteAdresseCodePostal","contractingEntityAddressCountry-entiteContractanteAdressePays-eng","contractingEntityName-nomEntitContractante-fra","contractingEntityAddressLine-ligneAdresseEntiteContractante-fra","contractingEntityAddressCity-entiteContractanteAdresseVille-fra","contractingEntityAddressProvince-entiteContractanteAdresseProvince-fra","contractingEntityAddressCountry-entiteContractanteAdressePays-fra","endUserEntitiesName-nomEntitesUtilisateurFinal-eng","endUserEntitiesAddress-adresseEntitesUtilisateurFinal-eng","endUserEntitiesName-nomEntitesUtilisateurFinal-fra","endUserEntitiesAddress-adresseEntitesUtilisateurFinal-fra","contactInfoName-informationsContactNom","contactInfoEmail-informationsContactCourriel","contactInfoPhone-contactInfoTelephone","contactInfoFax","contactInfoAddressLine-contactInfoAdresseLigne-eng","contactInfoCity-contacterInfoVille-eng","contactInfoProvince-contacterInfoProvince-eng","contactInfoPostalcode","contactInfoCountry-contactInfoPays-eng","contactInfoAddressLine-contactInfoAdresseLigne-fra","contactInfoCity-contacterInfoVille-fra","contactInfoProvince-contacterInfoProvince-fra","contactInfoCountry-contactInfoPays-fra","noticeURL-URLavis-eng","noticeURL-URLavis-fra","attachment-piecesJointes-eng","attachment-piecesJointes-fra","tenderDescription-descriptionAppelOffres-eng","tenderDescription-descriptionAppelOffres-fra"
+"QNAP TVS-H1688X - NAS server for RCMP","QNAP TVS-H1688X - NAS server pour la GRC","SSC-26-00034485:T","000","BPM026355/34485","","2026-11-04T14:00:00","","","","Open","Ouvert","*N7010","*Automatic Data Processing Equipment, System Configuration","*Équipement de traitement automatique de configuration de système","","","","*GD","Request for Proposal","Demande de propositions","Competitive - Open bidding","Concurrentielle - Invitation ouverte à soumissionner","","","","","*Canadian Free Trade Agreement (CFTA)","*Accord de libre-échange canadien (ALEC)","*Canada","*Canada","*Manitoba","*Manitoba","Shared Services Canada","90 Metcalfe Street","Ottawa","Ontario","K0A 0C3","Canada","Services partagés Canada","90, rue Metcalfe","Ottawa","Ontario","Canada","Shared Services Canada","90 Metcalfe Street,Ottawa,Ontario,K0A 0C3,Canada","Services partagés Canada","90, rue Metcalfe,Ottawa,Ontario,K0A 0C3,Canada","Contact Person","","","","","","","","","","","","","","","","","QNAP TVS-H1688X - NAS server for RCMP
+SSC QNAP TVS-H1688X - NAS server for RCMP- Amendment 000","QNAP TVS-H1688X - NAS server pour la GRC
+SSC QNAP TVS-H1688X - NAS server for RCMP- Amendment 000"
+"Hazardous Waste Disposal Services","Services d'élimination de déchets dangereux","PW-_NCS-030-11940","000","EW479-162880/C","2020-11-16","2026-09-14T14:00:00","","","","Open","Ouvert","*E108CA","*Hazardous Chemical Waste Disposal Services","*Services d'élimination de déchets dangereux","","","","*SRV","Request for Proposal","Demande de propositions","Competitive - Open bidding","Concurrentielle - Invitation ouverte à soumissionner","Subsequent/Follow-on Contracts","Marchés subséquents","","","","","","","*Northwest Territories
+*Nova Scotia
+*New Brunswick
+*Nunavut Territory
+*Newfoundland and Labrador
+*Yukon
+*British Columbia
+*Quebec (except NCR)
+*Saskatchewan
+*Manitoba
+*Prince Edward Island
+*Ontario (except NCR)
+*National Capital Region (NCR)
+*Alberta","*Territoires du Nord-Ouest
+*Nouvelle-Écosse
+*Nouveau-Brunswick
+*Territoire du Nunavut
+*Terre-Neuve-et-Labrador
+*Yukon
+*Colombie-Britannique
+*Québec (sauf RCN)
+*Saskatchewan
+*Manitoba
+*Île-du-Prince-Édouard
+*Ontario (sauf RCN)
+*Région de la capitale nationale (RCN)
+*Alberta","Public Works and Government Services Canada","11 Laurier St, Phase III, Place du Portage","Gatineau","Quebec","K1A 0S5","Canada","Travaux publics et Services gouvernementaux Canada","11, rue Laurier, Phase III, Place du Portage","Gatineau","Québec","Canada","Public Works and Government Services Canada","11 Laurier St, Phase III, Place du Portage,Gatineau,Quebec,K1A 0S5,Canada","Travaux publics et Services gouvernementaux Canada","11, rue Laurier, Phase III, Place du Portage,Gatineau,Québec,K1A 0S5,Canada","Contact Person","contact@example.gc.ca","000-000-0000","000-000-0000","Northern Contaminated Site Program<br>Canada Place/Place du Canada<br>10th Floor/10e étage<br>9700 Jasper Ave/9700 ave Jasper","Edmonton","Alberta","T5J 4C3","","Northern Contaminated Site Program<br>Canada Place/Place du Canada<br>10th Floor/10e étage<br>9700 Jasper Ave/9700 ave Jasper","Edmonton","Alberta","","","","https://canadabuys.canada.ca/documents/pub/att/2020/11/13/0cead1eeb0190bc86cac6e527cea7333/ABES.PROD.PW_NCS.B030.E11940.EBSU000.PDF","https://canadabuys.canada.ca/documents/pub/att/2020/11/13/72e0df8fdcc7f47ccbdd961102d570c2/ABES.PROD.PW_NCS.B030.F11940.EBSU000.PDF","Trade Agreement: CETA / WTO-AGP / CPTPP / CFTA / FTAs with Peru / Colombia / Panama / Korea
+Tendering Procedures: All interested suppliers may submit a bid
+Competitive Procurement Strategy: Subsequent/Follow-on Contracts
+Comprehensive Land Claim Agreement: No
+Nature of Requirements: 
+
+Hazardous Wast","Entente sur le commerce : AECG / OMC-AMP / PTPGP / ALEC / ALEs avec Pérou / Colombie / Panama / Corée
+Processus de demande des soumissions : Tout fournisseur intéressé peut présenter une soumission
+Stratégie d'approvisionnement concurrentielle : Marchés subséquents
+Entente sur les revendications ter"
+"E60HN-16ELEC for electrical and electronic products RFSA","E60HN-16ELEC pour produits électriques et électroniques DAMA","WS4298673451-Doc4332306790","000","WS4298673451","2023-12-01","2028-11-30T09:00:00","2023-12-01","2023-12-01","","Open","Ouvert","","","","*26121600
+*32131000
+*39121100
+*39121300
+*39121400
+*39121500
+*39121600
+*39121700
+*39121900
+*39122100
+*39122200
+*39122300","*Electrical cable and accessories
+*Electronic component parts and raw materials and accessories
+*Distribution and control centers and accessories
+*Electrical boxes and enclosures and fittings and accessories
+*Electrical lugs plugs and connectors
+*Electrical controls and accessories
+*Circuit protecti","*Câbles électrique et accessoires
+*Composants électroniques, matériaux et accessoires
+*Centres de distribution et de contrôle et accessoires
+*Boîtiers et coffrets électriques, fixations et accessoires
+*Cosses, fiches et connecteurs électriques
+*Interrupteurs, commutateurs, commandes, relais et acces","*GD","Request for Supply Arrangement","Demande pour un arrangement en matière d’approvisionnement","Competitive - Open bidding","Concurrentielle - Invitation ouverte à soumissionner","Not applicable","Sans objet","None","","*World Trade Organization Agreement on Government Procurement (WTO GPA)","*Accord sur les marchés publics de l'Organisation mondiale du commerce (AMP-OMC)","","","*Canada","*Canada","Department of Public Works and Government Services (PSPC)","11 Laurier St, Phase III, Place du Portage","Gatineau","Quebec","K1A 0S5","Canada"," Ministère des Travaux publics et des Services gouvernementaux (SPAC)","11, rue Laurier, Phase III, Place du Portage","Gatineau","Québec","Canada","Department of Public Works and Government Services (PSPC)","11 Laurier St, Phase III, Place du Portage,Gatineau,Quebec,K1A 0S5,Canada"," Ministère des Travaux publics et des Services gouvernementaux (SPAC)","11, rue Laurier, Phase III, Place du Portage,Gatineau,Québec,K1A 0S5,Canada","Contact Person","contact@example.gc.ca","","","","","","","","","","","","https://portal.us.bn.cloud.ariba.com/dashboard/public/appext/comsapsbncdiscoveryui#/RfxEvent/preview/18166573?anId=ANONYMOUS","https://portal.us.bn.cloud.ariba.com/dashboard/public/appext/comsapsbncdiscoveryui#/RfxEvent/preview/18166573?anId=ANONYMOUS","","","On-going opportunity for qualification for supply arrangement series E60HN-16ELEC for electrical and electronic products. This Request for Supply Arrangement(RFSA) is to provide for the supply, as required, of various electrical and electronic products from categories presented at Annexes A1 and A2 ","Occasion de qualification continue pour la série d'arrangements d'approvisionnement E60HN-16ELEC pour les produits électriques et électroniques. Cettedemande d'arrangement en matière d'approvisionnement (DAMA) est émise dans le but de permettre l'approvisionnement selon les besoins, de produits élec"
+"Lightspeed satellite services","Services satellitaires Lightspeed","SSC-26-00035176:T","000","BPM026778/35176","","2026-11-02T14:00:00","","","","Open","Ouvert","*D399BB","*Telecommunications - Satellite Services","*Télécommunications - services par satellite","","","","*SRV","Advance Contract Award Notice","Préavis d’attribution du contrat","Competitive - Open bidding","Concurrentielle - Invitation ouverte à soumissionner","","","","","*Canadian Free Trade Agreement (CFTA)
+*Comprehensive and Progressive Agreement for Trans-Pacific Partnership (CPTPP)
+*World Trade Organization Agreement on Government Procurement (WTO GPA)
+*Canada-Ukraine Free Trade Agreement (CUFTA)
+*Canada-Colombia Free Trade Agreement
+*Canada-Honduras Free Trade ","*Accord de libre-échange canadien (ALEC)
+*Accord de Partenariat transpacifique global et progressiste (PTPGP)
+*Accord sur les marchés publics de l'Organisation mondiale du commerce (AMP-OMC)
+*Accord de libre-échange Canada-Ukraine (ALECU)
+*Accord de libre-échange Canada-Colombie
+*Accord de libre-éch","*Canada","*Canada","*Canada","*Canada","Shared Services Canada","90 Metcalfe Street","Ottawa","Ontario","K0A 0C3","Canada","Services partagés Canada","90, rue Metcalfe","Ottawa","Ontario","Canada","Shared Services Canada","90 Metcalfe Street,Ottawa,Ontario,K0A 0C3,Canada","Services partagés Canada","90, rue Metcalfe,Ottawa,Ontario,K0A 0C3,Canada","Contact Person","","000-000-0000","000-000-0000","99 Metcalfe Street","Ottawa","Ontario","K0A 0C3","CANADA","99 Metcalfe Street Ontario<br>K0A 0C3<br>CANADA","","","","","","https://sscp2pspc.ssc-spc.gc.ca/page.aspx/en/fil/download_public/2F27097A-2A84-48CB-B17C-7023054B35B0","https://sscp2pspc.ssc-spc.gc.ca/page.aspx/fr/fil/download_public/9892FDCF-1B13-4813-9671-C728A9A1B048","This ACAN is being issued by Shared Services Canada (SSC) to satisfy the requirement for the provision and operation of Lightspeed Low Earth Orbiting satellite services (called Lightspeed Services) on an ‘’as and when’’ required basis.What is an ACAN: An ACAN is a public notice indicating to the sup","Ce PAC est publi&#233; par Services partag&#233;s Canada (SPC) afin de r&#233;pondre au besoin relatif &#224; la fourniture et &#224; l’exploitation de services satellitaires en orbite terrestre basse Lightspeed (appel&#233;s ‘’services Ligthspeed’’) au fur et &#224; mesure des besoins.Qu’est-ce qu’"
+"APN_UPGRADE ACCOMODATIONS BUILDINGS A-147 & A-149, CFB BORDEN, ON","PA_AMÉLIORATIONS DES IMMEUBLES D’HABITATION A-147 ET A-149, BFC BORDEN, ONTARIO","MX-444165208654","000","APN_86114","2026-09-17","2026-10-27T14:00:00","","2026-11-16","2026-11-16","Open","Ouvert","","","","","","","*CNST","","","Competitive - Open bidding","Concurrentielle - Invitation ouverte à soumissionner","","","","","*World Trade Organization Agreement on Government Procurement (WTO GPA)
+*Canada-European Union Comprehensive Economic and Trade Agreement (CETA)
+*Canadian Free Trade Agreement (CFTA)","*Accord sur les marchés publics de l'Organisation mondiale du commerce (AMP-OMC)
+*Accord économique et commercial global (AECG) entre le Canada et l’Union européenne (UE)
+*Accord de libre-échange canadien (ALEC)","","","","","Defence Construction Canada - Ontario Region","623 Fortune Crescent, Suite 200","Kingston","Ontario","K7P 0L5","Canada","Defence Construction Canada - Ontario Region","623 Fortune Crescent, Suite 200","Kingston","Ontario","Canada","","","","","Contact Person","contact@example.gc.ca","000-000-0000","","","","","","","","","","","https://www.merx.com/public/solicitations/4093079871/abstract?language=EN","https://www.merx.com/public/solicitations/4093079871/abstract?language=FR","","","Advance Procurement Notice
+
+Upgrade Accomodations Buildings A-147 &amp; A-149
+CFB Borden, ON
+(with Security Requirements)
+
+Purpose of this Advance Procurement Notice
+This is not a bid solicitation nor a request for proposals.
+
+In the context of the major investments announced by the Governm","Pr&eacute;avis d&rsquo;approvisionnement
+
+AM&Eacute;LIORATIONS DES IMMEUBLES D&rsquo;HABITATION A-147 et A-149
+BFC&nbsp;BORDEN, ONTARIO 
+(comprend des exigences en mati&egrave;re de s&eacute;curit&eacute;)
+
+Objectif du pr&eacute;sent pr&eacute;avis d&rsquo;approvisionnement
+Il ne s&rsquo;agit"

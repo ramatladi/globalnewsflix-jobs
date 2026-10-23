@@ -17,7 +17,7 @@
   },
   {
     "file": ".github/workflows/tenders.yml",
-    "sha256": "959b9e85353b54c2afa39d600c95cbf2bd892db2231e32592ba5d06b26d7662f"
+    "sha256": "fe454380dd76ba4241b4184f262294a6c6ae6df4b239d90495ba0747b1edd817"
   },
   {
     "file": ".github/workflows/tests.yml",
@@ -205,11 +205,15 @@
   },
   {
     "file": "tenders-collect.js",
-    "sha256": "dadf4f13d2d939bdb07acffd7dbe047285a18726b96aa1df0a7262a97b0b84f9"
+    "sha256": "c8267e08ee50634dd53d4fc81b13791fd99c195727ef2eafde75e77609c62459"
   },
   {
     "file": "tenders-kinds.js",
-    "sha256": "54c1fdea5218d50e9c2270c5fe5206b6ec426bb1f6b8acb22d544643c7c2a444"
+    "sha256": "f400bcd80a6072fa2b99929dfb5e95381d9cab076fa927afc3f9ce65f0d110b0"
+  },
+  {
+    "file": "tenders-national.js",
+    "sha256": "46e4f045103b45c58936355a579d057a03a9594d87207f6a05e7fd0219a047ae"
   },
   {
     "file": "tenders-runner.mjs",
@@ -218,6 +222,22 @@
   {
     "file": "tests/fixtures/afdb-solicitations.html",
     "sha256": "371f158c18986f7214c106920ac06fcee352cd15232835547e2d21986d5b86f0"
+  },
+  {
+    "file": "tests/fixtures/au-austender-atm.html",
+    "sha256": "0ba1742932b98b70a1e9ee1f1027611f5963f4187af0892105a8a79638a76799"
+  },
+  {
+    "file": "tests/fixtures/br-pncp-search.json",
+    "sha256": "27931741b39a1cc8d6114c0ef2b85161c0ba60609d300f0f0e02981d5b65d010"
+  },
+  {
+    "file": "tests/fixtures/ca-canadabuys-open.csv",
+    "sha256": "4e956e0a6f5f3ede273570fb5edc1f9b33281cd98b4570bd3e5e84401db52eeb"
+  },
+  {
+    "file": "tests/fixtures/co-secop-procesos.json",
+    "sha256": "eaa20480d54412a9df3684593e902aa713d1e9e15493b45dbe1f2a8ff34dd3b6"
   },
   {
     "file": "tests/fixtures/etenders-za-opportunities.json",
@@ -372,6 +392,14 @@
     "sha256": "df6993ec7caac3031dc7baf6c4ae389da996f9ad71cd223af1532c28fade1840"
   },
   {
+    "file": "tests/fixtures/ke-ppip-active.json",
+    "sha256": "1c6e7673895ba97ab9b94e866a8b56e906a890e9fbcb3c1218945926f665b6a2"
+  },
+  {
+    "file": "tests/fixtures/nz-gets-rss.xml",
+    "sha256": "e61f357638b594f9a4930bb9dda0645d35cd8ffb3fe0116909bb8380ed2ba14a"
+  },
+  {
     "file": "tests/fixtures/ted-public.json",
     "sha256": "5cdb143087becfc4637d42ab22c56ded0278e56e4da245eb1bf24ff6ed081e9f"
   },
@@ -476,8 +504,12 @@
     "sha256": "567248505e221d9d1532215ea964173b6b48d21dcad23e73ff85dd6385605154"
   },
   {
+    "file": "tests/tenders-national.test.mjs",
+    "sha256": "f8a44d695d2613205c11d944b46b5f021bc0cbe0dd1294637723c9249377492d"
+  },
+  {
     "file": "tests/tenders-public.test.mjs",
-    "sha256": "a3a8e9de2930b6eacc3b0d5a85a3563f95744b44859ccd586fcfb81dab9516d4"
+    "sha256": "74640137a50cee3ac638b6dd14a98dfd15a6fd479e5af4ab66aa5c2924a94849"
   },
   {
     "file": "tests/test_article_media.py",

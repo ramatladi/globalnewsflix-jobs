@@ -39,6 +39,13 @@ export const TENDER_SOURCES = Object.freeze({
   // South Africa's eTenders Publication Portal (National Treasury), where national and provincial departments,
   // municipalities and state-owned companies must advertise their tenders.
   etza: Object.freeze({ id: 'etza', name: 'eTenders Publication Portal (National Treasury)', issuerTypes: Object.freeze(['public']), hosts: Object.freeze(['www.etenders.gov.za']), countries: Object.freeze(['ZA']) }),
+  // National public procurement portals (tenders-national.js).
+  ppke: Object.freeze({ id: 'ppke', name: 'Public Procurement Information Portal (PPRA, Kenya)', issuerTypes: Object.freeze(['public']), hosts: Object.freeze(['tenders.go.ke']), countries: Object.freeze(['KE']) }),
+  gets: Object.freeze({ id: 'gets', name: 'GETS (New Zealand Government Procurement)', issuerTypes: Object.freeze(['public']), hosts: Object.freeze(['www.gets.govt.nz']), countries: Object.freeze(['NZ']) }),
+  aust: Object.freeze({ id: 'aust', name: 'AusTender (Australian Government)', issuerTypes: Object.freeze(['public']), hosts: Object.freeze(['www.tenders.gov.au']), countries: Object.freeze(['AU']) }),
+  secop: Object.freeze({ id: 'secop', name: 'SECOP II (Colombia Compra Eficiente)', issuerTypes: Object.freeze(['public']), hosts: Object.freeze(['community.secop.gov.co']), countries: Object.freeze(['CO']) }),
+  cabuy: Object.freeze({ id: 'cabuy', name: 'CanadaBuys (Public Services and Procurement Canada)', issuerTypes: Object.freeze(['public']), hosts: Object.freeze(['canadabuys.canada.ca']), countries: Object.freeze(['CA']) }),
+  pncp: Object.freeze({ id: 'pncp', name: 'Portal Nacional de Contratações Públicas (Brazil)', issuerTypes: Object.freeze(['public']), hosts: Object.freeze(['pncp.gov.br']), countries: Object.freeze(['BR']) }),
 });
 
 // TED's language codes (ISO 639-2/B and /T, as its multilingual fields are keyed) to the site's.

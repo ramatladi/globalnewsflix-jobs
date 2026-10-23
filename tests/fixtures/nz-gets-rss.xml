@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/" version="2.0">
+  <channel>
+    <title>GETS Open Tenders or Quotes</title>
+    <link>https://www.gets.govt.nz//ExternalIndex.htm</link>
+    <description>This feed list the current open tenders or requests for quote listed on the GETS.</description>
+    <image>
+      <title>Open tenders or Requests for Quote from GETS</title>
+      <url>https://www.gets.govt.nz//ext/default/img/getsLogo.jpg</url>
+      <link>https://www.gets.govt.nz//ExternalIndex.htm</link>
+    </image>
+    <item>
+      <title>25.119.01 - Online job advertising services - open supplier panel</title>
+      <link>https://www.gets.govt.nz//MSD/ExternalTenderDetails.htm?id=32705858</link>
+      <description>&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;RFx ID: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;32705858&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Organisation: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;Ministry of Social Development&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Open date: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;Wednesday, 8 October 2025 9:00 AM +13:00&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Close date: &lt;/td&gt;&lt;td&gt;Monday, 31 December 2029 5:00 PM +13:00&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top"&gt;&lt;b&gt;Categories: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;80000000 - Management and Business Professionals and Administrative Services&lt;br&gt;81110000 - Computer services&lt;br&gt;82100000 - Advertising&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top"&gt;&lt;b&gt;Region: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;New Zealand&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top"&gt;&lt;b&gt;Overview: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;The purpose of this procurement process is to establish an open Panel of suppliers for providing online job advertising services for the Ministry.&lt;br&gt;The Panel is a list of suppliers who have been approved by MSD through the procurement process as capable of delivering the services and who have agreed to the contract. Any Respondent who agrees and meets the pre-conditions, standards, and service requirements outlined in the RFA can apply to join the Panel. This means that suppliers can apply to join the Panel throughout the life of the Contract.&lt;br&gt;&lt;br&gt;For Application submitted before or on 12 November 2025, all enquiries/applications must be posted on Weka - MSD Supplier Portal.&lt;br&gt;For Application submitted after 12 November 2025, all enquiries/applications must be sent via email to procurement@msd.govt.nz with the subject "Enquiry for Online Job Advertising Services RFA 25.119.01".&lt;br&gt;&lt;br&gt;For Prospective Supplier Registration in Weka go to:&lt;br&gt;https://msd.govt.nz/documents/about-msd-and-our-work/about-msd/suppliers/how-to-register-as-a-prospective-supplier.pdf,&lt;br&gt;For Accessing and Responding to Tender Opportunities in Weka go to:&lt;br&gt;https://msd.govt.nz/documents/about-msd-and-our-work/about-msd/suppliers/accessing-and-responding-to-tender-opportunities-with-the-ministry.pdf.&lt;br&gt;For Navigating the Supplier Portal in Weka go to:&lt;br&gt;https://msd.govt.nz/documents/about-msd-and-our-work/about-msd/suppliers/navigating-the-supplier-portal.pdf.&lt;br&gt;For assistance with Weka email nac_suppliers@msd.govt.nz.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</description>
+      <category>80000000 - Management and Business Professionals and Administrative Services</category>
+      <category>81110000 - Computer services</category>
+      <category>82100000 - Advertising</category>
+      <pubDate>Tue, 07 Oct 2025 20:00:00 GMT</pubDate>
+      <guid>https://www.gets.govt.nz//MSD/ExternalTenderDetails.htm?id=32705858</guid>
+      <dc:creator>Ministry of Social Development</dc:creator>
+      <dc:date>2025-10-07T20:00:00Z</dc:date>
+    </item>
+    <item>
+      <title>Clinical Services - Request for Application</title>
+      <link>https://www.gets.govt.nz//ACC/ExternalTenderDetails.htm?id=29971844</link>
+      <description>&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;RFx ID: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;29971844&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Organisation: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;Accident Compensation Corporation&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Open date: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;Tuesday, 13 August 2024 10:00 AM +12:00&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Close date: &lt;/td&gt;&lt;td&gt;Friday, 30 June 2028 5:00 PM +12:00&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top"&gt;&lt;b&gt;Categories: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;85000000 - Healthcare Services&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top"&gt;&lt;b&gt;Region: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;Auckland&lt;br&gt;Bay of Plenty&lt;br&gt;Canterbury&lt;br&gt;Chatham Islands&lt;br&gt;Gisborne&lt;br&gt;Hawke's Bay&lt;br&gt;Manawatu-Wanganui&lt;br&gt;Marlborough&lt;br&gt;Nelson&lt;br&gt;Northland&lt;br&gt;Otago&lt;br&gt;Southland&lt;br&gt;Taranaki&lt;br&gt;Tasman&lt;br&gt;Waikato&lt;br&gt;Wellington&lt;br&gt;West Coast&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top"&gt;&lt;b&gt;Overview: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;PLEASE NOTE - this Request for Application is only for new Applicants to apply to hold the Clinical Services Contract - current Clinical Services contract arrangements stand.&lt;br&gt;&lt;br&gt;Attached is the Request for Application (RFA) to apply for a Clinical Services Contract with ACC.&lt;br&gt;&lt;br&gt;If you have any questions regarding the RFA Documents please ask these through the GETS Question &amp;amp; Answer function.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</description>
+      <category>85000000 - Healthcare Services</category>
+      <pubDate>Mon, 12 Aug 2024 22:00:00 GMT</pubDate>
+      <guid>https://www.gets.govt.nz//ACC/ExternalTenderDetails.htm?id=29971844</guid>
+      <dc:creator>Accident Compensation Corporation</dc:creator>
+      <dc:date>2024-08-12T22:00:00Z</dc:date>
+    </item>
+    <item>
+      <title>Applications for Māori agribusiness funding</title>
+      <link>https://www.gets.govt.nz//MPI/ExternalTenderDetails.htm?id=34127205</link>
+      <description>&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;RFx ID: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;34127205&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Organisation: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;Ministry for Primary Industries&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Open date: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;Wednesday, 20 May 2026 9:00 AM +12:00&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Close date: &lt;/td&gt;&lt;td&gt;Wednesday, 30 June 2027 11:30 PM +12:00&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top"&gt;&lt;b&gt;Categories: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;84101500 - Development assistance&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top"&gt;&lt;b&gt;Region: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;New Zealand&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top"&gt;&lt;b&gt;Overview: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;MPI welcomes applications for the following Māori agribusiness funding and support programmes:&lt;br&gt; &lt;br&gt;•	Māori Agribusiness Innovation Fund - enables Māori to develop innovative solutions to improve outcomes and create benefits for the Māori primary sector.&lt;br&gt;•	Māori Agribusiness Pathway to Increased Productivity (MAPIP) programme - provides one-on-one support to Māori landowners and trustees looking to increase the productivity of their primary sector assets. &lt;br&gt;•	Māori Agribusiness Extension (MABx) programme - supports interested Māori landowners and agribusinesses to work together in clusters towards common goals.&lt;br&gt;•	Māori Agribusiness Workforce programme – He Ara Mahi Hou – supports Māori food and fibre entities in workforce and governance development. &lt;br&gt; &lt;br&gt;For more information, including links to the application guidelines, criteria and contact information, please visit the MPI website: https://www.mpi.govt.nz/funding-rural-support/maori-agribusiness-funding-support &lt;br&gt;&lt;br&gt;Please note, there are no documents to download from GETS.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</description>
+      <category>84101500 - Development assistance</category>
+      <pubDate>Tue, 19 May 2026 21:00:00 GMT</pubDate>
+      <guid>https://www.gets.govt.nz//MPI/ExternalTenderDetails.htm?id=34127205</guid>
+      <dc:creator>Ministry for Primary Industries</dc:creator>
+      <dc:date>2026-05-19T21:00:00Z</dc:date>
+    </item>
+    <item>
+      <title>Burwood Landfill Site C : Provision of Plant hire, maintenance and operation of Burwood Landfill</title>
+      <link>https://www.gets.govt.nz//CCC/ExternalTenderDetails.htm?id=33761824</link>
+      <description>&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;RFx ID: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;33761824&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Organisation: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;Christchurch City Council&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Open date: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;Tuesday, 6 October 2026 9:30 AM +13:00&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;Close date: &lt;/td&gt;&lt;td&gt;Wednesday, 30 June 2027 12:00 PM +12:00&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top"&gt;&lt;b&gt;Categories: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;22000000 - Building and Construction Machinery and Accessories&lt;br&gt;23000000 - Industrial Manufacturing and Processing Machinery and Accessories&lt;br&gt;30000000 - Structures and Building and Construction and Manufacturing Components and Supplies&lt;br&gt;77000000 - Environmental Services&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top"&gt;&lt;b&gt;Region: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;Canterbury&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top"&gt;&lt;b&gt;Overview: &lt;/b&gt;&lt;/td&gt;&lt;td&gt;The purpose of this RFP is to invite Prospective Suppliers to submit their Proposals for Provision of suitable plant (as detailed within the Operations Specification) for preparing the landfill site for the disposal of contaminated soil and construction of final capping and landscaping the site.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</description>
+      <category>22000000 - Building and Construction Machinery and Accessories</category>
+      <category>23000000 - Industrial Manufacturing and Processing Machinery and Accessories</category>
+      <category>30000000 - Structures and Building and Construction and Manufacturing Components and Supplies</category>
+      <category>77000000 - Environmental Services</category>
+      <pubDate>Mon, 05 Oct 2026 20:30:00 GMT</pubDate>
+      <guid>https://www.gets.govt.nz//CCC/ExternalTenderDetails.htm?id=33761824</guid>
+      <dc:creator>Christchurch City Council</dc:creator>
+      <dc:date>2026-10-05T20:30:00Z</dc:date>
+    </item>
+    
+  </channel>
+</rss>

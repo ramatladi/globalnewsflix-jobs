@@ -1,7 +1,7 @@
 name: Tenders
 # Open tenders from international organisations, private companies and the public sector, read from official systems
-# three times a day (the EU and EEA public sector's, some 40,000 notices, on the first run of the day and on manual
-# runs) and uploaded to the site. The site accepts this workflow only on main (scheduled or manual), signed by GitHub
+# three times a day (the EU and EEA public sector's and Brazil's, some 40,000 notices each, on the first run of the day
+# and on manual runs) and uploaded to the site. The site accepts this workflow only on main (scheduled or manual), signed by GitHub
 # for this exact repository, and only on its tenders routes.
 on:
   schedule:

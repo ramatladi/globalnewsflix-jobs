@@ -1,0 +1,369 @@
+// Tenders from national public procurement systems (owner, 23 Oct 2026): each country's official portal, never an
+// aggregator. Kenya's Public Procurement Information Portal (PPRA), New Zealand's GETS (MBIE), Australia's AusTender
+// (Department of Finance), Colombia's SECOP II (Colombia Compra Eficiente, through the national open data portal) and
+// Brazil's PNCP (Portal Nacional de Contratações Públicas, once a day: some 39,000 open notices). Each notice keeps
+// what its portal states, links to its official page, and never the names, e-mail addresses or telephone numbers of
+// the officials who posted it. The crawler names itself (tenders-collect.js) and keeps to one request at a time.
+import { TENDER_MAX_AHEAD_MS } from './tenders-kinds.js';
+
+const UA = 'Mozilla/5.0 (compatible; GlobalNewsflixTenders/1.0; +https://globalnewsflix.com/contact)';
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const clean = (v, n) => String(v ?? '').replace(/[\u0000-\u001f\u007f]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, n);
+const NAMED = { quot: '"', apos: "'", lt: '<', gt: '>', nbsp: ' ', rsquo: '’', lsquo: '‘', rdquo: '”', ldquo: '“', ndash: '–', mdash: '—', hellip: '…', laquo: '«', raquo: '»', deg: '°', euro: '€' };
+const ACCENT = { acute: '\u0301', grave: '\u0300', circ: '\u0302', uml: '\u0308', tilde: '\u0303', cedil: '\u0327', ring: '\u030A' };
+// Character references, numeric and named ("&eacute;" -> "é"); "&amp;" last, so "&amp;eacute;" stays as written.
+const decode = s => String(s || '').replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(+n)).replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
+  .replace(/&([a-zA-Z]{2,8});/g, (m, name) => { if (NAMED[name]) return NAMED[name]; const a = /^([a-zA-Z])(acute|grave|circ|uml|tilde|cedil|ring)$/.exec(name); return a ? (a[1] + ACCENT[a[2]]).normalize('NFC') : name === 'szlig' ? 'ß' : name === 'aelig' ? 'æ' : name === 'oslash' ? 'ø' : m; })
+  .replace(/&amp;/g, '&');
+const text = html => decode(String(html || '').replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
+// No e-mail addresses or telephone numbers in what the site keeps of a notice's text.
+const noContacts = s => String(s || '').replace(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g, '').replace(/(?:\+\d{1,3}[ -]?)?(?:\(\d{2,4}\)[ -]?)?\b\d{2,4}[ -]\d{3,4}[ -]\d{3,4}\b/g, '').replace(/\s{2,}/g, ' ').trim();
+const summaryOf = (s, n = 400) => { const t = noContacts(clean(s, 2000)); if (t.length <= n) return t || null; const cut = t.slice(0, n - 1); return cut.slice(0, Math.max(cut.lastIndexOf(' '), n - 40)).replace(/[\s,;:.-]+$/, '') + '…'; };
+const closesOk = (ts, now) => Number.isFinite(ts) && ts > now && ts <= now + TENDER_MAX_AHEAD_MS;
+const noon = (y, m, d) => Date.UTC(y, m - 1, d, 12);
+
+// A local time in a time zone -> UTC milliseconds and the wording the site reads ("26-Oct-2026 10:00 (GMT 11.00)").
+function offsetMinutes(ts, zone) {
+  const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: zone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).formatToParts(ts).map(x => [x.type, x.value]));
+  return Math.round((Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute) - ts) / 60000);
+}
+const zoneText = (y, m, d, h, mi, off) => {
+  const sign = off < 0 ? '-' : '', a = Math.abs(off), frac = a % 60 === 30 ? '50' : a % 60 === 45 ? '75' : '00';
+  return `${String(d).padStart(2, '0')}-${MON[m - 1]}-${y}${h == null ? '' : ` ${String(h).padStart(2, '0')}:${String(mi).padStart(2, '0')} (GMT ${sign}${Math.floor(a / 60)}.${frac})`}`;
+};
+export function zonedTime(y, m, d, h, mi, zone) {
+  if (![y, m, d].every(Number.isInteger) || m < 1 || m > 12 || new Date(Date.UTC(y, m - 1, d)).getUTCDate() !== d) return null;
+  // A day without a time closes at its end.
+  const [hh, mm] = h == null ? [23, 59] : [h, mi];
+  let ts = Date.UTC(y, m - 1, d, hh, mm);
+  for (let i = 0; i < 2; i++) ts = Date.UTC(y, m - 1, d, hh, mm) - offsetMinutes(ts, zone) * 60000;
+  return { ts, text: zoneText(y, m, d, h, mi, offsetMinutes(ts, zone)) };
+}
+// "2026-10-24 11:00:00" or "2026-11-06T09:00" in a time zone.
+export function isoLocal(v, zone) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2}))?/.exec(String(v || ''));
+  return m ? zonedTime(+m[1], +m[2], +m[3], m[4] == null ? null : +m[4], m[5] == null ? null : +m[5], zone) : null;
+}
+const published = (v, now) => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(v || '')); const t = m ? noon(+m[1], +m[2], +m[3]) : null; return t && t <= now + 86400000 ? t : null; };
+const diagnostic = src => ({ src, status: 'failed', reason: '', rawCount: 0, acceptedCount: 0, httpRequests: 0 });
+const finish = (diag, rows, complete, log, note = '') => {
+  diag.acceptedCount = rows.length;
+  diag.status = complete ? 'complete' : rows.length ? 'partial' : 'failed';
+  diag.reason = complete ? '' : diag.reason || 'page-limit';
+  log(`${diag.src}: ${rows.length} open tenders${note}; ${diag.httpRequests} requests; ${diag.status}${diag.reason ? ' ' + diag.reason : ''}`);
+  return { rows, diagnostics: [diag] };
+};
+const failure = e => e?.name === 'TimeoutError' ? 'timeout' : 'network';
+
+// --- Kenya: the Public Procurement Information Portal (tenders.go.ke) ---
+export const PPKE = 'https://tenders.go.ke';
+const PPKE_KIND = { 'open tender': 'itb', 'request for proposals': 'rfp', 'expression of interest': 'eoi', 'request for quotation': 'rfq', 'framework agreements': 'itb', 'restricted tender': 'itb', 'two-stage tendering': 'itb' };
+const PPKE_NATURE = { works: 'works', goods: 'goods', 'consultancy services': 'services', 'non consultancy services': 'services' };
+// One active tender -> the row the site stores, or null. Each record carries the officer who posted it (created_by):
+// it is never read.
+export function ppkeRow(t, now = Date.now()) {
+  if (!t || typeof t !== 'object' || !Number.isSafeInteger(t.id) || t.id <= 0 || t.terminated === 1 || t.published === 0) return null;
+  const title = clean(t.title, 300), issuer = clean(t.pe?.name, 120);
+  const closes = isoLocal(t.close_at, 'Africa/Nairobi');
+  if (title.length < 4 || issuer.length < 2 || !closes || !closesOk(closes.ts, now)) return null;
+  const method = clean(t.procurement_method?.title, 60).toLowerCase(), category = clean(t.procurement_category?.title, 60);
+  const docs = (Array.isArray(t.documents) ? t.documents : []).filter(d => /^\/storage\/Documents\/[^?#]+\.[a-z0-9]{2,5}$/i.test(String(d?.url || ''))).slice(0, 6)
+    .map(d => ({ n: clean(d.type?.description || d.description, 120) || 'Document', u: new URL(d.url, PPKE).href }));
+  return { id: `ppke:${t.id}`, src: 'ppke', issuer, issuer_type: 'public', title, lang: 'en', langs: ['en'], ref: clean(t.tender_ref, 120) || null, kind: PPKE_KIND[method] || 'other', countries: ['KE'],
+    published_ts: published(t.published_at, now), closes_ts: closes.ts, closes_text: closes.text, url: `${PPKE}/tenders/${t.id}`, category: category || null, nature: PPKE_NATURE[category.toLowerCase()] || null,
+    place: clean(t.pe?.city, 80) || null, summary: t.description ? summaryOf(t.description) : null, info: docs.length ? { docs } : null };
+}
+export async function collectPpke(fetchImpl = fetch, { now = Date.now(), delayMs = 2000, maxPages = 40, log = () => {} } = {}) {
+  const diag = diagnostic('ppke'), rows = [], seen = new Set();
+  let complete = false;
+  try {
+    for (let page = 1; page <= maxPages; page++) {
+      if (page > 1) await sleep(delayMs);
+      const res = await fetchImpl(`${PPKE}/api/active-tenders?perpage=50&page=${page}`, { headers: { 'user-agent': UA, accept: 'application/json' }, signal: AbortSignal.timeout(60000) });
+      diag.httpRequests++;
+      if (!res.ok) { diag.reason = `list-http-${res.status}`; break; }
+      const data = await res.json().catch(() => null);
+      if (!data || !Array.isArray(data.data)) { diag.reason = 'bad-response'; break; }
+      diag.rawCount += data.data.length;
+      for (const t of data.data) { const r = ppkeRow(t, now); if (r && !seen.has(r.id)) { seen.add(r.id); rows.push(r); } }
+      if (!data.next_page_url || page >= Number(data.last_page || 0) || !data.data.length) { complete = true; break; }
+    }
+  } catch (e) { diag.reason = diag.reason || failure(e); }
+  return finish(diag, rows, complete, log);
+}
+
+// --- New Zealand: GETS (Government Electronic Tender Service, MBIE), its feed of open tenders ---
+export const GETS = 'https://www.gets.govt.nz';
+export const GETS_FEED = `${GETS}/ExternalRSSFeed.htm`;
+const NZ_REGIONS = new Set(['Northland', 'Auckland', 'Waikato', 'Bay of Plenty', 'Gisborne', "Hawke's Bay", 'Taranaki', 'Manawatu-Wanganui', 'Wellington', 'Tasman', 'Nelson', 'Marlborough', 'West Coast', 'Canterbury', 'Otago', 'Southland', 'Chatham Islands']);
+// What a title says the notice is ("RFP", "Registration of Interest", ...); else a tender.
+export function kindOfTitle(title, fallback = 'other') {
+  const t = String(title || '');
+  if (/\bRFQ\b|request for quot/i.test(t)) return 'rfq';
+  if (/\bRFP\b|request for proposals?/i.test(t)) return 'rfp';
+  if (/\bROI\b|\bEOI\b|registrations? of interest|expressions? of interest/i.test(t)) return 'eoi';
+  if (/\bRFI\b|request for information/i.test(t)) return 'rfi';
+  if (/\bRFT\b|request for tenders?|invitation to tender|\bITT\b/i.test(t)) return 'itb';
+  if (/\bfund(?:ing)?\b|\bgrants?\b/i.test(t)) return 'grant';
+  return fallback;
+}
+const unspscNature = code => { const s = Number(String(code || '').slice(0, 2)); return !s ? null : s === 72 || s === 95 ? 'works' : s >= 70 ? 'services' : 'goods'; };
+// "Monday, 31 December 2029 5:00 PM +13:00" -> the time and its wording.
+export function getsTime(v) {
+  const m = /(\d{1,2}) ([A-Za-z]+) (\d{4}) (\d{1,2}):(\d{2}) ([AP]M) ([+-])(\d{2}):(\d{2})/.exec(String(v || ''));
+  const mo = m ? ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'].indexOf(m[2].toLowerCase()) + 1 : 0;
+  if (!m || !mo) return null;
+  const h = (+m[4] % 12) + (m[6] === 'PM' ? 12 : 0), off = (m[7] === '-' ? -1 : 1) * (+m[8] * 60 + +m[9]);
+  const ts = Date.UTC(+m[3], mo - 1, +m[1], h, +m[5]) - off * 60000;
+  return new Date(Date.UTC(+m[3], mo - 1, +m[1])).getUTCDate() === +m[1] ? { ts, text: zoneText(+m[3], mo, +m[1], h, +m[5], off) } : null;
+}
+const field = (html, label) => { const m = new RegExp(`<b>${label}:\\s*(?:</b>)?\\s*</td>\\s*<td[^>]*>([\\s\\S]*?)</td>`, 'i').exec(html); return m ? m[1] : ''; };
+export function parseGets(xml) {
+  return String(xml || '').split(/<item>/).slice(1).map(item => {
+    const tag = n => decode((new RegExp(`<${n}>([\\s\\S]*?)</${n}>`).exec(item) || [])[1] || '');
+    const html = tag('description');
+    return { title: clean(tag('title'), 300), link: tag('link').trim(), rfx: text(field(html, 'RFx ID')), org: text(field(html, 'Organisation')), opened: text(field(html, 'Open date')), closes: text(field(html, 'Close date')),
+      categories: field(html, 'Categories').split(/<br\s*\/?>/i).map(text).filter(Boolean), regions: field(html, 'Region').split(/<br\s*\/?>/i).map(text).filter(Boolean), overview: text(field(html, 'Overview')) };
+  });
+}
+export function getsRow(n, now = Date.now()) {
+  if (!/^\d{4,12}$/.test(n?.rfx || '') || n.title.length < 4 || n.org.length < 2) return null;
+  const closes = getsTime(n.closes), opened = getsTime(n.opened);
+  let url;
+  try { const u = new URL(n.link.replace(/^(https:\/\/www\.gets\.govt\.nz)\/+/, '$1/')); url = u.host === 'www.gets.govt.nz' && u.searchParams.get('id') === n.rfx ? u.href : ''; } catch { url = ''; }
+  if (!closes || !closesOk(closes.ts, now) || !url) return null;
+  const region = n.regions.length === 1 && NZ_REGIONS.has(n.regions[0]) ? n.regions[0] : null;
+  const first = n.categories[0] || '';
+  return { id: `gets:${n.rfx}`, src: 'gets', issuer: clean(n.org, 120), issuer_type: 'public', title: n.title, lang: 'en', langs: ['en'], ref: n.rfx, kind: kindOfTitle(`${n.title} ${n.overview.slice(0, 160)}`), countries: ['NZ'],
+    published_ts: opened && opened.ts <= now + 86400000 ? opened.ts : null, closes_ts: closes.ts, closes_text: closes.text, url, category: clean(first.replace(/^\d+\s*-\s*/, ''), 80) || null,
+    nature: unspscNature(first), region, summary: summaryOf(n.overview) };
+}
+export async function collectGets(fetchImpl = fetch, { now = Date.now(), log = () => {} } = {}) {
+  const diag = diagnostic('gets'), rows = [];
+  let complete = false;
+  try {
+    const res = await fetchImpl(GETS_FEED, { headers: { 'user-agent': UA, accept: 'application/rss+xml, application/xml' }, signal: AbortSignal.timeout(60000) });
+    diag.httpRequests++;
+    if (!res.ok) diag.reason = `feed-http-${res.status}`;
+    else {
+      const xml = await res.text();
+      if (!/<rss[\s>]/.test(xml)) diag.reason = 'bad-response';
+      else {
+        const items = parseGets(xml), seen = new Set();
+        diag.rawCount = items.length;
+        for (const n of items) { const r = getsRow(n, now); if (r && !seen.has(r.id)) { seen.add(r.id); rows.push(r); } }
+        complete = true;
+      }
+    }
+  } catch (e) { diag.reason = diag.reason || failure(e); }
+  return finish(diag, rows, complete, log);
+}
+
+// --- Australia: AusTender (Department of Finance), its list of current approaches to market ---
+export const AUSTENDER = 'https://www.tenders.gov.au';
+export const AUSTENDER_LIST = `${AUSTENDER}/atm`;
+export function parseAusTender(html) {
+  const out = [];
+  for (const chunk of String(html || '').split(/<p class="lead" role="heading" aria-level="2">/).slice(1)) {
+    const desc = label => { const m = new RegExp(`<span>${label}:</span>\\s*<div class="list-desc-inner">([\\s\\S]*?)</div>`).exec(chunk); return m ? m[1] : ''; };
+    const atm = /<a href="\/Atm\/Show\/([0-9a-f-]{36})">([^<]+)<\/a>/.exec(chunk);
+    if (!atm) continue;
+    out.push({ title: text(chunk.slice(0, chunk.indexOf('</p>'))), uuid: atm[1], atmId: text(atm[2]), closes: text(desc('Close Date &amp; Time')), agency: text(desc('Agency')), category: text(desc('Category')), description: text(desc('Description')) });
+  }
+  return out;
+}
+// "26-Oct-2026 10:00 am (ACT Local Time)": Canberra time.
+export function ausTime(v) {
+  const m = /^(\d{1,2})-([A-Za-z]{3})-(\d{4}) (\d{1,2}):(\d{2}) ([ap]m)/i.exec(String(v || '').trim());
+  const mo = m ? MON.findIndex(x => x.toLowerCase() === m[2].toLowerCase()) + 1 : 0;
+  return m && mo ? zonedTime(+m[3], mo, +m[1], (+m[4] % 12) + (m[6].toLowerCase() === 'pm' ? 12 : 0), +m[5], 'Australia/Sydney') : null;
+}
+export function ausTenderRow(n, now = Date.now()) {
+  const closes = ausTime(n?.closes);
+  if (!n || n.title.length < 4 || n.agency.length < 2 || !closes || !closesOk(closes.ts, now)) return null;
+  // A description that only repeats the title adds nothing.
+  const d = n.description.toLowerCase(), t = n.title.toLowerCase();
+  const description = n.description && !t.startsWith(d) && !d.startsWith(t) ? n.description : '';
+  return { id: `aust:${n.uuid}`, src: 'aust', issuer: clean(n.agency, 120), issuer_type: 'public', title: clean(n.title, 300), lang: 'en', langs: ['en'], ref: clean(n.atmId, 120) || null,
+    kind: kindOfTitle(`${n.title} ${description}`, 'itb'), countries: ['AU'], published_ts: null, closes_ts: closes.ts, closes_text: closes.text, url: `${AUSTENDER}/Atm/Show/${n.uuid}`,
+    category: clean(n.category, 80) || null, nature: /construction|building/i.test(n.category) ? 'works' : null, summary: description ? summaryOf(description) : null };
+}
+export async function collectAusTender(fetchImpl = fetch, { now = Date.now(), delayMs = 2000, maxPages = 30, log = () => {} } = {}) {
+  const diag = diagnostic('aust'), rows = [], seen = new Set();
+  let complete = false;
+  try {
+    for (let page = 1; page <= maxPages; page++) {
+      if (page > 1) await sleep(delayMs);
+      const res = await fetchImpl(`${AUSTENDER_LIST}?page=${page}`, { headers: { 'user-agent': UA, accept: 'text/html' }, signal: AbortSignal.timeout(60000) });
+      diag.httpRequests++;
+      if (!res.ok) { diag.reason = `list-http-${res.status}`; break; }
+      const html = await res.text(), notices = parseAusTender(html);
+      if (!notices.length) { if (page === 1) diag.reason = 'no-list'; else complete = true; break; }
+      diag.rawCount += notices.length;
+      for (const n of notices) { const r = ausTenderRow(n, now); if (r && !seen.has(r.id)) { seen.add(r.id); rows.push(r); } }
+      if (!new RegExp(`href="\\?page=${page + 1}"`).test(html)) { complete = true; break; }
+    }
+  } catch (e) { diag.reason = diag.reason || failure(e); }
+  return finish(diag, rows, complete, log);
+}
+
+// --- Colombia: SECOP II processes (Colombia Compra Eficiente), from the national open data portal ---
+export const SECOP_DATA = 'https://www.datos.gov.co/resource/p6dx-8zbt.json';
+export const SECOP_PAGE = 1000;
+const SECOP_KIND = [[/^licitaci/i, 'itb'], [/subasta inversa/i, 'itb'], [/^selecci/i, 'itb'], [/^concurso de m/i, 'rfp'], [/^m[ií]nima cuant/i, 'rfq'], [/^solicitud de informaci/i, 'rfi'], [/r[ée]gimen especial/i, 'rfp'], [/^contrataci[oó]n directa \(con ofertas\)/i, 'rfq']];
+const SECOP_NATURE = [[/^obra/i, 'works'], [/^(compraventa|suministro)/i, 'goods'], [/^(prestaci[oó]n de servicios|consultor[ií]a|interventor[ií]a)/i, 'services']];
+const undefinedValue = v => !v || /^no (definido|aplica)$/i.test(String(v).trim());
+// The open processes: published, still receiving offers, by any method except direct contracting without bids.
+export function secopQuery(now = Date.now(), offset = 0) {
+  const day = new Date(now - 5 * 3600000).toISOString().slice(0, 10);
+  const q = { $where: `estado_del_procedimiento = 'Publicado' AND fecha_de_recepcion_de >= '${day}T00:00:00' AND modalidad_de_contratacion != 'Contratación directa'`, $order: 'id_del_proceso', $limit: String(SECOP_PAGE), $offset: String(offset) };
+  return Object.entries(q).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&');
+}
+export function secopRow(p, now = Date.now()) {
+  if (!p || typeof p !== 'object') return null;
+  let url = '', uid = '';
+  try { const u = new URL(p.urlproceso?.url || ''); uid = u.searchParams.get('noticeUID') || ''; url = u.host === 'community.secop.gov.co' && /^\/Public\/Tendering\/OpportunityDetail\//.test(u.pathname) && /^CO1\.NTC\.\d+$/.test(uid) ? u.href : ''; } catch { url = ''; }
+  const closes = isoLocal(String(p.fecha_de_recepcion_de || '').slice(0, 10), 'America/Bogota');
+  const name = clean(p.nombre_del_procedimiento, 300), desc = clean(p.descripci_n_del_procedimiento, 2000), issuer = clean(p.entidad, 120);
+  if (!url || !closes || !closesOk(closes.ts, now) || issuer.length < 2) return null;
+  // A generic name ("CONTRATO DE COMPRAVENTA") gives way to the description.
+  const generic = name.length < 30 && desc.length > name.length;
+  const title = (generic ? desc : name).slice(0, 300);
+  if (title.length < 4) return null;
+  const amount = Number(p.precio_base), modality = clean(p.modalidad_de_contratacion, 80), type = clean(p.tipo_de_contrato, 60);
+  return { id: `secop:${uid}`, src: 'secop', issuer, issuer_type: 'public', title, lang: 'es', langs: ['es'], ref: clean(p.referencia_del_proceso, 120) || null, kind: (SECOP_KIND.find(([re]) => re.test(modality)) || [])[1] || 'other',
+    countries: ['CO'], published_ts: published(p.fecha_de_publicacion_del, now), closes_ts: closes.ts, closes_text: closes.text, url, category: modality || null, nature: (SECOP_NATURE.find(([re]) => re.test(type)) || [])[1] || null,
+    region: undefinedValue(p.departamento_entidad) ? null : clean(p.departamento_entidad, 60), place: undefinedValue(p.ciudad_entidad) ? null : clean(p.ciudad_entidad, 80),
+    value_amount: Number.isFinite(amount) && amount >= 1000 ? amount : null, value_cur: Number.isFinite(amount) && amount >= 1000 ? 'COP' : null, summary: !generic && desc && desc.toLowerCase() !== name.toLowerCase() ? summaryOf(desc) : null };
+}
+export async function collectSecop(fetchImpl = fetch, { now = Date.now(), delayMs = 1000, maxPages = 20, log = () => {} } = {}) {
+  const diag = diagnostic('secop'), rows = [], seen = new Set();
+  let complete = false;
+  try {
+    for (let page = 0; page < maxPages; page++) {
+      if (page) await sleep(delayMs);
+      const res = await fetchImpl(`${SECOP_DATA}?${secopQuery(now, page * SECOP_PAGE)}`, { headers: { 'user-agent': UA, accept: 'application/json' }, signal: AbortSignal.timeout(60000) });
+      diag.httpRequests++;
+      if (!res.ok) { diag.reason = `data-http-${res.status}`; break; }
+      const data = await res.json().catch(() => null);
+      if (!Array.isArray(data)) { diag.reason = 'bad-response'; break; }
+      diag.rawCount += data.length;
+      for (const p of data) { const r = secopRow(p, now); if (r && !seen.has(r.id)) { seen.add(r.id); rows.push(r); } }
+      if (data.length < SECOP_PAGE) { complete = true; break; }
+    }
+  } catch (e) { diag.reason = diag.reason || failure(e); }
+  return finish(diag, rows, complete, log);
+}
+
+// --- Brazil: PNCP (Portal Nacional de Contratações Públicas), notices still receiving proposals ---
+// Its search reads at most 10,000 results per query, so the notices are read state by state.
+export const PNCP = 'https://pncp.gov.br';
+export const PNCP_SEARCH = `${PNCP}/api/search/`;
+export const PNCP_PAGE = 100;
+export const BR_STATES = Object.freeze({ AC: 'Acre', AL: 'Alagoas', AP: 'Amapá', AM: 'Amazonas', BA: 'Bahia', CE: 'Ceará', DF: 'Distrito Federal', ES: 'Espírito Santo', GO: 'Goiás', MA: 'Maranhão',
+  MT: 'Mato Grosso', MS: 'Mato Grosso do Sul', MG: 'Minas Gerais', PA: 'Pará', PB: 'Paraíba', PR: 'Paraná', PE: 'Pernambuco', PI: 'Piauí', RJ: 'Rio de Janeiro', RN: 'Rio Grande do Norte',
+  RS: 'Rio Grande do Sul', RO: 'Rondônia', RR: 'Roraima', SC: 'Santa Catarina', SP: 'São Paulo', SE: 'Sergipe', TO: 'Tocantins' });
+const PNCP_KIND = [[/^preg/i, 'itb'], [/^concorr/i, 'itb'], [/^dispensa/i, 'rfq'], [/^di[aá]logo competitivo/i, 'rfp'], [/^manifesta[cç][aã]o de interesse/i, 'eoi'], [/^pr[eé]-qualifica/i, 'prequal']];
+export function pncpRow(n, now = Date.now()) {
+  if (!n || typeof n !== 'object' || n.cancelado === true || n.document_type !== 'edital') return null;
+  const m = /^\/compras\/(\d{14})\/(\d{4})\/(\d{1,9})$/.exec(String(n.item_url || ''));
+  const closes = isoLocal(n.data_fim_vigencia, 'America/Sao_Paulo');
+  const title = clean(n.description, 300), issuer = clean(n.orgao_nome, 120);
+  if (!m || !closes || !closesOk(closes.ts, now) || title.length < 4 || issuer.length < 2) return null;
+  const amount = Number(n.valor_total_estimado), modality = clean(n.modalidade_licitacao_nome, 80);
+  return { id: `pncp:${m[1]}-${m[2]}-${m[3]}`, src: 'pncp', issuer, issuer_type: 'public', title, lang: 'pt', langs: ['pt'], ref: clean(n.title, 120) || null, kind: (PNCP_KIND.find(([re]) => re.test(modality)) || [])[1] || 'other',
+    countries: ['BR'], published_ts: published(n.data_publicacao_pncp, now), closes_ts: closes.ts, closes_text: closes.text, url: `${PNCP}/app/editais/${m[1]}/${m[2]}/${m[3]}`, category: modality || null,
+    region: BR_STATES[n.uf] || null, place: clean(n.municipio_nome, 80) || null, value_amount: Number.isFinite(amount) && amount >= 1000 ? amount : null, value_cur: Number.isFinite(amount) && amount >= 1000 ? 'BRL' : null,
+    summary: n.informacao_complementar ? summaryOf(n.informacao_complementar) : null };
+}
+export async function collectPncp(fetchImpl = fetch, { now = Date.now(), delayMs = 1000, log = () => {} } = {}) {
+  const diag = diagnostic('pncp'), rows = [], seen = new Set();
+  let complete = true;
+  try {
+    for (const uf of Object.keys(BR_STATES)) {
+      for (let page = 1; page <= 100; page++) {
+        await sleep(delayMs);
+        const res = await fetchImpl(`${PNCP_SEARCH}?tipos_documento=edital&status=recebendo_proposta&ordenacao=-data&ufs=${uf}&pagina=${page}&tam_pagina=${PNCP_PAGE}`, { headers: { 'user-agent': UA, accept: 'application/json' }, signal: AbortSignal.timeout(60000) });
+        diag.httpRequests++;
+        if (!res.ok) { diag.reason = `search-http-${res.status}`; complete = false; break; }
+        const data = await res.json().catch(() => null);
+        if (!data || !Array.isArray(data.items)) { diag.reason = 'bad-response'; complete = false; break; }
+        diag.rawCount += data.items.length;
+        for (const n of data.items) { const r = pncpRow(n, now); if (r && !seen.has(r.id)) { seen.add(r.id); rows.push(r); } }
+        if (data.items.length < PNCP_PAGE || page * PNCP_PAGE >= Number(data.total || 0)) break;
+        if (page === 100) { diag.reason = 'state-over-limit'; complete = false; }
+      }
+      if (!complete) break;
+    }
+  } catch (e) { diag.reason = diag.reason || failure(e); complete = false; }
+  return finish(diag, rows, complete, log);
+}
+
+// --- Canada: CanadaBuys (Public Services and Procurement Canada), its daily open data file of open tender notices ---
+// Notices are in English and French; contact people's names, e-mail addresses and telephone numbers are not kept.
+export const CANADABUYS = 'https://canadabuys.canada.ca';
+export const CANADABUYS_CSV = `${CANADABUYS}/opendata/pub/openTenderNotice-ouvertAvisAppelOffres.csv`;
+// RFC 4180: quoted fields may hold commas, quotes and line breaks.
+export function parseCsv(s) {
+  const rows = [];
+  let row = [], f = '', q = false;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (q) { if (c === '"') { if (s[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+    else if (c === '"') q = true;
+    else if (c === ',') { row.push(f); f = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && s[i + 1] === '\n') i++; row.push(f); rows.push(row); row = []; f = ''; }
+    else f += c;
+  }
+  if (f || row.length) { row.push(f); rows.push(row); }
+  return rows;
+}
+const CA_KIND = { 'request for proposal': 'rfp', 'request for supply arrangement': 'rfp', 'rfp against supply arrangement': 'rfp', 'request for standing offer': 'rfp', 'invitation to qualify': 'prequal',
+  'request for information': 'rfi', 'advance contract award notice': 'other', 'not applicable': 'other' };
+const CA_NATURE = { '*GD': 'goods', '*SRV': 'services', '*SRVTGD': 'services', '*CNST': 'works' };
+const lines = v => String(v || '').split(/\r?\n/).map(x => x.replace(/^\*/, '').trim()).filter(Boolean);
+const caRegion = v => { const l = lines(v).map(x => x.replace(/ \(except NCR\)$/, '').replace(/^National Capital Region \(NCR\)$/, 'National Capital Region')); return l.length === 1 && !['Canada', 'World', 'Foreign'].includes(l[0]) ? l[0] : null; };
+export const caSlug = ref => String(ref || '').toLowerCase().replace(/[^a-z0-9-]+/g, '');
+export function canadaBuysRow(r, now = Date.now()) {
+  const g = k => r?.[k] ?? '';
+  if (g('tenderStatus-appelOffresStatut-eng') !== 'Open') return null;
+  const type = g('noticeType-avisType-eng').trim().toLowerCase();
+  if (type === 'directed contract') return null;
+  const slug = caSlug(g('referenceNumber-numeroReference')), title = clean(decode(g('title-titre-eng')), 300), issuer = clean(g('contractingEntityName-nomEntitContractante-eng'), 120);
+  const closes = isoLocal(g('tenderClosingDate-appelOffresDateCloture'), 'America/Toronto');
+  if (!/^[a-z0-9][a-z0-9-]{2,69}$/.test(slug) || title.length < 4 || issuer.length < 2 || !closes || !closesOk(closes.ts, now)) return null;
+  const kind = CA_KIND[type] || (/^APN[_ -]/.test(title) ? 'other' : /open bidding/i.test(g('procurementMethod-methodeApprovisionnement-eng')) ? 'itb' : 'other');
+  const titleFr = clean(decode(g('title-titre-fra')), 300), issuerFr = clean(g('contractingEntityName-nomEntitContractante-fra'), 120);
+  const summary = summaryOf(text(g('tenderDescription-descriptionAppelOffres-eng'))), summaryFr = summaryOf(text(g('tenderDescription-descriptionAppelOffres-fra')));
+  const docs = String(g('attachment-piecesJointes-eng')).split(/\s+/).filter(u => /^https:\/\/canadabuys\.canada\.ca\/documents\//.test(u)).slice(0, 6).map((u, i) => ({ n: decodeURIComponent(u.split('/').pop() || `Document ${i + 1}`).slice(0, 120), u }));
+  return { id: `cabuy:${slug}`, src: 'cabuy', issuer, issuer_type: 'public', title, lang: 'en', langs: titleFr.length >= 4 ? ['en', 'fr'] : ['en'],
+    texts: titleFr.length >= 4 ? { fr: issuerFr && issuerFr !== issuer ? [titleFr, summaryFr, issuerFr] : [titleFr, summaryFr] } : null, ref: clean(g('solicitationNumber-numeroSollicitation'), 120) || clean(g('referenceNumber-numeroReference'), 120),
+    kind, countries: ['CA'], published_ts: published(g('publicationDate-datePublication'), now), closes_ts: closes.ts, closes_text: closes.text, url: `${CANADABUYS}/en/tender-opportunities/tender-notice/${slug}`,
+    category: clean(lines(g('gsinDescription-nibsDescription-eng'))[0] || lines(g('unspscDescription-eng'))[0] || '', 80) || null, nature: CA_NATURE[lines(g('procurementCategory-categorieApprovisionnement')).map(x => '*' + x)[0]] || null,
+    region: caRegion(g('regionsOfDelivery-regionsLivraison-eng')), place: clean(g('contractingEntityAddressCity-entiteContractanteAdresseVille-eng'), 80) || null, summary, info: docs.length ? { docs } : null };
+}
+export async function collectCanadaBuys(fetchImpl = fetch, { now = Date.now(), log = () => {} } = {}) {
+  const diag = diagnostic('cabuy'), rows = [];
+  let complete = false;
+  try {
+    const res = await fetchImpl(CANADABUYS_CSV, { headers: { 'user-agent': UA, accept: 'text/csv' }, signal: AbortSignal.timeout(120000) });
+    diag.httpRequests++;
+    if (!res.ok) diag.reason = `data-http-${res.status}`;
+    else {
+      const table = parseCsv((await res.text()).replace(/^﻿/, '')), head = table[0] || [];
+      if (!head.includes('referenceNumber-numeroReference') || !head.includes('tenderClosingDate-appelOffresDateCloture')) diag.reason = 'bad-response';
+      else {
+        const seen = new Set();
+        for (const cells of table.slice(1)) {
+          if (cells.length !== head.length) continue;
+          diag.rawCount++;
+          const r = canadaBuysRow(Object.fromEntries(head.map((k, i) => [k, cells[i]])), now);
+          if (r && !seen.has(r.id)) { seen.add(r.id); rows.push(r); }
+        }
+        complete = true;
+      }
+    }
+  } catch (e) { diag.reason = diag.reason || failure(e); }
+  return finish(diag, rows, complete, log);
+}

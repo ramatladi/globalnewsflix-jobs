@@ -104,13 +104,13 @@ test('South Africa\'s eTenders portal: every advertised tender with its province
   assert.deepEqual(TENDER_SOURCES.etza.hosts, ['www.etenders.gov.za']);
 });
 
-test('every run reads every source; the daily one adds TED\'s public buyers', async () => {
+test('every run reads every source; the daily one adds TED\'s public buyers and Brazil\'s PNCP', async () => {
   const seen = [];
   const fetchImpl = async (url, init) => { seen.push(String(url)); return new Response('{}', { status: 404 }); };
   const out = await collectTenders(fetchImpl, { now: NOW, delayMs: 0, afdbDelayMs: 0 });
-  assert.deepEqual(out.diagnostics.map(d => d.src), ['ungm', 'ted', 'wbg', 'afdb', 'etza']);
+  assert.deepEqual(out.diagnostics.map(d => d.src), ['ungm', 'ted', 'wbg', 'afdb', 'etza', 'ppke', 'gets', 'aust', 'secop', 'cabuy']);
   const fullOut = await collectTenders(fetchImpl, { now: NOW, delayMs: 0, afdbDelayMs: 0, full: true });
-  assert.deepEqual(fullOut.diagnostics.map(d => d.src), ['ungm', 'ted', 'tedn', 'wbg', 'afdb', 'etza']);
+  assert.deepEqual(fullOut.diagnostics.map(d => d.src), ['ungm', 'ted', 'tedn', 'wbg', 'afdb', 'etza', 'ppke', 'gets', 'aust', 'secop', 'cabuy', 'pncp']);
   assert.equal(fullRun(Date.parse('2026-10-23T02:23:00Z'), {}), true, 'the first run of the day');
   assert.equal(fullRun(Date.parse('2026-10-23T10:23:00Z'), {}), false);
   assert.equal(fullRun(Date.parse('2026-10-23T10:23:00Z'), { TENDERS_FULL: '1' }), true, 'a manual run');
