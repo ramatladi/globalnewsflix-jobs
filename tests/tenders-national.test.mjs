@@ -8,7 +8,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { ppkeRow, collectPpke, PPKE, parseGets, getsRow, getsTime, collectGets, GETS_FEED, parseAusTender, ausTenderRow, ausTime, collectAusTender, AUSTENDER_LIST,
+import { ppkeRow, collectPpke, PPKE, parseGets, getsRow, getsTime, collectGets, GETS_FEED, parseAusTender, ausTenderRow, ausTime, collectAusTender, AUSTENDER_LIST, AUSTENDER_FEED,
   secopRow, secopQuery, collectSecop, SECOP_DATA, pncpRow, collectPncp, PNCP_SEARCH, BR_STATES, zonedTime, isoLocal, kindOfTitle, parseCsv, canadaBuysRow, caSlug, collectCanadaBuys, CANADABUYS_CSV, contractsFinderRow, collectContractsFinder, CF_SEARCH, findTenderRow, collectFindATender, FTS_RELEASES, samRow, collectSam, SAM_SEARCH, retrying } from '../tenders-national.js';
 import { TENDER_SOURCES } from '../tenders-kinds.js';
 
@@ -86,10 +86,16 @@ test('Australia: AusTender\'s current approaches to market, in Canberra time, pa
     url: 'https://www.tenders.gov.au/Atm/Show/284574a4-fb3c-459c-a7af-b9a0e9b6722a', category: 'Building construction and support and maintenance and repair services', nature: 'works', summary: null });
   assert.equal(ausTenderRow(list[3], NOW).kind, 'eoi');
   assert.match(ausTenderRow(list[0], NOW).summary, /^Reissue of 5950-2025-26 with amended closing date/);
+  // The list does not say when each was published; its feed of current ATMs does (two items as served).
+  const feed = '<rss version="2.0"><channel><title>AusTender Current ATM List</title><item><title>5950a-2025-26: Upgrade of the Automatic Weather Station (AWS) network in the Republic of Kiribati</title><link>https://www.tenders.gov.au/Atm/Show/3f8c7e54-2161-4b82-88d3-42e04e0c3b21</link><pubDate>Tue, 20 Oct 2026 00:00:00 GMT</pubDate></item>'
+    + '<item><title>S-EST11265: Lavarack Barracks Building works, QLD</title><link>https://www.tenders.gov.au/Atm/Show/284574a4-fb3c-459c-a7af-b9a0e9b6722a</link><pubDate>Thu, 10 Sep 2026 00:00:00 GMT</pubDate></item></channel></rss>';
   const calls = [];
-  const out = await collectAusTender(async (url, init) => { calls.push({ url, init }); return new Response(calls.length === 1 ? html : html.replace(/href="\?page=\d+"/g, '')); }, { now: NOW, delayMs: 0 });
-  assert.deepEqual([calls.length, calls[0].url, calls[1].url, out.diagnostics[0].status, out.rows.length], [2, `${AUSTENDER_LIST}?page=1`, `${AUSTENDER_LIST}?page=2`, 'complete', 4]);
+  const out = await collectAusTender(async (url, init) => { calls.push({ url, init }); return new Response(url === AUSTENDER_FEED ? feed : calls.length === 1 ? html : html.replace(/href="\?page=\d+"/g, '')); }, { now: NOW, delayMs: 0 });
+  assert.deepEqual([calls.length, calls[0].url, calls[1].url, calls[2].url, out.diagnostics[0].status, out.rows.length], [3, `${AUSTENDER_LIST}?page=1`, `${AUSTENDER_LIST}?page=2`, AUSTENDER_FEED, 'complete', 4]);
+  assert.deepEqual(out.rows.map(r => r.published_ts), [Date.parse('2026-10-20T12:00:00Z'), Date.parse('2026-09-10T12:00:00Z'), null, null], 'not in the feed: not known');
   assert.match(calls[0].init.headers['user-agent'], UA);
+  const noFeed = await collectAusTender(async url => url === AUSTENDER_FEED ? new Response('', { status: 503 }) : new Response(html.replace(/href="\?page=\d+"/g, '')), { now: NOW, delayMs: 0 });
+  assert.deepEqual([noFeed.diagnostics[0].status, noFeed.rows.length], ['complete', 4], 'the feed unavailable: the notices still listed');
 });
 
 test('Colombia: SECOP II processes still receiving offers, from the national open data portal', async () => {

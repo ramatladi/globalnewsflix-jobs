@@ -230,8 +230,27 @@ export async function collectAusTender(fetchImpl = fetch, { now = Date.now(), de
       for (const n of notices) { const r = ausTenderRow(n, now); if (r && !seen.has(r.id)) { seen.add(r.id); rows.push(r); } }
       if (!new RegExp(`href="\\?page=${page + 1}"`).test(html)) { complete = true; break; }
     }
+    // When each was published: the list does not say, its feed does.
+    if (rows.length) {
+      await sleep(delayMs);
+      const feed = await fetchImpl(AUSTENDER_FEED, { headers: { 'user-agent': UA, accept: 'application/rss+xml, application/xml' }, signal: AbortSignal.timeout(60000) }).catch(() => null);
+      diag.httpRequests++;
+      const dates = feed?.ok ? ausFeedDates(await feed.text().catch(() => ''), now) : new Map();
+      for (const r of rows) r.published_ts = dates.get(r.id.slice(5)) ?? null;
+    }
   } catch (e) { diag.reason = diag.reason || failure(e); }
   return finish(diag, rows, complete, log);
+}
+export const AUSTENDER_FEED = `${AUSTENDER}/public_data/rss/rss.xml`;
+// The feed of current ATMs: each one's address and publication day ("Tue, 20 Oct 2026 00:00:00 GMT").
+export function ausFeedDates(xml, now = Date.now()) {
+  const out = new Map();
+  for (const item of String(xml || '').split('<item>').slice(1)) {
+    const id = /\/Atm\/Show\/([0-9a-f-]{36})/.exec(item)?.[1], d = /<pubDate>\s*\w{3}, (\d{1,2}) (\w{3}) (\d{4})/.exec(item);
+    const mo = d ? MON.indexOf(d[2]) + 1 : 0, ts = mo ? noon(+d[3], mo, +d[1]) : null;
+    if (id && ts && ts <= now + 86400000) out.set(id, ts);
+  }
+  return out;
 }
 
 // --- Colombia: SECOP II processes (Colombia Compra Eficiente), from the national open data portal ---
