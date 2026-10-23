@@ -137,6 +137,12 @@ test('Brazil: PNCP notices receiving proposals, read state by state (its search 
   assert.match(calls[0].init.headers['user-agent'], UA);
   const refused = await collectPncp(async () => new Response('busy', { status: 429 }), { now: NOW, delayMs: 0, retryMs: 0 });
   assert.deepEqual([refused.diagnostics[0].status, refused.diagnostics[0].reason, refused.diagnostics[0].httpRequests], ['failed', 'search-http-429', 5], 'asked again after a wait, then the run ends');
+  // A connection dropped past every retry: that state is left, the others read; three such end the reading.
+  const reset = () => Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNRESET' } });
+  const one = await collectPncp(async url => { if (url.includes('ufs=AL')) throw reset(); return new Response(JSON.stringify(url.includes('ufs=AC') ? data : { items: [], total: 0 })); }, { now: NOW, delayMs: 0, retryMs: 0 });
+  assert.deepEqual([one.rows.length, one.diagnostics[0].status, one.diagnostics[0].reason, one.diagnostics[0].httpRequests], [3, 'partial', 'network-econnreset', 26 + 5]);
+  const down = await collectPncp(async () => { throw reset(); }, { now: NOW, delayMs: 0, retryMs: 0 });
+  assert.deepEqual([down.diagnostics[0].status, down.diagnostics[0].httpRequests], ['failed', 15]);
 });
 
 test('Canada: CanadaBuys\' daily file of open tender notices, in English with the French version, each on its CanadaBuys page', async () => {
@@ -256,12 +262,15 @@ test('United States: SAM.gov\'s active federal opportunities, closing in the tim
   // Each kind page after page, 100 at a time; a kind longer than one search allows is also read from its other end.
   const calls = [], page = (n, total) => new Response(JSON.stringify({ _embedded: { results: list.slice(0, n) }, page: { totalElements: total } }));
   const out = await collectSam(async (url, init) => { calls.push({ url, init }); const u = new URL(url); return u.searchParams.get('notice_type') === 'k' ? page(9, 15000) : page(3, 3); }, { now: at, delayMs: 0 });
-  assert.equal(calls[0].url, `${SAM_SEARCH}?index=opp&page=0&mode=search&sort=-modifiedDate&size=100&mfe=true&is_active=true&notice_type=o`);
+  assert.equal(calls[0].url, `${SAM_SEARCH}?index=opp&page=0&mode=search&sort=-modifiedDate&size=100&mfe=true&is_active=true&notice_type=o&response_date.from=2026-10-22-00:00`, 'only notices still taking responses (from the day before)');
   assert.deepEqual(calls.map(c => new URL(c.url).searchParams.get('notice_type') + new URL(c.url).searchParams.get('sort')), ['o-modifiedDate', 'k-modifiedDate', 'kmodifiedDate', 'p-modifiedDate', 'r-modifiedDate']);
   assert.match(calls[0].init.headers['user-agent'], UA);
   assert.deepEqual([out.rows.length, out.diagnostics[0].status], [7, 'complete']);
   const more = await collectSam(async () => page(3, 25000), { now: at, delayMs: 0 });
   assert.deepEqual([more.diagnostics[0].status, more.diagnostics[0].reason], ['partial', 'over-limit'], 'more than both ends of the list: nothing pruned');
+  const plain = [];
+  const all = await collectSam(async url => { plain.push(url); return /response_date/.test(url) ? new Response('bad', { status: 400 }) : page(3, 3); }, { now: at, delayMs: 0 });
+  assert.deepEqual([all.rows.length, all.diagnostics[0].status, plain.length, plain.filter(u => /response_date/.test(u)).length], [2, 'complete', 5, 1], 'the filter refused: every active notice, read once');
   const refused = await collectSam(async () => new Response('denied', { status: 403 }), { now: at, delayMs: 0 });
   assert.deepEqual([refused.diagnostics[0].status, refused.diagnostics[0].reason, refused.diagnostics[0].httpRequests], ['failed', 'search-http-403', 1]);
 });

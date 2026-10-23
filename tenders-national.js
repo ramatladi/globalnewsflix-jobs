@@ -324,23 +324,25 @@ export function pncpRow(n, now = Date.now()) {
 export async function collectPncp(fetchImpl = fetch, { now = Date.now(), delayMs = 1000, retryMs = 20000, log = () => {} } = {}) {
   const diag = diagnostic('pncp'), rows = [], seen = new Set();
   let complete = true;
-  try {
-    for (const uf of Object.keys(BR_STATES)) {
+  // A state whose connection the portal drops past every retry leaves the reading partial and the next state is
+  // read (three such states end it); a refusal ends it at once.
+  let dropped = 0;
+  states: for (const uf of Object.keys(BR_STATES)) {
+    try {
       for (let page = 1; page <= 100; page++) {
         await sleep(delayMs);
         const res = await retrying(fetchImpl, `${PNCP_SEARCH}?tipos_documento=edital&status=recebendo_proposta&ordenacao=-data&ufs=${uf}&pagina=${page}&tam_pagina=${PNCP_PAGE}`,
           () => ({ headers: { 'user-agent': UA, accept: 'application/json' }, signal: AbortSignal.timeout(60000) }), { retryMs, count: () => diag.httpRequests++ });
-        if (!res.ok) { diag.reason = `search-http-${res.status}`; complete = false; break; }
+        if (!res.ok) { diag.reason = `search-http-${res.status}`; complete = false; break states; }
         const data = await res.json().catch(() => null);
-        if (!data || !Array.isArray(data.items)) { diag.reason = 'bad-response'; complete = false; break; }
+        if (!data || !Array.isArray(data.items)) { diag.reason = 'bad-response'; complete = false; break states; }
         diag.rawCount += data.items.length;
         for (const n of data.items) { const r = pncpRow(n, now); if (r && !seen.has(r.id)) { seen.add(r.id); rows.push(r); } }
         if (data.items.length < PNCP_PAGE || page * PNCP_PAGE >= Number(data.total || 0)) break;
-        if (page === 100) { diag.reason = 'state-over-limit'; complete = false; }
+        if (page === 100) { diag.reason = diag.reason || 'state-over-limit'; complete = false; }
       }
-      if (!complete) break;
-    }
-  } catch (e) { diag.reason = diag.reason || failure(e); complete = false; }
+    } catch (e) { diag.reason = diag.reason || failure(e); complete = false; if (++dropped >= 3) break; }
+  }
   return finish(diag, rows, complete, log);
 }
 
@@ -547,9 +549,11 @@ export async function collectFindATender(fetchImpl = fetch, { now = Date.now(), 
 }
 
 // --- United States: SAM.gov (General Services Administration), the federal government's contract opportunities ---
-// What its public search lists as active: solicitations, combined synopses/solicitations, presolicitations (notices
-// of a solicitation to come) and sources sought (requests for information), some 30,000. One search returns at most
-// 10,000, so a longer list is also read from its other end (oldest changed first).
+// What its public search lists as active and still taking responses (closing from the day before on: most active
+// notices have closed and wait to be archived): solicitations, combined synopses/solicitations, presolicitations
+// (notices of a solicitation to come) and sources sought (requests for information), some 7,000. One search returns
+// at most 10,000, so a longer list is also read from its other end (oldest changed first). Should the search stop
+// taking the closing-date filter, every active notice is read instead (some 30,000).
 export const SAM = 'https://sam.gov';
 export const SAM_SEARCH = `${SAM}/api/prod/sgs/v1/search/`;
 export const SAM_PAGE = 100;
@@ -577,7 +581,7 @@ export function samRow(x, now = Date.now()) {
 }
 export async function collectSam(fetchImpl = fetch, { now = Date.now(), delayMs = 1000, retryMs = 20000, log = () => {} } = {}) {
   const diag = diagnostic('samus'), rows = [], seen = new Set();
-  let complete = true;
+  let complete = true, since = `&response_date.from=${new Date(now - 86400000).toISOString().slice(0, 10)}-00:00`;
   try {
     kinds: for (const type of Object.keys(SAM_KIND)) {
       let total = null;
@@ -585,8 +589,9 @@ export async function collectSam(fetchImpl = fetch, { now = Date.now(), delayMs 
         if (sort === 'modifiedDate' && !(total > SAM_CAP)) break;
         for (let page = 0; page * SAM_PAGE < Math.min(total ?? SAM_CAP, SAM_CAP); page++) {
           if (diag.httpRequests) await sleep(delayMs);
-          const res = await retrying(fetchImpl, `${SAM_SEARCH}?index=opp&page=${page}&mode=search&sort=${sort}&size=${SAM_PAGE}&mfe=true&is_active=true&notice_type=${type}`,
+          const res = await retrying(fetchImpl, `${SAM_SEARCH}?index=opp&page=${page}&mode=search&sort=${sort}&size=${SAM_PAGE}&mfe=true&is_active=true&notice_type=${type}${since}`,
             () => ({ headers: { 'user-agent': UA, accept: 'application/hal+json' }, signal: AbortSignal.timeout(60000) }), { retryMs, count: () => diag.httpRequests++ });
+          if (res.status === 400 && since) { since = ''; total = null; page = -1; continue; }
           if (!res.ok) { diag.reason = `search-http-${res.status}`; complete = false; break kinds; }
           const data = await res.json().catch(() => null);
           const n = data?.page?.totalElements, list = data?._embedded?.results ?? (n === 0 ? [] : null);

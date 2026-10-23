@@ -213,7 +213,7 @@
   },
   {
     "file": "tenders-national.js",
-    "sha256": "e7bb65eb75f90b6f65789de615caeb1f28e88e39206e48e5162472e0f29b1056"
+    "sha256": "3c65717bd23c0119516d905800a02cd81263e2bf3e27a51459e4d0ea6a67cb60"
   },
   {
     "file": "tenders-runner.mjs",
@@ -517,7 +517,7 @@
   },
   {
     "file": "tests/tenders-national.test.mjs",
-    "sha256": "7a67f61bd6eb084be07e10ebe80322084baa37bb96535a82e028635ccd0ba04e"
+    "sha256": "0992c906380aa922f9fb224cd08d028575b79d367d20909457d8e4854e26460b"
   },
   {
     "file": "tests/tenders-public.test.mjs",
