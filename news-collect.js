@@ -87,6 +87,10 @@ export function parseTrends(xml) {
 // Trend rows: a trend's reports are one story about it, scored above an ordinary single report (several outlets explain
 // it, and people are looking for it now), more so the more people search for it.
 export const TREND_BONUS = 25;
+// Searches people make every day (lottery draws, market prices, the weather, site names) are not news of the day.
+export const ROUTINE_SEARCH = /\b(?:lottery|lotto|sambad|powerball|mega ?millions|euromillions|jackpot|horoscopes?|weather|forecast|nifty|sensex|share price|stock price|gold (?:rate|price)|petrol price|fuel price|exchange rate|live score|youtube|google|facebook|instagram|whatsapp|gmail|netflix|amazon)\b/i;
+// A match ("Chiefs vs Arrows", "Flamengo x Palmeiras") trends as a match: its report stays in its own section.
+export const isMatchup = q => /\bvs\.?\b|\bversus\b|\bv\b|\s[xX]\s/.test(String(q || ''));
 export const trendScore = t => t.news.length * 10 + TREND_BONUS + Math.min(30, Math.round(5 * Math.log10(Math.max(1, t.traffic))));
 const trendKey = q => String(q).toLowerCase().normalize('NFKC').replace(/\s+/g, ' ').trim();
 
@@ -372,7 +376,7 @@ export async function collectTarget(target, rot, { sections } = {}) {
       if (f.trends) {
         // A trend's reports become one row (a story about what is trending and why); a refused list is not replaced.
         const day = new Date().toISOString().slice(0, 10);
-        for (const t of parseTrends(await fetchText(f.url)).filter(t => isFreshNews(t.pub)).slice(0, 20)) {
+        for (const t of parseTrends(await fetchText(f.url)).filter(t => isFreshNews(t.pub) && !ROUTINE_SEARCH.test(t.query)).slice(0, 20)) {
           const news = t.news.filter(x => !nonNewsReason(x.t) && !sponsoredContentReason({ url: x.u, title: x.t, source: x.s }));
           if (!news.length) continue;
           let home = ''; try { home = new URL(news[0].u).origin; } catch { /* none */ }
