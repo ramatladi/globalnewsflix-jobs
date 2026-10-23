@@ -11,7 +11,7 @@
 import { UNGM_KIND, countryCode, countryFromIso3, TENDER_MAX_AHEAD_MS, TED_LANG } from './tenders-kinds.js';
 import { guessLang } from './lang-guess.js';
 import { COUNTRY, newsLang } from './data.js';
-import { collectPpke, collectGets, collectAusTender, collectSecop, collectPncp, collectCanadaBuys, collectContractsFinder, collectFindATender, retrying } from './tenders-national.js';
+import { collectPpke, collectGets, collectAusTender, collectSecop, collectPncp, collectCanadaBuys, collectContractsFinder, collectFindATender, collectSam, retrying } from './tenders-national.js';
 
 // The usual form for a named crawler (as the site's photo checks use): it says who is asking and where to reach us.
 export const UA = 'Mozilla/5.0 (compatible; GlobalNewsflixTenders/1.0; +https://globalnewsflix.com/contact)';
@@ -519,7 +519,7 @@ export async function collectEtza(fetchImpl = fetch, { now = Date.now(), delayMs
 export async function collectTenders(fetchImpl = fetch, opts = {}) {
   const parts = [await collectUngm(fetchImpl, opts), await collectTed(fetchImpl, opts), await collectWbg(fetchImpl, opts), await collectAfdb(fetchImpl, opts), await collectEtza(fetchImpl, opts),
     await collectPpke(fetchImpl, opts), await collectGets(fetchImpl, opts), await collectAusTender(fetchImpl, opts), await collectSecop(fetchImpl, opts), await collectCanadaBuys(fetchImpl, opts), await collectFindATender(fetchImpl, opts),
-    await collectContractsFinder(fetchImpl, opts), ...(opts.full ? [await collectPncp(fetchImpl, opts)] : [])];
+    await collectContractsFinder(fetchImpl, opts), await collectSam(fetchImpl, opts), ...(opts.full ? [await collectPncp(fetchImpl, opts)] : [])];
   const diagnostics = parts.flatMap(p => p.diagnostics);
   return { rows: withoutRepeats(parts.flatMap(p => p.rows), diagnostics), diagnostics, complete: diagnostics.filter(d => d.status === 'complete').map(d => d.src) };
 }

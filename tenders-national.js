@@ -2,7 +2,8 @@
 // aggregator. Kenya's Public Procurement Information Portal (PPRA), New Zealand's GETS (MBIE), Australia's AusTender
 // (Department of Finance), Colombia's SECOP II (Colombia Compra Eficiente, through the national open data portal),
 // Brazil's PNCP (Portal Nacional de Contratações Públicas, once a day: some 39,000 open notices), CanadaBuys (Public
-// Services and Procurement Canada) and the UK's Find a Tender (Cabinet Office) and Contracts Finder. Each notice keeps
+// Services and Procurement Canada), the UK's Find a Tender (Cabinet Office) and Contracts Finder, and the United
+// States' SAM.gov (General Services Administration). Each notice keeps
 // what its portal states, links to its official page, and never the names, e-mail addresses or telephone numbers of
 // the officials who posted it. The crawler names itself (tenders-collect.js) and keeps to one request at a time.
 import { TENDER_MAX_AHEAD_MS } from './tenders-kinds.js';
@@ -19,8 +20,10 @@ const decode = s => String(s || '').replace(/&#(\d+);/g, (_, n) => String.fromCo
   .replace(/&amp;/g, '&');
 const text = html => decode(String(html || '').replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
 // No e-mail addresses or telephone numbers in what the site keeps of a notice's text.
-const noContacts = s => String(s || '').replace(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g, '').replace(/(?:\+\d{1,3}[ -]?)?(?:\(\d{2,4}\)[ -]?)?\b\d{2,4}[ -]\d{3,4}[ -]\d{3,4}\b/g, '').replace(/\s{2,}/g, ' ').trim();
-const summaryOf = (s, n = 400) => { const t = noContacts(clean(s, 2000)); if (t.length <= n) return t || null; const cut = t.slice(0, n - 1); return cut.slice(0, Math.max(cut.lastIndexOf(' '), n - 40)).replace(/[\s,;:.-]+$/, '') + '…'; };
+const noContacts = s => String(s || '').replace(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g, '').replace(/(?:\+\d{1,3}[ -]?)?(?:\(\d{2,4}\)[ -]?)?\b\d{2,4}[ -]\d{3,4}[ -]\d{3,4}\b/g, '')
+  // ... and no words left pointing at what was removed ("contact us on ." -> "contact us.").
+  .replace(/\s+(?:on|at|via|to|e-?mail|tel(?:ephone)?|phone)\s*:?\s*(?=[.,;)]|$)/gi, '').replace(/\s{2,}/g, ' ').trim();
+const summaryOf = (s, n = 400) => { const t = noContacts(clean(s, 2000).replace(/\*\*/g, '')).replace(/^[?\s]+(?=\p{Lu})/u, ''); if (t.length <= n) return t || null; const cut = t.slice(0, n - 1); return cut.slice(0, Math.max(cut.lastIndexOf(' '), n - 40)).replace(/[\s,;:.-]+$/, '') + '…'; };
 const closesOk = (ts, now) => Number.isFinite(ts) && ts > now && ts <= now + TENDER_MAX_AHEAD_MS;
 const noon = (y, m, d) => Date.UTC(y, m - 1, d, 12);
 
@@ -51,9 +54,18 @@ const diagnostic = src => ({ src, status: 'failed', reason: '', rawCount: 0, acc
 // One request, tried again when the portal asks the crawler to slow down (429) or is briefly unavailable (5xx): after
 // the wait it asks for (Retry-After), else a little longer each time. `init` makes each attempt's options; `count`
 // is told of every request made.
+// A connection the portal drops (reset, refused, unreachable for a moment) is tried again the same way.
+const DROPPED = new Set(['ECONNRESET', 'ECONNREFUSED', 'ETIMEDOUT', 'EPIPE', 'EAI_AGAIN', 'UND_ERR_SOCKET', 'UND_ERR_CONNECT_TIMEOUT']);
 export async function retrying(fetchImpl, url, init, { attempts = 5, retryMs = 20000, count = () => {} } = {}) {
   for (let a = 1; ; a++) {
-    const res = await fetchImpl(url, init());
+    let res;
+    try { res = await fetchImpl(url, init()); }
+    catch (e) {
+      count();
+      if (a >= attempts || !DROPPED.has(e?.cause?.code || e?.code)) throw e;
+      await sleep(retryMs * a);
+      continue;
+    }
     count();
     if ((res.status !== 429 && res.status < 500) || a >= attempts) return res;
     const after = Number(res.headers?.get?.('retry-after'));
@@ -67,7 +79,8 @@ const finish = (diag, rows, complete, log, note = '') => {
   log(`${diag.src}: ${rows.length} open tenders${note}; ${diag.httpRequests} requests; ${diag.status}${diag.reason ? ' ' + diag.reason : ''}`);
   return { rows, diagnostics: [diag] };
 };
-const failure = e => e?.name === 'TimeoutError' ? 'timeout' : 'network';
+// Why a request failed, for the run's report: a timeout, or the network's own reason ("network-econnreset").
+const failure = e => { const code = String(e?.cause?.code || e?.code || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 30); return e?.name === 'TimeoutError' ? 'timeout' : code ? `network-${code}` : 'network'; };
 
 // --- Kenya: the Public Procurement Information Portal (tenders.go.ke) ---
 export const PPKE = 'https://tenders.go.ke';
@@ -389,11 +402,13 @@ export const CF_SIZE = 1000;
 const CF_TYPES = { Contract: 'itb', PreProcurement: 'rfi', EarlyEngagement: 'rfi' };
 // CPV divisions: 45 is works, those below goods, those above services (48, software packages, goods).
 const cpvNature = code => { const d = Number(String(code || '').slice(0, 2)); return !d ? null : d === 45 ? 'works' : d < 45 || d === 48 ? 'goods' : 'services'; };
-const company = name => /\b(limited|ltd|plc|llp|lp)\.?$/i.test(String(name || '').trim());
+// Companies by their names: a company's legal form at the end, or a joint venture of companies.
+const company = name => /\b(limited|ltd|plc|llp|lp|llc|inc|incorporated|corp|corporation|gmbh|cyfyngedig|cyf)\.?$/i.test(String(name || '').trim()) || /\b(JV|joint venture)\b/i.test(String(name || ''));
 // The time in UK time, as the site words it ("13-Nov-2026 17:00 (GMT 0.00)").
 const londonText = ts => { const off = offsetMinutes(ts, 'Europe/London'), l = new Date(ts + off * 60000); return zoneText(l.getUTCFullYear(), l.getUTCMonth() + 1, l.getUTCDate(), l.getUTCHours(), l.getUTCMinutes(), off); };
 // Titles some e-tendering systems prefix with the place, in the old European style ("GB-Leeds: ...").
-const ukTitle = v => clean(decode(v), 300).replace(/^GB-[A-Za-z .'&-]{2,40}:\s+/, '');
+// Some repeat themselves either side of a dash ("Taxi and MPV (1-8 seats) - Taxi and MPV (1-8 seats)").
+const ukTitle = v => { const t = clean(decode(v), 300).replace(/^GB-[A-Za-z .'&-]{2,40}:\s+/, ''), m = /^(.{4,}?) - \1$/.exec(t); return m ? m[1] : t; };
 export function contractsFinderRow(n, now = Date.now()) {
   const x = n?.item;
   if (!x || typeof x !== 'object' || x.noticeStatus !== 'Open' || !CF_TYPES[x.noticeType] || !/^[0-9a-f-]{36}$/.test(String(x.id || ''))) return null;
@@ -406,7 +421,7 @@ export function contractsFinderRow(n, now = Date.now()) {
   return { id: `cfgb:${x.id}`, src: 'cfgb', issuer, issuer_type: company(issuer) ? 'private' : 'public', title, lang: 'en', langs: ['en'],
     ref: x.noticeIdentifier && !/^n\s*\/\s*a$/i.test(x.noticeIdentifier) ? clean(x.noticeIdentifier, 120) : null, kind: x.noticeType === 'Contract' ? kindOfTitle(title, 'itb') : 'rfi', countries: ['GB'],
     published_ts: published(x.publishedDate, now), closes_ts: ts, closes_text, url: `${CONTRACTS_FINDER}/Notice/${x.id}`, category: clean(x.cpvDescription, 80) || null,
-    nature: cpvNature(x.cpvCodes), region: region && !region.includes(',') && region !== 'Any region' ? region : null, value_amount: value && value >= 1000 ? value : null, value_cur: value && value >= 1000 ? 'GBP' : null,
+    nature: cpvNature(x.cpvCodes), region: Object.values(NUTS1).includes(region) ? region : null, value_amount: value && value >= 1000 ? value : null, value_cur: value && value >= 1000 ? 'GBP' : null,
     summary: summaryOf(text(x.description)) };
 }
 export async function collectContractsFinder(fetchImpl = fetch, { now = Date.now(), retryMs = 20000, log = () => {} } = {}) {
@@ -509,5 +524,63 @@ export async function collectFindATender(fetchImpl = fetch, { now = Date.now(), 
   } catch (e) { diag.reason = diag.reason || failure(e); }
   const rows = [];
   for (const list of byOcid.values()) { const r = findTenderRow(list, now, { since }); if (r) rows.push(r); }
+  return finish(diag, rows, complete, log);
+}
+
+// --- United States: SAM.gov (General Services Administration), the federal government's contract opportunities ---
+// What its public search lists as active: solicitations, combined synopses/solicitations, presolicitations (notices
+// of a solicitation to come) and sources sought (requests for information), some 30,000. One search returns at most
+// 10,000, so a longer list is also read from its other end (oldest changed first).
+export const SAM = 'https://sam.gov';
+export const SAM_SEARCH = `${SAM}/api/prod/sgs/v1/search/`;
+export const SAM_PAGE = 100;
+export const SAM_CAP = 10000;
+const SAM_KIND = Object.freeze({ o: 'itb', k: 'itb', p: 'prebid', r: 'rfi' });
+// Military post offices are not places.
+const MILITARY_POST = new Set(['APO', 'FPO', 'DPO']);
+const zoneOk = z => { try { return typeof z === 'string' && /^[A-Za-z_]+\/[A-Za-z_\/-]+$/.test(z) && !!new Intl.DateTimeFormat('en', { timeZone: z }); } catch { return false; } };
+const capital = s => s.toLowerCase().replace(/(^|[\s-])(\p{L})/gu, (_, a, b) => a + b.toUpperCase());
+// One opportunity -> the row the site stores, or null. Its agency issues it; the contracting office's town is the place.
+export function samRow(x, now = Date.now()) {
+  if (!x || typeof x !== 'object' || x.isCanceled === true || x.isActive === false || !/^[0-9a-f]{32}$/.test(String(x._id || '')) || !SAM_KIND[x.type?.code]) return null;
+  const ts = Date.parse(x.responseDate || ''), org = Array.isArray(x.organizationHierarchy) ? x.organizationHierarchy.filter(o => o && typeof o === 'object') : [];
+  const agency = org.find(o => o.level === 2) || org.find(o => o.level === 1), office = org[org.length - 1];
+  const title = clean(decode(x.title), 300), issuer = clean(agency?.name, 120);
+  if (!Number.isFinite(ts) || !closesOk(ts, now) || title.length < 4 || issuer.length < 2) return null;
+  const zone = zoneOk(x.responseTimeZone) ? x.responseTimeZone : 'America/New_York', off = offsetMinutes(ts, zone), l = new Date(ts + off * 60000);
+  const city = clean(office?.address?.city, 60), state = clean(office?.address?.state, 4);
+  const code = x.type.code, summary = summaryOf(text(x.descriptions?.[0]?.content));
+  return { id: `samus:${x._id}`, src: 'samus', issuer, issuer_type: 'public', title, lang: 'en', langs: ['en'], ref: clean(x.solicitationNumber, 120) || null,
+    kind: code === 'o' || code === 'k' ? kindOfTitle(title, 'itb') : SAM_KIND[code], countries: ['US'], published_ts: published(x.publishDate, now), closes_ts: ts,
+    closes_text: zoneText(l.getUTCFullYear(), l.getUTCMonth() + 1, l.getUTCDate(), l.getUTCHours(), l.getUTCMinutes(), off), url: `${SAM}/opp/${x._id}/view`,
+    place: city && !MILITARY_POST.has(city.toUpperCase()) ? `${capital(city)}${/^[A-Z]{2}$/.test(state) ? `, ${state}` : ''}` : null,
+    summary: summary && summary.toLowerCase() !== title.toLowerCase() ? summary : null };
+}
+export async function collectSam(fetchImpl = fetch, { now = Date.now(), delayMs = 1000, retryMs = 20000, log = () => {} } = {}) {
+  const diag = diagnostic('samus'), rows = [], seen = new Set();
+  let complete = true;
+  try {
+    kinds: for (const type of Object.keys(SAM_KIND)) {
+      let total = null;
+      for (const sort of ['-modifiedDate', 'modifiedDate']) {
+        if (sort === 'modifiedDate' && !(total > SAM_CAP)) break;
+        for (let page = 0; page * SAM_PAGE < Math.min(total ?? SAM_CAP, SAM_CAP); page++) {
+          if (diag.httpRequests) await sleep(delayMs);
+          const res = await retrying(fetchImpl, `${SAM_SEARCH}?index=opp&page=${page}&mode=search&sort=${sort}&size=${SAM_PAGE}&mfe=true&is_active=true&notice_type=${type}`,
+            () => ({ headers: { 'user-agent': UA, accept: 'application/hal+json' }, signal: AbortSignal.timeout(60000) }), { retryMs, count: () => diag.httpRequests++ });
+          if (!res.ok) { diag.reason = `search-http-${res.status}`; complete = false; break kinds; }
+          const data = await res.json().catch(() => null);
+          const n = data?.page?.totalElements, list = data?._embedded?.results ?? (n === 0 ? [] : null);
+          if (!Number.isSafeInteger(n) || !Array.isArray(list)) { diag.reason = 'bad-response'; complete = false; break kinds; }
+          total = n;
+          diag.rawCount += list.length;
+          for (const x of list) { const r = samRow(x, now); if (r && !seen.has(r.id)) { seen.add(r.id); rows.push(r); } }
+          if (list.length < SAM_PAGE) break;
+        }
+      }
+      // Longer than both ends of the list together: a partial reading, so nothing is pruned.
+      if (total > 2 * SAM_CAP) { complete = false; diag.reason = 'over-limit'; }
+    }
+  } catch (e) { complete = false; diag.reason = diag.reason || failure(e); }
   return finish(diag, rows, complete, log);
 }

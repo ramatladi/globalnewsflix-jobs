@@ -3,12 +3,13 @@
 // Find a Tender and Contracts Finder. Fixtures are the portals' answers as served, cut to a few notices (Kenya's: the
 // officer who posted each tender, the bidders and the subscribers removed; PNCP's: empty fields left out; CanadaBuys':
 // long fields cut at 300 characters and contact people replaced; Contracts Finder's: one long description shortened;
-// Find a Tender's: the fields the reader uses, descriptions cut near 420 characters, a few places and lots).
+// Find a Tender's: the fields the reader uses, descriptions cut near 420 characters, a few places and lots; SAM.gov's:
+// the fields the reader uses, descriptions cut at 420 characters).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { ppkeRow, collectPpke, PPKE, parseGets, getsRow, getsTime, collectGets, GETS_FEED, parseAusTender, ausTenderRow, ausTime, collectAusTender, AUSTENDER_LIST,
-  secopRow, secopQuery, collectSecop, SECOP_DATA, pncpRow, collectPncp, PNCP_SEARCH, BR_STATES, zonedTime, isoLocal, kindOfTitle, parseCsv, canadaBuysRow, caSlug, collectCanadaBuys, CANADABUYS_CSV, contractsFinderRow, collectContractsFinder, CF_SEARCH, findTenderRow, collectFindATender, FTS_RELEASES, retrying } from '../tenders-national.js';
+  secopRow, secopQuery, collectSecop, SECOP_DATA, pncpRow, collectPncp, PNCP_SEARCH, BR_STATES, zonedTime, isoLocal, kindOfTitle, parseCsv, canadaBuysRow, caSlug, collectCanadaBuys, CANADABUYS_CSV, contractsFinderRow, collectContractsFinder, CF_SEARCH, findTenderRow, collectFindATender, FTS_RELEASES, samRow, collectSam, SAM_SEARCH, retrying } from '../tenders-national.js';
 import { TENDER_SOURCES } from '../tenders-kinds.js';
 
 const fx = name => readFileSync(new URL('./fixtures/' + name, import.meta.url), 'utf8');
@@ -28,6 +29,7 @@ test('local times in each portal\'s time zone, with the offset of that day', () 
   for (const id of ['ppke', 'gets', 'aust', 'secop', 'pncp', 'cabuy']) assert.deepEqual(TENDER_SOURCES[id].issuerTypes, ['public'], id);
   assert.deepEqual(TENDER_SOURCES.cfgb.issuerTypes, ['public', 'private'], 'Contracts Finder also carries companies\' sub-contracts');
   assert.deepEqual(TENDER_SOURCES.ftsgb.issuerTypes, ['public', 'private'], 'Find a Tender also carries private utilities\' tenders');
+  assert.deepEqual(TENDER_SOURCES.samus.issuerTypes, ['public']);
 });
 
 test('Kenya: the active tenders on PPIP, with their documents and nothing about the officers who posted them', async () => {
@@ -172,6 +174,12 @@ test('United Kingdom: Contracts Finder\'s open notices, public bodies\' and the 
   assert.doesNotMatch(d.summary, /@/);
   assert.equal(contractsFinderRow(amey, NOW), null, 'a pipeline notice takes no bids yet');
   assert.equal(contractsFinderRow({ item: { ...leeds.item, noticeType: 'Contract', organisationName: 'AMEY DEFENCE SERVICES LIMITED' } }, NOW).issuer_type, 'private');
+  // Companies by their legal form, or a joint venture; a UK region only; a title said twice, once; nothing left of removed contacts.
+  const cf = item => contractsFinderRow({ item: { ...leeds.item, ...item } }, NOW);
+  assert.deepEqual(['Chemonics International, Inc.', 'Balfour Beatty VINCI JV HS2', 'Dwr Cymru Cyfyngedig', 'Leicester City Council'].map(o => cf({ organisationName: o }).issuer_type), ['private', 'private', 'private', 'public']);
+  assert.deepEqual(['Pakistan', 'North East, North West', 'London'].map(r => cf({ regionText: r }).region), [null, null, 'London']);
+  assert.equal(cf({ title: 'Taxi and MPV (1-8 seats) - Taxi and MPV (1-8 seats)' }).title, 'Taxi and MPV (1-8 seats)');
+  assert.equal(cf({ description: '?The Trust invites tenders. **Deadline extended.** Any queries please contact MultiQuote on help@multiquote.example.' }).summary, 'The Trust invites tenders. Deadline extended. Any queries please contact MultiQuote.');
   const calls = [];
   const out = await collectContractsFinder(async (url, init) => { calls.push({ url, init }); return new Response(JSON.stringify({ ...data, hitCount: 4 })); }, { now: NOW });
   assert.deepEqual([out.rows.length, out.diagnostics[0].status, calls[0].url, JSON.parse(calls[0].init.body)], [3, 'complete', CF_SEARCH, { searchCriteria: { statuses: ['Open'] }, size: 1000 }]);
@@ -221,6 +229,45 @@ test('United Kingdom: Find a Tender\'s procurements whose latest notice invites 
   assert.deepEqual([away.diagnostics[0].status, away.diagnostics[0].reason], ['failed', 'bad-response'], 'a next page elsewhere is never followed');
   const busy = await collectFindATender(async () => new Response('', { status: 429 }), { now: NOW, delayMs: 0, retryMs: 0 });
   assert.deepEqual([busy.diagnostics[0].reason, busy.diagnostics[0].httpRequests], ['list-http-429', 5], 'asked to slow down: tried again, then left for the next run');
+});
+
+test('United States: SAM.gov\'s active federal opportunities, closing in the time zone each states', async () => {
+  const data = JSON.parse(fx('us-sam-opportunities.json')), list = data._embedded.results, at = Date.parse('2026-10-23T12:00:00Z');
+  const [boxes, naples, oregon, japan, pest, repair, reno, welder, fema] = list;
+  assert.deepEqual(samRow(boxes, at), { id: 'samus:87aa63f6868f415997178be979a64d04', src: 'samus', issuer: 'DEPT OF THE NAVY', issuer_type: 'public', title: 'TRI WALL BOXES', lang: 'en', langs: ['en'],
+    ref: 'N0018926QL3760001', kind: 'itb', countries: ['US'], published_ts: Date.parse('2026-10-23T12:00:00Z'), closes_ts: Date.parse('2026-10-26T16:00:00Z'), closes_text: '26-Oct-2026 12:00 (GMT -4.00)',
+    url: 'https://sam.gov/opp/87aa63f6868f415997178be979a64d04/view', place: 'Norfolk, VA', summary: null }, 'a description that only repeats the title is left out');
+  assert.deepEqual([samRow(naples, at).closes_text, samRow(naples, at).place], ['02-Nov-2026 11:00 (GMT 1.00)', null], 'Naples time; a military post office is no place');
+  assert.deepEqual([samRow(japan, at).closes_text, samRow(japan, at).issuer, samRow(japan, at).place], ['28-Oct-2026 10:00 (GMT 9.00)', 'DEPT OF THE AIR FORCE', null]);
+  assert.equal(samRow(oregon, at), null, 'closed');
+  assert.equal(samRow(reno, at), null, 'no agency named');
+  assert.deepEqual([pest, repair, welder, fema].map(x => samRow(x, at).kind), ['itb', 'prebid', 'rfi', 'rfi'], 'a presolicitation announces one to come; sources sought ask for information');
+  assert.deepEqual([samRow(repair, at).closes_text, samRow(fema, at).place], ['06-Nov-2026 13:00 (GMT -8.00)', 'Washington, DC']);
+  assert.match(samRow(pest, at).summary, /^See Section L of the Solicitation/);
+  assert.equal(samRow({ ...pest, isCanceled: true }, at), null, 'cancelled');
+  assert.equal(samRow({ ...pest, type: { code: 'a', value: 'Award Notice' } }, at), null, 'an award');
+  assert.equal(samRow({ ...pest, responseTimeZone: 'Mars/Olympus' }, at).closes_text, '24-Nov-2026 11:00 (GMT -5.00)', 'an unknown zone: Washington\'s');
+  // Each kind page after page, 100 at a time; a kind longer than one search allows is also read from its other end.
+  const calls = [], page = (n, total) => new Response(JSON.stringify({ _embedded: { results: list.slice(0, n) }, page: { totalElements: total } }));
+  const out = await collectSam(async (url, init) => { calls.push({ url, init }); const u = new URL(url); return u.searchParams.get('notice_type') === 'k' ? page(9, 15000) : page(3, 3); }, { now: at, delayMs: 0 });
+  assert.equal(calls[0].url, `${SAM_SEARCH}?index=opp&page=0&mode=search&sort=-modifiedDate&size=100&mfe=true&is_active=true&notice_type=o`);
+  assert.deepEqual(calls.map(c => new URL(c.url).searchParams.get('notice_type') + new URL(c.url).searchParams.get('sort')), ['o-modifiedDate', 'k-modifiedDate', 'kmodifiedDate', 'p-modifiedDate', 'r-modifiedDate']);
+  assert.match(calls[0].init.headers['user-agent'], UA);
+  assert.deepEqual([out.rows.length, out.diagnostics[0].status], [7, 'complete']);
+  const more = await collectSam(async () => page(3, 25000), { now: at, delayMs: 0 });
+  assert.deepEqual([more.diagnostics[0].status, more.diagnostics[0].reason], ['partial', 'over-limit'], 'more than both ends of the list: nothing pruned');
+  const refused = await collectSam(async () => new Response('denied', { status: 403 }), { now: at, delayMs: 0 });
+  assert.deepEqual([refused.diagnostics[0].status, refused.diagnostics[0].reason, refused.diagnostics[0].httpRequests], ['failed', 'search-http-403', 1]);
+});
+
+test('a dropped connection is tried again; a failure names its cause', async () => {
+  const dropped = () => Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNRESET' } });
+  let n = 0;
+  const r = await retrying(async () => { if (++n < 3) throw dropped(); return new Response('ok'); }, 'https://example.gov/x', () => ({}), { retryMs: 0 });
+  assert.deepEqual([r.status, n], [200, 3]);
+  await assert.rejects(retrying(async () => { throw new TypeError('bad url'); }, 'https://example.gov/x', () => ({}), { retryMs: 0 }), /bad url/, 'other errors are not tried again');
+  const out = await collectSam(async () => { throw dropped(); }, { now: NOW, delayMs: 0, retryMs: 0 });
+  assert.deepEqual([out.diagnostics[0].status, out.diagnostics[0].reason, out.diagnostics[0].httpRequests], ['failed', 'network-econnreset', 5]);
 });
 
 test('a portal that asks the crawler to slow down is waited for, as long as it asks, then asked again', async () => {

@@ -17,7 +17,7 @@
   },
   {
     "file": ".github/workflows/tenders.yml",
-    "sha256": "fe454380dd76ba4241b4184f262294a6c6ae6df4b239d90495ba0747b1edd817"
+    "sha256": "7125cd7b21afc7fc2b1ad51136364e08229820d914a3e0343a6db9e50349c0a0"
   },
   {
     "file": ".github/workflows/tests.yml",
@@ -205,15 +205,15 @@
   },
   {
     "file": "tenders-collect.js",
-    "sha256": "d72ac2464fc1cb8b9c8d1fc8586154a39fc2988735c5597d2cec12039d2bf47f"
+    "sha256": "ef4b6f4817e79b6f6e5ca71c8724743a75471de9d2ff47e916c3e78ca2181523"
   },
   {
     "file": "tenders-kinds.js",
-    "sha256": "f32b3bbeda912fba18ff615594d9943186dba8f64c55bb4bb36a7b1f14fb209d"
+    "sha256": "d1194fba413321dfb75600d4e07a162808cd6785109cac07d59e8a84bfe57aaf"
   },
   {
     "file": "tenders-national.js",
-    "sha256": "2bd1247ee6fccd7629f3a70e267ab4d781db205d0d71c067ba7109123dabc1ab"
+    "sha256": "d6844c51882aa7f46bf5078e248cd0d580a7ad07c29393bc17cb2df9e104b12e"
   },
   {
     "file": "tenders-runner.mjs",
@@ -420,6 +420,10 @@
     "sha256": "c0fd5b5174a0ec7890832dffc7000eadd0f8caf619b4110ffd7d1db4374e071f"
   },
   {
+    "file": "tests/fixtures/us-sam-opportunities.json",
+    "sha256": "4ead824cc6413d6fa51af05318cd79ef6d379e5c1e438907fa9aecaa12e95e56"
+  },
+  {
     "file": "tests/fixtures/wbg-advertisements.json",
     "sha256": "6c27a7cbd168fc3aed1710f582b9ff80e24efc035a9c51b94ee7c29db557110b"
   },
@@ -513,11 +517,11 @@
   },
   {
     "file": "tests/tenders-national.test.mjs",
-    "sha256": "d9d4cd0e90776cd7fea1e175f96eef6185dacf489f2b7294d9d6a4144fdfccf0"
+    "sha256": "256c9b10619542e3d80262db69fe061c4cec9b988fabec46486bfa4617684ad3"
   },
   {
     "file": "tests/tenders-public.test.mjs",
-    "sha256": "1e4bef7dce1a2ab2a486943d67bff2fa63441a16ba8ee4732814f9f7d4226d3a"
+    "sha256": "ea7895895a4d1463b50b0f7487209cf29aad714e782063c3e138a8bf006e60b0"
   },
   {
     "file": "tests/test_article_media.py",

@@ -47,6 +47,7 @@ export const TENDER_SOURCES = Object.freeze({
   cabuy: Object.freeze({ id: 'cabuy', name: 'CanadaBuys (Public Services and Procurement Canada)', issuerTypes: Object.freeze(['public']), hosts: Object.freeze(['canadabuys.canada.ca']), countries: Object.freeze(['CA']) }),
   cfgb: Object.freeze({ id: 'cfgb', name: 'Contracts Finder (UK Government)', issuerTypes: Object.freeze(['public', 'private']), hosts: Object.freeze(['www.contractsfinder.service.gov.uk']), countries: Object.freeze(['GB']) }),
   ftsgb: Object.freeze({ id: 'ftsgb', name: 'Find a Tender (UK Government)', issuerTypes: Object.freeze(['public', 'private']), hosts: Object.freeze(['www.find-tender.service.gov.uk']), countries: Object.freeze(['GB']) }),
+  samus: Object.freeze({ id: 'samus', name: 'SAM.gov (US General Services Administration)', issuerTypes: Object.freeze(['public']), hosts: Object.freeze(['sam.gov']), countries: Object.freeze(['US']) }),
   pncp: Object.freeze({ id: 'pncp', name: 'Portal Nacional de Contratações Públicas (Brazil)', issuerTypes: Object.freeze(['public']), hosts: Object.freeze(['pncp.gov.br']), countries: Object.freeze(['BR']) }),
 });
 
