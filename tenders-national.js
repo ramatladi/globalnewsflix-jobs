@@ -26,7 +26,7 @@ const noon = (y, m, d) => Date.UTC(y, m - 1, d, 12);
 // A local time in a time zone -> UTC milliseconds and the wording the site reads ("26-Oct-2026 10:00 (GMT 11.00)").
 function offsetMinutes(ts, zone) {
   const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: zone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).formatToParts(ts).map(x => [x.type, x.value]));
-  return Math.round((Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute) - ts) / 60000);
+  return Math.round((Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute) - (ts - (((ts % 60000) + 60000) % 60000))) / 60000) || 0;
 }
 const zoneText = (y, m, d, h, mi, off) => {
   const sign = off < 0 ? '-' : '', a = Math.abs(off), frac = a % 60 === 30 ? '50' : a % 60 === 45 ? '75' : '00';
@@ -47,6 +47,18 @@ export function isoLocal(v, zone) {
 }
 const published = (v, now) => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(v || '')); const t = m ? noon(+m[1], +m[2], +m[3]) : null; return t && t <= now + 86400000 ? t : null; };
 const diagnostic = src => ({ src, status: 'failed', reason: '', rawCount: 0, acceptedCount: 0, httpRequests: 0 });
+// One request, tried again when the portal asks the crawler to slow down (429) or is briefly unavailable (5xx): after
+// the wait it asks for (Retry-After), else a little longer each time. `init` makes each attempt's options; `count`
+// is told of every request made.
+export async function retrying(fetchImpl, url, init, { attempts = 5, retryMs = 20000, count = () => {} } = {}) {
+  for (let a = 1; ; a++) {
+    const res = await fetchImpl(url, init());
+    count();
+    if ((res.status !== 429 && res.status < 500) || a >= attempts) return res;
+    const after = Number(res.headers?.get?.('retry-after'));
+    await sleep(retryMs ? (Number.isFinite(after) && after > 0 ? Math.min(after, 120) * 1000 : retryMs * a) : 0);
+  }
+}
 const finish = (diag, rows, complete, log, note = '') => {
   diag.acceptedCount = rows.length;
   diag.status = complete ? 'complete' : rows.length ? 'partial' : 'failed';
@@ -237,14 +249,13 @@ export function secopRow(p, now = Date.now()) {
     region: undefinedValue(p.departamento_entidad) ? null : clean(p.departamento_entidad, 60), place: undefinedValue(p.ciudad_entidad) ? null : clean(p.ciudad_entidad, 80),
     value_amount: Number.isFinite(amount) && amount >= 1000 ? amount : null, value_cur: Number.isFinite(amount) && amount >= 1000 ? 'COP' : null, summary: !generic && desc && desc.toLowerCase() !== name.toLowerCase() ? summaryOf(desc) : null };
 }
-export async function collectSecop(fetchImpl = fetch, { now = Date.now(), delayMs = 1000, maxPages = 20, log = () => {} } = {}) {
+export async function collectSecop(fetchImpl = fetch, { now = Date.now(), delayMs = 1000, maxPages = 20, retryMs = 20000, log = () => {} } = {}) {
   const diag = diagnostic('secop'), rows = [], seen = new Set();
   let complete = false;
   try {
     for (let page = 0; page < maxPages; page++) {
       if (page) await sleep(delayMs);
-      const res = await fetchImpl(`${SECOP_DATA}?${secopQuery(now, page * SECOP_PAGE)}`, { headers: { 'user-agent': UA, accept: 'application/json' }, signal: AbortSignal.timeout(60000) });
-      diag.httpRequests++;
+      const res = await retrying(fetchImpl, `${SECOP_DATA}?${secopQuery(now, page * SECOP_PAGE)}`, () => ({ headers: { 'user-agent': UA, accept: 'application/json' }, signal: AbortSignal.timeout(60000) }), { retryMs, count: () => diag.httpRequests++ });
       if (!res.ok) { diag.reason = `data-http-${res.status}`; break; }
       const data = await res.json().catch(() => null);
       if (!Array.isArray(data)) { diag.reason = 'bad-response'; break; }
@@ -277,15 +288,15 @@ export function pncpRow(n, now = Date.now()) {
     region: BR_STATES[n.uf] || null, place: clean(n.municipio_nome, 80) || null, value_amount: Number.isFinite(amount) && amount >= 1000 ? amount : null, value_cur: Number.isFinite(amount) && amount >= 1000 ? 'BRL' : null,
     summary: n.informacao_complementar ? summaryOf(n.informacao_complementar) : null };
 }
-export async function collectPncp(fetchImpl = fetch, { now = Date.now(), delayMs = 1000, log = () => {} } = {}) {
+export async function collectPncp(fetchImpl = fetch, { now = Date.now(), delayMs = 1000, retryMs = 20000, log = () => {} } = {}) {
   const diag = diagnostic('pncp'), rows = [], seen = new Set();
   let complete = true;
   try {
     for (const uf of Object.keys(BR_STATES)) {
       for (let page = 1; page <= 100; page++) {
         await sleep(delayMs);
-        const res = await fetchImpl(`${PNCP_SEARCH}?tipos_documento=edital&status=recebendo_proposta&ordenacao=-data&ufs=${uf}&pagina=${page}&tam_pagina=${PNCP_PAGE}`, { headers: { 'user-agent': UA, accept: 'application/json' }, signal: AbortSignal.timeout(60000) });
-        diag.httpRequests++;
+        const res = await retrying(fetchImpl, `${PNCP_SEARCH}?tipos_documento=edital&status=recebendo_proposta&ordenacao=-data&ufs=${uf}&pagina=${page}&tam_pagina=${PNCP_PAGE}`,
+          () => ({ headers: { 'user-agent': UA, accept: 'application/json' }, signal: AbortSignal.timeout(60000) }), { retryMs, count: () => diag.httpRequests++ });
         if (!res.ok) { diag.reason = `search-http-${res.status}`; complete = false; break; }
         const data = await res.json().catch(() => null);
         if (!data || !Array.isArray(data.items)) { diag.reason = 'bad-response'; complete = false; break; }
@@ -362,6 +373,55 @@ export async function collectCanadaBuys(fetchImpl = fetch, { now = Date.now(), l
           if (r && !seen.has(r.id)) { seen.add(r.id); rows.push(r); }
         }
         complete = true;
+      }
+    }
+  } catch (e) { diag.reason = diag.reason || failure(e); }
+  return finish(diag, rows, complete, log);
+}
+
+// --- United Kingdom: Contracts Finder (Crown Commercial Service), its search of open notices ---
+// Public bodies' contracts (in England, mostly below the thresholds for Find a Tender), and the sub-contracts that
+// companies delivering public contracts must advertise there.
+export const CONTRACTS_FINDER = 'https://www.contractsfinder.service.gov.uk';
+export const CF_SEARCH = `${CONTRACTS_FINDER}/api/rest/2/search_notices/json`;
+export const CF_SIZE = 1000;
+const CF_TYPES = { Contract: 'itb', PreProcurement: 'rfi', EarlyEngagement: 'rfi' };
+// CPV divisions: 45 is works, those below goods, those above services (48, software packages, goods).
+const cpvNature = code => { const d = Number(String(code || '').slice(0, 2)); return !d ? null : d === 45 ? 'works' : d < 45 || d === 48 ? 'goods' : 'services'; };
+const company = name => /\b(limited|ltd|plc|llp|lp)\.?$/i.test(String(name || '').trim());
+export function contractsFinderRow(n, now = Date.now()) {
+  const x = n?.item;
+  if (!x || typeof x !== 'object' || x.noticeStatus !== 'Open' || !CF_TYPES[x.noticeType] || !/^[0-9a-f-]{36}$/.test(String(x.id || ''))) return null;
+  const ts = Date.parse(x.deadlineDate || '');
+  const title = clean(decode(x.title), 300), issuer = clean(decode(x.organisationName), 120);
+  if (!Number.isFinite(ts) || !closesOk(ts, now) || title.length < 4 || issuer.length < 2) return null;
+  const local = new Date(ts + offsetMinutes(ts, 'Europe/London') * 60000);
+  const closes_text = zoneText(local.getUTCFullYear(), local.getUTCMonth() + 1, local.getUTCDate(), local.getUTCHours(), local.getUTCMinutes(), offsetMinutes(ts, 'Europe/London'));
+  const value = Number(x.valueHigh) > 0 ? Number(x.valueHigh) : Number(x.valueLow) > 0 ? Number(x.valueLow) : null;
+  const region = clean(x.regionText || x.region, 60);
+  return { id: `cfgb:${x.id}`, src: 'cfgb', issuer, issuer_type: company(issuer) ? 'private' : 'public', title, lang: 'en', langs: ['en'],
+    ref: x.noticeIdentifier && !/^n\s*\/\s*a$/i.test(x.noticeIdentifier) ? clean(x.noticeIdentifier, 120) : null, kind: x.noticeType === 'Contract' ? kindOfTitle(title, 'itb') : 'rfi', countries: ['GB'],
+    published_ts: published(x.publishedDate, now), closes_ts: ts, closes_text, url: `${CONTRACTS_FINDER}/Notice/${x.id}`, category: clean(x.cpvDescription, 80) || null,
+    nature: cpvNature(x.cpvCodes), region: region && !region.includes(',') && region !== 'Any region' ? region : null, value_amount: value && value >= 1000 ? value : null, value_cur: value && value >= 1000 ? 'GBP' : null,
+    summary: summaryOf(text(x.description)) };
+}
+export async function collectContractsFinder(fetchImpl = fetch, { now = Date.now(), retryMs = 20000, log = () => {} } = {}) {
+  const diag = diagnostic('cfgb'), rows = [];
+  let complete = false;
+  try {
+    const res = await retrying(fetchImpl, CF_SEARCH, () => ({ method: 'POST', headers: { 'user-agent': UA, accept: 'application/json', 'content-type': 'application/json' },
+      body: JSON.stringify({ searchCriteria: { statuses: ['Open'] }, size: CF_SIZE }), signal: AbortSignal.timeout(90000) }), { retryMs, count: () => diag.httpRequests++ });
+    if (!res.ok) diag.reason = `search-http-${res.status}`;
+    else {
+      const data = await res.json().catch(() => null);
+      if (!data || !Array.isArray(data.noticeList)) diag.reason = 'bad-response';
+      else {
+        const seen = new Set();
+        diag.rawCount = data.noticeList.length;
+        for (const n of data.noticeList) { const r = contractsFinderRow(n, now); if (r && !seen.has(r.id)) { seen.add(r.id); rows.push(r); } }
+        // More open notices than one search returns: a partial reading, so nothing is pruned.
+        complete = !(Number(data.hitCount) > data.noticeList.length);
+        if (!complete) diag.reason = 'over-limit';
       }
     }
   } catch (e) { diag.reason = diag.reason || failure(e); }

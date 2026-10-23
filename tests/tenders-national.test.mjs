@@ -2,12 +2,12 @@
 // Kenya's PPIP, New Zealand's GETS, Australia's AusTender, Colombia's SECOP II, Brazil's PNCP and CanadaBuys. Fixtures
 // are the portals' answers as served, cut to a few notices (Kenya's: the officer who posted each tender, the bidders
 // and the subscribers removed; PNCP's: empty fields left out; CanadaBuys': long fields cut at 300 characters and contact
-// people replaced).
+// people replaced; Contracts Finder's: one long description shortened).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { ppkeRow, collectPpke, PPKE, parseGets, getsRow, getsTime, collectGets, GETS_FEED, parseAusTender, ausTenderRow, ausTime, collectAusTender, AUSTENDER_LIST,
-  secopRow, secopQuery, collectSecop, SECOP_DATA, pncpRow, collectPncp, PNCP_SEARCH, BR_STATES, zonedTime, isoLocal, kindOfTitle, parseCsv, canadaBuysRow, caSlug, collectCanadaBuys, CANADABUYS_CSV } from '../tenders-national.js';
+  secopRow, secopQuery, collectSecop, SECOP_DATA, pncpRow, collectPncp, PNCP_SEARCH, BR_STATES, zonedTime, isoLocal, kindOfTitle, parseCsv, canadaBuysRow, caSlug, collectCanadaBuys, CANADABUYS_CSV, contractsFinderRow, collectContractsFinder, CF_SEARCH, retrying } from '../tenders-national.js';
 import { TENDER_SOURCES } from '../tenders-kinds.js';
 
 const fx = name => readFileSync(new URL('./fixtures/' + name, import.meta.url), 'utf8');
@@ -25,6 +25,7 @@ test('local times in each portal\'s time zone, with the offset of that day', () 
   assert.deepEqual(ausTime('26-Oct-2026 2:00 pm (ACT Local Time)'), { ts: Date.parse('2026-10-26T03:00:00Z'), text: '26-Oct-2026 14:00 (GMT 11.00)' });
   assert.deepEqual(['RFQ for laptops', 'Registration of Interest – roads', 'Request for Tender: bridge', 'Primary Sector Growth Fund', 'Panel'].map(t => kindOfTitle(t)), ['rfq', 'eoi', 'itb', 'grant', 'other']);
   for (const id of ['ppke', 'gets', 'aust', 'secop', 'pncp', 'cabuy']) assert.deepEqual(TENDER_SOURCES[id].issuerTypes, ['public'], id);
+  assert.deepEqual(TENDER_SOURCES.cfgb.issuerTypes, ['public', 'private'], 'Contracts Finder also carries companies\' sub-contracts');
 });
 
 test('Kenya: the active tenders on PPIP, with their documents and nothing about the officers who posted them', async () => {
@@ -124,8 +125,8 @@ test('Brazil: PNCP notices receiving proposals, read state by state (its search 
   assert.ok(calls[0].url.startsWith(PNCP_SEARCH + '?') && calls[0].url.includes('ufs=AC') && calls[0].url.includes('status=recebendo_proposta'));
   assert.deepEqual([out.rows.length, out.diagnostics[0].status], [3, 'complete']);
   assert.match(calls[0].init.headers['user-agent'], UA);
-  const refused = await collectPncp(async () => new Response('busy', { status: 429 }), { now: NOW, delayMs: 0 });
-  assert.deepEqual([refused.diagnostics[0].status, refused.diagnostics[0].reason, refused.diagnostics[0].httpRequests], ['failed', 'search-http-429', 1], 'a refusal ends the run');
+  const refused = await collectPncp(async () => new Response('busy', { status: 429 }), { now: NOW, delayMs: 0, retryMs: 0 });
+  assert.deepEqual([refused.diagnostics[0].status, refused.diagnostics[0].reason, refused.diagnostics[0].httpRequests], ['failed', 'search-http-429', 5], 'asked again after a wait, then the run ends');
 });
 
 test('Canada: CanadaBuys\' daily file of open tender notices, in English with the French version, each on its CanadaBuys page', async () => {
@@ -152,4 +153,36 @@ test('Canada: CanadaBuys\' daily file of open tender notices, in English with th
   assert.match(calls[0].init.headers['user-agent'], UA);
   const bad = await collectCanadaBuys(async () => new Response('<html>busy</html>'), { now: NOW });
   assert.deepEqual([bad.diagnostics[0].status, bad.diagnostics[0].reason], ['failed', 'bad-response']);
+});
+
+test('United Kingdom: Contracts Finder\'s open notices, public bodies\' and the sub-contracts companies advertise, in UK time', async () => {
+  const data = JSON.parse(fx('gb-contracts-finder.json'));
+  const [leeds, school, dstl, amey] = data.noticeList;
+  assert.deepEqual(contractsFinderRow(leeds, NOW), { id: 'cfgb:382dcd02-e90d-46d3-a0d4-d58205dc7ca2', src: 'cfgb', issuer: 'University of Leeds', issuer_type: 'public', title: 'GB-Leeds: 202526 5920 Six Miele Glasswashers',
+    lang: 'en', langs: ['en'], ref: 'BIP1077224731', kind: 'itb', countries: ['GB'], published_ts: Date.parse('2026-10-23T12:00:00Z'), closes_ts: Date.parse('2026-11-13T17:00:00Z'), closes_text: '13-Nov-2026 17:00 (GMT 0.00)',
+    url: 'https://www.contractsfinder.service.gov.uk/Notice/382dcd02-e90d-46d3-a0d4-d58205dc7ca2', category: 'Washer/dryers', nature: 'goods', region: 'Yorkshire and The Humber', value_amount: 100000, value_cur: 'GBP',
+    summary: 'The Supply, Installation & Commissioning of Six (6) Miele PLW 8683 [LD DC10] Glasswashers and associated accessories.' });
+  const s = contractsFinderRow(school, NOW);
+  assert.deepEqual([s.region, s.nature, s.value_amount], [null, 'services', 309000], '"Any region" names none');
+  assert.doesNotMatch(s.summary, /020 3920 8054/, 'no telephone numbers');
+  const d = contractsFinderRow(dstl, NOW);
+  assert.deepEqual([d.kind, d.ref, d.closes_text], ['rfi', null, '31-Oct-2026 23:59 (GMT 0.00)']);
+  assert.doesNotMatch(d.summary, /@/);
+  assert.equal(contractsFinderRow(amey, NOW), null, 'a pipeline notice takes no bids yet');
+  assert.equal(contractsFinderRow({ item: { ...leeds.item, noticeType: 'Contract', organisationName: 'AMEY DEFENCE SERVICES LIMITED' } }, NOW).issuer_type, 'private');
+  const calls = [];
+  const out = await collectContractsFinder(async (url, init) => { calls.push({ url, init }); return new Response(JSON.stringify({ ...data, hitCount: 4 })); }, { now: NOW });
+  assert.deepEqual([out.rows.length, out.diagnostics[0].status, calls[0].url, JSON.parse(calls[0].init.body)], [3, 'complete', CF_SEARCH, { searchCriteria: { statuses: ['Open'] }, size: 1000 }]);
+  assert.match(calls[0].init.headers['user-agent'], UA);
+  const more = await collectContractsFinder(async () => new Response(JSON.stringify(data)), { now: NOW });
+  assert.deepEqual([more.diagnostics[0].status, more.diagnostics[0].reason], ['partial', 'over-limit'], 'more open notices than one search returns: nothing pruned');
+});
+
+test('a portal that asks the crawler to slow down is waited for, as long as it asks, then asked again', async () => {
+  const answers = [new Response('', { status: 429, headers: { 'retry-after': '0' } }), new Response('', { status: 503 }), new Response('ok')];
+  let n = 0;
+  const r = await retrying(async () => answers.shift(), 'https://example.gov/x', () => ({}), { retryMs: 0, count: () => n++ });
+  assert.deepEqual([r.status, n], [200, 3]);
+  const no = await retrying(async () => new Response('', { status: 404 }), 'https://example.gov/x', () => ({}), { retryMs: 0, count: () => n++ });
+  assert.deepEqual([no.status, n], [404, 4], 'a refusal is not asked again');
 });

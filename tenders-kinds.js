@@ -45,6 +45,7 @@ export const TENDER_SOURCES = Object.freeze({
   aust: Object.freeze({ id: 'aust', name: 'AusTender (Australian Government)', issuerTypes: Object.freeze(['public']), hosts: Object.freeze(['www.tenders.gov.au']), countries: Object.freeze(['AU']) }),
   secop: Object.freeze({ id: 'secop', name: 'SECOP II (Colombia Compra Eficiente)', issuerTypes: Object.freeze(['public']), hosts: Object.freeze(['community.secop.gov.co']), countries: Object.freeze(['CO']) }),
   cabuy: Object.freeze({ id: 'cabuy', name: 'CanadaBuys (Public Services and Procurement Canada)', issuerTypes: Object.freeze(['public']), hosts: Object.freeze(['canadabuys.canada.ca']), countries: Object.freeze(['CA']) }),
+  cfgb: Object.freeze({ id: 'cfgb', name: 'Contracts Finder (UK Government)', issuerTypes: Object.freeze(['public', 'private']), hosts: Object.freeze(['www.contractsfinder.service.gov.uk']), countries: Object.freeze(['GB']) }),
   pncp: Object.freeze({ id: 'pncp', name: 'Portal Nacional de Contratações Públicas (Brazil)', issuerTypes: Object.freeze(['public']), hosts: Object.freeze(['pncp.gov.br']), countries: Object.freeze(['BR']) }),
 });
 

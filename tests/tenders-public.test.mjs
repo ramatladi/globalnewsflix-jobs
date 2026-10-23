@@ -60,8 +60,12 @@ test('the daily full TED run reads every open call with TED\'s iteration mode an
   // A search TED could not finish is not a complete reading: nothing is pruned.
   const timed = await collectTed(async () => new Response(JSON.stringify({ notices: TED.notices, totalNoticeCount: 9, timedOut: true })), { now: NOW, delayMs: 0, full: true });
   assert.deepEqual(timed.diagnostics.map(d => [d.status, d.reason]), [['failed', 'search-timed-out'], ['failed', 'search-timed-out']]);
-  const refused = await collectTed(async () => new Response('busy', { status: 503 }), { now: NOW, delayMs: 0, full: true });
+  const refused = await collectTed(async () => new Response('busy', { status: 503 }), { now: NOW, delayMs: 0, full: true, retryMs: 0 });
   assert.deepEqual(refused.diagnostics.map(d => d.reason), ['search-http-503', 'search-http-503']);
+  // A refusal for too many requests is waited out (as long as TED asks) and the same page asked again.
+  const answers = [new Response('slow down', { status: 429, headers: { 'retry-after': '0' } }), new Response(JSON.stringify({ notices: TED.notices, totalNoticeCount: 5, iterationNextToken: null }))];
+  const patient = await collectTed(async () => answers.shift(), { now: NOW, delayMs: 0, full: true, retryMs: 0 });
+  assert.deepEqual(patient.diagnostics.map(d => [d.status, d.httpRequests]), [['complete', 2], ['complete', 2]]);
 });
 
 test('South Africa\'s eTenders portal: every advertised tender with its province, category, briefing session and documents, and nobody\'s contact details', async () => {
@@ -108,9 +112,9 @@ test('every run reads every source; the daily one adds TED\'s public buyers and 
   const seen = [];
   const fetchImpl = async (url, init) => { seen.push(String(url)); return new Response('{}', { status: 404 }); };
   const out = await collectTenders(fetchImpl, { now: NOW, delayMs: 0, afdbDelayMs: 0 });
-  assert.deepEqual(out.diagnostics.map(d => d.src), ['ungm', 'ted', 'wbg', 'afdb', 'etza', 'ppke', 'gets', 'aust', 'secop', 'cabuy']);
+  assert.deepEqual(out.diagnostics.map(d => d.src), ['ungm', 'ted', 'wbg', 'afdb', 'etza', 'ppke', 'gets', 'aust', 'secop', 'cabuy', 'cfgb']);
   const fullOut = await collectTenders(fetchImpl, { now: NOW, delayMs: 0, afdbDelayMs: 0, full: true });
-  assert.deepEqual(fullOut.diagnostics.map(d => d.src), ['ungm', 'ted', 'tedn', 'wbg', 'afdb', 'etza', 'ppke', 'gets', 'aust', 'secop', 'cabuy', 'pncp']);
+  assert.deepEqual(fullOut.diagnostics.map(d => d.src), ['ungm', 'ted', 'tedn', 'wbg', 'afdb', 'etza', 'ppke', 'gets', 'aust', 'secop', 'cabuy', 'cfgb', 'pncp']);
   assert.equal(fullRun(Date.parse('2026-10-23T02:23:00Z'), {}), true, 'the first run of the day');
   assert.equal(fullRun(Date.parse('2026-10-23T10:23:00Z'), {}), false);
   assert.equal(fullRun(Date.parse('2026-10-23T10:23:00Z'), { TENDERS_FULL: '1' }), true, 'a manual run');

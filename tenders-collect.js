@@ -11,7 +11,7 @@
 import { UNGM_KIND, countryCode, countryFromIso3, TENDER_MAX_AHEAD_MS, TED_LANG } from './tenders-kinds.js';
 import { guessLang } from './lang-guess.js';
 import { COUNTRY, newsLang } from './data.js';
-import { collectPpke, collectGets, collectAusTender, collectSecop, collectPncp, collectCanadaBuys } from './tenders-national.js';
+import { collectPpke, collectGets, collectAusTender, collectSecop, collectPncp, collectCanadaBuys, collectContractsFinder, retrying } from './tenders-national.js';
 
 // The usual form for a named crawler (as the site's photo checks use): it says who is asking and where to reach us.
 export const UA = 'Mozilla/5.0 (compatible; GlobalNewsflixTenders/1.0; +https://globalnewsflix.com/contact)';
@@ -287,7 +287,8 @@ export function tednRow(n, now = Date.now()) {
 // Every open TED notice from EU institutions and international organisations, through the public search API, page
 // by page; with `full`, every other buyer's too (the public sector, tedn). Where a procedure has several notices, its
 // latest one.
-export async function collectTed(fetchImpl = fetch, { now = Date.now(), delayMs = 1000, maxPages, full = false, log = () => {} } = {}) {
+// TED's search answers about 60 requests a minute; a refusal for too many is waited out and the page asked again.
+export async function collectTed(fetchImpl = fetch, { now = Date.now(), delayMs = 1500, maxPages, full = false, retryMs = 30000, log = () => {} } = {}) {
   const pages = maxPages ?? (full ? TED_FULL_MAX_PAGES : TED_MAX_PAGES);
   const diag = { src: 'ted', status: 'failed', reason: '', rawCount: 0, acceptedCount: 0, httpRequests: 0 };
   const byProcedure = { ted: new Map(), tedn: new Map() }, query = full ? tedAllQuery(now) : tedQuery(now);
@@ -297,8 +298,8 @@ export async function collectTed(fetchImpl = fetch, { now = Date.now(), delayMs 
     for (let page = 1; page <= pages; page++) {
       if (page > 1) await sleep(delayMs);
       const body = { query, fields: TED_FIELDS, limit: TED_PAGE_SIZE, onlyLatestVersions: true, ...(full ? { paginationMode: 'ITERATION', ...(token ? { iterationNextToken: token } : {}) } : { page, paginationMode: 'PAGE_NUMBER' }) };
-      const res = await fetchImpl(TED_API, { method: 'POST', headers: { 'user-agent': UA, accept: 'application/json', 'content-type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(90000) });
-      diag.httpRequests++;
+      const res = await retrying(fetchImpl, TED_API, () => ({ method: 'POST', headers: { 'user-agent': UA, accept: 'application/json', 'content-type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(90000) }),
+        { attempts: 6, retryMs, count: () => diag.httpRequests++ });
       if (!res.ok) { diag.reason = `search-http-${res.status}`; break; }
       const data = await res.json().catch(() => null);
       if (!data || !Array.isArray(data.notices)) { diag.reason = 'bad-response'; break; }
@@ -517,7 +518,7 @@ export async function collectEtza(fetchImpl = fetch, { now = Date.now(), delayMs
 // Brazil's from PNCP (some 40,000 each).
 export async function collectTenders(fetchImpl = fetch, opts = {}) {
   const parts = [await collectUngm(fetchImpl, opts), await collectTed(fetchImpl, opts), await collectWbg(fetchImpl, opts), await collectAfdb(fetchImpl, opts), await collectEtza(fetchImpl, opts),
-    await collectPpke(fetchImpl, opts), await collectGets(fetchImpl, opts), await collectAusTender(fetchImpl, opts), await collectSecop(fetchImpl, opts), await collectCanadaBuys(fetchImpl, opts), ...(opts.full ? [await collectPncp(fetchImpl, opts)] : [])];
+    await collectPpke(fetchImpl, opts), await collectGets(fetchImpl, opts), await collectAusTender(fetchImpl, opts), await collectSecop(fetchImpl, opts), await collectCanadaBuys(fetchImpl, opts), await collectContractsFinder(fetchImpl, opts), ...(opts.full ? [await collectPncp(fetchImpl, opts)] : [])];
   const diagnostics = parts.flatMap(p => p.diagnostics);
   return { rows: parts.flatMap(p => p.rows), diagnostics, complete: diagnostics.filter(d => d.status === 'complete').map(d => d.src) };
 }

@@ -131,7 +131,7 @@ test('TED notices become rows: the official notice, issuer, kind, reference, pla
   const body = JSON.parse(calls[0].init.body);
   assert.equal(body.onlyLatestVersions, true);
   assert.equal(body.query, tedQuery(NOW));
-  const refused = await collectTed(async () => new Response('busy', { status: 429 }), { now: NOW, delayMs: 0 });
+  const refused = await collectTed(async () => new Response('busy', { status: 429 }), { now: NOW, delayMs: 0, retryMs: 0 });
   assert.deepEqual([refused.rows.length, refused.diagnostics[0].status, refused.diagnostics[0].reason], [0, 'failed', 'search-http-429']);
 });
 
