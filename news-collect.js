@@ -376,7 +376,11 @@ export async function collectTarget(target, rot, { sections } = {}) {
       if (f.trends) {
         // A trend's reports become one row (a story about what is trending and why); a refused list is not replaced.
         const day = new Date().toISOString().slice(0, 10);
-        for (const t of parseTrends(await fetchText(f.url)).filter(t => isFreshNews(t.pub) && !ROUTINE_SEARCH.test(t.query)).slice(0, 20)) {
+        // Google Trends lists only some countries (it answers 400 or 404 for China, Namibia, Botswana and others): no list
+        // is not an error.
+        let list = '';
+        try { list = await fetchText(f.url); } catch (e) { if (/^HTTP 40[04]\b/.test(String(e?.message))) return; throw e; }
+        for (const t of parseTrends(list).filter(t => isFreshNews(t.pub) && !ROUTINE_SEARCH.test(t.query)).slice(0, 20)) {
           const news = t.news.filter(x => !nonNewsReason(x.t) && !sponsoredContentReason({ url: x.u, title: x.t, source: x.s }));
           if (!news.length) continue;
           let home = ''; try { home = new URL(news[0].u).origin; } catch { /* none */ }
