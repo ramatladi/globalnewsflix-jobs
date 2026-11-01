@@ -88,7 +88,14 @@ export function parseTrends(xml) {
 // it, and people are looking for it now), more so the more people search for it.
 export const TREND_BONUS = 25;
 // Searches people make every day (lottery draws, market prices, the weather, site names) are not news of the day.
-export const ROUTINE_SEARCH = /\b(?:lottery|lotto|sambad|powerball|mega ?millions|euromillions|jackpot|horoscopes?|weather|forecast|nifty|sensex|share price|stock price|gold (?:rate|price)|petrol price|fuel price|exchange rate|live score|youtube|google|facebook|instagram|whatsapp|gmail|netflix|amazon)\b/i;
+// Prayer times, lottery draws and the weather in the languages of the editions that search for them most (owner, 1 Nov
+// 2026: "Jadwal shalat wilayah Sukabumi" reached Random News).
+export const ROUTINE_SEARCH = new RegExp(`(?<![\\p{L}\\p{N}])(?:${['lottery', 'lotto', 'sambad', 'powerball', 'mega ?millions', 'euromillions', 'euromilh[õo]es', 'euromillones', 'jackpot',
+  'loter[ií]a', 'lotofácil', 'lotofacil', 'mega[- ]?sena', 'quina', 'primitiva', 'bonoloto', 'el gordo', 'togel', 'mark six',
+  'horoscopes?', 'hor[oó]scopo', 'weather', 'forecast', 'cuaca', 'clima', 'wetter', 'météo', 'meteo', 'погода', 'hava durumu',
+  'prayer times?', 'jadwal (?:shalat|sholat|salat|imsak(?:iyah)?|buka puasa)', 'waktu solat', 'namaz vakit(?:leri)?', 'ezan vakt[iı]', 'horaires? (?:de|des) pri[eè]res?',
+  'nifty', 'sensex', 'share price', 'stock price', 'gold (?:rate|price)', 'petrol price', 'fuel price', 'exchange rate', 'live score',
+  'youtube', 'google', 'facebook', 'instagram', 'whatsapp', 'gmail', 'netflix', 'amazon'].join('|')})(?![\\p{L}\\p{N}])|六合彩|天氣|天气|天気`, 'iu');
 // A match ("Chiefs vs Arrows", "Flamengo x Palmeiras") trends as a match: its report stays in its own section.
 export const isMatchup = q => /\bvs\.?\b|\bversus\b|\bv\b|\s[xX]\s/.test(String(q || ''));
 export const trendScore = t => t.news.length * 10 + TREND_BONUS + Math.min(30, Math.round(5 * Math.log10(Math.max(1, t.traffic))));
@@ -380,7 +387,7 @@ export async function collectTarget(target, rot, { sections } = {}) {
         // is not an error.
         let list = '';
         try { list = await fetchText(f.url); } catch (e) { if (/^HTTP 40[04]\b/.test(String(e?.message))) return; throw e; }
-        for (const t of parseTrends(list).filter(t => isFreshNews(t.pub) && !ROUTINE_SEARCH.test(t.query)).slice(0, 20)) {
+        for (const t of parseTrends(list).filter(t => isFreshNews(t.pub) && !ROUTINE_SEARCH.test(t.query) && !ROUTINE_SEARCH.test(t.news[0]?.t || '')).slice(0, 20)) {
           const news = t.news.filter(x => !nonNewsReason(x.t) && !sponsoredContentReason({ url: x.u, title: x.t, source: x.s }));
           if (!news.length) continue;
           let home = ''; try { home = new URL(news[0].u).origin; } catch { /* none */ }
