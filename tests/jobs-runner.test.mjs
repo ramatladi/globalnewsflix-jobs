@@ -74,3 +74,27 @@ test('a busy site (429, 5xx, a dropped connection) is tried again before an uplo
  assert.equal(stuck.ok,false);assert.deepEqual(stuck.failedSources.sort(),['absa','nedbank'],'still refused after every attempt: never pruned');
  assert.equal(runner.UPLOAD_ATTEMPTS,4);
 });
+
+// Nov 2026: a busy database refused 11 to 57 sources' uploads a run even after four attempts; those sources were
+// then reported as never collected. Uploads refused by a busy site are sent once more at the end, after a pause.
+test('uploads refused by a busy site are sent once more at the end, within a time budget',async()=>{
+ const waits=[],calls=[];const busyUntil=runner.UPLOAD_ATTEMPTS;
+ const fetchImpl=async(u,o)=>{calls.push(u);if(u.endsWith('/finish'))return Response.json({ok:true});
+  return calls.length<=busyUntil?new Response('{"ok":false}',{status:503,headers:{'retry-after':'30'}}):Response.json({ok:true,n:JSON.parse(o.body).rows.length});};
+ const result=await uploadJobs({...payload,wait:async ms=>{waits.push(ms);},getToken:async()=>'t',fetchImpl});
+ assert.equal(result.ok,true);assert.deepEqual(result.failedSources,[]);
+ assert.deepEqual(waits,[30000,30000,45000,runner.RETRY_PASS_PAUSE_MS],'a 503 asking for 30s is waited for at least that long; then the end-of-run pause');
+ assert.equal(calls.filter(u=>u.endsWith('/api/jobs')).length,5);
+ // Past the budget nothing more is sent and the sources stay failed (never pruned).
+ let t=0;calls.length=0;
+ const rows=[...Array(500)].map(()=>({src:'absa'})).concat([...Array(500)].map(()=>({src:'nedbank'})));
+ const late=await uploadJobs({...payload,rows,wait:async()=>{},clock:()=>t,getToken:async()=>'t',
+  fetchImpl:async u=>{calls.push(u);t+=runner.RETRY_PASS_BUDGET_MS;return u.endsWith('/finish')?Response.json({ok:true}):new Response('busy',{status:503});}});
+ assert.equal(late.ok,false);assert.deepEqual(late.failedSources.sort(),['absa','nedbank']);
+ assert.equal(calls.filter(u=>u.endsWith('/api/jobs')).length,3*runner.UPLOAD_ATTEMPTS,'two uploads, then only the first sent again: the budget ran out');
+ // A rejected upload (4xx) is not sent again.
+ calls.length=0;
+ const rejected=await uploadJobs({...payload,wait:async()=>assert.fail('no pause for a rejection'),getToken:async()=>'t',
+  fetchImpl:async u=>{calls.push(u);return u.endsWith('/finish')?Response.json({ok:true}):new Response('{"ok":false}',{status:400});}});
+ assert.equal(rejected.ok,false);assert.equal(calls.filter(u=>u.endsWith('/api/jobs')).length,1);
+});

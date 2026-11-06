@@ -20,7 +20,9 @@ async function postWithRetry(fetchImpl, url, init, { wait = pause, log = () => {
       last = r;
       if (attempt === UPLOAD_ATTEMPTS) return r;
       const after = Number(r.headers?.get?.('retry-after'));
-      const ms = r.status === 429 && Number.isFinite(after) && after > 0 ? Math.min(after, 75) * 1000 : 15000 * attempt;
+      // A 429 is waited for as long as it asks; a busy site's 503 may ask for longer than the usual step.
+      const asked = Number.isFinite(after) && after > 0 ? Math.min(after, 75) * 1000 : 0;
+      const ms = r.status === 429 && asked ? asked : Math.max(15000 * attempt, asked);
       log(`jobs upload: ${r.status}, trying again in ${Math.round(ms / 1000)}s`);
       await wait(ms);
     } catch (error) {
@@ -32,20 +34,36 @@ async function postWithRetry(fetchImpl, url, init, { wait = pause, log = () => {
   return last;
 }
 
-export async function uploadJobs({ rows, ok, diagnostics = [], runTs, site, getToken, fetchImpl = fetch, log = console.log, wait = pause }) {
-  const failed = new Set();
+// Uploads the site still refused after every attempt are sent once more at the end, after a pause, within this
+// time budget (Nov 2026: a busy database refused 11 to 57 sources' uploads a run, and those sources were then
+// reported as never collected). The budget keeps a long outage from pushing the run past its time limit.
+export const RETRY_PASS_PAUSE_MS = 60000, RETRY_PASS_BUDGET_MS = 10 * 60000;
+export async function uploadJobs({ rows, ok, diagnostics = [], runTs, site, getToken, fetchImpl = fetch, log = console.log, wait = pause, clock = Date.now }) {
   const tokenHeaders = async () => ({ authorization: `Bearer ${await getToken()}`, 'content-type': 'application/json' });
-  for (let i = 0; i < rows.length; i += 500) {
-    const chunk = rows.slice(i, i + 500);
-    let acknowledged = false;
+  const send = async chunk => {
     try {
       const r = await postWithRetry(fetchImpl, `${site}/api/jobs`, async () => ({ method: 'POST', headers: await tokenHeaders(), body: JSON.stringify({ runTs, rows: chunk }) }), { wait, log });
       const out = await r.json().catch(() => ({}));
-      acknowledged = r.ok && out.ok === true && out.n === chunk.length;
       log(`jobs upload: ${r.status}, accepted ${Number.isInteger(out.n) ? out.n : 0}/${chunk.length}`);
-    } catch { log('jobs upload: failed'); }
-    if (!acknowledged) chunk.forEach(x => failed.add(x.src));
+      return { ok: r.ok && out.ok === true && out.n === chunk.length, busy: r.status === 429 || r.status >= 500 };
+    } catch { log('jobs upload: failed'); return { ok: false, busy: true }; }
+  };
+  const refused = [], busy = [];
+  for (let i = 0; i < rows.length; i += 500) {
+    const chunk = rows.slice(i, i + 500);
+    const sent = await send(chunk);
+    if (!sent.ok) (sent.busy ? busy : refused).push(chunk);
   }
+  // Only uploads refused because the site was busy (429, 5xx, no answer) are sent again; a rejected or partly
+  // accepted upload is not.
+  if (busy.length) {
+    log(`jobs upload: ${busy.length} upload(s) refused by a busy site, sent once more after a pause`);
+    await wait(RETRY_PASS_PAUSE_MS);
+    const deadline = clock() + RETRY_PASS_BUDGET_MS;
+    for (const chunk of busy) if (clock() > deadline || !(await send(chunk)).ok) refused.push(chunk);
+  }
+  const failed = new Set();
+  for (const chunk of refused) chunk.forEach(x => failed.add(x.src));
   const sources = ok.filter(s => !failed.has(s));
   const reported = diagnostics.map(d => failed.has(d.src) ? {...d,status:'failed',reason:'upload-failed',acceptedCount:0} : d);
   let finished = false, pruneBlocked = [];
