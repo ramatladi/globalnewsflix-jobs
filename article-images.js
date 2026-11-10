@@ -43,7 +43,21 @@ export const blockedImageCandidate = blockedImageUrl;
 export const publicArticleImage = article => article && (blockedImageUrl(article.image) || BLOCKED_ARTICLE_RESOURCES.get(article.id) === imageResourceKey(article.image))
   ? { ...article, image: null, image_credit: null } : article;
 
-export const AI_IMAGE_PATH = /(?:^|[\/_.-])(?:ai[-_]generated|chatgpt[-_ ]image|gemini[-_]generated|dall[-_]e[-_\d]|midjourney|stable[-_]diffusion)(?=$|[\/_.\-\d])/i;
+// Also after "File:" (Wikimedia Commons file names: "File:DALL-E_-_Blackboard_drawing…", "File:Gemini_Generated_Image_…";
+// 4 Nov 2026 audit), a space or a "+", and the spaced forms Commons titles use ("Gemini Generated Image").
+export const AI_IMAGE_PATH = /(?:^|[\/_.:+\s-])(?:ai[-_ ]generated|chatgpt[-_ ]image|gemini[-_ ]generated|dall[-_ ]?e[-_ \d]|dalle[-_ \d]|midjourney|stable[-_ ]diffusion|image[-_ ]creator|firefly[-_ ]generated)(?=$|[\/_.\-\d\s])/i;
+// A credit, title or description that names an image generator as the picture's maker ("Bing Image Creator / Wikimedia
+// Commons", "Generated with Midjourney") or the picture as generated. Names alone (Gemini, Firefly) are not enough here:
+// "Gemini 4 spacewalk" is a NASA photograph.
+export const AI_IMAGE_TEXT = /\b(?:Bing Image Creator|Image Creator(?: from (?:Microsoft )?Designer)?|Microsoft Designer|DALL[-·\s]?E(?:\s?[23])?|Midjourney|Stable Diffusion|Adobe Firefly|Leonardo\.?Ai|NightCafe|Craiyon|Gemini[_\s]Generated|ChatGPT[_\s]Image|AI[-\s]generated|generated (?:by|with|using) (?:an? )?(?:AI|artificial intelligence|DALL|Midjourney|Stable Diffusion|Gemini|ChatGPT|Copilot|Firefly|Imagen|a text-to-image)|text-to-image|KI-generiert|généré(?:e)? par (?:l['’])?IA|generad[oa] (?:por|con) (?:IA|inteligencia artificial))\b/i;
+// Whether a picture marks itself as AI-generated: its address or file name, its credit, or its title and description
+// (Wikimedia Commons categories such as "AI-generated images" are part of the description).
+export function aiGeneratedImage({ url = '', title = '', credit = '', about = '' } = {}) {
+  let path = String(url || '').split('?')[0];
+  try { path = decodeURIComponent(path); } catch { /* keep the encoded form */ }
+  return AI_IMAGE_PATH.test(path) || AI_IMAGE_PATH.test(String(title || '')) || AI_IMAGE_TEXT.test(String(credit || '')) ||
+    AI_IMAGE_TEXT.test(String(title || '')) || AI_IMAGE_TEXT.test(String(about || ''));
+}
 export function usablePublisherImage(url) {
   if (blockedImageCandidate(url)) return false;
   if (!url || !/^https:\/\//.test(url)) return false;
@@ -53,7 +67,7 @@ export function usablePublisherImage(url) {
   try { filename = new URL(url).pathname.split('/').at(-1); } catch { return false; }
   if (/^no[-_]?img\.(?:jpe?g|png|webp|gif)$/i.test(filename)) return false;
   // Pictures their own address marks as AI-generated (owner rule: real photographs only).
-  if (AI_IMAGE_PATH.test(decodeURIComponent(url.split('?')[0]))) return false;
+  if (aiGeneratedImage({ url })) return false;
   // Width hints in the URL (e.g. w=120, /150x150/) below a sensible size mean a thumbnail.
   const w = url.match(/[?&/_-]w(?:idth)?[=_-]?(\d{2,4})\b/i) || url.match(/\/(\d{2,4})x\d{2,4}\//);
   if (w && Number(w[1]) < 500) return false;

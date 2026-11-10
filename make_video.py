@@ -8,7 +8,7 @@ pictures shared by several outlets rank first), with no outlet branding, waterma
 checked by two AI models against the line being narrated. Credited as published by those outlets.
 Output: out/video.mp4, out/thumbnail.png, out/meta.json
 """
-import base64, hashlib, html, io, json, math, os, re, subprocess, sys, textwrap, urllib.error, urllib.parse, urllib.request, wave
+import base64, hashlib, html, io, json, math, os, re, subprocess, sys, textwrap, time, urllib.error, urllib.parse, urllib.request, wave
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from article_media import article_image_urls, photo_request_headers, same_publisher_host, approved_photo_url
@@ -883,6 +883,32 @@ def ai_mention(art):
     return None
 
 
+TOP_RETRY_DELAYS = (5, 15, 45, 90)  # seconds between attempts when the site is busy (about 2.5 minutes in all)
+
+
+def fetch_top(sleep=time.sleep, delays=TOP_RETRY_DELAYS):
+    """The site's next story (/api/top). A busy moment (HTTP 429/5xx or a dropped connection) is retried with a
+    growing pause, honouring the site's Retry-After (at most two minutes); other errors fail at once."""
+    for attempt in range(len(delays) + 1):
+        try:
+            return json.loads(fetch(f"{SITE}/api/top", timeout=60))
+        except urllib.error.HTTPError as error:
+            if error.code != 429 and error.code < 500 or attempt == len(delays):
+                raise
+            wait = delays[attempt]
+            try:
+                wait = max(wait, min(120, int(error.headers.get("retry-after") or 0)))
+            except (TypeError, ValueError):
+                pass
+            print(f"/api/top answered HTTP {error.code}; trying again in {wait}s ({attempt + 1}/{len(delays)})")
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as error:
+            if attempt == len(delays):
+                raise
+            wait = delays[attempt]
+            print(f"/api/top unreachable ({error}); trying again in {wait}s ({attempt + 1}/{len(delays)})")
+        sleep(wait)
+
+
 STORY_TRIES = int(os.environ.get("STORY_TRIES", "3"))  # stories one run may build before giving the slot up
 
 
@@ -890,7 +916,7 @@ def pick_story(tried=()):
     """The next story waiting for a Short that has outlet pictures; exits 2 (none waiting) or 4 (no pictures)."""
     art = None
     for attempt in range(6):
-        art = json.loads(Path(sys.argv[1]).read_text()) if len(sys.argv) > 1 and sys.argv[1].endswith(".json") else json.loads(fetch(f"{SITE}/api/top"))
+        art = json.loads(Path(sys.argv[1]).read_text()) if len(sys.argv) > 1 and sys.argv[1].endswith(".json") else fetch_top()
         if not art or not art.get("id"):
             print("No story available"); sys.exit(2)
         if art["id"] in tried:
@@ -1050,7 +1076,9 @@ def build_short(art):
     title = textwrap.shorten(f"{art['title']} | {ctx['country']}", 98, placeholder="…")
     image_credits = "\n".join(f"- {c}" for c in sorted(set(credits)) if c)
     body = (art.get("dek") or art.get("summary") or "").strip()
-    desc = (f"{body}\n\nNEUTRAL: {art.get('neutral', '')}\n\nPOSITIVE: {art.get('positive', '')}\n\nNEGATIVE: {art.get('negative', '')}\n\n"
+    # Only the readings the story has (a story may have no positive or negative reading).
+    views = "".join(f"{k.upper()}: {(art.get(k) or '').strip()}\n\n" for k in ("neutral", "positive", "negative") if (art.get(k) or "").strip())
+    desc = (f"{body}\n\n{views}"
             f"Images and footage:\n{image_credits}\n\n"
             "#Shorts #news #worldnews #" + re.sub(r"\W+", "", art.get("category") or "news"))
     meta = {"title": title, "description": desc[:4900], "article_id": art["id"], "url": url, "seconds": round(secs, 1),
