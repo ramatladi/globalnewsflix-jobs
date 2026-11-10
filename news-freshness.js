@@ -177,15 +177,39 @@ export function sourceDateEvidence(candidate,facts,now=Date.now()) {
 
 export function isCurrentReport(article,now=Date.now(),maxAge=NEWS_MAX_AGE_MS){return article?.source_date_review_required===0&&isFreshNews(article.source_pub_ts,now,maxAge);}
 // Conservative deterministic review clues, not semantic or factual verification.
+// Words that mark a report as looking back: an anniversary, an archive item, a retrospective. In the headline they
+// always count. In the lead (the page's description and opening text) "archive" and "anniversary" words count only
+// within a few words of a year or another number ("50th anniversary", "Архив 1998") or as a phrase ("from our
+// archive"): a page's own menu carries "Архив" or "Archives" on every report, and that menu text was holding good
+// stories (4 Nov 2026 audit: 694 drafts, about 50 a day, from Lenta, France 24, Yahoo and others). Korean 기념 ("to
+// mark, commemorative": "컴백을 기념하는 팝업스토어") is ordinary news language, so only "N주년" (Nth anniversary) counts.
+const B='(?<![\\p{L}\\p{N}_])',E='(?![\\p{L}\\p{N}_])';
+const MENU_WORDS=new RegExp(`${B}(?:archiv(?:e|ed|es)|архив[\\p{L}]*|anniversary|anniversaire|anniversario|anivers[aá]rio|aniversario|jahrestag|yıldönümü|годовщин[\\p{L}]*)${E}|أرشيف|ارشيف`,'gu');
+const ALWAYS=new RegExp(`${B}(?:retrospective|on this day|throwback|rückblick)${E}|周年|回顾|回顧|ذكرى|الذكرى|회고|\\d\\s?주년`,'u');
+const ARCHIVE_PHRASE=/(?:from|in) (?:our|the) archives?|aus (?:unserem|dem) archiv|de (?:nos|nuestros?|nossos?) archiv|dal nostro archivio|из (?:нашего )?архива|من (?:ال)?أرشيف/u;
+const NEAR_NUMBER=40;
+const lookbackIn=(text,{lead=false}={})=>ALWAYS.test(text)||(lead?ARCHIVE_PHRASE.test(text)||[...text.matchAll(MENU_WORDS)].some(m=>/\d/.test(text.slice(Math.max(0,m.index-NEAR_NUMBER),m.index+m[0].length+NEAR_NUMBER))):new RegExp(MENU_WORDS.source,'u').test(text));
+// A past year that only says since when ("prices up 71% since 2021", "seit 2019", "desde 2020", "2021年以来"), or that
+// opens a span reaching the report's own year ("the 2025/26 season", "2021–2026"), is not an old event.
+const SINCE_BEFORE=/(?:since|seit|desde|depuis|dal|dall['’]|dalla|dai|sinds|sedan|siden|sejak|od|от|с|з|від|منذ|από|kể từ|từ)\s+(?:the year\s+|el año\s+|l['’]an\s+|dem jahr\s+|năm\s+|года?\s+)?$/u;
+const SINCE_AFTER=/^\s*(?:年)?\s*(?:以来|から|이후|부터)/u;
+function pastYearCounts(head,m,year){
+ const value=Number(m[1]);if(value>=year)return false;
+ const at=m.index+m[0].length-4,before=head.slice(Math.max(0,at-24),at),after=head.slice(at+4,at+14);
+ if(SINCE_BEFORE.test(before)||SINCE_AFTER.test(after))return false;
+ const span=after.match(/^\s*[-–—/]\s*((?:19|20)\d{2}|\d{2})(?![0-9])/);
+ if(span){const end=span[1].length===2?Math.floor(value/100)*100+Number(span[1]):Number(span[1]);if(end>=year&&end<=year+1)return false;}
+ return true;
+}
 export function publicationReview(title,lead,publishedTs){
  const ts=sourceTimestamp(publishedTs);if(ts===null)return {required:true,reasons:['date-unverified']};
  const norm=v=>String(v||'').normalize('NFKC').replace(/[٠-٩۰-۹]/g,c=>String(c.charCodeAt(0)-(c>='۰'?1776:1632))).toLowerCase();
- const head=norm(String(title||'').slice(0,600)),text=head+' '+norm(String(lead||'').slice(0,1800));
+ const head=norm(String(title||'').slice(0,600)),body=norm(String(lead||'').slice(0,1800));
  const year=new Date(ts).getUTCFullYear(),reasons=[];
  // Only a PAST year in the headline suggests an old event; future years (plans, model years) and years
  // cited as background in the lead (laws, resolutions, records) are normal in current reporting.
- if([...head.matchAll(/(?:^|[^0-9])((?:19|20)\d{2})(?![0-9])/g)].some(m=>Number(m[1])<year))reasons.push('different-year');
- if(/(?<![\p{L}\p{N}_])(?:anniversary|archiv(?:e|ed|es)|retrospective|on this day|throwback|anniversaire|anniversario|anivers[aá]rio|aniversario|jahrestag|rückblick|yıldönümü|годовщин[\p{L}]*|архив[\p{L}]*)(?![\p{L}\p{N}_])|周年|回顾|回顧|ذكرى|الذكرى|أرشيف|ارشيف|회고|기념/u.test(text))reasons.push('historical-language');
+ if([...head.matchAll(/(?:^|[^0-9])((?:19|20)\d{2})(?![0-9])/g)].some(m=>pastYearCounts(head,m,year)))reasons.push('different-year');
+ if(lookbackIn(head)||lookbackIn(body,{lead:true}))reasons.push('historical-language');
  return {required:reasons.length>0,reasons};
 }
 // A repair is operational metadata, never a new report/publication date.

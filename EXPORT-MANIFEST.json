@@ -33,7 +33,7 @@
   },
   {
     "file": "article-images.js",
-    "sha256": "1eb9b586d7929383e18396093f2b1ec443e79aee971ea0013c663ff923e4ef9d"
+    "sha256": "b9b28bb76cd384d95117f0568b6e4dcb0577b50bf81ee9c62e0918a12fbf7c33"
   },
   {
     "file": "article_media.py",
@@ -161,15 +161,15 @@
   },
   {
     "file": "make_video.py",
-    "sha256": "eb8233c7a0f8ad7622a92cddf0b85c6fa04661765bd0fde19324f77b715a235f"
+    "sha256": "e4728bdd27c6e6316c18076e8fbeff99002cacf75e7c5b32d37a82e719e178ee"
   },
   {
     "file": "news-collect.js",
-    "sha256": "8f7403b83aebc2dc77acbbdb25a4dee714d2e5a81df8a039f3c21eb404d2d55e"
+    "sha256": "20b59491d2377a660f43684aa24d410399027ae1f7be2f7c8561484dcecccc47"
   },
   {
     "file": "news-freshness.js",
-    "sha256": "962fac7e986caaed8f80ec46d94886d3ad02e44c4e99eb8b965e6bbffeeb505e"
+    "sha256": "746156ebda37a26b708c86fdf2302a0c66121fb5e3a1565dea41a0fde752e6a0"
   },
   {
     "file": "non-news.js",
@@ -201,7 +201,7 @@
   },
   {
     "file": "sponsored-content.js",
-    "sha256": "bae196167372b9cfac401ccf99940eb7f937255cf7070c3c720e9fd4e40e7d94"
+    "sha256": "303ab91b3edbccce14794764f632828865dca3915b959c237ee41604ab8885ea"
   },
   {
     "file": "tenders-collect.js",

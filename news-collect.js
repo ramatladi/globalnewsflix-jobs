@@ -89,13 +89,33 @@ export function parseTrends(xml) {
 export const TREND_BONUS = 25;
 // Searches people make every day (lottery draws, market prices, the weather, site names) are not news of the day.
 // Prayer times, lottery draws and the weather in the languages of the editions that search for them most (owner, 1 Nov
-// 2026: "Jadwal shalat wilayah Sukabumi" reached Random News).
-export const ROUTINE_SEARCH = new RegExp(`(?<![\\p{L}\\p{N}])(?:${['lottery', 'lotto', 'sambad', 'powerball', 'mega ?millions', 'euromillions', 'euromilh[õo]es', 'euromillones', 'jackpot',
+// 2026: "Jadwal shalat wilayah Sukabumi" reached Random News). This list is for the search itself (the trend's query).
+export const ROUTINE_QUERY = new RegExp(`(?<![\\p{L}\\p{N}])(?:${['lottery', 'lotto', 'sambad', 'powerball', 'mega ?millions', 'euromillions', 'euromilh[õo]es', 'euromillones', 'jackpot',
   'loter[ií]a', 'lotofácil', 'lotofacil', 'mega[- ]?sena', 'quina', 'primitiva', 'bonoloto', 'el gordo', 'togel', 'mark six',
   'horoscopes?', 'hor[oó]scopo', 'weather', 'forecast', 'cuaca', 'clima', 'wetter', 'météo', 'meteo', 'погода', 'hava durumu',
   'prayer times?', 'jadwal (?:shalat|sholat|salat|imsak(?:iyah)?|buka puasa)', 'waktu solat', 'namaz vakit(?:leri)?', 'ezan vakt[iı]', 'horaires? (?:de|des) pri[eè]res?',
   'nifty', 'sensex', 'share price', 'stock price', 'gold (?:rate|price)', 'petrol price', 'fuel price', 'exchange rate', 'live score',
   'youtube', 'google', 'facebook', 'instagram', 'whatsapp', 'gmail', 'netflix', 'amazon'].join('|')})(?![\\p{L}\\p{N}])|六合彩|天氣|天气|天気`, 'iu');
+export const ROUTINE_SEARCH = ROUTINE_QUERY;
+// The trend's lead news headline is checked against everyday-search phrases only: no site names and no bare "forecast",
+// "clima" or "jackpot". The query list above dropped real news when it was applied to headlines (4 Nov 2026 review:
+// "Amazon to cut 14,000 corporate jobs", "Google fined €2.9bn by EU over adtech", "Hurricane Melissa forecast to
+// strengthen", "COP30: cumbre del clima arranca en Belém").
+export const ROUTINE_HEADLINE = new RegExp(`(?<![\\p{L}\\p{N}])(?:${[
+  // Prayer times
+  'jadwal (?:shalat|sholat|salat|imsak(?:iyah)?|buka puasa)', 'waktu (?:solat|sholat|shalat)', 'namaz vakit(?:leri)?', 'ezan vakt[iı]', 'iftar vakt[iı]',
+  'horaires? (?:de|des) pri[eè]res?', 'prayer times? (?:today|in|for)',
+  // Lottery draws and their results
+  'lottery sambad', 'lottery results?', 'lotto results?', 'lotto numbers', 'winning numbers', 'powerball (?:numbers|results?|drawing)',
+  'mega millions (?:numbers|results?|drawing)', 'resultados? d[aeo] (?:la )?(?:mega[- ]?sena|lotof[aá]cil|quina|loter[ií]a|lotomania|timemania|dupla sena)',
+  'mega[- ]?sena (?:concurso|\\d)', 'euromilh[õo]es', 'euromillions (?:results?|numbers)', 'mark six', 'togel', 'números ganadores', 'numeros ganadores',
+  'lottozahlen', 'superenalotto', 'loto sonu[çc]lar[ıi]',
+  // Weather forecasts as a daily service
+  'cuaca hari ini', 'prakiraan cuaca', 'weather forecast (?:for|today|tomorrow)', 'weather today', 'wetter heute', 'wetter morgen', 'météo du jour',
+  'hava durumu', 'el tiempo (?:hoy|mañana)', 'clima (?:para )?(?:hoy|mañana)', 'previsão do tempo', 'погода на (?:сегодня|завтра)',
+  // Horoscopes
+  'horoscopes? (?:today|for)', 'hor[oó]scopo (?:de )?(?:hoy|do dia|del d[ií]a)',
+].join('|')})(?![\\p{L}\\p{N}])`, 'iu');
 // A match ("Chiefs vs Arrows", "Flamengo x Palmeiras") trends as a match: its report stays in its own section.
 export const isMatchup = q => /\bvs\.?\b|\bversus\b|\bv\b|\s[xX]\s/.test(String(q || ''));
 export const trendScore = t => t.news.length * 10 + TREND_BONUS + Math.min(30, Math.round(5 * Math.log10(Math.max(1, t.traffic))));
@@ -140,8 +160,9 @@ export function editionLanguageFeeds(c, lang, rot = 0) {
   if (!name || name === c.code) name = c.name;
   const names = [...new Set([name, c.name, c.q].filter(Boolean))];
   const out = [], edition = LANG_SEARCH_EDITION[lang];
-  if (edition) out.push({ country: c.code, section: 'top', search: true, names, url: feedUrl({ edition, q: `"${name}" when:${rot % 2 ? 2 : 1}d` }) });
-  out.push({ country: c.code, section: 'top', bing: true, search: true, names, url: bingUrl(`"${name}"`, lang, BING_MARKET[lang] || c.code) });
+  const term = searchTerm(c.code, name, lang);
+  if (edition) out.push({ country: c.code, section: 'top', search: true, names, url: feedUrl({ edition, q: `${term} when:${rot % 2 ? 2 : 1}d` }) });
+  out.push({ country: c.code, section: 'top', bing: true, search: true, names, url: bingUrl(term, lang, BING_MARKET[lang] || c.code) });
   return out;
 }
 // A title that names the edition's country (any spelling the edition is searched by), case- and accent-insensitive.
@@ -152,6 +173,53 @@ export function namesCountry(title, names) {
 }
 // Searches return any page that mentions the country; a report that names it in its title is more likely about it.
 export const NAMED_COUNTRY_BONUS = 20;
+
+// Editions whose name another place or a person shares (4 Nov 2026 audit: the Georgia edition carried US-state Georgia
+// news, 36 of its 42 stories in a week; Chad and Jordan carried stories about people called Chad or Jordan; Guinea
+// carried Guinea-Bissau, Equatorial Guinea and Papua New Guinea). A report for one of them must be about that country:
+// it names something only that country has (strong), or it names the country once the look-alikes are taken out
+// ("Guinea-Bissau", "Chad Gable", "Air Jordan") and nothing marks the other place (US-state Georgia).
+const US_STATES = 'Alabama|Alaska|Arizona|Arkansas|California|Colorado|Connecticut|Delaware|Florida|Hawaii|Idaho|Illinois|Indiana|Iowa|Kansas|Kentucky|Louisiana|Maine|Maryland|Massachusetts|Michigan|Minnesota|Mississippi|Missouri|Montana|Nebraska|Nevada|New Hampshire|New Jersey|New Mexico|New York|North Carolina|North Dakota|Ohio|Oklahoma|Oregon|Pennsylvania|Rhode Island|South Carolina|South Dakota|Tennessee|Texas|Utah|Vermont|Virginia|Washington|West Virginia|Wisconsin|Wyoming';
+export const AMBIGUOUS_EDITIONS = Object.freeze({
+  GE: {
+    strong: /Tbilisi|Batumi|Kutaisi|Rustavi|Zugdidi|Telavi|Mtskheta|Kakheti|Svaneti|Samegrelo|Adjara|Ajara|Abkhaz|Ossetia|Tskhinvali|Sukhum|Georgian Dream|Kobakhidze|Kavelashvili|Zourabichvili|Zurabishvili|Ivanishvili|Saakashvili|Papuashvili|Garibashvili|Republic of Georgia|Sakartvelo|South Caucasus|National Bank of Georgia|Geostat|\blari\b|[\u10A0-\u10FF]|\b\p{Lu}\p{Ll}+(?:shvili|dze)\b/u,
+    mention: /\bGeorgia(?:n|'s|’s)?\b/u, weak: /\bGeorgia(?:n|'s|’s)?\b/u,
+    other: new RegExp(`\\b(?:${US_STATES}|Atlanta|Savannah|Augusta|Macon|Athens|Columbus|Valdosta|Albany|Kennesaw|Marietta|Alpharetta|Kemp|Raffensperger|Ossoff|Warnock|Bulldogs|Dawgs|Yellow Jackets|Falcons|Braves|Hawks|UGA|Georgia Tech|Georgia State|Georgia Southern|Georgia Power|Kirby Smart|Fulton|Gwinnett|Cobb|DeKalb|Clayton|Chatham|county|counties|Peach State|Senate|GOP|Democrats?|Republicans?|Gov\\.|Ga\\.|U\\.S\\.|sheriff|SEC|NCAA|NFL|MLB|NBA|WNBA|college football|Interstate|I-(?:75|85|20|16|95)|Hartsfield)\\b`, 'u'),
+  },
+  TD: {
+    strong: /Tchad|tchadien|Chadian|N['’]?\s?Djam[eé]na|Ndjamena|D[ée]by\b|Moundou|Ab[ée]ch[ée]|\bSarh\b|Tibesti|Ennedi/u,
+    look: /\bChad\s+(?!(?:Basin|basin|Lake|lake|army|Army|government|Government|president|President|prime|Prime|capital|border|national|National|armed|Armed|forces|junta|military|interior|foreign|Foreign)\b)\p{Lu}[\p{L}'’-]+|\b\p{Lu}\p{Ll}+\s+Chad\b(?!ian)/gu,
+    mention: /\bChad\b|Tchad/u, weak: /\bChad\b|Tchad/u,
+  },
+  JO: {
+    strong: /الأردن|الاردن|أردني|اردني|الأردني|العقبة|إربد|اربد|الزرقاء|الهاشمي|عبدالله الثاني|عبد الله الثاني|\bAmman\b|Aqaba|Irbid|Zarqa|Jordanian|Hashemite|Jordanie/u,
+    look: /(?:Air|Michael|Eddie|Vernon|Jim|Chris|Kevin|Marcus|Matt|Jalen|DeAndre|Brian|Montell|Thomas|Robert)\s+Jordan|\bJordan\s+(?!(?:Valley|River|Rift)\b)\p{Lu}[\p{L}'’-]+|جوردان\S*|جوردن\S*|جوردون\S*|إير جورد\S*/gu,
+    mention: /\bJordan|جورد|الأردن|الاردن/u, weak: /\bJordan\b|الأردن|الاردن/u,
+    other: /\b(?:GOP|Republicans?|Democrats?|Congress|House Judiciary|NBA|NFL|Nike|sneakers?|Bulls|Ohio)\b|الجمهوري|الكونغرس|نايكي/u,
+  },
+  GN: {
+    strong: /Conakry|Doumbouya|Kankan|N['’]?Z[eé]r[eé]kor[eé]|Kindia|\bLab[eé]\b|\bBok[eé]\b|Simandou|Kamsar|Mamou|Fouta[- ]Djallon|(?<![-‑]|Bissau |bissau |[ée]quato)guin[ée]en(?:ne)?s?(?![-‑])|(?<![-‑])Guinean(?![-‑])/u,
+    look: /Guin[ée]e?[-‑\s]+Bissau|Guin[ée]e[-‑\s]+[ée]quatoriale|Equatorial[-\s]+Guinea|Guinea[-\s]+Ecuatorial|Guin[ée][-\s]+Equatorial|(?:Papouasie[-‑\s]+)?Nouvelle[-‑\s]+Guin[ée]e|(?:Papua[-\s]+)?New[-\s]+Guinea|Papua Nugini|golfe de Guin[ée]e|Gulf of Guinea|bissau[-‑]guin[ée]en\w*|[ée]quato[-‑]guin[ée]en\w*|guinea[-\s]pigs?|cochons? d['’]Inde/giu,
+    mention: /Guin[ée]e|Guinea/iu, weak: /Guin[ée]e|Guinea/iu,
+  },
+});
+// '' when a report can be in this edition, else the reason. Strict (the writer's run, with the report's own text): the
+// report must show it is about the country. Not strict (the collector, with a feed's headline and summary only): only a
+// report that is plainly about the other place or person is dropped.
+export function editionMismatch(country, text, { strict = false } = {}) {
+  const rule = AMBIGUOUS_EDITIONS[country];
+  if (!rule) return '';
+  const t = String(text || '').normalize('NFC');
+  if (rule.strong.test(t)) return '';
+  const rest = rule.look ? t.replace(rule.look, ' ') : t;
+  const named = rule.weak.test(rest), other = !!rule.other?.test(t);
+  const reason = `not about ${COUNTRY[country]?.name || country}: ${other ? 'another place or person of that name' : named ? 'not shown to be the country' : 'a look-alike name'}`;
+  if (strict) return named && !other ? '' : reason;
+  return other || (!named && rule.mention.test(t)) ? reason : '';
+}
+// How each of those editions is searched by name: not the bare shared name.
+const SEARCH_TERM = { GE: { en: '"Georgia" (Tbilisi OR Georgian OR Batumi OR Caucasus)' }, GN: { fr: '"Guinée" -Bissau -équatoriale -Papouasie' } };
+export const searchTerm = (code, name, lang) => SEARCH_TERM[code]?.[lang] || `"${name}"`;
 
 // For one-source feeds (Bing), estimate trend by how many items tell the same story.
 export function clusterBySimilarity(items) {
@@ -275,7 +343,8 @@ export function feedsFor(target, rot) {
     // An English edition can only use English reports: a term in another script ("Македонија") is not searched.
     const q = /^[\p{Script=Latin}\s'’.-]+$/u.test(c.q || '') && c.q !== c.name ? c.q : '';
     const names = [...new Set([c.name, c.q].filter(Boolean))];
-    const feeds = [{ country: c.code, section: 'top', search: true, names, url: feedUrl({ edition: 'en-US;US;US:en', q: `"${c.name}" when:2d` }) }, { country: c.code, section: 'top', bing: true, search: true, names, url: bingUrl(`"${c.name}"`) }];
+    const term = searchTerm(c.code, c.name, 'en');
+    const feeds = [{ country: c.code, section: 'top', search: true, names, url: feedUrl({ edition: 'en-US;US;US:en', q: `${term} when:2d` }) }, { country: c.code, section: 'top', bing: true, search: true, names, url: bingUrl(term) }];
     if (q) feeds.push({ country: c.code, section: 'top', search: true, names, url: feedUrl({ edition: searchEditionFor(c), q: `${q} when:2d` }) });
     if (q) feeds.push({ country: c.code, section: 'top', bing: true, search: true, names, url: bingUrl(q).replace('&setlang=en', '') });
     return feeds;
@@ -341,8 +410,9 @@ export function sectionFeedsFor(target, rot, sections) {
   if (!name || name === c.code) name = c.name;
   const named = { ...base, search: true, names: [...new Set([name, c.name, c.q].filter(Boolean))] };
   const edition = lang === 'en' ? 'en-US;US;US:en' : LANG_SEARCH_EDITION[lang];
-  if (edition) return [{ ...named, url: feedUrl({ edition, q: `"${name}" ${q} when:2d` }) }];
-  return [{ ...named, bing: true, url: lang === 'en' ? bingUrl(`"${name}" ${q}`) : bingUrl(`"${name}" ${q}`, lang, BING_MARKET[lang] || c.code) }];
+  const term = searchTerm(c.code, name, lang);
+  if (edition) return [{ ...named, url: feedUrl({ edition, q: `${term} ${q} when:2d` }) }];
+  return [{ ...named, bing: true, url: lang === 'en' ? bingUrl(`${term} ${q}`) : bingUrl(`${term} ${q}`, lang, BING_MARKET[lang] || c.code) }];
 }
 // Coming Up: one search for scheduled events (elections, votes, court rulings, strikes, festivals, summits, matches,
 // exams; three groups in turn, event-search.js) on every visit, in the edition's own language next to the country's
@@ -387,7 +457,7 @@ export async function collectTarget(target, rot, { sections } = {}) {
         // is not an error.
         let list = '';
         try { list = await fetchText(f.url); } catch (e) { if (/^HTTP 40[04]\b/.test(String(e?.message))) return; throw e; }
-        for (const t of parseTrends(list).filter(t => isFreshNews(t.pub) && !ROUTINE_SEARCH.test(t.query) && !ROUTINE_SEARCH.test(t.news[0]?.t || '')).slice(0, 20)) {
+        for (const t of parseTrends(list).filter(t => isFreshNews(t.pub) && !ROUTINE_QUERY.test(t.query) && !ROUTINE_HEADLINE.test(t.news[0]?.t || '')).slice(0, 20)) {
           const news = t.news.filter(x => !nonNewsReason(x.t) && !sponsoredContentReason({ url: x.u, title: x.t, source: x.s }));
           if (!news.length) continue;
           let home = ''; try { home = new URL(news[0].u).origin; } catch { /* none */ }
@@ -403,7 +473,8 @@ export async function collectTarget(target, rot, { sections } = {}) {
         if (f.bing || f.change || f.event || f.sectionSearch || !COUNTRY[f.country]) throw e;
         // Google refused: fall back to Bing for this country, in the same language.
         const c = COUNTRY[f.country], l = feedLanguage(f.url) || 'en', name = l === 'en' ? c.name : (countryNameIn(c.code, l) || c.name);
-        xml = await fetchText(l === 'en' ? bingUrl(`"${name}"`) : bingUrl(`"${name}"`, l, BING_MARKET[l] || c.code)); f.bing = true;
+        const term = searchTerm(c.code, name, l);
+        xml = await fetchText(l === 'en' ? bingUrl(term) : bingUrl(term, l, BING_MARKET[l] || c.code)); f.bing = true;
       }
       // A Coming Up search keeps its first twelve results (its relevance falls off after that; each row is a write).
       let items = parseFeed(xml).filter(it => isFreshNews(it.pub) && !nonNewsReason(it.title) &&
@@ -415,6 +486,8 @@ export async function collectTarget(target, rot, { sections } = {}) {
       // and in English (read worldwide) also the edition's country.
       if ((f.change || f.event) && f.bing) items = items.filter(it => { const text = it.cluster.map(x => `${x.t || ''} ${x.d || ''}`).join(' ') || it.title;
         return (f.change ? namesChange(f.lang, text) : namesEvent(f.lang, text)) && (f.lang !== 'en' || f.country === 'WW' || namesCountry(text, f.names)); });
+      // An edition whose name others share keeps only the reports that are not plainly about the other place or person.
+      if (AMBIGUOUS_EDITIONS[f.country]) items = items.filter(it => !editionMismatch(f.country, [it.title, ...it.cluster.map(x => `${x.t || ''} ${x.d || ''}`)].join(' ')));
       // fl: the language the feed returns, so the collector and the writer's queue favour reports an edition can use.
       const fl = feedLanguage(f.url);
       for (const it of items) {
@@ -697,6 +770,23 @@ export function readCluster(str) {
 const STOP = new Set('the a an of to in on for and or is are was were be by with at from as after over into its his her their this that new says say said de la el le les des du en y und der die das il di da do na no o e'.split(' '));
 export function normTitle(t) {
   return [...new Set(String(t).toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').split(/[^\p{L}\p{N}]+/u).filter(w => w.length > 2 && !STOP.has(w)))].sort().join(' ');
+}
+// The same story published again days later (4 Nov 2026 audit: 40 in a month; news stays on the site, so a repeat shows
+// in Earlier). Beyond the writer's 72-hour checks, within 15 days in the same edition: a report whose own title is
+// (nearly) all in a live story's words (the same report found again), or a headline that shares at least 70% of all
+// its words, and at least three, with a live story's headline ("U2 regressam a Portugal em 2027…" twice). A different
+// result or decision on the same subject ("Arsenal beat Chelsea" / "Arsenal beat Spurs") stays below that.
+export const REPEAT_WINDOW_MS = 15 * 86400000;
+const wordSet = text => new Set(String(text || '').split(' ').filter(Boolean));
+export function repeatOf(candidateNorm, storyNorm) {
+  const A = wordSet(candidateNorm), B = wordSet(storyNorm);
+  let i = 0; for (const w of A) if (B.has(w)) i++;
+  return i >= 4 && i / A.size >= 0.9;
+}
+export function repeatHeadline(a, b) {
+  const A = wordSet(a), B = wordSet(b);
+  let i = 0; for (const w of A) if (B.has(w)) i++;
+  return i >= 3 && i / (A.size + B.size - i) >= 0.7;
 }
 export function similar(a, b) {
   const A = new Set(a.split(' ')), B = new Set(b.split(' '));
