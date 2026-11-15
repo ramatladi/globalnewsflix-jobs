@@ -210,11 +210,22 @@ const SEARCH_EDITION = {
   sr: 'sr;RS;RS:sr', zh: 'zh-HK;HK;HK:zh-Hant', default: 'en-US;US;US:en'
 };
 
-export const COUNTRIES = COUNTRY_ROWS.trim().split('\n').map(line => {
+// Every country: for reading places, job and tender locations and other data that can name any country.
+export const ALL_COUNTRIES = COUNTRY_ROWS.trim().split('\n').map(line => {
   const [code, name, lang, region, edition, q] = line.split('|');
   return { code, name, lang, region, edition: edition || '', q: q || '' };
 });
-export const COUNTRY = Object.fromEntries(COUNTRIES.map(c => [c.code, c]));
+export const COUNTRY = Object.fromEntries(ALL_COUNTRIES.map(c => [c.code, c]));
+// The country editions the site publishes (owner, 14 Nov 2026: thirteen, then Netherlands, Norway, Israel, Denmark,
+// Austria, New Zealand and Germany the same morning: twenty, beside Global). Every list of
+// editions (menus, country picker, sitemaps, news targets, Biography and Nerd, Jobs, Opportunities and Tenders pages)
+// comes from COUNTRIES; the other countries' pages redirect to Global. COUNTRY still names every country.
+export const EDITION_CODES = ['AE', 'AT', 'AU', 'CA', 'CH', 'DE', 'DK', 'GB', 'HK', 'IE', 'IL', 'IS', 'LU', 'MC', 'NL', 'NO', 'NZ', 'SG', 'US', 'ZA'];
+// The behaviour tests written for every country run with globalThis.__GNF_ALL_EDITIONS__ set (tests/all-editions.mjs);
+// the site and tests/thirteen-editions.test.mjs run with the site's editions.
+export const COUNTRIES = globalThis.__GNF_ALL_EDITIONS__ === true ? ALL_COUNTRIES : ALL_COUNTRIES.filter(c => EDITION_CODES.includes(c.code));
+export const EDITION = Object.fromEntries(COUNTRIES.map(c => [c.code, c]));
+export const isEdition = cc => Object.hasOwn(EDITION, cc || '');
 
 export function searchEditionFor(c) {
   if (!c.q) return SEARCH_EDITION.default;

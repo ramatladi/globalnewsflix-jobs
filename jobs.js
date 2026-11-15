@@ -6,7 +6,7 @@ import { boardNamesOrganization } from './jobs-identity-name.js';
 // Pay is shown only where the employer publishes it.
 import discoveredManifest from './data/discovered-sources/manifest.json' with { type: 'json' };
 import { registeredDiscoveredSources, discoveredJobAllowed } from './jobs-discovered-sources.js';
-import { COUNTRY, newsLang } from './data.js';
+import { EDITION, COUNTRY, isEdition, newsLang } from './data.js';
 import { guessLang } from './lang-guess.js';
 import { iso3To2 } from './iso-codes.js';
 import { workdayQueryFacets } from './jobs-workday-query.js';
@@ -177,6 +177,22 @@ const decode = s => s.replace(/&(#(?:x[0-9a-f]+|[0-9]+)|[a-z0-9]+);/gi, (m, e) =
 });
 export const plain = s => decode(decode(String(s || '')))
   .replace(/<[^>]+>/g, ' ').replace(/[\u2012-\u2015\u2212]/g, '-').replace(/\u00a0|\u202f/g, ' ').replace(/\s+/g, ' ').trim();
+
+// The employer's own job description as plain paragraphs (owner, 14 Nov 2026: job pages with Google's job posting
+// data, which needs the full description). Under JOB_DESCRIPTION_MIN characters it is not a description (a pay line
+// or a summary), so the vacancy gets no page of its own.
+export const JOB_DESCRIPTION_MIN = 300, JOB_DESCRIPTION_MAX = 6000;
+export function jobDescription(html) {
+  if (typeof html !== 'string' || !html.trim()) return '';
+  const text = decode(decode(html))
+    .replace(/<\s*(script|style)\b[\s\S]*?<\/\s*\1\s*>/gi, ' ')
+    .replace(/<\s*br\s*\/?>/gi, '\n').replace(/<\s*li\b[^>]*>/gi, '\n• ').replace(/<\/\s*(p|div|li|ul|ol|h[1-6]|tr|section)\s*>/gi, '\n')
+    .replace(/<[^>]+>/g, ' ').replace(/[\u2012-\u2015\u2212]/g, '-').replace(/\u00a0|\u202f/g, ' ');
+  const paras = text.split(/\n+/).map(p => p.replace(/[ \t\r\f\v]+/g, ' ').trim()).filter(p => p && p !== '•');
+  let out = '';
+  for (const p of paras) { if (out.length + p.length + 1 > JOB_DESCRIPTION_MAX) break; out += (out ? '\n' : '') + p; }
+  return out.length >= JOB_DESCRIPTION_MIN ? out : '';
+}
 
 // ---------- Salary ----------
 const SYMBOL = { 'US$': 'USD', 'CA$': 'CAD', 'C$': 'CAD', 'A$': 'AUD', 'AU$': 'AUD', 'NZ$': 'NZD', 'S$': 'SGD', 'HK$': 'HKD', 'R$': 'BRL', 'MX$': 'MXN', '$': 'USD', '£': 'GBP', '€': 'EUR', '₹': 'INR', '¥': 'JPY', '₪': 'ILS', 'zł': 'PLN', 'R': 'ZAR' };
@@ -407,6 +423,7 @@ export function normalizeCollectedJob(src, j, fx) {
     posted_ts: j.posted || j.posted_ts || null, closing_ts: j.closing || j.closing_ts || null,
     reference: j.reference || null, source_url: j.source_url || j.url, salary_text: j.salary_text ? plain(j.salary_text).slice(0, 1200) : null, salary_url: j.salary_text ? (j.salary_url || j.url) : null,
     ...(Object.hasOwn(j, 'payObserved') ? { pay_observed: j.payObserved } : {}),
+    ...(jobDescription(j.text) ? { description: jobDescription(j.text) } : {}),
   };
 }
 

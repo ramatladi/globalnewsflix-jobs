@@ -119,7 +119,26 @@ function paidMetadata(html, url, title) {
   return null;
 }
 
+// Personal blogs and social-media posts are not reports (4 Nov 2026 audit: 82 note.com diary posts such as "Traveler
+// climbs Sigiriya Rock after 10-hour journey from Colombo" were published as news, with the blog's photo). Their pages,
+// and so the photos on them, are never used as a story's source. Exact hosts, or subdomains where each blog has its own.
+const USER_CONTENT_HOSTS = new Set(['note.com', 'note.mu', 'medium.com', 'substack.com', 'blogger.com', 'wordpress.com', 'tumblr.com',
+  'livejournal.com', 'ameblo.jp', 'hatenablog.com', 'hatenablog.jp', 'hatenadiary.com', 'hatenadiary.jp', 'blog.fc2.com', 'fc2.com',
+  'blog.naver.com', 'post.naver.com', 'tistory.com', 'brunch.co.kr', 'velog.io', 'blog.daum.net', 'weebly.com', 'wixsite.com',
+  'x.com', 'twitter.com', 'facebook.com', 'fb.com', 'instagram.com', 'threads.net', 'threads.com', 'tiktok.com', 'youtube.com', 'youtu.be',
+  'reddit.com', 'quora.com', 'linkedin.com', 'vk.com', 't.me', 'telegra.ph', 'steemit.com', 'patreon.com', 'dzen.ru', 'zen.yandex.ru',
+  'pikabu.ru', 'weibo.com', 'douyin.com', 'bilibili.com', 'xiaohongshu.com']);
+export function userContentReason(url) {
+  let host;
+  try { host = new URL(url).hostname.toLowerCase().replace(/\.$/, ''); } catch { return null; }
+  if (/(?:^|\.)blogspot\.[a-z.]+$/.test(host) || /(?:^|\.)pinterest\.[a-z.]+$/.test(host)) return 'user-content-platform';
+  for (let h = host; h.includes('.'); h = h.slice(h.indexOf('.') + 1)) if (USER_CONTENT_HOSTS.has(h)) return 'user-content-platform';
+  return null;
+}
+
 export function sponsoredContentReason({ url, title, source, html } = {}) {
+  const user = userContentReason(url);
+  if (user) return user;
   if (paidUrl(url)) return 'publisher-paid-section';
   const context = {url, title, html};
   if (paidLabel(source, context)) return 'feed-paid-label';
