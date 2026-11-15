@@ -38,6 +38,19 @@ async function postWithRetry(fetchImpl, url, init, { wait = pause, log = () => {
 // time budget (Nov 2026: a busy database refused 11 to 57 sources' uploads a run, and those sources were then
 // reported as never collected). The budget keeps a long outage from pushing the run past its time limit.
 export const RETRY_PASS_PAUSE_MS = 60000, RETRY_PASS_BUDGET_MS = 10 * 60000;
+// Uploads of at most 500 vacancies and UPLOAD_BYTES of JSON each: descriptions (14 Nov 2026) make rows larger, and
+// the site refuses bodies over 2 MiB.
+export const UPLOAD_ROWS = 500, UPLOAD_BYTES = 1_600_000;
+export function uploadChunks(rows) {
+  const out = []; let chunk = [], bytes = 0;
+  for (const r of rows) {
+    const size = new TextEncoder().encode(JSON.stringify(r)).length + 1;
+    if (chunk.length && (chunk.length >= UPLOAD_ROWS || bytes + size > UPLOAD_BYTES)) { out.push(chunk); chunk = []; bytes = 0; }
+    chunk.push(r); bytes += size;
+  }
+  if (chunk.length) out.push(chunk);
+  return out;
+}
 export async function uploadJobs({ rows, ok, diagnostics = [], runTs, site, getToken, fetchImpl = fetch, log = console.log, wait = pause, clock = Date.now }) {
   const tokenHeaders = async () => ({ authorization: `Bearer ${await getToken()}`, 'content-type': 'application/json' });
   const send = async chunk => {
@@ -49,8 +62,7 @@ export async function uploadJobs({ rows, ok, diagnostics = [], runTs, site, getT
     } catch { log('jobs upload: failed'); return { ok: false, busy: true }; }
   };
   const refused = [], busy = [];
-  for (let i = 0; i < rows.length; i += 500) {
-    const chunk = rows.slice(i, i + 500);
+  for (const chunk of uploadChunks(rows)) {
     const sent = await send(chunk);
     if (!sent.ok) (sent.busy ? busy : refused).push(chunk);
   }

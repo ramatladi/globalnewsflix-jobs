@@ -1,7 +1,7 @@
 // Tenders: open tenders from international organisations and private companies (owner, 22 Oct 2026) and, in each
 // country, from the public sector (owner, 23 Oct 2026), read only from official systems, never from aggregators, each
 // linking to the official notice. Shared by the public collector (tenders-collect.js) and the site (tenders.js).
-import { COUNTRIES } from './data.js';
+import { ALL_COUNTRIES as COUNTRIES } from './data.js';
 import { iso3To2 } from './iso-codes.js';
 
 // Notices closing further ahead than this are not listed (standing calls such as dynamic purchasing systems).
