@@ -681,7 +681,15 @@ export function utf8CompleteLength(bytes) {
   return bytes.length-(i-1)>=need?bytes.length:i-1;
 }
 
-export function publisherSourceLanguage(html) {
+export function publisherSourceLanguage(html, pageUrl = '') {
+  // Monaco Hebdo's article pages contain French headlines and article text but declare
+  // lang="en" on the HTML root. Treat its non-English-path editorial pages as French;
+  // keep the ordinary publisher-language gate for every other host and /en/ pages.
+  try {
+    const url = new URL(pageUrl);
+    const host = url.hostname.toLowerCase().replace(/^(?:www\d*|m|amp|mobile)\./, '');
+    if (host === 'monaco-hebdo.com' && !/^\/(?:en|english)(?:\/|$)/i.test(url.pathname)) return 'fr';
+  } catch { /* no publisher URL: use the declared HTML language */ }
   const root=String(html).match(/<html\b[^>]*>/i)?.[0] || '';
   const value=root.match(/\slang\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
   const lang=(value?.[1] || value?.[2] || value?.[3] || '').trim();
@@ -795,7 +803,7 @@ export async function enrich(cand, opts = {}) {
     }
     out.sponsored_reason = sponsoredContentReason({html,url:out.url});
     if (out.sponsored_reason) return out;
-    out.source_lang=publisherSourceLanguage(html);
+    out.source_lang=publisherSourceLanguage(html,url);
     out.fetched_ts=Date.now();
     Object.assign(out, dates);
     const imageData = extractArticleImages(html, url);

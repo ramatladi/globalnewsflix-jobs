@@ -165,7 +165,7 @@
   },
   {
     "file": "news-collect.js",
-    "sha256": "4d1d8c4a978505d17ce3533f1ac24d40f01c973ddc479e84cc21975645edee9d"
+    "sha256": "16e182c7d913ca4d199386e6635b240d913a7ad0be1ebbb1962ce82791c3bce8"
   },
   {
     "file": "news-freshness.js",
@@ -429,7 +429,7 @@
   },
   {
     "file": "tests/ingest-runner.test.mjs",
-    "sha256": "33083bb41406ec4d4178b226d27f2623a65e329af1e0b30e6187972bd1bc7fca"
+    "sha256": "a0e8a2fdabd9e5ed80179e1252519c07288990f15f8ec2a905fff3cb12496ffe"
   },
   {
     "file": "tests/jobs-africa-sources.test.mjs",

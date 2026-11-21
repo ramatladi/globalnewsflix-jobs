@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { publisherSourceLanguage } from '../news-collect.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const runner = new URL('../ingest-runner.mjs', import.meta.url).href;
@@ -146,4 +147,13 @@ test('each collector pass reports a counts-only summary as a workflow annotation
   assert.ok(summary.pages.enriched > 0);
   assert.equal(typeof summary.google.resolved, 'number');
   assert.doesNotMatch(line, /https?:|Story \d|example\.com/, 'no titles or URLs in the annotation');
+});
+
+test('Monaco Hebdo French reports are not misclassified by its incorrect English HTML language', () => {
+  const html = '<html lang="en"><body><article><p>La 23ème édition du festival de cinéma se termine samedi.</p></article></body></html>';
+  assert.equal(publisherSourceLanguage(html, 'https://monaco-hebdo.com/culture/monte-carlo-film-festival-2026/'), 'fr');
+  assert.equal(publisherSourceLanguage(html, 'https://www.monaco-hebdo.com/actualites/sport/example/'), 'fr');
+  assert.equal(publisherSourceLanguage(html, 'https://monaco-hebdo.com/en/news/example/'), 'en');
+  assert.equal(publisherSourceLanguage(html, 'https://example.com/article/'), 'en');
+  assert.equal(publisherSourceLanguage('<html lang="fr">', 'https://example.com/article/'), 'fr');
 });
