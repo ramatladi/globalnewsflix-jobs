@@ -478,6 +478,67 @@ export function hostTurn(url, fn) {
   HOST_TURN.set(h, run.then(() => {}, () => {}));
   return run;
 }
+// Direct local desks supplement aggregator searches in editions that routinely receive single-outlet clusters.
+const LOCAL_DESKS = {
+  IS: [
+    ['Iceland Review', 'https://www.icelandreview.com/feed/', '/news/'],
+    ['The Reykjavík Grapevine', 'https://grapevine.is/feed/', '/news/'],
+  ],
+  MC: [
+    ['Monaco-Matin', 'https://www.nicematin.com/monaco/rss', '/'],
+    ['Gouvernement Princier de Monaco', 'https://www.gouv.mc/rss/feed/portail-gouv-actualites-fr', '/actualites/'],
+  ],
+};
+
+async function addLocalDeskReports(target, rows, errors) {
+  const desks = LOCAL_DESKS[target];
+  if (!desks) return;
+  const lang = newsLang(target);
+  const direct = [];
+  for (const [source, feed, path] of desks) {
+    try {
+      const origin = new URL(feed).origin;
+      for (const item of parseFeed(await fetchText(feed)).slice(0, 30)) {
+        if (!isFreshNews(item.pub) || !item.title || nonNewsReason(item.title)) continue;
+        let page;
+        try { page = new URL(item.link); } catch { continue; }
+        if (page.origin !== origin || !page.pathname.startsWith(path) || page.pathname === '/' ||
+            sponsoredContentReason({ url: page.href, title: item.title, source })) continue;
+        direct.push({ id: await sha(target + '|' + page.href), country: target, section: 'top', title: item.title,
+          source, source_home: origin, gn_link: page.href, pub_ts: item.pub, date_verified: 1, fl: lang,
+          cluster: JSON.stringify({ c: [{ t: item.title, s: source, u: page.href }], fl: lang }),
+          score: scoreItem({ ...item, cluster: [item] }), celeb: null, facts: null });
+      }
+    } catch (err) { errors.push(target + ' ' + source + ': ' + err.message); }
+  }
+  const seen = new Set(rows.map(row => row.gn_link));
+  for (const row of direct) {
+    if (!seen.has(row.gn_link)) { rows.push(row); seen.add(row.gn_link); }
+  }
+  attachLocalCoverage(rows, direct);
+}
+
+export function attachLocalCoverage(rows, direct) {
+  const reports = direct.map(row => ({ row, norm: normTitle(row.title) }));
+  for (const lead of rows) {
+    const norm = normTitle(lead.title);
+    const cluster = readCluster(lead.cluster);
+    const before = cluster.c.length;
+    for (const { row, norm: other } of reports) {
+      if (cluster.c.length >= 8) break;
+      if (lead.country !== row.country || !repeatHeadline(norm, other) ||
+          Math.abs(lead.pub_ts - row.pub_ts) > 86400000 || row.source === lead.source ||
+          publisherHost(row.source_home) === publisherHost(lead.source_home) ||
+          row.gn_link === lead.gn_link || cluster.c.some(c => c.u === row.gn_link || c.s === row.source)) continue;
+      cluster.c.push({ t: row.title, s: row.source, u: row.gn_link });
+    }
+    if (cluster.c.length > before) {
+      lead.cluster = JSON.stringify({ ...JSON.parse(lead.cluster), c: cluster.c });
+      lead.score += 10 * (cluster.c.length - before);
+    }
+  }
+}
+
 export async function collectTarget(target, rot, { sections } = {}) {
   const rows = [], errors = [];
   const read = async f => {
@@ -540,6 +601,7 @@ export async function collectTarget(target, rot, { sections } = {}) {
   // The visit's two Coming Up searches normally go to different engines: they run side by side, never two at once to one
   // host. (One after the other they added minutes to every collector run.)
   await Promise.all([...changeFeedsFor(target, rot), ...eventFeedsFor(target, rot)].map(f => hostTurn(f.url, () => read(f))));
+  await addLocalDeskReports(target, rows, errors);
   return { rows, errors };
 }
 
