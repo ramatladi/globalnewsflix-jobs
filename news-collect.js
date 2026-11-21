@@ -483,10 +483,12 @@ const LOCAL_DESKS = {
   IS: [
     ['Iceland Review', 'https://www.icelandreview.com/feed/', '/news/'],
     ['The Reykjavík Grapevine', 'https://grapevine.is/feed/', '/news/'],
+    ['RÚV English', 'https://www.ruv.is/rss/english', '/'],
   ],
   MC: [
     ['Monaco-Matin', 'https://www.nicematin.com/monaco/rss', '/'],
     ['Gouvernement Princier de Monaco', 'https://www.gouv.mc/rss/feed/portail-gouv-actualites-fr', '/actualites/'],
+    ['Monaco Hebdo', 'https://monaco-hebdo.com/actualites/feed/', '/actualites/'],
   ],
 };
 
