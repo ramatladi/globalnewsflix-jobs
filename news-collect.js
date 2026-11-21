@@ -740,6 +740,24 @@ export function samePublisherAlternate(html, pageUrl) {
   }
   return null;
 }
+// RÚV renders its English reports from the page's Next.js article blocks. The
+// server-rendered paragraphs can contain only navigation and footer text.
+export function ruvArticleBody(html, url) {
+  const page = new URL(url);
+  if (page.hostname !== 'www.ruv.is' || !page.pathname.startsWith('/english/')) return null;
+  const data = html.match(/<script\b[^>]*\bid=["']__NEXT_DATA__["'][^>]*>([\s\S]*?)<\/script>/i);
+  if (!data) return null;
+  try {
+    const article = JSON.parse(data[1]).props?.pageProps?.data?.article;
+    if (article?.parent?.slug !== 'english' || !Array.isArray(article.body)) return '';
+    const reported = new URL(article.url);
+    const path = value => value.pathname.replace(/\/$/, '');
+    if (!['www.ruv.is', 'nyr.ruv.is'].includes(reported.hostname) || path(reported) !== path(page)) return '';
+    return article.body.map(block => block?.text_block?.html).filter(value => typeof value === 'string').join('\n');
+  } catch {
+    return '';
+  }
+}
 // Options: resolve(link) -> publisher URL or null (the collector passes its budgeted, cached resolver so enrichment never
 // makes unbudgeted Google requests); timeoutMs; retries; lang (edition language for Accept-Language); skipHost(host).
 export async function enrich(cand, opts = {}) {
@@ -786,7 +804,7 @@ export async function enrich(cand, opts = {}) {
     out.images = imageData.images.slice(1).map(x => x.url);
     out.image_size = out.image ? declaredImageSize(html) : null;
     out.description = meta(html, 'og:description') || meta(html, 'description');
-    const body = (html.match(/<article[\s\S]*?<\/article>/i) || [html])[0];
+    const body = ruvArticleBody(html, url) ?? (html.match(/<article[\s\S]*?<\/article>/i) || [html])[0];
     const paras = [];
     const pre = /<p[^>]*>([\s\S]*?)<\/p>/gi; let p, len = 0;
     while ((p = pre.exec(body)) && len < SOURCE_EXCERPT_MAX) {
