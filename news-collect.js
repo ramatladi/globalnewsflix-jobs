@@ -226,6 +226,23 @@ export const AMBIGUOUS_EDITIONS = Object.freeze({
     strong: /\bJuba\b|Salva Kiir|Riek Machar|SPLM|SPLA|South Sudanese|Bor\b|Malakal|Wau\b|Bentiu|Jonglei|Upper Nile|Unity State|Bahr el Ghazal|Equatoria|Abyei/u,
     mention: /Sudan|Soudan/u, weak: /South[-\s]+Sudan|Soudan du Sud|Sud[-\s]+Soudan/u,
   },
+  // 22 Nov 2026 audit: a PSG injury report entered Monaco because a second source mentioned
+  // AS Monaco only in a transfer table deep in its article. A Monaco edition report must
+  // identify the Principality or a distinct Monaco institution in its headline/description/lead.
+  // The writer's strict check uses the first 600 characters of the publisher lead, not the full page.
+  MC: {
+    strong: /Monaco[-\s]Ville|Monte[-\s]Carlo|Fontvieille|La Condamine|Larvotto|Port Hercule|Stade Louis[-\s]?II|Palais Princier|Prince Albert II|Albert II de Monaco|Charl[eè]ne de Monaco|Camille Gottlieb|Gouvernement Princier|Conseil National|Société des Bains de Mer|AS Monaco|Principauté de Monaco|monégasq/iu,
+    mention: /Monaco|monégasq/iu, weak: /Monaco|monégasq/iu,
+  },
+  // 20 and 22 Nov 2026 audits: the Luxembourg edition carried reports about Belgium's province of Luxembourg (Wallonia):
+  // four councillors of the province disqualified (Sudinfo) and a judge reassigned at the court of first instance in
+  // Arlon (L'Avenir). Every other report may stay (most never name the country), so only a report that marks the
+  // Belgian province, and nothing only the Grand Duchy has, is dropped.
+  LU: {
+    strong: /Grand[-\s]Duch[ée]|grand[-\s]ducale?s?|Grand Duchy|Großherzogtum|Lëtzebuerg|Luxembourg[-\s]Ville|Ville de Luxembourg|Esch[-\s]sur[-\s]Alzette|Differdange|Dudelange|Ettelbruck|Diekirch|Kirchberg|P[ée]tange|Echternach|Remich|Wiltz|Mersch|Strassen|Bertrange|Hesperange|Luc Frieden|Chambre des d[ée]put[ée]s|Statec|STATEC|\bADEM\b|\bCHL\b|\bLSAP\b|\bCSV\b|d[ée]i gr[ée]ng/u,
+    mention: /Luxembourg|Luxemburg/u, weak: /(?:)/u,
+    other: /[Pp]rovince (?:de |du |of )?Luxembourg|Provinz Luxemburg|Luxembourg belge|Belgian Luxembourg|province luxembourgeoise|\b(?:Arlon|Bastogne|Marche[-\s]en[-\s]Famenne|Neufch[âa]teau|Libramont|Virton|Durbuy|Vielsalm|Aubange|Messancy|Athus|Habay)\b/u,
+  },
   // 14 Nov 2026 audit: "American Samoa dengue outbreak …" (a US territory) reached the Samoa edition.
   WS: {
     strong: /\bApia\b|Upolu|Savai['’]?i|Fiam[eē]|La['’]?auli|Fono\b|\btala\b|Faleolo|Samoa Observer/u,

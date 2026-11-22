@@ -165,7 +165,7 @@
   },
   {
     "file": "news-collect.js",
-    "sha256": "16e182c7d913ca4d199386e6635b240d913a7ad0be1ebbb1962ce82791c3bce8"
+    "sha256": "3d0eca7478f2a4d6dfc2595bf89663c431e08a05f39c4bf024b286393110a0ce"
   },
   {
     "file": "news-freshness.js",
@@ -218,6 +218,10 @@
   {
     "file": "tenders-runner.mjs",
     "sha256": "e3c4474d2c13869a242aa739db021f51b2d4d1bf4fc2b416a566c6c64dfd5525"
+  },
+  {
+    "file": "tests/edition-geography-parity.test.mjs",
+    "sha256": "74bc57cd95bc4480a911c4bdd784aa3acec1433e689781c89a7a6750e9f2e820"
   },
   {
     "file": "tests/fixtures/afdb-solicitations.html",
@@ -506,6 +510,10 @@
   {
     "file": "tests/jobs-workday.test.mjs",
     "sha256": "ee8a95a87f9617530d15457ee94084de8be3eb60f845472369dca81739ca35e8"
+  },
+  {
+    "file": "tests/monaco-geography.test.mjs",
+    "sha256": "a66e87fabdbc9431ba0d85493b94ebecb3bc3c04707a6f867cd236c06beba53c"
   },
   {
     "file": "tests/site-fetch.test.mjs",
