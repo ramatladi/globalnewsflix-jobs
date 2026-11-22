@@ -4,8 +4,9 @@ name: Story photos
 # native size, relevance) and stories wait, hidden, until one is accepted. The site accepts this workflow
 # only on main (scheduled or manual), signed by GitHub for this exact repository, and only on its photo routes.
 # GitHub delivers only some scheduled runs, so a run works for about ten minutes, picking up stories as the
-# writer saves them, and starts the next run while more are due soon. The chain stops when the writer is
-# quiet and nothing is due; the schedule and the news collection start it again.
+# writer saves them, and starts the next run while more are due. When the writer is quiet and nothing
+# is due, the run waits until about ten minutes after it began and then starts the next one, so news
+# collection is restarted on time even when GitHub skips the schedule.
 on:
   schedule:
     - cron: "4,14,24,34,44,54 * * * *"
@@ -78,3 +79,19 @@ jobs:
           if [ "$status" != "in_progress" ] && [ "$status" != "queued" ] && [ "$age" -ge 55 ]; then
             gh workflow run ingest.yml --repo "$REPO" --ref main && echo "started ingest.yml" || true
           fi
+      # When the chain stops, the next start used to wait for a scheduled run, and GitHub skips most of them:
+      # on 22 Nov 2026 news collection stopped for up to 4 hours 45 minutes. So the idle run waits until about
+      # ten minutes after it began (no more often than the schedule asks) and starts the next photo run, whose
+      # first step starts news collection once it is overdue.
+      - name: Keep watch for the next collection
+        if: always() && steps.photos.outputs.chain != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          began=$(gh api "repos/$REPO/actions/runs/$GITHUB_RUN_ID" --jq '.run_started_at' || echo "")
+          wait=300
+          if [ -n "$began" ]; then wait=$(( $(date -d "$began" +%s) + 600 - $(date +%s) )); fi
+          if [ "$wait" -gt 600 ]; then wait=600; fi
+          if [ "$wait" -gt 0 ]; then sleep "$wait"; fi
+          gh workflow run photos.yml --repo "$REPO" --ref main || true
