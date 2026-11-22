@@ -209,6 +209,14 @@ export const AMBIGUOUS_EDITIONS = Object.freeze({
     mention: /\bIceland\b|Ísland/u, weak: /\bIceland(?:'s|’s)?\b|Ísland/u,
     other: /£|\bIceland (?:Foods|stores?|supermarkets?|shops?|frozen)\b|supermarket|frozen food|\b(?:Tesco|Asda|Sainsbury'?s?|Morrisons|Waitrose|Aldi|Lidl|Co-op|Boots|Poundland|Malcolm Walker|Richard Walker)\b/u,
   },
+  // 22 Nov 2026 audit: a PSG injury report entered Monaco because a second source mentioned
+  // AS Monaco only in a transfer table deep in its article. A Monaco edition report must
+  // identify the Principality or a distinct Monaco institution in its headline/description/lead.
+  // The writer's strict check uses the first 600 characters of the publisher lead, not the full page.
+  MC: {
+    strong: /Monaco[-\s]Ville|Monte[-\s]Carlo|Fontvieille|La Condamine|Larvotto|Port Hercule|Stade Louis[-\s]?II|Palais Princier|Prince Albert II|Albert II de Monaco|Charl[eè]ne de Monaco|Camille Gottlieb|Gouvernement Princier|Conseil National|Société des Bains de Mer|AS Monaco|Principauté de Monaco|monégasq/iu,
+    mention: /Monaco|monégasq/iu, weak: /Monaco|monégasq/iu,
+  },
   // 13 Nov 2026 audit: "Inner Mongolian herders win … Cashmere of the Year Award" (China) reached the Mongolia edition.
   MN: {
     strong: /Ulaanbaatar|Ulan Bator|Ulaan Baatar|State Great Khural|Khurelsukh|Oyun-Erdene|Zandanshatar|Erdenet|Darkhan|Oyu Tolgoi|t[uö]gr[iö]k|Mongolian People['’]s Party|[ӨөҮү]/u,
