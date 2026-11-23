@@ -262,10 +262,12 @@ export function editionMismatch(country, text, { strict = false, lead = null } =
   const rule = AMBIGUOUS_EDITIONS[country];
   if (!rule) return '';
   const t = String(text || '').normalize('NFC');
-  if (rule.strong.test(t)) return '';
   const unlook = s => rule.look ? s.replace(rule.look, ' ') : s;
   const rest = unlook(t);
   const leadText = strict && lead != null ? unlook(String(lead).normalize('NFC')) : rest;
+  // Monaco evidence buried in a related-article list must not qualify an unrelated publisher lead.
+  // The writer's strict view has a separate, explicitly supplied opening lead.
+  if (rule.strong.test(strict && country === 'MC' ? leadText : t)) return '';
   const named = rule.weak.test(rest) && rule.weak.test(leadText), other = !!rule.other?.test(t);
   const reason = `not about ${COUNTRY[country]?.name || country}: ${other ? 'another place or person of that name' : named ? 'not shown to be the country' : 'a look-alike name'}`;
   if (strict) return named && !other ? '' : reason;
