@@ -165,7 +165,7 @@
   },
   {
     "file": "news-collect.js",
-    "sha256": "16e182c7d913ca4d199386e6635b240d913a7ad0be1ebbb1962ce82791c3bce8"
+    "sha256": "6b83e1123fe1787321cc8151cfd63a6818791f01fad8c0f7236dfc85390af672"
   },
   {
     "file": "news-freshness.js",
@@ -506,6 +506,10 @@
   {
     "file": "tests/jobs-workday.test.mjs",
     "sha256": "ee8a95a87f9617530d15457ee94084de8be3eb60f845472369dca81739ca35e8"
+  },
+  {
+    "file": "tests/monaco-geography.test.mjs",
+    "sha256": "5d2756f8dbc74d2cd7170619004a4d5568bdd3ac10b1183818634818b03f1c3c"
   },
   {
     "file": "tests/site-fetch.test.mjs",

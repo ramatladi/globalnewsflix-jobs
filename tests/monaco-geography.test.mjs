@@ -20,3 +20,13 @@ test('Monaco-specific reporting remains eligible for the Monaco edition', () => 
     ["Le Gouvernement Princier annonce un nouveau dispositif", "Le Gouvernement Princier de Monaco a présenté le dispositif à Monte-Carlo."]
   ]) assert.equal(strict(headline + ' ' + lead, headline + ' ' + lead), '');
 });
+
+test('Luxembourg collection distinguishes the Belgian province from the Grand Duchy', () => {
+  assert.ok(editionMismatch('LU', 'La province de Luxembourg en Belgique annonce quatre disqualifications à Arlon.'));
+  assert.equal(editionMismatch('LU', 'Le Grand-Duché de Luxembourg présente son budget national.'), '');
+});
+
+test('a Swiss Conseil National report does not qualify for Monaco', () => {
+  const lead = 'Le Conseil National suisse débat du budget à Berne.';
+  assert.ok(editionMismatch('MC', lead, { strict: true, lead }));
+});
