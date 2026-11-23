@@ -165,7 +165,7 @@
   },
   {
     "file": "news-collect.js",
-    "sha256": "6b83e1123fe1787321cc8151cfd63a6818791f01fad8c0f7236dfc85390af672"
+    "sha256": "6e3edbc4ed6f0c51b8ae84f9b1a01aefcc604335b9b6942ddc2accc7bfb413dc"
   },
   {
     "file": "news-freshness.js",
@@ -542,6 +542,10 @@
   {
     "file": "tests/test_photo_runs.py",
     "sha256": "9c87b43f24d3b55d7a791d7249089c5a7d48be2d8b09f3571530dd74d48aed36"
+  },
+  {
+    "file": "tests/uat-news-intake-errors.test.mjs",
+    "sha256": "9731591ee3355fd9350f7c41c8626d7ee2e83e11b683c6a40809ec45dbc8ca95"
   },
   {
     "file": "za-government-directory.json",
