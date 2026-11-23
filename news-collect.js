@@ -511,7 +511,20 @@ const LOCAL_DESKS = {
   ],
 };
 
-async function addLocalDeskReports(target, rows, errors) {
+function describeFeedError(url, section, error) {
+  const status = /^HTTP ([1-5]\d{2})\b/.exec(error?.message);
+  const reason = status ? 'HTTP ' + status[1] :
+    error?.name === 'TimeoutError' || error?.name === 'AbortError' ? 'timeout or aborted' : 'collection failure';
+  return { host: new URL(url).hostname, section, reason };
+}
+
+// A diagnostic callback only observes failures: if it throws (or the URL cannot be parsed), collection carries on.
+function reportFeedError(onFeedError, url, section, error) {
+  if (typeof onFeedError !== 'function') return;
+  try { onFeedError(describeFeedError(url, section, error)); } catch { /* diagnostics never stop collection */ }
+}
+
+async function addLocalDeskReports(target, rows, errors, onFeedError) {
   const desks = LOCAL_DESKS[target];
   if (!desks) return;
   const lang = newsLang(target);
@@ -530,7 +543,10 @@ async function addLocalDeskReports(target, rows, errors) {
           cluster: JSON.stringify({ c: [{ t: item.title, s: source, u: page.href }], fl: lang }),
           score: scoreItem({ ...item, cluster: [item] }), celeb: null, facts: null });
       }
-    } catch (err) { errors.push(target + ' ' + source + ': ' + err.message); }
+    } catch (err) {
+      errors.push(target + ' ' + source + ': ' + err.message);
+      reportFeedError(onFeedError, feed, source, err);
+    }
   }
   const seen = new Set(rows.map(row => row.gn_link));
   for (const row of direct) {
@@ -560,9 +576,10 @@ export function attachLocalCoverage(rows, direct) {
   }
 }
 
-export async function collectTarget(target, rot, { sections } = {}) {
+export async function collectTarget(target, rot, { sections, onFeedError } = {}) {
   const rows = [], errors = [];
   const read = async f => {
+    let attemptedUrl = f.url;
     try {
       let xml;
       // The extra Coming Up searches ask a host at most once a second after the previous request to it.
@@ -591,7 +608,8 @@ export async function collectTarget(target, rot, { sections } = {}) {
         // Google refused: fall back to Bing for this country, in the same language.
         const c = COUNTRY[f.country], l = feedLanguage(f.url) || 'en', name = l === 'en' ? c.name : (countryNameIn(c.code, l) || c.name);
         const term = searchTerm(c.code, name, l);
-        xml = await fetchText(l === 'en' ? bingUrl(term) : bingUrl(term, l, BING_MARKET[l] || c.code)); f.bing = true;
+        attemptedUrl = l === 'en' ? bingUrl(term) : bingUrl(term, l, BING_MARKET[l] || c.code);
+        xml = await fetchText(attemptedUrl); f.bing = true;
       }
       // A Coming Up search keeps its first twelve results (its relevance falls off after that; each row is a write).
       let items = parseFeed(xml).filter(it => isFreshNews(it.pub) && !nonNewsReason(it.title) &&
@@ -616,13 +634,16 @@ export async function collectTarget(target, rot, { sections } = {}) {
             ((f.change || f.event) && isOfficialHost(it.srcHome || it.link) ? OFFICIAL_SOURCE_BONUS : 0), celeb: f.celeb || null, facts: null,
         });
       }
-    } catch (e) { errors.push(`${target}: ${e.message}`); }
+    } catch (e) {
+      errors.push(`${target}: ${e.message}`);
+      reportFeedError(onFeedError, attemptedUrl, f.section, e);
+    }
   };
   for (const f of [...feedsFor(target, rot), ...sectionFeedsFor(target, rot, sections)]) await read(f);
   // The visit's two Coming Up searches normally go to different engines: they run side by side, never two at once to one
   // host. (One after the other they added minutes to every collector run.)
   await Promise.all([...changeFeedsFor(target, rot), ...eventFeedsFor(target, rot)].map(f => hostTurn(f.url, () => read(f))));
-  await addLocalDeskReports(target, rows, errors);
+  await addLocalDeskReports(target, rows, errors, onFeedError);
   return { rows, errors };
 }
 
