@@ -128,9 +128,20 @@ const USER_CONTENT_HOSTS = new Set(['note.com', 'note.mu', 'medium.com', 'substa
   'x.com', 'twitter.com', 'facebook.com', 'fb.com', 'instagram.com', 'threads.net', 'threads.com', 'tiktok.com', 'youtube.com', 'youtu.be',
   'reddit.com', 'quora.com', 'linkedin.com', 'vk.com', 't.me', 'telegra.ph', 'steemit.com', 'patreon.com', 'dzen.ru', 'zen.yandex.ru',
   'pikabu.ru', 'weibo.com', 'douyin.com', 'bilibili.com', 'xiaohongshu.com']);
+// Audit 23 Nov 2026: one-author blogs that read like news sites (BornCity, Günter Born's blog, relayed an Apple rumour
+// into the DE edition), and fans' match "game threads" syndicated on portals ("WVU vs Houston Game Thread": "It's Senior
+// Day in Morgantown! Let's see if we can get a much needed win", published in the US edition after the game).
+const PERSONAL_BLOG_HOSTS = new Set(['borncity.com']);
+// Audit 24 Nov 2026: link aggregators are not reports. Digg pages were taken as one of a story's reports, and their
+// generated preview card ("opengraph-image") was published as two Global stories' photos, credited "Digg".
+const AGGREGATOR_HOSTS = new Set(['digg.com']);
+const FAN_THREAD_PATH = /(?:^|[/-])game-thread(?:[/.-]|$)/;
 export function userContentReason(url) {
-  let host;
-  try { host = new URL(url).hostname.toLowerCase().replace(/\.$/, ''); } catch { return null; }
+  let host, path;
+  try { const u = new URL(url); host = u.hostname.toLowerCase().replace(/\.$/, ''); path = u.pathname.toLowerCase(); } catch { return null; }
+  for (let h = host; h.includes('.'); h = h.slice(h.indexOf('.') + 1)) if (PERSONAL_BLOG_HOSTS.has(h)) return 'personal-blog';
+  for (let h = host; h.includes('.'); h = h.slice(h.indexOf('.') + 1)) if (AGGREGATOR_HOSTS.has(h)) return 'aggregator';
+  if (FAN_THREAD_PATH.test(path)) return 'fan-thread';
   if (/(?:^|\.)blogspot\.[a-z.]+$/.test(host) || /(?:^|\.)pinterest\.[a-z.]+$/.test(host)) return 'user-content-platform';
   for (let h = host; h.includes('.'); h = h.slice(h.indexOf('.') + 1)) if (USER_CONTENT_HOSTS.has(h)) return 'user-content-platform';
   return null;
