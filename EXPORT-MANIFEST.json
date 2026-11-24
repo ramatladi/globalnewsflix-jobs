@@ -169,7 +169,7 @@
   },
   {
     "file": "news-freshness.js",
-    "sha256": "746156ebda37a26b708c86fdf2302a0c66121fb5e3a1565dea41a0fde752e6a0"
+    "sha256": "8f7a2f51510f8b2d0f538c77410ebb479c3977e12d044a2bded54e9e4f8d045a"
   },
   {
     "file": "non-news.js",
@@ -218,6 +218,10 @@
   {
     "file": "tenders-runner.mjs",
     "sha256": "e3c4474d2c13869a242aa739db021f51b2d4d1bf4fc2b416a566c6c64dfd5525"
+  },
+  {
+    "file": "tests/dotted-publication-date.test.mjs",
+    "sha256": "dd406973bfa6d4a41d0e0bd47f2a6a4093d3e83da7c6ec03ae2574d1ec355f99"
   },
   {
     "file": "tests/fixtures/afdb-solicitations.html",

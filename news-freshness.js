@@ -59,6 +59,19 @@ export function urlPathDateRange(pageUrl, now = Date.now()) {
     for(const x of path.matchAll(re)){if(+x[1]<1995)continue;const r=publicationInstantRange(`${x[1]}-${x[2]}-${x[3]}`,now);if(r)out.push(r);}
   return out.length?out.reduce((a,b)=>a.lo<=b.lo?a:b):null;
 }
+// A day-first dotted publisher time with an explicit zone ("23.11.2026 18:05:33 +00:00", seen on visir.is). It is not
+// evidence on its own: publisherDateEvidence accepts it only when the page states the same publication day elsewhere.
+export function dottedPublicationInstant(value, now = Date.now()) {
+  if (typeof value !== 'string' || value.length > 40) return null;
+  const m=value.trim().match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})\s+(\d{2}):(\d{2})(?::(\d{2}))?\s*(Z|UTC|GMT|[+-]\d{2}:?\d{2})$/i);
+  if(!m)return null;
+  const [d,mo,y,h,mi]=[m[1],m[2],m[3],m[4],m[5]].map(Number),sec=+(m[6]||0),z=m[7];
+  if(y<1970||mo<1||mo>12||d<1||d>new Date(Date.UTC(y,mo,0)).getUTCDate()||h>23||mi>59||sec>59)return null;
+  let offset=0;
+  if(/^[+-]/.test(z)){const n=z.slice(1).replace(':',''),oh=+n.slice(0,2),om=+n.slice(2);if(oh>14||om>59||(oh===14&&om))return null;offset=(z[0]==='-'?-1:1)*(oh*HOUR+om*60000);}
+  const ts=Date.UTC(y,mo-1,d,h,mi,sec)-offset;return ts>0&&ts<=now?ts:null;
+}
+const dottedDay=value=>{const m=String(value).trim().match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})\s/);return m?`${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`:'';};
 // Comparison key for "is this JSON-LD node about this page": scheme, www./m./amp. host prefixes, AMP path suffixes,
 // tracking parameters, trailing slashes and percent-encoding case do not make a different article.
 const URL_TRACKING=/^(?:utm_.*|fbclid|gclid|amp|outputtype|output|ref|cmpid|ocid)$/i;
@@ -86,10 +99,12 @@ export function publisherDateEvidence(html, now = Date.now(), pageUrl = '') {
   // WebPage/VideoObject JSON-LD, 3 generic date meta. The first tier with evidence decides; lower tiers are ignored
   // so related-story lists or generic markers cannot contradict or refresh a stronger statement.
   const tiers=[0,1,2,3].map(()=>({ranges:[],invalid:false})), modified=[];
+  const dotted=[],statedDays=[];
   const add=(tier,value,legacy=false)=>{
     if(value===undefined||value===null)return;
     const r=publicationInstantRange(value,now);
-    if(r)tiers[tier].ranges.push(r);else{tiers[tier].invalid=true;if(legacy)tiers[tier].legacyInvalid=true;}
+    if(r){tiers[tier].ranges.push(r);const day=String(value).trim().match(/^\d{4}-\d{2}-\d{2}/)?.[0];if(day)statedDays.push({day,r});}
+    else{const ts=dottedPublicationInstant(value,now);if(ts!==null)dotted.push({tier,ts,legacy,day:dottedDay(value)});else{tiers[tier].invalid=true;if(legacy)tiers[tier].legacyInvalid=true;}}
   };
   const addModified=value=>{const r=publicationInstantRange(value,now);if(r)modified.push(r);};
   for(const match of html.matchAll(/<meta\b[^>]*>/gi)){
@@ -130,6 +145,13 @@ export function publisherDateEvidence(html, now = Date.now(), pageUrl = '') {
   own.forEach(node=>{add(0,node.datePublished,true);addModified(node.dateModified);});
   nodes.filter(n=>!own.includes(n)).forEach(n=>{if(typeof n.dateModified==='string')addModified(n.dateModified);});
   if(!own.length){const secondary=nodes.filter(n=>!typesOf(n).some(t=>PRIMARY_TYPES.test(t))&&typesOf(n).some(t=>SECONDARY_TYPES.test(t)));scoped(secondary,!articles.length).forEach(node=>add(2,node.datePublished));}
+  // A dotted publisher time counts only when another publication marker on the page states the same calendar day and a
+  // range that holds the time (visir.is: JSON-LD datePublished "2026-11-23" beside meta "23.11.2026 18:05:33 +00:00").
+  // Otherwise it stays invalid, as before.
+  for(const x of dotted){
+    if(statedDays.some(s=>s.day===x.day&&s.r.lo<=x.ts&&x.ts<=s.r.hi))tiers[x.tier].ranges.push({lo:x.ts,hi:x.ts,precise:true});
+    else{tiers[x.tier].invalid=true;if(x.legacy)tiers[x.tier].legacyInvalid=true;}
+  }
   // Ambiguous article graphs without any page-scoped publication evidence cannot establish a date.
   const legacyArticles=articles.filter(n=>typesOf(n).some(t=>LEGACY_TYPES.test(t)));
   if(page&&legacyArticles.length&&!own.length&&!tiers[0].ranges.length){tiers[0].invalid=true;tiers[0].legacyInvalid=true;tiers[0].ambiguous=true;}
