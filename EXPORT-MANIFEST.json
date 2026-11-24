@@ -41,7 +41,7 @@
   },
   {
     "file": "change-search.js",
-    "sha256": "b9990835ddacbfd428d01c304eab5264695133e1718f412bc36d276afbbe3c16"
+    "sha256": "576592af440ca222bba256b302c2d3ec9e9f1a63facf65ca0f2c13986b58e100"
   },
   {
     "file": "data.js",
@@ -53,7 +53,7 @@
   },
   {
     "file": "event-search.js",
-    "sha256": "0abbd5faff10ec2ee58804a744c0d029c2ba4e85471c8e1b86526dee807bcddb"
+    "sha256": "2e8c749c437f721b9553eeefe2c24c8fb9a114d3c86e4b8287f755d39c603c48"
   },
   {
     "file": "google-news-url.js",
@@ -506,6 +506,10 @@
   {
     "file": "tests/jobs-workday.test.mjs",
     "sha256": "ee8a95a87f9617530d15457ee94084de8be3eb60f845472369dca81739ca35e8"
+  },
+  {
+    "file": "tests/lazy-search-matchers.test.mjs",
+    "sha256": "675130840ca34e21bfd205d1f149eb9ce5ffed7268cec2ea3f3c111fd628d7b3"
   },
   {
     "file": "tests/monaco-geography.test.mjs",

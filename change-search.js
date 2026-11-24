@@ -377,18 +377,24 @@ export function changeQuery(lang, type, countryName = '', { short = false } = {}
 // Whether a report's title or summary names a kind of change in the edition's language (accents and case aside;
 // a long word may differ in its last two letters: "brangsta"/"brangs", "increase"/"increases").
 const fold = s => String(s || '').normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase();
-const STEMS = new Map(Object.entries(T).map(([lang, t]) => [lang, [...new Set(CHANGE_TYPES.flatMap(type => t[type]).map(fold))].map(f => {
+// Built per language on first use, not at module load: compiling every language's patterns up front cost the pipeline
+// Worker about a third of its startup CPU, and Cloudflare rejects a Worker whose startup exceeds its limit (error 10021).
+const STEMS = new Map();
+function stemsFor(lang) {
+  if (!STEMS.has(lang)) STEMS.set(lang, Object.hasOwn(T, lang) ? [...new Set(CHANGE_TYPES.flatMap(type => T[lang][type]).map(fold))].map(f => {
   const last = f.split(/\s+/).pop(), alphabetic = /^[\p{Script=Latin}\p{Script=Cyrillic}\p{Script=Greek}]+$/u.test(last);
   // Alphabetic terms match whole words; a long final word may carry a different ending. Other scripts match anywhere.
   if (!alphabetic) return { any: f };
   const esc = (last.length >= 6 ? f.slice(0, -2) : f).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   return { re: new RegExp(`(?<![\\p{L}\\p{N}])${esc}${last.length >= 6 ? '\\p{L}{0,4}' : ''}(?![\\p{L}\\p{N}])`, 'u') };
-})]));
+}) : undefined);
+  return STEMS.get(lang);
+}
 // Compounding languages join words ("Mautgebühren", "collegegeldverhoging"): their terms match inside words.
 const COMPOUNDING = new Set(['de', 'nl', 'sv', 'no', 'da', 'fi', 'et', 'hu']);
 export function namesChange(lang, text) {
   if (COMPOUNDING.has(lang)) { const t = fold(text); return (T[lang] ? CHANGE_TYPES.flatMap(type => T[lang][type]) : []).some(w => { const f = fold(w); return t.includes(f.length >= 6 ? f.slice(0, -2) : f); }); }
-  const stems = STEMS.get(lang), t = fold(text);
+  const stems = stemsFor(lang), t = fold(text);
   return !!stems && stems.some(x => x.any ? t.includes(x.any) : x.re.test(t));
 }
 

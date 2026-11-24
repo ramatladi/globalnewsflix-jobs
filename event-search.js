@@ -104,14 +104,19 @@ export function eventQuery(lang, group, countryName = '', { short = false } = {}
 // of up to four letters ("elections"), one of four or five letters up to two more ("grèves"). Other scripts match anywhere.
 const fold = s => String(s || '').normalize('NFKD').replace(/[\p{M}‌‍]/gu, '').toLowerCase();
 const ALPHA = /^[\p{Script=Latin}\p{Script=Cyrillic}\p{Script=Greek}\s'’.-]+$/u;
-const MATCHERS = new Map(Object.entries(E).map(([lang, e]) => [lang, [...new Set(EVENT_GROUPS.flatMap(g => e[g]).map(fold))].map(f => {
+// Built per language on first use, not at module load (see stemsFor in change-search.js: pipeline startup CPU limit).
+const MATCHERS = new Map();
+function matchersFor(lang) {
+  if (!MATCHERS.has(lang)) MATCHERS.set(lang, Object.hasOwn(E, lang) ? [...new Set(EVENT_GROUPS.flatMap(g => E[lang][g]).map(fold))].map(f => {
   if (!ALPHA.test(f)) return { any: f };
   const last = f.split(/\s+/).pop(), esc = (last.length >= 6 ? f.slice(0, -2) : f).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const ending = last.length >= 6 ? '\\p{L}{0,4}' : last.length >= 4 ? '\\p{L}{0,2}' : '';
   return { re: new RegExp(`(?<![\\p{L}\\p{N}])${esc}${ending}(?![\\p{L}\\p{N}])`, 'u') };
-})]));
+}) : undefined);
+  return MATCHERS.get(lang);
+}
 export function namesEvent(lang, text) {
-  const m = MATCHERS.get(lang), t = fold(text);
+  const m = matchersFor(lang), t = fold(text);
   return !!m && m.some(x => x.any ? t.includes(x.any) : x.re.test(t));
 }
 
